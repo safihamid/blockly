@@ -82,13 +82,8 @@ Turtle.init = function(config) {
   document.getElementById(config.containerId).innerHTML = html;
 
   BlocklyApps.init(config);
-
-  var rtl = BlocklyApps.isRtl();
-  Blockly.inject(document.getElementById('blockly'), {
-    path: BlocklyApps.BASE_URL,
-    rtl: rtl,
-    toolbox: level.toolbox,
-    trashcan: true
+  BlocklyApps.inject({
+    toolbox: level.toolbox
   });
 
   // Add to reserved word list: API, local variables in execution evironment
