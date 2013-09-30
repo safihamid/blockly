@@ -339,9 +339,6 @@ Maze.init = function(config) {
 
   BlocklyApps.init(config);
 
-  var rtl = BlocklyApps.isRtl();
-  var toolbox = document.getElementById('toolbox');
-
   /**
    * The richness of block colours, regardless of the hue.
    * MOOC blocks should be brighter (target audience is younger).
@@ -350,12 +347,8 @@ Maze.init = function(config) {
    */
   Blockly.HSV_SATURATION = 0.6;
 
-  Blockly.inject(document.getElementById('blockly'), {
-    path: BlocklyApps.BASE_URL,
-    rtl: rtl,
-    toolbox: toolbox,
-    trashcan: true
-  });
+  BlocklyApps.inject();
+
   Blockly.loadAudio_(['media/maze/win.mp3', 'media/maze/win.ogg'], 'win');
   Blockly.loadAudio_(['media/maze/whack.mp3', 'media/maze/whack.ogg'], 'whack');
   Blockly.SNAP_RADIUS *= Maze.scale.snapRadius;

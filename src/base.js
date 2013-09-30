@@ -65,6 +65,27 @@ BlocklyApps.init = function(config) {
   }
 };
 
+BlocklyApps.inject = function(options) {
+  if (!options) {
+    options = {};
+  }
+
+  var defaults = {
+    blocklyDiv: document.getElementById('blockly'),
+    path: BlocklyApps.BASE_URL,
+    rtl: BlocklyApps.isRtl(),
+    toolbox: document.getElementById('toolbox'),
+    trashcan: true
+  };
+
+  Blockly.inject(options.blocklyDiv || defaults.blocklyDiv, {
+    path: options.path || defaults.path,
+    rtl: options.rtl || defaults.rtl,
+    toolbox: options.toolbox || defaults.toolbox,
+    trashcan: options.trashcan || defaults.trashcan
+  });
+};
+
 /**
  * Returns true if the current HTML page is in right-to-left language mode.
  */
