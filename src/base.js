@@ -93,6 +93,26 @@ BlocklyApps.isRtl = function() {
   return document.head.parentElement.getAttribute('dir') == 'rtl';
 };
 
+BlocklyApps.callout = function(callouts) {
+  var sessionPrefix = "callout_";
+
+  for (var index in callouts) {
+    var callout = callouts[index];
+    var selector = callout.element_id;  // jquery selector.
+    if (!(sessionPrefix + selector in sessionStorage)) {  // show only once.
+      var calloutDomElement = $(selector).qtip({
+        content: {
+          text: callout.text
+        }
+      });
+      calloutDomElement.qtip('show');
+      if (calloutDomElement.length > 0) {  // Only store if callout was shown.
+        sessionStorage.setItem(sessionPrefix + selector, true);
+      }
+    }
+  }
+};
+
 /**
  * Initialize Blockly for a readonly iframe.  Called on page load.
  * XML argument may be generated from the console with:
