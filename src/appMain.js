@@ -11,6 +11,9 @@ module.exports = function(app, options) {
       BlocklyApps.initReadonly(options);
     } else {
       app.init(options);
+      if (options.onInitialize) {
+        options.onInitialize();
+      }
     }
   });
 
