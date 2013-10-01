@@ -347,7 +347,8 @@ Maze.init = function(config) {
    */
   Blockly.HSV_SATURATION = 0.6;
 
-  BlocklyApps.inject();
+  var div = document.getElementById('blockly');
+  BlocklyApps.inject(div);
 
   Blockly.loadAudio_(['media/maze/win.mp3', 'media/maze/win.ogg'], 'win');
   Blockly.loadAudio_(['media/maze/whack.mp3', 'media/maze/whack.ogg'], 'whack');
@@ -389,8 +390,6 @@ Maze.init = function(config) {
   Blockly.addChangeListener(function() {
     BlocklyApps.updateCapacity();
   });
-
-  BlocklyApps.callout(config.callouts);
 };
 
 /**

@@ -82,9 +82,9 @@ Turtle.init = function(config) {
   document.getElementById(config.containerId).innerHTML = html;
 
   BlocklyApps.init(config);
-  BlocklyApps.inject({
-    toolbox: level.toolbox
-  });
+
+  var div = document.getElementById('blockly');
+  BlocklyApps.inject(div, { toolbox: level.toolbox });
 
   // Add to reserved word list: API, local variables in execution evironment
   // (execute) and the infinite loop detection function.
@@ -145,7 +145,6 @@ Turtle.init = function(config) {
       Turtle.updateBlockCount();
     });
   }
-
 
   BlocklyApps.callout(config.callouts);
 };
