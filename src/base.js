@@ -65,25 +65,33 @@ BlocklyApps.init = function(config) {
   }
 };
 
-BlocklyApps.inject = function(options) {
+/**
+ * @param {Object} options Configuration parameters for Blockly. Parameters are
+ * optional and include:
+ *  - {string} path The root path to the /blockly directory, defaults to the
+ *    the directory in which this script is located.
+ *  - {boolean} rtl True if the current language right to left.
+ *  - {DomElement} toolbox The element in which to insert the toolbox,
+ *    defaults to the element with 'toolbox'.
+ *  - {boolean} trashcan True if the trashcan should be displayed, defaults to
+ *    true.
+ * @param {DomElement} div The parent div in which to insert Blockly.
+ */
+exports.inject = function(div, options) {
   if (!options) {
     options = {};
   }
 
-  var defaults = {
-    blocklyDiv: document.getElementById('blockly'),
+  var finalOptions = {  // Defaults, to be overriden.
     path: BlocklyApps.BASE_URL,
     rtl: BlocklyApps.isRtl(),
     toolbox: document.getElementById('toolbox'),
     trashcan: true
   };
-
-  Blockly.inject(options.blocklyDiv || defaults.blocklyDiv, {
-    path: options.path || defaults.path,
-    rtl: options.rtl || defaults.rtl,
-    toolbox: options.toolbox || defaults.toolbox,
-    trashcan: options.trashcan || defaults.trashcan
-  });
+  for (var key in options) {
+    finalOptions[key] = options[key];  // Override anything passed in.
+  }
+  Blockly.inject(div, finalOptions);
 };
 
 /**
@@ -120,26 +128,6 @@ exports.inject = function(div, options) {
  */
 BlocklyApps.isRtl = function() {
   return document.head.parentElement.getAttribute('dir') == 'rtl';
-};
-
-BlocklyApps.callout = function(callouts) {
-  var sessionPrefix = "callout_";
-
-  for (var index in callouts) {
-    var callout = callouts[index];
-    var selector = callout.element_id;  // jquery selector.
-    if (!(sessionPrefix + selector in sessionStorage)) {  // show only once.
-      var calloutDomElement = $(selector).qtip({
-        content: {
-          text: callout.text
-        }
-      });
-      calloutDomElement.qtip('show');
-      if (calloutDomElement.length > 0) {  // Only store if callout was shown.
-        sessionStorage.setItem(sessionPrefix + selector, true);
-      }
-    }
-  }
 };
 
 /**
