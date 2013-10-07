@@ -328,7 +328,9 @@ Maze.init = function(config) {
 
   // Override the current level with caller supplied parameters.
   for (var prop in config.level) {
-    level[prop] = config.level[prop];
+    if (config.level[prop]) {
+      level[prop] = config.level[prop];
+    }
   }
 
   config.level = level;
@@ -385,15 +387,10 @@ Maze.init = function(config) {
   Blockly.svgResize();
 
   // Add the starting block(s).
-  var xml, dom;
-  // If userXml is passed in
-  if (config.userXml) {
-    BlocklyApps.loadBlocks(config.userXml);
-  } else if (level.startBlocks) {
-    var startBlocks = level.startBlocks ||
+  var startBlocks = level.startBlocks ||
       '<block type="maze_moveForward" x="70" y="70"></block>';
-    BlocklyApps.loadBlocks(startBlocks);
-  }
+  // If config.level.startBlocks is passed in, it overrides level.startBlocks
+  BlocklyApps.loadBlocks(startBlocks);
 
   BlocklyApps.reset(true);
   Blockly.addChangeListener(function() {
