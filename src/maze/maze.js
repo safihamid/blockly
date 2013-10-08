@@ -328,9 +328,7 @@ Maze.init = function(config) {
 
   // Override the current level with caller supplied parameters.
   for (var prop in config.level) {
-    if (config.level[prop]) {
-      level[prop] = config.level[prop];
-    }
+    level[prop] = config.level[prop];
   }
 
   config.level = level;
