@@ -74,6 +74,14 @@
 {/template}
 
 /**
+ * Code area.
+ */
+{template .codeArea}
+  <div id="codeTextbox" contenteditable style="float:left; width:300px; min-height:300px; height:auto;" onclick="document.getElementById('blockly').style.display='none';">
+  </div>
+{/template}
+
+/**
  * A spot for the server to inject some HTML for help content.
  */
 {template .helpArea}
