@@ -49,16 +49,6 @@
     "string": "dots",
     "description": "TODO"
   },
-  "drawAHouseNotDefined8": {
-    "id": "8625429193502071045",
-    "string": "You need to complete level 7 before doing this level.",
-    "description": "TODO"
-  },
-  "drawAHouseNotDefined9": {
-    "id": "8669528399059881976",
-    "string": "You need to complete levels 7 and 8 before doing this level.",
-    "description": "TODO"
-  },
   "drawASnowman": {
     "id": "3552165757021173739",
     "string": "draw a snowman",
