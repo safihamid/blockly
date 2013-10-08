@@ -281,7 +281,7 @@ var drawMap = function() {
                                 skin.goal);
     finishMarker.setAttribute('height', 34);
     finishMarker.setAttribute('width', 20);
-    svg.appendChild(finishMarker);
+    svg.insertBefore(finishMarker, pegmanIcon);
   }
 
   // Add obstacles.
