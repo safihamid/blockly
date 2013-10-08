@@ -536,6 +536,19 @@ Maze.execute = function() {
     displayFeedback();
     return;
   }
+  
+  var codeOverride = false;
+  codeTextbox = document.getElementById('codeTextbox');
+  
+  // Check for innerText && textContent (for IE compat). If we see either,
+  // override the code that came from the blocks
+  if (codeTextbox.innerText || codeTextbox.textContent) {
+    code = codeTextbox.innerText || codeTextbox.textContent;
+    code = "turnLeft = function() { Maze.turnLeft(); };" + code;
+    code = "turnRight = function() { Maze.turnRight(); };" + code;
+    code = "move = function() { Maze.moveForward(); };" + code;
+    codeOverride = true;
+  }
 
   // Try running the user's code.  There are four possible outcomes:
   // 1. If pegman reaches the finish [SUCCESS], true is thrown.
@@ -578,6 +591,12 @@ Maze.execute = function() {
   BlocklyApps.levelComplete = (Maze.result == ResultType.SUCCESS);
 
   Maze.testResults = BlocklyApps.getTestResults();
+  
+  if (codeOverride) {
+    Maze.testResults = BlocklyApps.levelComplete ?
+      BlocklyApps.TestResults.ALL_PASS :
+      BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED;
+  }
 
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   var textBlocks = Blockly.Xml.domToText(xml);
