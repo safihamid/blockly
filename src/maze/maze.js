@@ -369,14 +369,22 @@ Maze.init = function(config) {
   resetDirt();
 
   drawMap();
-
+  
+  if (level.editCode) {
+    document.getElementById('codeTextbox').style.display = 'block';
+    div.style.display = 'none';
+  }
+  
   window.addEventListener('scroll', function() {
       BlocklyApps.onResize();
       Blockly.fireUiEvent(window, 'resize');
     });
   window.addEventListener('resize', BlocklyApps.onResize);
   BlocklyApps.onResize();
-  Blockly.svgResize();
+
+  if (!level.editCode) {
+    Blockly.svgResize();
+  }
 
   // Add the starting block(s).
   var startBlocks = level.startBlocks ||
@@ -537,17 +545,13 @@ Maze.execute = function() {
     return;
   }
   
-  var codeOverride = false;
-  codeTextbox = document.getElementById('codeTextbox');
-  
-  // Check for innerText && textContent (for IE compat). If we see either,
-  // override the code that came from the blocks
-  if (codeTextbox.innerText || codeTextbox.textContent) {
+  if (level.editCode) {
+    // Check for innerText && textContent (for IE compat).
+    codeTextbox = document.getElementById('codeTextbox');
     code = codeTextbox.innerText || codeTextbox.textContent;
     code = "turnLeft = function() { Maze.turnLeft(); };" + code;
     code = "turnRight = function() { Maze.turnRight(); };" + code;
     code = "move = function() { Maze.moveForward(); };" + code;
-    codeOverride = true;
   }
 
   // Try running the user's code.  There are four possible outcomes:
@@ -592,10 +596,10 @@ Maze.execute = function() {
 
   Maze.testResults = BlocklyApps.getTestResults();
   
-  if (codeOverride) {
+  if (level.editCode) {
     Maze.testResults = BlocklyApps.levelComplete ?
       BlocklyApps.TestResults.ALL_PASS :
-      BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED;
+      BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
 
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);

@@ -77,7 +77,13 @@
  * Code area.
  */
 {template .codeArea}
-  <div id="codeTextbox" contenteditable style="float:left; width:300px; min-height:300px; height:auto;" onclick="document.getElementById('blockly').style.display='none';">
+  <div id="codeTextbox" contenteditable style="display:none;">
+    {msg meaning="Apps.typeCode" desc="hint text - type code here"}// Type your JavaScript code here:{/msg}
+    <br>
+    {msg meaning="Apps.typeFuncs" desc="hint text - type functions here"}// Available functions: move(), turnLeft(), and turnRight(){/msg}
+    <br>
+    <br>
+    <br>
   </div>
 {/template}
 

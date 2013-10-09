@@ -264,6 +264,7 @@ module.exports = {
     'instructions': 'instructions2_1',
     'toolbox': toolbox(2, 1),
     'ideal': 2,
+    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
     ],
@@ -283,6 +284,7 @@ module.exports = {
     'instructions': 'instructions2_2',
     'toolbox': toolbox(2, 2),
     'ideal': 3,
+    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
     ],
@@ -302,6 +304,7 @@ module.exports = {
     'instructions': 'instructions2_3',
     'toolbox': toolbox(2, 3),
     'ideal': 5,
+    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
       [{'test': 'turnLeft',
@@ -327,6 +330,7 @@ module.exports = {
     'instructions': 'instructions2_4',
     'toolbox': toolbox(2, 4),
     'ideal': 7,
+    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
       [{'test': 'turnLeft',
