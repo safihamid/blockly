@@ -141,6 +141,35 @@ exports.inject = function(div, options) {
 };
 
 /**
+ * @param {Object} options Configuration parameters for Blockly. Parameters are
+ * optional and include:
+ *  - {string} path The root path to the /blockly directory, defaults to the
+ *    the directory in which this script is located.
+ *  - {boolean} rtl True if the current language right to left.
+ *  - {DomElement} toolbox The element in which to insert the toolbox,
+ *    defaults to the element with 'toolbox'.
+ *  - {boolean} trashcan True if the trashcan should be displayed, defaults to
+ *    true.
+ * @param {DomElement} div The parent div in which to insert Blockly.
+ */
+exports.inject = function(div, options) {
+  if (!options) {
+    options = {};
+  }
+
+  var finalOptions = {  // Defaults, to be overriden.
+    path: BlocklyApps.BASE_URL,
+    rtl: BlocklyApps.isRtl(),
+    toolbox: document.getElementById('toolbox'),
+    trashcan: true
+  };
+  for (var key in options) {
+    finalOptions[key] = options[key];  // Override anything passed in.
+  }
+  Blockly.inject(div, finalOptions);
+};
+
+/**
  * Returns true if the current HTML page is in right-to-left language mode.
  */
 BlocklyApps.isRtl = function() {
