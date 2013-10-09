@@ -22,6 +22,17 @@ html[dir="RTL"] .farSide {
   box-shadow: 7px 7px 10px #888;
   margin-left: 415px;
 }
+#codeTextbox {
+  position: absolute;
+  bottom: 10px;
+  box-shadow: 7px 7px 10px #888;
+  margin-left: 415px;
+  display: none;
+  color: rgb(0, 0, 0);
+  font-family: monospace;
+  line-height: 1.5;
+  border: 4px solid #ddd;
+}
 #visualization {
   position: relative;
   top: 10px;

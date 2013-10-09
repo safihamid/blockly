@@ -39,6 +39,17 @@ var onContinue;
 BlocklyApps.BASE_URL = undefined;
 
 /**
+ * If the user presses backspace, stop propagation - this prevents blockly
+ * from eating the backspace key
+ * @param {!Event} e Keyboard event.
+ */
+var codeKeyDown = function(e) {
+  if (e.keyCode == 8) {
+    e.stopPropagation();
+  }
+};
+
+/**
  * Common startup tasks for all apps.
  */
 BlocklyApps.init = function(config) {
@@ -62,6 +73,12 @@ BlocklyApps.init = function(config) {
   if (viewport && screen.availWidth < 725) {
     viewport.setAttribute('content',
         'width=725, initial-scale=.35, user-scalable=no');
+  }
+  
+  if (config.level.editCode) {
+    document.getElementById('codeTextbox').addEventListener('keydown',
+        codeKeyDown, true);
+    BlocklyApps.editCode = true;
   }
 };
 
@@ -131,22 +148,26 @@ BlocklyApps.loadBlocks = function(blocksXml) {
 BlocklyApps.onResize = function() {
   var blocklyDiv = document.getElementById('blockly');
   var visualization = document.getElementById('visualization');
+  var codeTextbox = document.getElementById('codeTextbox');
   var top = visualization.offsetTop;
   var scrollY = window.pageYOffset;
-  blocklyDiv.style.top = Math.max(top, scrollY) + 'px';
   var svg = document.getElementById('svgMaze');
 
+  // resize either blockly or codetextbox
+  var div = BlocklyApps.editCode ? codeTextbox : blocklyDiv;
+  
   var blocklyDivParent = blocklyDiv.parentNode;
   var parentStyle = window.getComputedStyle ?
                     window.getComputedStyle(blocklyDivParent) :
                     blocklyDivParent.currentStyle.width;  // IE
   var parentWidth = parseInt(parentStyle.width, 10);
-  var parentHeight = window.innerHeight - parseInt(blocklyDiv.style.top, 10) +
+  var parentHeight = window.innerHeight - parseInt(div.style.top, 10) +
     scrollY - 20;
-
-  blocklyDiv.style.width = (parentWidth - svg.clientWidth - 40) + 'px';
-  blocklyDiv.style.height = parentHeight + 'px';
-  blocklyDiv.style.marginLeft = (svg.clientWidth + 15) + 'px';
+  
+  div.style.top = Math.max(top, scrollY) + 'px';
+  div.style.width = (parentWidth - svg.clientWidth - 40) + 'px';
+  div.style.height = parentHeight + 'px';
+  div.style.marginLeft = (svg.clientWidth + 15) + 'px';
 };
 
 /**
@@ -188,11 +209,24 @@ BlocklyApps.hideDialog = function(opt_animate) {
 };
 
 /**
+ * Retrieve a string containing the user's generated Javascript code.
+ */
+BlocklyApps.getGeneratedCodeString = function() {
+  if (BlocklyApps.editCode) {
+    var codeTextbox = document.getElementById('codeTextbox');
+    return (codeTextbox.innerText || codeTextbox.textContent);
+  }
+  else {
+    return codegen.workspaceCode(Blockly);
+  }
+};
+
+/**
  * Retrieve a DOM text node containing the user's generated Javascript code.
  */
 BlocklyApps.getGeneratedCodeElement = function() {
   // Inject the code as a textNode, then extract with innerHTML, thus escaping.
-  var unescapedCodeString = codegen.workspaceCode(Blockly);
+  var unescapedCodeString = BlocklyApps.getGeneratedCodeString();
   var codeNode = document.createTextNode(unescapedCodeString);
   return codeNode;
 };
@@ -223,6 +257,17 @@ BlocklyApps.showGeneratedCodeInFeedback = function(showLinkElement) {
   pre.appendChild(BlocklyApps.getGeneratedCodeElement());
   pre.parentNode.style.display = 'block';
   showLinkElement.style.display = 'none';
+};
+
+/**
+ * Reset the link to show generated code in the feedback modal popup.
+ * @param {Element} showLinkElement The link element from which the code display is triggered.
+ */
+BlocklyApps.resetGeneratedCodeInFeedback = function(showLinkElement) {
+  var pre = document.getElementById('generatedCodeContainer');
+  pre.innerHTML = "";
+  pre.parentNode.style.display = 'none';
+  showLinkElement.style.display = 'block';
 };
 
 /**
@@ -478,6 +523,17 @@ BlocklyApps.getMissingRequiredBlocks = function() {
  * @return {number} Number of blocks used.
  */
 BlocklyApps.getNumBlocksUsed = function() {
+  if (BlocklyApps.editCode) {
+    var codeLines = 0;
+    // quick and dirty method to count non-blank lines that don't start with //
+    var lines = BlocklyApps.getGeneratedCodeString().split("\n");
+    for (var i = 0; i < lines.length; i++) {
+      if ((lines[i].length > 1) && (lines[i][0] != '/' || lines[i][1] != '/')) {
+        codeLines++;
+      }
+    }
+    return codeLines;
+  }
   var blocks = BlocklyApps.getUserBlocks_();
   if (!BlocklyApps.FREE_BLOCKS) {
     return blocks.length;
@@ -655,10 +711,12 @@ BlocklyApps.setLevelFeedback = function(options) {
       break;
   }
   if (BlocklyApps.canContinueToNextLevel(options.feedbackType)) {
+    BlocklyApps.resetGeneratedCodeInFeedback(document.getElementById('showLinesOfCodeLink'));
     document.getElementById('generatedCodeInfoContainer').style.display = 'inline';
     BlocklyApps.setTextForElement('linesOfCodeFeedbackMsg', msg.numLinesOfCodeWritten({numLines: BlocklyApps.getNumBlocksUsed()}));
     BlocklyApps.setTextForElement('showLinesOfCodeLink', msg.showGeneratedCode());
-    BlocklyApps.setTextForElement('generatedCodeInfoMsg', msg.generatedCodeInfo());
+    BlocklyApps.setTextForElement('generatedCodeInfoMsg', BlocklyApps.editCode ?
+        "" : msg.generatedCodeInfo());
   }
 };
 
