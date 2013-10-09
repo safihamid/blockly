@@ -549,8 +549,8 @@ Maze.execute = function() {
     // Check for innerText && textContent (for IE compat).
     codeTextbox = document.getElementById('codeTextbox');
     code = codeTextbox.innerText || codeTextbox.textContent;
-    code = "turnLeft = function() { Maze.turnLeft(); };" + code;
-    code = "turnRight = function() { Maze.turnRight(); };" + code;
+    code = "turnleft = function() { Maze.turnLeft(); };" + code;
+    code = "turnright = function() { Maze.turnRight(); };" + code;
     code = "move = function() { Maze.moveForward(); };" + code;
   }
 

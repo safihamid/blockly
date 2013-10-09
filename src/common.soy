@@ -77,10 +77,15 @@
  * Code area.
  */
 {template .codeArea}
-  <div id="codeTextbox" contenteditable style="display:none;">
-    {msg meaning="Apps.typeCode" desc="hint text - type code here"}// Type your JavaScript code here:{/msg}
+  <div id="codeTextbox" contenteditable spellcheck=false>
+    {msg meaning="Apps.typeCode" desc="hint text - type code here"
+    }// Type your JavaScript code here:{/msg}
     <br>
-    {msg meaning="Apps.typeFuncs" desc="hint text - type functions here"}// Available functions: move(), turnLeft(), and turnRight(){/msg}
+    {msg meaning="Apps.typeFuncs" desc="hint text - type functions here"
+    }// Available functions: move(); turnleft(); and turnright();{/msg}
+    <br>
+    {msg meaning="Apps.typeHint" desc="hint text - parens and semicolon needed"
+    }// Note that the parentheses and semicolons are required.{/msg}
     <br>
     <br>
     <br>
