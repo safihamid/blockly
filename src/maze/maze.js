@@ -549,9 +549,16 @@ Maze.execute = function() {
     // Check for innerText && textContent (for IE compat).
     codeTextbox = document.getElementById('codeTextbox');
     code = codeTextbox.innerText || codeTextbox.textContent;
-    code = "turnleft = function() { Maze.turnLeft(); };" + code;
-    code = "turnright = function() { Maze.turnRight(); };" + code;
-    code = "move = function() { Maze.moveForward(); };" + code;
+    // Insert aliases from level codeBlocks into code
+    if (level.codeFunctions) {
+      for (var i = 0; i < level.codeFunctions.length; i++) {
+        var codeFunction = level.codeFunctions[i];
+        if (codeFunction.alias) {
+          code = codeFunction.func +
+              " = function() { " + codeFunction.alias + " };" + code;
+        }
+      }
+    }
   }
 
   // Try running the user's code.  There are four possible outcomes:

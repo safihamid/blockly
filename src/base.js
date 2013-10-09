@@ -76,68 +76,20 @@ BlocklyApps.init = function(config) {
   }
   
   if (config.level.editCode) {
-    document.getElementById('codeTextbox').addEventListener('keydown',
-        codeKeyDown, true);
     BlocklyApps.editCode = true;
+    var codeTextbox = document.getElementById('codeTextbox');
+    var codeFunctions = config.level.codeFunctions;
+    // Insert hint text from level codeFunctions into editCode area
+    if (codeFunctions) {
+      var hintText = "";
+      for (var i = 0; i < codeFunctions.length; i++) {
+        hintText = hintText + " " + codeFunctions[i].func + "();";
+      }
+      codeTextbox.innerHTML += msg.typeFuncs().replace('%1', hintText);
+    }
+    // Needed to prevent blockly from swallowing up the backspace key
+    codeTextbox.addEventListener('keydown', codeKeyDown, true);
   }
-};
-
-/**
- * @param {Object} options Configuration parameters for Blockly. Parameters are
- * optional and include:
- *  - {string} path The root path to the /blockly directory, defaults to the
- *    the directory in which this script is located.
- *  - {boolean} rtl True if the current language right to left.
- *  - {DomElement} toolbox The element in which to insert the toolbox,
- *    defaults to the element with 'toolbox'.
- *  - {boolean} trashcan True if the trashcan should be displayed, defaults to
- *    true.
- * @param {DomElement} div The parent div in which to insert Blockly.
- */
-exports.inject = function(div, options) {
-  if (!options) {
-    options = {};
-  }
-
-  var finalOptions = {  // Defaults, to be overriden.
-    path: BlocklyApps.BASE_URL,
-    rtl: BlocklyApps.isRtl(),
-    toolbox: document.getElementById('toolbox'),
-    trashcan: true
-  };
-  for (var key in options) {
-    finalOptions[key] = options[key];  // Override anything passed in.
-  }
-  Blockly.inject(div, finalOptions);
-};
-
-/**
- * @param {Object} options Configuration parameters for Blockly. Parameters are
- * optional and include:
- *  - {string} path The root path to the /blockly directory, defaults to the
- *    the directory in which this script is located.
- *  - {boolean} rtl True if the current language right to left.
- *  - {DomElement} toolbox The element in which to insert the toolbox,
- *    defaults to the element with 'toolbox'.
- *  - {boolean} trashcan True if the trashcan should be displayed, defaults to
- *    true.
- * @param {DomElement} div The parent div in which to insert Blockly.
- */
-exports.inject = function(div, options) {
-  if (!options) {
-    options = {};
-  }
-
-  var finalOptions = {  // Defaults, to be overriden.
-    path: BlocklyApps.BASE_URL,
-    rtl: BlocklyApps.isRtl(),
-    toolbox: document.getElementById('toolbox'),
-    trashcan: true
-  };
-  for (var key in options) {
-    finalOptions[key] = options[key];  // Override anything passed in.
-  }
-  Blockly.inject(div, finalOptions);
 };
 
 /**

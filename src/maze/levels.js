@@ -264,7 +264,6 @@ module.exports = {
     'instructions': 'instructions2_1',
     'toolbox': toolbox(2, 1),
     'ideal': 2,
-    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
     ],
@@ -284,7 +283,6 @@ module.exports = {
     'instructions': 'instructions2_2',
     'toolbox': toolbox(2, 2),
     'ideal': 3,
-    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
     ],
@@ -304,7 +302,6 @@ module.exports = {
     'instructions': 'instructions2_3',
     'toolbox': toolbox(2, 3),
     'ideal': 5,
-    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
       [{'test': 'turnLeft',
@@ -330,7 +327,6 @@ module.exports = {
     'instructions': 'instructions2_4',
     'toolbox': toolbox(2, 4),
     'ideal': 7,
-    'editCode': true,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
       [{'test': 'turnLeft',
@@ -686,6 +682,117 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 1, 0],
       [0, 0, 1, 1, 0, 1, 1, 0],
       [0, 1, 3, 1, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+  },
+  
+  // Copied levels with editCode enabled
+  '3_1': {
+    'instructions': 'instructions3_1',
+    'toolbox': toolbox(3, 1),
+    'ideal': 2,
+    'editCode': true,
+    'codeFunctions': [
+      {'func': 'move', 'alias': 'Maze.moveForward();'},
+      {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
+      {'func': 'turnright', 'alias': 'Maze.turnRight();'},
+    ],
+    'requiredBlocks': [
+       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+     ],
+    'startDirection': Direction.EAST,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 2, 1, 3, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+  },
+  '3_2': {
+    'instructions': 'instructions3_2',
+    'toolbox': toolbox(3, 2),
+    'ideal': 3,
+    'editCode': true,
+    'codeFunctions': [
+      {'func': 'move', 'alias': 'Maze.moveForward();'},
+      {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
+      {'func': 'turnright', 'alias': 'Maze.turnRight();'},
+    ],
+    'requiredBlocks': [
+       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+     ],
+    'startDirection': Direction.SOUTH,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0],
+      [0, 0, 0, 3, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+  },
+  '3_3': {
+    'instructions': 'instructions3_3',
+    'toolbox': toolbox(3, 3),
+    'ideal': 5,
+    'editCode': true,
+    'codeFunctions': [
+      {'func': 'move', 'alias': 'Maze.moveForward();'},
+      {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
+      {'func': 'turnright', 'alias': 'Maze.turnRight();'},
+    ],
+    'requiredBlocks': [
+      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+      [{'test': 'turnLeft',
+        'type': 'maze_turn',
+        'titles': {'DIR': 'turnLeft'}}],
+      [{'test': 'turnRight',
+        'type': 'maze_turn',
+        'titles': {'DIR': 'turnRight'}}]
+    ],
+    'startDirection': Direction.EAST,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 4, 1, 3, 0, 0, 0],
+      [0, 0, 2, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+  },
+  '3_4': {
+    'instructions': 'instructions3_4',
+    'toolbox': toolbox(3, 4),
+    'ideal': 7,
+    'editCode': true,
+    'codeFunctions': [
+      {'func': 'move', 'alias': 'Maze.moveForward();'},
+      {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
+      {'func': 'turnright', 'alias': 'Maze.turnRight();'},
+    ],
+    'requiredBlocks': [
+      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+      [{'test': 'turnLeft',
+       'type': 'maze_turn',
+       'titles': {'DIR': 'turnLeft'}}]
+    ],
+    'startDirection': Direction.EAST,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 2, 4, 3, 0, 0, 0],
+      [0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0]
     ]
   }
