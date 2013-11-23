@@ -300,7 +300,6 @@ var drawMap = function() {
   Maze.clipRect.setAttribute('width', Maze.PEGMAN_WIDTH);
   Maze.clipRect.setAttribute('height', Maze.PEGMAN_HEIGHT);
   pegmanClip.appendChild(Maze.clipRect);
-  document.appendChild(pegmanClip);
 
   // Add pegman.
   Maze.pegmanIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -689,19 +688,19 @@ BlocklyApps.reset = function(first) {
   // Reset pegman's visibility.
   if (skin.idlePegmanAnimation) {
     Maze.pegmanIcon.setAttribute('visibility', 'hidden');
-    var idlePegmanIcon = Maze['idlePegman'];
+    var idlePegmanIcon = Maze.idlePegman;
     idlePegmanIcon.setAttribute('visibility', 'visible');
   } else {
     Maze.pegmanIcon.setAttribute('visibility', 'visible');
   }
 
   if (skin.wallPegmanAnimation) {
-    var wallPegmanIcon = Maze['wallPegman'];
+    var wallPegmanIcon = Maze.wallPegman;
     wallPegmanIcon.setAttribute('visibility', 'hidden');
   }
 
   if (skin.movePegmanAnimation) {
-    var movePegmanIcon = Maze['movePegman'];
+    var movePegmanIcon = Maze.movePegman;
     movePegmanIcon.setAttribute('visibility', 'hidden');
   }
 
