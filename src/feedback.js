@@ -54,20 +54,20 @@ exports.displayFeedback = function(options) {
   });
 
   if (againButton) {
-    dom.addClickTouchEvent(againButton, function() {
+    againButton.addEventListener('click', function() {
       feedbackDialog.hide();
     });
   }
 
   if (previousLevelButton) {
-    dom.addClickTouchEvent(previousLevelButton, function() {
+    previousLevelButton.addEventListener('click', function() {
       feedbackDialog.hide();
       options.backToPreviousLevel();
     });
   }
 
   if (continueButton) {
-    dom.addClickTouchEvent(continueButton, function() {
+    continueButton.addEventListener('click', function() {
       feedbackDialog.hide();
       // onContinue will fire already if there was only a continue button
       if (!onlyContinue) {
@@ -365,7 +365,7 @@ exports.showGeneratedCode = function(Dialog) {
 
   var okayButton = buttons.querySelector('#ok-button');
   if (okayButton) {
-    dom.addClickTouchEvent(okayButton, function() {
+    okayButton.addEventListener('click', function() {
       dialog.hide();
     });
   }

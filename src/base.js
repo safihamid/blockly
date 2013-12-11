@@ -90,8 +90,8 @@ BlocklyApps.init = function(config) {
   container.innerHTML = config.html;
   var runButton = container.querySelector('#runButton');
   var resetButton = container.querySelector('#resetButton');
-  dom.addClickTouchEvent(runButton, BlocklyApps.runButtonClick);
-  dom.addClickTouchEvent(resetButton, BlocklyApps.resetButtonClick);
+  runButton.addEventListener('click', BlocklyApps.runButtonClick);
+  resetButton.addEventListener('click', BlocklyApps.resetButtonClick);
 
   // Record time at initialization.
   BlocklyApps.initTime = new Date().getTime();
@@ -133,7 +133,7 @@ BlocklyApps.init = function(config) {
 
   var showCode = document.getElementById('show-code-header');
   if (showCode) {
-    dom.addClickTouchEvent(showCode, function() {
+    showCode.addEventListener('click', function() {
       feedback.showGeneratedCode(BlocklyApps.Dialog);
     });
   }
@@ -349,7 +349,7 @@ var showInstructions = function(level) {
       });
   var okayButton = buttons.querySelector('#ok-button');
   if (okayButton) {
-    dom.addClickTouchEvent(okayButton, function() {
+    okayButton.addEventListener('click', function() {
       dialog.hide();
     });
   }
