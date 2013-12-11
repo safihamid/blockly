@@ -18,15 +18,15 @@ exports.displayFeedback = function(options) {
   if (feedbackMessage) {
     feedback.appendChild(feedbackMessage);
   }
-  if (feedbackImage) {
-    feedback.appendChild(feedbackImage);
-  }
   if (options.numTrophies) {
     var trophies = getTrophiesElement(options);
     feedback.appendChild(trophies);
   }
   if (feedbackBlocks.div) {
     feedback.appendChild(feedbackBlocks.div);
+  }
+  if (feedbackImage) {
+    feedback.appendChild(feedbackImage);
   }
   if (showCode) {
     feedback.appendChild(showCode);
@@ -204,10 +204,12 @@ var getFeedbackMessage = function(options) {
 
 var createFeedbackImage = function(options) {
   var feedbackImage;
-  if (options.level.instructionImageUrl) {
+  var feedbackImageSrc =
+      options.level.instructionImageUrl || options.feedbackImage;
+  if (feedbackImageSrc) {
     feedbackImage = document.createElement('img');
     feedbackImage.className = 'feedback-image';
-    feedbackImage.src = options.level.instructionImageUrl;
+    feedbackImage.src = feedbackImageSrc;
   }
   return feedbackImage;
 };
