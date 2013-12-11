@@ -511,13 +511,18 @@ var isCorrect = function(pixelErrors, permittedErrors) {
  * BlocklyApps.displayFeedback when appropriate
  */
 var displayFeedback = function() {
+  // Get the canvas data for feedback.
+  var drawingCanvas = document.getElementById('display');
+  var feedbackImage = drawingCanvas.toDataURL("image/png");
+
   BlocklyApps.displayFeedback({
     app: 'turtle', //XXX
     skin: skin.id,
     feedbackType: Turtle.testResults,
     message: Turtle.message,
     response: Turtle.response,
-    level: level
+    level: level,
+    feedbackImage: feedbackImage
     });
 };
 
