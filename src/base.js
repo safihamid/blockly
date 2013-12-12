@@ -103,6 +103,8 @@ BlocklyApps.init = function(config) {
     var openWorkspace = document.createElement('button');
     openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
     dom.addClickTouchEvent(openWorkspace, function() {
+      // Redirect user to /edit version of this page. It would be better to
+      // just turn on the workspace but there are rendering issues with that.
       window.location.href = window.location.href + '/edit';
     });
     buttonRow.appendChild(openWorkspace);
