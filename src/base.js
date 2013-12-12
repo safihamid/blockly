@@ -73,6 +73,7 @@ BlocklyApps.init = function(config) {
   if (!config) {
     config = {};
   }
+
   // Store configuration.
   onAttempt = config.onAttempt || function(report) {
     console.log('Attempt!');
@@ -118,6 +119,10 @@ BlocklyApps.init = function(config) {
   var resetButton = container.querySelector('#resetButton');
   dom.addClickTouchEvent(runButton, BlocklyApps.runButtonClick);
   dom.addClickTouchEvent(resetButton, BlocklyApps.resetButtonClick);
+
+  if (config.hide_source) {
+    container.querySelector('#blockly').style.display = 'none';
+  }
 
   // Record time at initialization.
   BlocklyApps.initTime = new Date().getTime();
