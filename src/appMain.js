@@ -36,7 +36,6 @@ module.exports = function(app, levels, options) {
   }
 
   options.Dialog = options.Dialog || StubDialog;
-  options.onReport = options.onReport || console.log;
 
   BlocklyApps.BASE_URL = options.baseUrl;
   BlocklyApps.CACHE_BUST = options.cacheBust;
