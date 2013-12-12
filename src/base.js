@@ -74,6 +74,8 @@ BlocklyApps.init = function(config) {
     config = {};
   }
 
+  BlocklyApps.share = config.share;
+
   // Store configuration.
   onAttempt = config.onAttempt || function(report) {
     console.log('Attempt!');
@@ -86,32 +88,6 @@ BlocklyApps.init = function(config) {
     console.log('Continue!');
   };
   backToPreviousLevel = config.backToPreviousLevel || function() {};
-
-  /**
-   * Report back to the server, if available.
-   * @param {object} options - parameter block which includes:
-   * {string} app The name of the application.
-   * {number} id A unique identifier generated when the page was loaded.
-   * {string} level The ID of the current level.
-   * {number} result An indicator of the success of the code.
-   * {number} testResult More specific data on success or failure of code.
-   * {string} program The user program, which will get URL-encoded.
-   * {function} onComplete Function to be called upon completion.
-   */
-  BlocklyApps.report = function(options) {
-    config.onReport(function() {
-      // copy from options: app, level, result, testResult, program, onComplete
-      var report = options;
-      report.pass = feedback.canContinueToNextLevel(options.testResults);
-      report.time = ((new Date().getTime()) - BlocklyApps.initTime);
-      report.attempt = BlocklyApps.attempts;
-      report.lines = feedback.getNumBlocksUsed();
-
-      // Disable the run button until onReportComplete is called.
-      document.getElementById('runButton').setAttribute('disabled', 'disabled');
-      onAttempt(report);
-    });
-  };
 
   var container = document.getElementById(config.containerId);
   container.innerHTML = config.html;
@@ -607,6 +583,32 @@ BlocklyApps.displayFeedback = function(options) {
 
 BlocklyApps.getTestResults = function() {
   return feedback.getTestResults();
+};
+
+/**
+ * Report back to the server, if available.
+ * @param {object} options - parameter block which includes:
+ * {string} app The name of the application.
+ * {number} id A unique identifier generated when the page was loaded.
+ * {string} level The ID of the current level.
+ * {number} result An indicator of the success of the code.
+ * {number} testResult More specific data on success or failure of code.
+ * {string} program The user program, which will get URL-encoded.
+ * {function} onComplete Function to be called upon completion.
+ */
+BlocklyApps.report = function(options) {
+  // copy from options: app, level, result, testResult, program, onComplete
+  var report = options;
+  report.pass = feedback.canContinueToNextLevel(options.testResults);
+  report.time = ((new Date().getTime()) - BlocklyApps.initTime);
+  report.attempt = BlocklyApps.attempts;
+  report.lines = feedback.getNumBlocksUsed();
+
+  // Disable the run button until onReportComplete is called.
+  if (!BlocklyApps.share) {
+    document.getElementById('runButton').setAttribute('disabled', 'disabled');
+    onAttempt(report);
+  }
 };
 
 /**
