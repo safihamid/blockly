@@ -121,7 +121,15 @@ BlocklyApps.init = function(config) {
   dom.addClickTouchEvent(resetButton, BlocklyApps.resetButtonClick);
 
   if (config.hide_source) {
-    container.querySelector('#blockly').style.display = 'none';
+    var blockly = container.querySelector('#blockly');
+    blockly.style.display = 'none';
+    var buttonRow = runButton.parentElement;
+    var openWorkspace = document.createElement('button');
+    openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+    dom.addClickTouchEvent(openWorkspace, function() {
+      window.location.href = window.location.href + '/edit';
+    });
+    buttonRow.appendChild(openWorkspace);
   }
 
   // Record time at initialization.
