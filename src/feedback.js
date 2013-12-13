@@ -216,22 +216,24 @@ var createSharingDiv = function(options) {
     sharingDiv.appendChild(sharingImage);
   }
 
-  sharingUrl.innerHTML = require('./templates/buttons.html')({
-    data: {
-      sharingUrl: options.response.level_source
-    }
-  });
-  sharingDiv.appendChild(sharingUrl);
+  if (options.response && options.response.level_source) {
+    sharingUrl.innerHTML = require('./templates/buttons.html')({
+      data: {
+        sharingUrl: options.response.level_source
+      }
+    });
+    sharingDiv.appendChild(sharingUrl);
 
-  sharingButtons.innerHTML = require('./templates/buttons.html')({
-    data: {
-      facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
-          options.response.level_source,
-      twitterUrl: "https://twitter.com/intent/tweet?url=" +
-          options.response.level_source
-    }
-  });
-  sharingDiv.appendChild(sharingButtons);
+    sharingButtons.innerHTML = require('./templates/buttons.html')({
+      data: {
+        facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
+            options.response.level_source,
+        twitterUrl: "https://twitter.com/intent/tweet?url=" +
+            options.response.level_source
+      }
+    });
+    sharingDiv.appendChild(sharingButtons);
+  }
 
   return sharingDiv;
 };
