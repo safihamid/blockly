@@ -549,7 +549,7 @@ Turtle.checkAnswer = function() {
   // Pixels are in RGBA format.  Only check the Alpha bytes.
   for (var i = 3; i < len; i += 4) {
     // Check the Alpha byte.
-    if ((userImage.data[i] === 0) != (answerImage.data[i] === 0)) {
+    if (Math.abs(userImage.data[i] - answerImage.data[i]) > 5) {
       delta++;
     }
   }
