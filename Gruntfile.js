@@ -197,9 +197,9 @@ config.express = {
 var uglifiedFiles = {};
 APPS.forEach(function(app) {
   LOCALES.forEach(function(locale) {
-    var relname = locale + '/' + app + '.js';
-    var src = 'build/browserified/' + relname;
-    var dest = 'build/package/js/' + relname + '.min';
+    var relname = locale + '/' + app;
+    var src = 'build/browserified/' + relname + '.js';
+    var dest = 'build/package/js/' + relname + '.min.js';
     uglifiedFiles[dest] = [src];
   });
 });
