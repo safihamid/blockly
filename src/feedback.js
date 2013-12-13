@@ -207,6 +207,7 @@ var createSharingDiv = function(options) {
   sharingDiv.setAttribute('style', 'display:inline-block');
   var sharingImage = document.createElement('div');
   var sharingUrl = document.createElement('div');
+  sharingUrl.className = 'feedback-links';
   var sharingButtons = document.createElement('div');
 
   var feedbackImage = createFeedbackImage(options);
