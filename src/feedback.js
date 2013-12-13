@@ -203,39 +203,46 @@ var getFeedbackMessage = function(options) {
 };
 
 var createSharingDiv = function(options) {
-  var sharingDiv = document.createElement('div');
-  sharingDiv.setAttribute('style', 'display:inline-block');
-  var sharingImage = document.createElement('div');
-  var sharingUrl = document.createElement('div');
-  sharingUrl.className = 'feedback-links';
-  var sharingButtons = document.createElement('div');
+  // Creates the sharing div only in Turtle and the solution is a passing
+  // solution.
+  if (options.app === "turtle" &&
+      exports.canContinueToNextLevel(options.feedbackType)) {
+    var sharingDiv = document.createElement('div');
+    sharingDiv.setAttribute('style', 'display:inline-block');
+    var sharingImage = document.createElement('div');
+    var sharingUrl = document.createElement('div');
+    sharingUrl.className = 'feedback-links';
+    var sharingButtons = document.createElement('div');
 
-  var feedbackImage = createFeedbackImage(options);
-  if (feedbackImage) {
-    sharingImage.appendChild(feedbackImage);
-    sharingDiv.appendChild(sharingImage);
+    var feedbackImage = createFeedbackImage(options);
+    if (feedbackImage) {
+        sharingImage.appendChild(feedbackImage);
+        sharingDiv.appendChild(sharingImage);
+    }
+
+    if (options.response && options.response.level_source) {
+        sharingUrl.innerHTML = require('./templates/buttons.html')({
+            data: {
+                sharingUrl: options.response.level_source
+            }
+        });
+        sharingDiv.appendChild(sharingUrl);
+
+        sharingButtons.innerHTML = require('./templates/buttons.html')({
+            data: {
+                facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
+                    options.response.level_source,
+                twitterUrl: "https://twitter.com/intent/tweet?url=" +
+                    options.response.level_source
+            }
+        });
+        sharingDiv.appendChild(sharingButtons);
+    }
+
+    return sharingDiv;
+  } else {
+    return null;
   }
-
-  if (options.response && options.response.level_source) {
-    sharingUrl.innerHTML = require('./templates/buttons.html')({
-      data: {
-        sharingUrl: options.response.level_source
-      }
-    });
-    sharingDiv.appendChild(sharingUrl);
-
-    sharingButtons.innerHTML = require('./templates/buttons.html')({
-      data: {
-        facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
-            options.response.level_source,
-        twitterUrl: "https://twitter.com/intent/tweet?url=" +
-            options.response.level_source
-      }
-    });
-    sharingDiv.appendChild(sharingButtons);
-  }
-
-  return sharingDiv;
 };
 
 var createFeedbackImage = function(options) {
