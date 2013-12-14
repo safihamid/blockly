@@ -512,7 +512,7 @@ var isCorrect = function(pixelErrors, permittedErrors) {
  */
 var displayFeedback = function() {
   // Get the canvas data for feedback.
-  var drawingCanvas = document.getElementById('display');
+  var drawingCanvas = document.getElementById('scratch');
   var feedbackImage = drawingCanvas.toDataURL("image/png");
 
   BlocklyApps.displayFeedback({
