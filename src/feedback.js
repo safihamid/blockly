@@ -203,9 +203,9 @@ var getFeedbackMessage = function(options) {
 };
 
 var createSharingDiv = function(options) {
-  // Creates the sharing div only in Turtle and the solution is a passing
-  // solution.
-  if (options.app === "turtle" &&
+  // Creates the sharing div only when showingShring is set and the solution is
+  // a passing solution.
+  if (options.showingSharing &&
       exports.canContinueToNextLevel(options.feedbackType)) {
     var sharingDiv = document.createElement('div');
     sharingDiv.setAttribute('style', 'display:inline-block');

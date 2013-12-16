@@ -522,7 +522,8 @@ var displayFeedback = function() {
     message: Turtle.message,
     response: Turtle.response,
     level: level,
-    feedbackImage: feedbackImage
+    feedbackImage: feedbackImage,
+    showingSharing: true
     });
 };
 
