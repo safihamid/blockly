@@ -554,7 +554,8 @@ Turtle.checkAnswer = function() {
   var delta = 0;
   // Pixels are in RGBA format.  Only check the Alpha bytes.
   for (var i = 3; i < len; i += 4) {
-    // Check the Alpha byte.
+    // Copying and compositing images across canvases seems to distort the
+    // alpha. Use a large error value (250) to compensate.
     if (Math.abs(userImage.data[i] - answerImage.data[i]) > 250) {
       delta++;
     }
