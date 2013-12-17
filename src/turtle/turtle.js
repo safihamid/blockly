@@ -70,6 +70,11 @@ Turtle.avatarImage = new Image();
 Turtle.numberAvatarHeadings = undefined;
 
 /**
+ * Feedback image
+ */
+Turtle.feedbackImage = undefined;
+
+/**
  * Initialize Blockly and the turtle.  Called on page load.
  */
 Turtle.init = function(config) {
@@ -511,10 +516,6 @@ var isCorrect = function(pixelErrors, permittedErrors) {
  * BlocklyApps.displayFeedback when appropriate
  */
 var displayFeedback = function() {
-  // Get the canvas data for feedback.
-  var drawingCanvas = document.getElementById('scratch');
-  var feedbackImage = drawingCanvas.toDataURL("image/png");
-
   BlocklyApps.displayFeedback({
     app: 'turtle', //XXX
     skin: skin.id,
@@ -522,7 +523,7 @@ var displayFeedback = function() {
     message: Turtle.message,
     response: Turtle.response,
     level: level,
-    feedbackImage: feedbackImage,
+    feedbackImage: Turtle.feedbackImage,
     showingSharing: true
     });
 };
@@ -632,14 +633,29 @@ Turtle.checkAnswer = function() {
     BlocklyApps.playAudio('failure', {volume : 0.5});
   }
 
-  BlocklyApps.report({
-    app: 'turtle',
-    level: level.id,
-    result: BlocklyApps.levelComplete,
-    testResult: Turtle.testResults,
-    program: encodeURIComponent(textBlocks),
-    onComplete: Turtle.onReportComplete
-  });
+  // Get the canvas data for feedback.
+  var drawingCanvas = document.getElementById('scratch');
+  Turtle.feedbackImage = drawingCanvas.toDataURL("image/png");
+  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
+    BlocklyApps.report({
+      app: 'turtle',
+      level: level.id,
+      result: BlocklyApps.levelComplete,
+      testResult: Turtle.testResults,
+      program: encodeURIComponent(textBlocks),
+      onComplete: Turtle.onReportComplete,
+      image : encodeURIComponent(Turtle.feedbackImage)
+    });
+  } else {
+    BlocklyApps.report({
+      app: 'turtle',
+      level: level.id,
+      result: BlocklyApps.levelComplete,
+      testResult: Turtle.testResults,
+      program: encodeURIComponent(textBlocks),
+      onComplete: Turtle.onReportComplete
+    });
+  }
 
   // The call to displayFeedback() will happen later in onReportComplete()
 };
