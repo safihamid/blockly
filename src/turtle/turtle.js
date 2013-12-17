@@ -636,16 +636,26 @@ Turtle.checkAnswer = function() {
   // Get the canvas data for feedback.
   var drawingCanvas = document.getElementById('scratch');
   Turtle.feedbackImage = drawingCanvas.toDataURL("image/png");
-
-  BlocklyApps.report({
-    app: 'turtle',
-    level: level.id,
-    result: BlocklyApps.levelComplete,
-    testResult: Turtle.testResults,
-    program: encodeURIComponent(textBlocks),
-    onComplete: Turtle.onReportComplete,
-    image: encodeURIComponent(Turtle.feedbackImage)
-  });
+  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
+    BlocklyApps.report({
+      app: 'turtle',
+      level: level.id,
+      result: BlocklyApps.levelComplete,
+      testResult: Turtle.testResults,
+      program: encodeURIComponent(textBlocks),
+      onComplete: Turtle.onReportComplete,
+      image : encodeURIComponent(Turtle.feedbackImage)
+    });
+  } else {
+    BlocklyApps.report({
+      app: 'turtle',
+      level: level.id,
+      result: BlocklyApps.levelComplete,
+      testResult: Turtle.testResults,
+      program: encodeURIComponent(textBlocks),
+      onComplete: Turtle.onReportComplete
+    });
+  }
 
   // The call to displayFeedback() will happen later in onReportComplete()
 };
