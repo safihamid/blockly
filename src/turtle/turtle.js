@@ -644,7 +644,7 @@ Turtle.checkAnswer = function() {
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
       onComplete: Turtle.onReportComplete,
-      image : encodeURIComponent(Turtle.feedbackImage)
+      image : encodeURIComponent(Turtle.feedbackImage.split(',')[1])
     });
   } else {
     BlocklyApps.report({
