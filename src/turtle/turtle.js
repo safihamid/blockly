@@ -540,17 +540,6 @@ Turtle.onReportComplete = function(response) {
   displayFeedback();
 };
 
-var convertDataUrlToBlob = function(dataUrl) {
-  console.log("yeah");
-  var binary = atob( dataUrl.substr( dataUrl.indexOf(',') + 1 ) ),
-      i = binary.length,
-      view = new Uint8Array(i);
-  while (i--) {
-    view[i] = binary.charCodeAt(i);
-  }
-  return new Blob([view]);
-};
-
 /**
  * Verify if the answer is correct.
  * If so, move on to next level.
@@ -647,7 +636,6 @@ Turtle.checkAnswer = function() {
   // Get the canvas data for feedback.
   var drawingCanvas = document.getElementById('scratch');
   Turtle.feedbackImage = drawingCanvas.toDataURL("image/png");
-  var blob = convertDataUrlToBlob(Turtle.feedbackImage);
 
   BlocklyApps.report({
     app: 'turtle',
@@ -656,7 +644,7 @@ Turtle.checkAnswer = function() {
     testResult: Turtle.testResults,
     program: encodeURIComponent(textBlocks),
     onComplete: Turtle.onReportComplete,
-    image: blob
+    image: encodeURIComponent(Turtle.feedbackImage)
   });
 
   // The call to displayFeedback() will happen later in onReportComplete()
