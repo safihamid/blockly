@@ -70,6 +70,11 @@ Turtle.avatarImage = new Image();
 Turtle.numberAvatarHeadings = undefined;
 
 /**
+ * Feedback image
+ */
+Turtle.feedbackImage = undefined;
+
+/**
  * Initialize Blockly and the turtle.  Called on page load.
  */
 Turtle.init = function(config) {
@@ -511,10 +516,6 @@ var isCorrect = function(pixelErrors, permittedErrors) {
  * BlocklyApps.displayFeedback when appropriate
  */
 var displayFeedback = function() {
-  // Get the canvas data for feedback.
-  var drawingCanvas = document.getElementById('scratch');
-  var feedbackImage = drawingCanvas.toDataURL("image/png");
-
   BlocklyApps.displayFeedback({
     app: 'turtle', //XXX
     skin: skin.id,
@@ -522,7 +523,7 @@ var displayFeedback = function() {
     message: Turtle.message,
     response: Turtle.response,
     level: level,
-    feedbackImage: feedbackImage,
+    feedbackImage: Turtle.feedbackImage,
     showingSharing: true
     });
 };
@@ -537,6 +538,17 @@ Turtle.onReportComplete = function(response) {
   var runButton = document.getElementById('runButton');
   runButton.disabled = false;
   displayFeedback();
+};
+
+var convertDataUrlToBlob = function(dataUrl) {
+  console.log("yeah");
+  var binary = atob( dataUrl.substr( dataUrl.indexOf(',') + 1 ) ),
+      i = binary.length,
+      view = new Uint8Array(i);
+  while (i--) {
+    view[i] = binary.charCodeAt(i);
+  }
+  return new Blob([view]);
 };
 
 /**
@@ -632,13 +644,19 @@ Turtle.checkAnswer = function() {
     BlocklyApps.playAudio('failure', {volume : 0.5});
   }
 
+  // Get the canvas data for feedback.
+  var drawingCanvas = document.getElementById('scratch');
+  Turtle.feedbackImage = drawingCanvas.toDataURL("image/png");
+  var blob = convertDataUrlToBlob(Turtle.feedbackImage);
+
   BlocklyApps.report({
     app: 'turtle',
     level: level.id,
     result: BlocklyApps.levelComplete,
     testResult: Turtle.testResults,
     program: encodeURIComponent(textBlocks),
-    onComplete: Turtle.onReportComplete
+    onComplete: Turtle.onReportComplete,
+    image: blob
   });
 
   // The call to displayFeedback() will happen later in onReportComplete()
