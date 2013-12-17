@@ -368,8 +368,10 @@ $modal-image-margin-gap: 10px;
   .feedback-image {
     width: 40%;
     height: auto;
-    padding: 15px;
-    float: left
+    margin: 15px;
+    float: left;
+    border: lightgrey;
+    border-style: solid
   }
 
   .feedback-links {
