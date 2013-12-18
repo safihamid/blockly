@@ -70,11 +70,6 @@ Turtle.avatarImage = new Image();
 Turtle.numberAvatarHeadings = undefined;
 
 /**
- * Feedback image
- */
-Turtle.feedbackImage = undefined;
-
-/**
  * Initialize Blockly and the turtle.  Called on page load.
  */
 Turtle.init = function(config) {
@@ -123,6 +118,7 @@ Turtle.init = function(config) {
     Turtle.ctxAnswer = document.getElementById('answer').getContext('2d');
     Turtle.ctxImages = document.getElementById('images').getContext('2d');
     Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
+    Turtle.ctxFeedback = document.getElementById('feedback').getContext('2d');
     Turtle.loadTurtle();
     Turtle.drawImages();
     Turtle.drawAnswer();
@@ -251,6 +247,10 @@ BlocklyApps.reset = function(ignore) {
   Turtle.ctxScratch.lineCap = 'round';
   Turtle.ctxScratch.font = 'normal 18pt Arial';
   Turtle.display();
+
+  // Clear the feedback.
+  Turtle.ctxFeedback.clearRect(
+      0, 0, Turtle.ctxFeedback.canvas.width, Turtle.ctxFeedback.canvas.height);
 
   // Kill any task.
   if (Turtle.pid) {
@@ -523,7 +523,7 @@ var displayFeedback = function() {
     message: Turtle.message,
     response: Turtle.response,
     level: level,
-    feedbackImage: Turtle.feedbackImage,
+    feedbackImage: document.getElementById('scratch').toDataURL("image/png"),
     showingSharing: true
     });
 };
@@ -634,8 +634,6 @@ Turtle.checkAnswer = function() {
   }
 
   // Get the canvas data for feedback.
-  var drawingCanvas = document.getElementById('scratch');
-  Turtle.feedbackImage = drawingCanvas.toDataURL("image/png");
   if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
     BlocklyApps.report({
       app: 'turtle',
@@ -644,7 +642,7 @@ Turtle.checkAnswer = function() {
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
       onComplete: Turtle.onReportComplete,
-      image : encodeURIComponent(Turtle.feedbackImage.split(',')[1])
+      image : getFeedbackImage()
     });
   } else {
     BlocklyApps.report({
@@ -658,4 +656,13 @@ Turtle.checkAnswer = function() {
   }
 
   // The call to displayFeedback() will happen later in onReportComplete()
+};
+
+var getFeedbackImage = function() {
+  // Copy the user layer
+  Turtle.ctxFeedback.globalCompositeOperation = 'copy';
+  Turtle.ctxFeedback.drawImage(Turtle.ctxScratch.canvas, 0, 0, 154, 154);
+  var feedbackCanvas = document.getElementById('feedback');
+  return encodeURIComponent(
+      feedbackCanvas.toDataURL("image/png").split(',')[1]);
 };
