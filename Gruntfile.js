@@ -31,6 +31,7 @@ var LOCALES = (LOCALIZE ? [
   'fr_fr',
   'he_il',
   'hi_in',
+  'hr_hr',
   'hu_hu',
   'id_id',
   'is_is',
