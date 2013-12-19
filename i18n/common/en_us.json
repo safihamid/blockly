@@ -54,5 +54,6 @@
   "workspaceHeader": "Assemble your blocks here: ",
   "infinity": "Infinity",
   "rotateText": "Rotate your device.",
-  "orientationLock": "Turn off orientation lock in device settings."
+  "orientationLock": "Turn off orientation lock in device settings.",
+  "shareDrawing": "Share your drawing:"
 }
