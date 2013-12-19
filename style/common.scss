@@ -137,6 +137,9 @@ input[type="radio"] {
   margin-bottom: 10px;
   clear: left;
 }
+#slider-cell {
+  vertical-align: top;
+}
 
 /* Dialogs */
 #help {
@@ -425,4 +428,17 @@ $modal-image-margin-gap: 10px;
 
 .hide {
   display: none;
+}
+.hide-source {
+  #visualization {
+    display: inline-block;
+  }
+  #belowVisualization {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 30px;
+  }
+  #bubble {
+    display: none;
+  }
 }

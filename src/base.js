@@ -96,12 +96,23 @@ BlocklyApps.init = function(config) {
   dom.addClickTouchEvent(runButton, BlocklyApps.runButtonClick);
   dom.addClickTouchEvent(resetButton, BlocklyApps.resetButtonClick);
 
+  var belowViz = document.getElementById('belowVisualization');
+  if (config.referenceArea) {
+    belowViz.appendChild(config.referenceArea());
+  }
+
   if (config.hide_source) {
     var blockly = container.querySelector('#blockly');
+    container.className += ' hide-source';
     blockly.style.display = 'none';
     var buttonRow = runButton.parentElement;
     var openWorkspace = document.createElement('button');
     openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+    belowViz.appendChild(feedback.createSharingButtons({
+      response: {
+        level_source: window.location
+      }
+    }));
     dom.addClickTouchEvent(openWorkspace, function() {
       // Redirect user to /edit version of this page. It would be better to
       // just turn on the workspace but there are rendering issues with that.
@@ -187,11 +198,6 @@ BlocklyApps.init = function(config) {
     promptIcon.src = BlocklyApps.SMALL_ICON;
   }
 
-  if (config.referenceArea) {
-    var belowViz = document.getElementById('belowVisualization');
-    belowViz.appendChild(config.referenceArea());
-  }
-
   var div = document.getElementById('blockly');
   BlocklyApps.inject(div, {
     toolbox: config.level.toolbox
@@ -207,7 +213,9 @@ BlocklyApps.init = function(config) {
     Turtle.speedSlider = new Slider(10, 35, 130, slider);
 
     // Change default speed (eg Speed up levels that have lots of steps).
-    if (config.level.sliderSpeed) {
+    if (BlocklyApps.share) {
+      Turtle.speedSlider.setValue(1);
+    } else if (config.level.sliderSpeed) {
       Turtle.speedSlider.setValue(config.level.sliderSpeed);
     }
   }
