@@ -210,9 +210,6 @@ var createSharingDiv = function(options) {
     var sharingDiv = document.createElement('div');
     sharingDiv.setAttribute('style', 'display:inline-block');
     var sharingImage = document.createElement('div');
-    var sharingUrl = document.createElement('div');
-    sharingUrl.className = 'feedback-links';
-    var sharingButtons = document.createElement('div');
 
     var feedbackImage = createFeedbackImage(options);
     if (feedbackImage) {
@@ -221,22 +218,37 @@ var createSharingDiv = function(options) {
     }
 
     if (options.response && options.response.level_source) {
-        sharingUrl.innerHTML = require('./templates/buttons.html')({
-            data: {
-                sharingUrl: options.response.level_source
-            }
-        });
-        sharingDiv.appendChild(sharingUrl);
+      var sharingText = document.createElement('div');
+      dom.setText(sharingText, msg.shareDrawing());
+      sharingText.className = 'shareDrawingMsg';
+      sharingDiv.appendChild(sharingText);
 
-        sharingButtons.innerHTML = require('./templates/buttons.html')({
-            data: {
-                facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
-                    options.response.level_source,
-                twitterUrl: "https://twitter.com/intent/tweet?url=" +
-                    options.response.level_source
-            }
+      var sharingUrl = document.createElement('div');
+      sharingUrl.className = 'feedback-links';
+      sharingUrl.innerHTML = require('./templates/buttons.html')({
+        data: {
+          sharingUrl: options.response.level_source
+        }
+      });
+      sharingDiv.appendChild(sharingUrl);
+      var sharingInput = sharingUrl.querySelector('#sharing-input');
+      if (sharingInput) {
+        dom.addClickTouchEvent(sharingInput, function() {
+          sharingInput.focus();
+          sharingInput.select();
         });
-        sharingDiv.appendChild(sharingButtons);
+      }
+
+      var sharingButtons = document.createElement('div');
+      sharingButtons.innerHTML = require('./templates/buttons.html')({
+        data: {
+          facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
+              options.response.level_source,
+          twitterUrl: "https://twitter.com/intent/tweet?url=" +
+              options.response.level_source
+        }
+      });
+      sharingDiv.appendChild(sharingButtons);
     }
 
     return sharingDiv;
