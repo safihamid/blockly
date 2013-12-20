@@ -96,12 +96,27 @@ BlocklyApps.init = function(config) {
   dom.addClickTouchEvent(runButton, BlocklyApps.runButtonClick);
   dom.addClickTouchEvent(resetButton, BlocklyApps.resetButtonClick);
 
+  var belowViz = document.getElementById('belowVisualization');
+  if (config.referenceArea) {
+    belowViz.appendChild(config.referenceArea());
+  }
+
   if (config.hide_source) {
     var blockly = container.querySelector('#blockly');
+    container.className = 'hide-source';
     blockly.style.display = 'none';
     var buttonRow = runButton.parentElement;
     var openWorkspace = document.createElement('button');
+    openWorkspace.setAttribute('id', 'open-workspace');
     openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+    belowViz.appendChild(feedback.createSharingButtons({
+      response: {
+        level_source: window.location
+      }
+    }));
+    var upSale = document.createElement('div');
+    upSale.innerHTML = require('./templates/learn.html')();
+    belowViz.appendChild(upSale);
     dom.addClickTouchEvent(openWorkspace, function() {
       // Redirect user to /edit version of this page. It would be better to
       // just turn on the workspace but there are rendering issues with that.
@@ -185,11 +200,6 @@ BlocklyApps.init = function(config) {
 
     var promptIcon = document.getElementById('prompt-icon');
     promptIcon.src = BlocklyApps.SMALL_ICON;
-  }
-
-  if (config.referenceArea) {
-    var belowViz = document.getElementById('belowVisualization');
-    belowViz.appendChild(config.referenceArea());
   }
 
   var div = document.getElementById('blockly');

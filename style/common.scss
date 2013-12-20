@@ -27,6 +27,10 @@ h2 {
 }
 a {
   color: #0596CE;
+  &:hover {
+    color: #0596CE;
+    background: none;
+  }
 }
 .farSide {
   text-align: right;
@@ -133,9 +137,28 @@ input[type="radio"] {
   margin-right: 10px;
 }
 
+#learn {
+  h1 {
+    margin: 20px 0px 0px 0px;
+  }
+  img {
+    margin-bottom: 5px;
+  }
+  a {
+    display: block;
+  }
+}
+
+#open-workspace {
+  margin: 5px 0px 5px 0px;
+}
+
 #gameButtons {
   margin-bottom: 10px;
   clear: left;
+}
+#slider-cell {
+  vertical-align: top;
 }
 
 /* Dialogs */
@@ -380,7 +403,7 @@ $modal-image-margin-gap: 10px;
   }
 
   .feedback-links {
-    margin-top: 15px
+    margin-top: 15px;
   }
 }
 
@@ -430,4 +453,20 @@ $modal-image-margin-gap: 10px;
 
 .hide {
   display: none;
+}
+.hide-source {
+  #visualization {
+    display: inline-block;
+  }
+  #belowVisualization {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 30px;
+  }
+  #bubble {
+    display: none;
+  }
+}
+.social-buttons a:hover {
+  text-decoration: none;
 }

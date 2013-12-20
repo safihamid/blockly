@@ -202,6 +202,38 @@ var getFeedbackMessage = function(options) {
   return feedback;
 };
 
+exports.createSharingButtons = function(options) {
+  var sharingWrapper = document.createElement('div');
+  var sharingButtons = document.createElement('div');
+  var sharingUrl = document.createElement('div');
+  sharingButtons.className = 'social-buttons';
+  sharingUrl.className = 'feedback-links';
+  sharingUrl.innerHTML = require('./templates/buttons.html')({
+    data: {
+      sharingUrl: options.response.level_source
+    }
+  });
+  sharingButtons.innerHTML = require('./templates/buttons.html')({
+    data: {
+      facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
+                    options.response.level_source,
+      twitterUrl: "https://twitter.com/intent/tweet?url=" +
+                  options.response.level_source
+    }
+  });
+  var sharingInput = sharingUrl.querySelector('#sharing-input');
+  if (sharingInput) {
+    dom.addClickTouchEvent(sharingInput, function() {
+      sharingInput.focus();
+      sharingInput.select();
+    });
+  }
+  sharingWrapper.appendChild(sharingUrl);
+  sharingWrapper.appendChild(sharingButtons);
+  return sharingWrapper;
+};
+
+
 var createSharingDiv = function(options) {
   // Creates the sharing div only when showingShring is set and the solution is
   // a passing solution.
@@ -223,34 +255,8 @@ var createSharingDiv = function(options) {
       sharingText.className = 'shareDrawingMsg';
       sharingDiv.appendChild(sharingText);
 
-      var sharingUrl = document.createElement('div');
-      sharingUrl.className = 'feedback-links';
-      sharingUrl.innerHTML = require('./templates/buttons.html')({
-        data: {
-          sharingUrl: options.response.level_source
-        }
-      });
-      sharingDiv.appendChild(sharingUrl);
-      var sharingInput = sharingUrl.querySelector('#sharing-input');
-      if (sharingInput) {
-        dom.addClickTouchEvent(sharingInput, function() {
-          sharingInput.focus();
-          sharingInput.select();
-        });
-      }
-
-      var sharingButtons = document.createElement('div');
-      sharingButtons.innerHTML = require('./templates/buttons.html')({
-        data: {
-          facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
-              options.response.level_source,
-          twitterUrl: "https://twitter.com/intent/tweet?url=" +
-              options.response.level_source
-        }
-      });
-      sharingDiv.appendChild(sharingButtons);
+      sharingDiv.appendChild(exports.createSharingButtons(options));
     }
-
     return sharingDiv;
   } else {
     return null;
