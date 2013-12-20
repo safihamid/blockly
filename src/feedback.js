@@ -206,6 +206,7 @@ exports.createSharingButtons = function(options) {
   var sharingWrapper = document.createElement('div');
   var sharingButtons = document.createElement('div');
   var sharingUrl = document.createElement('div');
+  sharingUrl.className = 'feedback-links';
   sharingUrl.innerHTML = require('./templates/buttons.html')({
     data: {
       sharingUrl: options.response.level_source
@@ -219,6 +220,13 @@ exports.createSharingButtons = function(options) {
                   options.response.level_source
     }
   });
+  var sharingInput = document.createElement('div');
+  if (sharingInput) {
+    dom.addClickTouchEvent(sharingInput, function() {
+      sharingInput.focus();
+      sharingInput.select();
+    });
+  }
   sharingWrapper.appendChild(sharingUrl);
   sharingWrapper.appendChild(sharingButtons);
   return sharingWrapper;
@@ -233,7 +241,6 @@ var createSharingDiv = function(options) {
     var sharingDiv = document.createElement('div');
     sharingDiv.setAttribute('style', 'display:inline-block');
     var sharingImage = document.createElement('div');
-    sharingUrl.className = 'feedback-links';
 
     var feedbackImage = createFeedbackImage(options);
     if (feedbackImage) {
@@ -242,9 +249,13 @@ var createSharingDiv = function(options) {
     }
 
     if (options.response && options.response.level_source) {
-        sharingDiv.appendChild(exports.sharingButtons(options));
-    }
+      var sharingText = document.createElement('div');
+      dom.setText(sharingText, msg.shareDrawing());
+      sharingText.className = 'shareDrawingMsg';
+      sharingDiv.appendChild(sharingText);
 
+      sharingDiv.appendChild(exports.createSharingButtons(options));
+    }
     return sharingDiv;
   } else {
     return null;
