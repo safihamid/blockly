@@ -103,7 +103,7 @@ BlocklyApps.init = function(config) {
 
   if (config.hide_source) {
     var blockly = container.querySelector('#blockly');
-    container.className += ' hide-source';
+    container.className = 'hide-source';
     blockly.style.display = 'none';
     var buttonRow = runButton.parentElement;
     var openWorkspace = document.createElement('button');
