@@ -133,6 +133,22 @@ input[type="radio"] {
   margin-right: 10px;
 }
 
+#learn {
+  h1 {
+    margin: 20px 0px 0px 0px;
+  }
+  img {
+    margin-bottom: 5px;
+  }
+  a {
+    display: block;
+  }
+}
+
+#open-workspace {
+  margin: 5px 0px 5px 0px;
+}
+
 #gameButtons {
   margin-bottom: 10px;
   clear: left;
@@ -383,8 +399,11 @@ $modal-image-margin-gap: 10px;
   }
 
   .feedback-links {
-    margin-top: 15px
+    margin-top: 15px;
   }
+}
+.social-buttons a {
+  background: none;
 }
 
 .dialog-title {

@@ -107,12 +107,16 @@ BlocklyApps.init = function(config) {
     blockly.style.display = 'none';
     var buttonRow = runButton.parentElement;
     var openWorkspace = document.createElement('button');
+    openWorkspace.setAttribute('id', 'open-workspace');
     openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
     belowViz.appendChild(feedback.createSharingButtons({
       response: {
         level_source: window.location
       }
     }));
+    var upSale = document.createElement('div');
+    upSale.innerHTML = require('./templates/learn.html')();
+    belowViz.appendChild(upSale);
     dom.addClickTouchEvent(openWorkspace, function() {
       // Redirect user to /edit version of this page. It would be better to
       // just turn on the workspace but there are rendering issues with that.
@@ -213,9 +217,7 @@ BlocklyApps.init = function(config) {
     Turtle.speedSlider = new Slider(10, 35, 130, slider);
 
     // Change default speed (eg Speed up levels that have lots of steps).
-    if (BlocklyApps.share) {
-      Turtle.speedSlider.setValue(1);
-    } else if (config.level.sliderSpeed) {
+    if (config.level.sliderSpeed) {
       Turtle.speedSlider.setValue(config.level.sliderSpeed);
     }
   }

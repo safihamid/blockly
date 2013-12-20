@@ -206,6 +206,7 @@ exports.createSharingButtons = function(options) {
   var sharingWrapper = document.createElement('div');
   var sharingButtons = document.createElement('div');
   var sharingUrl = document.createElement('div');
+  sharingButtons.className = 'social-buttons';
   sharingUrl.className = 'feedback-links';
   sharingUrl.innerHTML = require('./templates/buttons.html')({
     data: {
@@ -220,7 +221,7 @@ exports.createSharingButtons = function(options) {
                   options.response.level_source
     }
   });
-  var sharingInput = document.createElement('div');
+  var sharingInput = sharingUrl.querySelector('#sharing-input');
   if (sharingInput) {
     dom.addClickTouchEvent(sharingInput, function() {
       sharingInput.focus();
