@@ -276,7 +276,7 @@ var removeShovelfuls = function(n) { -%>
     <block type="procedures_defnoreturn" x="300" y="200" editable="false"
       deletable="false">
       <mutation></mutation>
-      <title name="NAME"><%= msg.fillStack() %></title>
+      <title name="NAME"><%= msg.fillStack({shovelfuls: 2}) %></title>
       <statement name="STACK">
         <block type="maze_turn" editable="false" deletable="false"
           movable="false">
