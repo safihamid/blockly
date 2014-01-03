@@ -134,44 +134,57 @@ var IF_ELSE = {'test': '} else {', 'type': 'karel_ifElse'};
 
 // This tests for and creates the "fill num" block.
 var fill = function(num) {
-  return {'test': 'fill_' + num + '();',
+  return {'test': function(block) {
+            return block.getTitleValue('NAME') == msg.fillN({shovelfuls: num});
+          },
           'type': 'procedures_callnoreturn',
           'titles': {'NAME': msg.fillN({shovelfuls: num})}};
 };
 
 // This tests for and creates the "remove num" blcok.
 var remove = function(num) {
-  return {'test': 'remove_' + num + '();',
+  return {'test': function(block) {
+            return block.getTitleValue('NAME') ==
+                msg.removeN({shovelfuls: num});
+          },
           'type': 'procedures_callnoreturn',
           'titles': {'NAME': msg.removeN({shovelfuls: num})}};
 };
 
 // This tests for and creates the "avoid the cow and remove 1" block.
 var AVOID_OBSTACLE_AND_REMOVE = {
-  'test': 'avoid_the_cow_and_remove_1();',
+  'test': function(block) {
+    return block.getTitleValue('NAME') == msg.avoidCowAndRemove();
+  },
   'type': 'procedures_callnoreturn',
   'titles': {'NAME': msg.avoidCowAndRemove()}
 };
 
 // This tests for and creates the "remove 1 and avoid the cow" block.
 var REMOVE_AND_AVOID_OBSTACLE = {
-  'test': 'remove_1_and_avoid_the_cow();',
+  'test': function(block) {
+    return block.getTitleValue('NAME') == msg.removeAndAvoidTheCow();
+  },
   'type': 'procedures_callnoreturn',
-  'titles': {'NAME': msg.avoidCowAndRemove()}
+  'titles': {'NAME': msg.removeAndAvoidTheCow()}
 };
 
 // This tests for and creates the "remove piles" block.
 var REMOVE_PILES = {
-  'test': 'remove_stack_of_4_piles();',
+  'test': function(block) {
+    return block.getTitleValue('NAME') == msg.removeStack({shovelfuls: 4});
+  },
   'type': 'procedures_callnoreturn',
   'titles': {'NAME': msg.removeStack({shovelfuls: 4})}
 };
 
 // This tests for and creates the "fill holes" block.
 var FILL_HOLES = {
-  'test': 'fill_stack_of_2_holes();',
+  'test': function(block) {
+    return block.getTitleValue('NAME') == msg.fillStack({shovelfuls: 2});
+  },
   'type': 'procedures_callnoreturn',
-  'titles': {'NAME': msg.fillStack()}
+  'titles': {'NAME': msg.fillStack({shovelfuls: 2})}
 };
 
 module.exports = {
