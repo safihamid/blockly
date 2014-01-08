@@ -198,7 +198,7 @@ exports.install = function(blockly, skin) {
     init: function() {
       this.setHSV(196, 1.0, 0.79);
       this.appendDummyInput()
-          .appendTitle('if');
+          .appendTitle(msg.ifCode());
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
       this.setInputsInline(true);
@@ -233,7 +233,7 @@ exports.install = function(blockly, skin) {
     init: function() {
       this.setHSV(196, 1.0, 0.79);
       this.appendDummyInput()
-          .appendTitle('if');
+          .appendTitle(msg.ifCode());
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
       this.setInputsInline(true);
