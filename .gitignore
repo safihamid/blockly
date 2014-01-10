@@ -7,3 +7,5 @@ npm-debug.log
 build/
 dist/
 node_modules/
+
+lib/blockly/blockly_compressed.js
