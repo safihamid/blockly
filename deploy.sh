@@ -1,4 +1,4 @@
 #!/bin/bash
 
 npm install
-grunt build
+script/full_build
