@@ -55,9 +55,9 @@
   "infinity": "无限远",
   "rotateText": "旋转您的设备。",
   "orientationLock": "关闭设置中的旋转锁定。",
-  "shareDrawing": "Share your drawing:",
-  "wantToLearn": "Want to learn to code?",
-  "watchVideo": "Watch the Video",
-  "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "shareDrawing": "分享您的图画：",
+  "wantToLearn": "想要学习如何写代码吗？",
+  "watchVideo": "观看视频",
+  "tryHOC": "来试试编程训练",
+  "signup": "注册账号后参加简介课程"
 }
