@@ -11,6 +11,7 @@ var APPS = [
 // Parse options from environment.
 var MINIFY = (process.env.MOOC_MINIFY === '1');
 var LOCALIZE = (process.env.MOOC_LOCALIZE === '1');
+var DEV = (process.env.MOOC_DEV === '1');
 
 var LOCALES = (LOCALIZE ? [
   'af_za',
@@ -182,10 +183,11 @@ APPS.forEach(function(app) {
 
 config.concat = {};
 LOCALES.forEach(function(locale) {
+  var ext = DEV ? 'debug' : 'compressed';
   config.concat['vendor_' + locale] = {
     nonull: true,
     src: [
-      'lib/blockly/blockly_compressed.js',
+      'lib/blockly/blockly_' + ext + '.js',
       'lib/blockly/blocks_compressed.js',
       'lib/blockly/javascript_compressed.js',
       'lib/blockly/' + locale + '.js'
@@ -319,5 +321,4 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'mochaTest']);
 
   grunt.registerTask('default', ['rebuild', 'test']);
-
 };
