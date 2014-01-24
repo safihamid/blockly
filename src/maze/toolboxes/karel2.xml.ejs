@@ -14,11 +14,11 @@ var addProcedures = function() { -%>
     </category>
   <% } -%>
   <% if (level < 9) { -%>
-    <category name="<%= commonMsg.catCondition() %>">
+    <category name="<%= commonMsg.catLogic() %>">
       <block type="karel_if"></block>
     </category>
   <% } else if (level > 8) { -%>
-    <category name="<%= commonMsg.catCondition() %>">
+    <category name="<%= commonMsg.catLogic() %>">
       <block type="karel_if"></block>
       <block type="karel_ifElse"></block>
     </category>
