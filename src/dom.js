@@ -35,7 +35,10 @@ exports.addClickTouchEvent = function(element, handler) {
   }
   if (key) {
     var touchEvent = TOUCH_MAP.click[key];
-    element.addEventListener(touchEvent, handler, false);
+    element.addEventListener(touchEvent, function(e) {
+      e.preventDefault();  // Stop mouse events.
+      handler(e);
+    }, false);
   }
 };
 
