@@ -21,10 +21,10 @@ window_.DOMParser = global.DOMParser = xmldom.DOMParser;
 window_.XMLSerializer = global.XMLSerializer = xmldom.XMLSerializer;
 window_.Blockly = global.Blockly = initBlockly(window_);
 
-// Asynchronously test a level in side a virtual browser environment.
-var runLevel = function(app, level, done) {
+// Asynchronously test a level inside a virtual browser environment.
+var runLevel = function(app, level, onAttempt) {
   require('../build/js/' + app + '/main');
-  var main = window_[app + 'Main'];
+  var main = window_[app + 'Main'];  
   main({
     skinId: 'farmer', // XXX Doesn't apply to Turtle, should come from level.
     level: level,
@@ -34,49 +34,46 @@ var runLevel = function(app, level, done) {
       // Click the run button!
       window_.BlocklyApps.runButtonClick();
     },
-    onAttempt: function(report) {
-      // Validate successful solution.
-      assert(report.result, "Failed solution");
-      done();
-    }
+    onAttempt: onAttempt
   });
-
-  //TODO: Validate that solutions match their puzzle's toolbox.
-  //TODO: Create non-solution test cases too.
 };
 
-['maze', 'turtle'].forEach(function(app) {
-  describe(app + ' levels', function() {
+/**
+ * Loads a test collection at path an runs all the tests specified in it.
+ */
+var runTestCollection = function (path) {
+  var testCollection = require(path);
+  var app = testCollection.app;
 
-    var levels = require('../build/js/' + app + '/levels');
-    Object.keys(levels).forEach(function(levelId) {
+  // TODO: do i want a way to run this against src file as well so that we dont
+  // require a build to run tests?
+  var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
+  var level = levels[testCollection.levelId];
 
-      var level = levels[levelId];
-      var xmlPath = path.join(__dirname, 'solutions', app, levelId + '.xml');
-      var description = 'level ' + levelId + ' solution';
+  testCollection.tests. forEach(function (testData) {
+    it(testData.description, function (done) {
+      // Warp Speed!
+        if (!level.scale) {
+          level.scale = {};
+        }
+        level.scale.stepSpeed = 0;
 
-      if (fs.existsSync(xmlPath)) {
-        it(description, function(done) {
+        // Override start blocks to load the solution;      
+        level.startBlocks = testData.xml;
 
-          // Warp Speed!
-          if (!level.scale) {
-            level.scale = {};
-          }
-          level.scale.stepSpeed = 0;
+        runLevel(app, level, function (report) {          
+          // todo - see what happens with empty/bad expected
 
-          // Override start blocks to load the solution;
-          var xml = fs.readFileSync(xmlPath, 'utf8');
-          level.startBlocks = xml;
-
-          runLevel(app, level, done);
-
+          // Validate successful solution.
+          Object.keys(testData.expected).forEach(function (key) {
+            assert.equal(report[key], testData.expected[key],
+              "Failure for key: " + key);
+          });
+          done();
         });
-      } else {
-        // Treat missing solutions as pending, not failing.
-        it(description);
-      }
-
     });
-
   });
-});
+
+};
+
+runTestCollection('./solutions/maze/karel_2_10.json');
