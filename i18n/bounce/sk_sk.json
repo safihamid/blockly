@@ -21,8 +21,6 @@
   "ifPathAhead": "if path ahead",
   "ifTooltip": "If there is a path in the specified direction, then do some actions.",
   "ifelseTooltip": "If there is a path in the specified direction, then do the first block of actions. Otherwise, do the second block of actions.",
-  "isWall": "is this a wall",
-  "isWallTooltip": "Returns true if there is a wall here",
   "moveForward": "move forward",
   "moveForwardTooltip": "Move me forward one space.",
   "nextLevel": "Congratulations! You have completed this puzzle.",
@@ -48,8 +46,6 @@
   "turnLeft": "turn left",
   "turnRight": "turn right",
   "turnTooltip": "Turns me left or right by 90 degrees.",
-  "whenRun": "when Run clicked",
-  "whenRunTooltip": "Execute the actions below when the Run button is clicked.",
   "while": "while",
   "whileTooltip": "Repeat the enclosed actions until finish point is reached.",
   "yes": "Yes"
