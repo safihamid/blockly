@@ -57,9 +57,13 @@ var runTestCollection = function (path) {
   var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
   var level = levels[testCollection.levelId];
 
-  testCollection.tests. forEach(function (testData) {
-    it(testData.description, function (done) {
-      // Warp Speed!
+  var exceptions, messages;
+
+  describe('app: ' + app + ', levelFile: ' + testCollection.levelFile +
+    ', levelId: ' + testCollection.levelId, function () {        
+    testCollection.tests.forEach(function (testData) {
+      it(testData.description, function (done) {
+        // Warp Speed!
         if (!level.scale) {
           level.scale = {};
         }
@@ -70,14 +74,31 @@ var runTestCollection = function (path) {
 
         runLevel(app, level, function (report) {          
           // todo - see what happens with empty/bad expected
+          exceptions = [];
 
           // Validate successful solution.
           Object.keys(testData.expected).forEach(function (key) {
-            assert.equal(report[key], testData.expected[key],
-              "Failure for key: " + key);
+            try {
+              assert.equal(report[key], testData.expected[key],
+                'Failure for key: ' + key);
+            } catch (e) {
+              // swallow exception to start so that if there are multiple  we
+              // can catch them all
+              exceptions.push(e);
+            }               
           });
+          if (exceptions.length === 1) {
+            throw exceptions[0];
+          } else if (exceptions.length > 1) {
+            messages = 'Multiple exceptions\n---';
+            exceptions.forEach(function (e) {
+              messages += '\n' + e.message;
+            });
+            assert.ok(false, messages + '\n---\nEnd of combined exceptions');
+          }
           done();
         });
+      });
     });
   });
 };
@@ -94,8 +115,6 @@ var getTestCollections = function (directory) {
   return testCollections;
 };
 
-describe('level tests', function () {    
-  getTestCollections('./test').forEach(function (path) {
-    runTestCollection(path);
-  });  
+getTestCollections('./test').forEach(function (path) {
+  runTestCollection(path);
 });
