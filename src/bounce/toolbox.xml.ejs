@@ -1,0 +1,19 @@
+<%
+
+var msg = require('../../locale/current/bounce');
+
+/*
+TOOLBOX.
+
+PAGE 1
+======
+Within this page, blocks are only added, never taken away.
+
+Level 1 [el]: Adds draw_move_by_constant and draw_turn_by_constant.
+
+*/ -%>
+<xml id="toolbox" style="display: none;">
+  <% if (page == 1) { -%>
+    <block type="bounce_isWall"></block>
+  <% } -%>
+</xml>

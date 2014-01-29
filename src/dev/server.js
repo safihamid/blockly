@@ -45,4 +45,8 @@ app.get('/turtle', function(req, res) {
   renderApp('turtle', req, res);
 });
 
+app.get('/bounce', function(req, res) {
+  renderApp('bounce', req, res);
+});
+
 module.exports = app;

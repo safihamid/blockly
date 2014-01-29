@@ -5,7 +5,8 @@ var config = {};
 
 var APPS = [
   'maze',
-  'turtle'
+  'turtle',
+  'bounce'
 ];
 
 // Parse options from environment.
@@ -265,6 +266,7 @@ config.jshint = {
       BlocklyApps: true,
       Maze: true,
       Turtle: true,
+      Bounce: true
     }
   },
   all: [
