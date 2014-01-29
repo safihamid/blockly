@@ -1,8 +1,17 @@
+/**
+ * The level test driver.
+ * Tests collections are specified in .json files in this directory.
+ * To extract the xml for a test from a workspace, run the following code in
+ * your console:
+ * JSON.stringify(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)));
+ */
+
 var path = require('path');
 var fs = require('fs');
 var assert = require('chai').assert;
 var jsdom = require('jsdom').jsdom;
 var xmldom = require('xmldom');
+var wrench = require('wrench');
 
 var VENDOR_CODE =
   fs.readFileSync(path.join(__dirname, '../build/package/js/en_us/vendor.js'));
@@ -38,11 +47,9 @@ var runLevel = function(app, level, onAttempt) {
   });
 };
 
-/**
- * Loads a test collection at path an runs all the tests specified in it.
- */
+// Loads a test collection at path an runs all the tests specified in it.
 var runTestCollection = function (path) {
-  var testCollection = require(path);
+  var testCollection = require('./' + path);
   var app = testCollection.app;
 
   // TODO: do i want a way to run this against src file as well so that we dont
@@ -73,7 +80,22 @@ var runTestCollection = function (path) {
         });
     });
   });
-
 };
 
-runTestCollection('./solutions/maze/karel_2_10.json');
+// Get all json files under directory path
+var getTestCollections = function (directory) {  
+  var files = wrench.readdirSyncRecursive(directory);
+  var testCollections = [];
+  files.forEach(function (file) {
+    if (/\.json$/.test(file)) {
+      testCollections.push(file);
+    }
+  });
+  return testCollections;
+};
+
+describe('level tests', function () {    
+  getTestCollections('./test').forEach(function (path) {
+    runTestCollection(path);
+  });  
+});
