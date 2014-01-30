@@ -58,3 +58,21 @@ exports.evalWith = function(code, options) {
   var fn = new ctor();
   return fn.apply(null, args);
 };
+
+/**
+ * Returns a function based on a string of code parameterized with a dictionary.
+ */
+exports.functionFromCode = function(code, options) {
+  var params = [];
+  var args = [];
+  for (var k in options) {
+    params.push(k);
+    args.push(options[k]);
+  }
+  params.push(code);
+  var ctor = function() {
+    return Function.apply(this, params);
+  };
+  ctor.prototype = Function.prototype;
+  return new ctor();
+};

@@ -12,6 +12,13 @@ exports.Direction = {
   WEST: 3
 };
 
+exports.AngleDirection = {
+  NORTHEAST: 0,
+  SOUTHEAST: 1,
+  SOUTHWEST: 2,
+  NORTHWEST: 3
+};
+
 /**
  * The types of squares in the maze, which is represented
  * as a 2D array of SquareType values.
@@ -23,5 +30,6 @@ exports.SquareType = {
   START: 2,
   FINISH: 3,
   OBSTACLE: 4,
-  STARTANDFINISH: 5
+  STARTANDFINISH: 5,
+  BALLSTART: 6
 };

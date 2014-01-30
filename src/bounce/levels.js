@@ -24,9 +24,9 @@ module.exports = {
 
   '1_1': {
     'toolbox': toolbox(1, 1),
-    'ideal': 1,
+    'ideal': 3,
     'requiredBlocks': [
-      [{'test': 'isWall', 'type': 'bounce_isWall'}]
+      [{'test': 'moveForward', 'type': 'bounce_moveForward'}]
     ],
     'scale': {
       'snapRadius': 2,
@@ -38,11 +38,11 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 2, 1, 3, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
+      [2, 1, 1, 1, 1, 1, 1, 3],
+      [0, 0, 0, 0, 0, 6, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
-    'singleTopBlock': true
+    'startBlocks': startBlocks(1, 1)
   }
 };

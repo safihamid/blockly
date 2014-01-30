@@ -36,6 +36,8 @@
   "pathLeft": "if path to the left",
   "pathRight": "if path to the right",
   "pilePresent": "there is a pile",
+  "playSound": "play sound",
+  "playSoundTooltip": "Play a sound.",
   "putdownTower": "put down tower",
   "removeAndAvoidTheCow": "remove 1 and avoid the cow",
   "removeN": "remove {shovelfuls}",
@@ -50,6 +52,8 @@
   "turnTooltip": "Turns me left or right by 90 degrees.",
   "whenRun": "when Run clicked",
   "whenRunTooltip": "Execute the actions below when the Run button is clicked.",
+  "whenWallCollided": "when Wall collision",
+  "whenWallCollidedTooltip": "Execute the actions below when a wall collision occurs.",
   "while": "while",
   "whileTooltip": "Repeat the enclosed actions until finish point is reached.",
   "yes": "Yes"
