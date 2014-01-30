@@ -457,6 +457,9 @@ Maze.init = function(config) {
 
     Blockly.SNAP_RADIUS *= Maze.scale.snapRadius;
 
+    Maze.start_ = undefined;
+    Maze.finish_ = undefined;
+    
     // Locate the start and finish squares.
     for (var y = 0; y < Maze.ROWS; y++) {
       for (var x = 0; x < Maze.COLS; x++) {

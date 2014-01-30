@@ -1,8 +1,0 @@
-<xml>
-  <block type="controls_repeat" x="39" y="50">
-    <title name="TIMES">5</title>
-    <statement name="DO">
-      <block type="maze_moveForward"/>
-    </statement>
-  </block>
-</xml>

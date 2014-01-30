@@ -1,7 +1,0 @@
-<xml>
-  <block type="maze_forever" x="27" y="47">
-    <statement name="DO">
-      <block type="maze_moveForward"/>
-    </statement>
-  </block>
-</xml>

@@ -1,8 +1,17 @@
+/**
+ * The level test driver.
+ * Tests collections are specified in .json files in this directory.
+ * To extract the xml for a test from a workspace, run the following code in
+ * your console:
+ * JSON.stringify(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)));
+ */
+
 var path = require('path');
 var fs = require('fs');
 var assert = require('chai').assert;
 var jsdom = require('jsdom').jsdom;
 var xmldom = require('xmldom');
+var wrench = require('wrench');
 
 var VENDOR_CODE =
   fs.readFileSync(path.join(__dirname, '../build/package/js/en_us/vendor.js'));
@@ -21,10 +30,10 @@ window_.DOMParser = global.DOMParser = xmldom.DOMParser;
 window_.XMLSerializer = global.XMLSerializer = xmldom.XMLSerializer;
 window_.Blockly = global.Blockly = initBlockly(window_);
 
-// Asynchronously test a level in side a virtual browser environment.
-var runLevel = function(app, level, done) {
+// Asynchronously test a level inside a virtual browser environment.
+var runLevel = function(app, level, onAttempt) {
   require('../build/js/' + app + '/main');
-  var main = window_[app + 'Main'];
+  var main = window_[app + 'Main'];  
   main({
     skinId: 'farmer', // XXX Doesn't apply to Turtle, should come from level.
     level: level,
@@ -34,49 +43,77 @@ var runLevel = function(app, level, done) {
       // Click the run button!
       window_.BlocklyApps.runButtonClick();
     },
-    onAttempt: function(report) {
-      // Validate successful solution.
-      assert(report.result, "Failed solution");
-      done();
-    }
+    onAttempt: onAttempt
   });
-
-  //TODO: Validate that solutions match their puzzle's toolbox.
-  //TODO: Create non-solution test cases too.
 };
 
-['maze', 'turtle'].forEach(function(app) {
-  describe(app + ' levels', function() {
+// Loads a test collection at path an runs all the tests specified in it.
+var runTestCollection = function (path) {
+  var testCollection = require('./' + path);
+  var app = testCollection.app;
 
-    var levels = require('../build/js/' + app + '/levels');
-    Object.keys(levels).forEach(function(levelId) {
+  var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
+  var level = levels[testCollection.levelId];
 
-      var level = levels[levelId];
-      var xmlPath = path.join(__dirname, 'solutions', app, levelId + '.xml');
-      var description = 'level ' + levelId + ' solution';
+  var exceptions, messages;
 
-      if (fs.existsSync(xmlPath)) {
-        it(description, function(done) {
+  describe('app: ' + app + ', levelFile: ' + testCollection.levelFile +
+    ', levelId: ' + testCollection.levelId, function () {        
+    testCollection.tests.forEach(function (testData) {
+      it(testData.description, function (done) {
+        // Warp Speed!
+        if (!level.scale) {
+          level.scale = {};
+        }
+        level.scale.stepSpeed = 0;
 
-          // Warp Speed!
-          if (!level.scale) {
-            level.scale = {};
+        // Override start blocks to load the solution;      
+        level.startBlocks = testData.xml;
+
+        runLevel(app, level, function (report) {          
+          // todo - see what happens with empty/bad expected
+          exceptions = [];
+
+          // Validate successful solution.
+          assert(Object.keys(testData.expected).length > 0);
+          Object.keys(testData.expected).forEach(function (key) {
+            try {
+              assert.equal(report[key], testData.expected[key],
+                'Failure for key: ' + key);
+            } catch (e) {
+              // swallow exception to start so that if there are multiple  we
+              // can catch them all
+              exceptions.push(e);
+            }               
+          });
+          if (exceptions.length === 1) {
+            throw exceptions[0];
+          } else if (exceptions.length > 1) {
+            messages = 'Multiple exceptions\n---';
+            exceptions.forEach(function (e) {
+              messages += '\n' + e.message;
+            });
+            assert.ok(false, messages + '\n---\nEnd of combined exceptions');
           }
-          level.scale.stepSpeed = 0;
-
-          // Override start blocks to load the solution;
-          var xml = fs.readFileSync(xmlPath, 'utf8');
-          level.startBlocks = xml;
-
-          runLevel(app, level, done);
-
+          done();
         });
-      } else {
-        // Treat missing solutions as pending, not failing.
-        it(description);
-      }
-
+      });
     });
-
   });
+};
+
+// Get all json files under directory path
+var getTestCollections = function (directory) {  
+  var files = wrench.readdirSyncRecursive(directory);
+  var testCollections = [];
+  files.forEach(function (file) {
+    if (/\.json$/.test(file)) {
+      testCollections.push(file);
+    }
+  });
+  return testCollections;
+};
+
+getTestCollections('./test').forEach(function (path) {
+  runTestCollection(path);
 });
