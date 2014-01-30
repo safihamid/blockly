@@ -52,8 +52,6 @@ var runTestCollection = function (path) {
   var testCollection = require('./' + path);
   var app = testCollection.app;
 
-  // TODO: do i want a way to run this against src file as well so that we dont
-  // require a build to run tests?
   var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
   var level = levels[testCollection.levelId];
 
@@ -77,6 +75,7 @@ var runTestCollection = function (path) {
           exceptions = [];
 
           // Validate successful solution.
+          assert(Object.keys(testData.expected).length > 0);
           Object.keys(testData.expected).forEach(function (key) {
             try {
               assert.equal(report[key], testData.expected[key],
