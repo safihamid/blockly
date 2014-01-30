@@ -19,6 +19,7 @@ var feedback = require('../feedback.js');
 var dom = require('../dom');
 
 var Direction = tiles.Direction;
+var AngleDirection = tiles.AngleDirection;
 var SquareType = tiles.SquareType;
 
 /**
@@ -290,7 +291,7 @@ var drawMap = function() {
   clipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
   pegmanClip.appendChild(clipRect);
   svg.appendChild(pegmanClip);
-
+  
   // Add pegman.
   var pegmanIcon = document.createElementNS(Blockly.SVG_NS, 'image');
   pegmanIcon.setAttribute('id', 'pegman');
@@ -300,6 +301,26 @@ var drawMap = function() {
   pegmanIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
   pegmanIcon.setAttribute('clip-path', 'url(#pegmanClipPath)');
   svg.appendChild(pegmanIcon);
+
+  // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
+  var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+  ballClip.setAttribute('id', 'ballClipPath');
+  var ballClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  ballClipRect.setAttribute('id', 'ballClipRect');
+  ballClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
+  ballClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+  ballClip.appendChild(ballClipRect);
+  svg.appendChild(ballClip);
+  
+  // Add ball.
+  var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+  ballIcon.setAttribute('id', 'ball');
+  ballIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                          skin.avatar);
+  ballIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+  ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+  ballIcon.setAttribute('clip-path', 'url(#ballClipPath)');
+  svg.appendChild(ballIcon);
 
   if (Bounce.finish_) {
     // Add finish marker.
@@ -373,8 +394,70 @@ var drawMap = function() {
       numRowPegman: 9
     });
   }
+  
+  window.setInterval(Bounce.onTick, 33);
 
 };
+
+Bounce.onTick = function() {
+  var deltaX = 0;
+  var deltaY = 0;
+  var collision = false;
+  
+  switch (Bounce.ballD) {
+    case AngleDirection.NORTHEAST:
+      deltaY = -0.05;
+      deltaX = 0.05;
+      break;
+    case AngleDirection.NORTHWEST:
+      deltaY = -0.05;
+      deltaX = -0.05;
+      break;
+    case AngleDirection.SOUTHEAST:
+      deltaY = 0.05;
+      deltaX = 0.05;
+      break;
+    case AngleDirection.SOUTHWEST:
+      deltaY = 0.05;
+      deltaX = -0.05;
+      break;
+  }
+
+  Bounce.ballX += deltaX;
+  Bounce.ballY += deltaY;
+  
+  if (Bounce.ballX < 0) {
+    Bounce.ballX = 0;
+    Bounce.ballD += 1;
+    collision = true;
+  } else if (Bounce.ballX > (Bounce.COLS - 1)) {
+    Bounce.ballX = Bounce.COLS - 1;
+    Bounce.ballD += 1;
+    collision = true;
+  }
+
+  if (Bounce.ballY < 0) {
+    Bounce.ballY = 0;
+    Bounce.ballD += 1;
+    collision = true;
+  } else if (Bounce.ballY > (Bounce.ROWS - 1)) {
+    Bounce.ballY = Bounce.ROWS - 1;
+    Bounce.ballD += 1;
+    collision = true;
+  }
+  
+  if (collision) {
+    Bounce.ballD %= 4;
+    console.log("collission");
+    try {
+      Bounce.whenWallCollided(BlocklyApps, api);
+    }
+    catch (e) {
+    }
+  }
+  
+  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 0);
+}
 
 var resetDirt = function() {
   // Init the dirt so that all places are empty
@@ -451,6 +534,8 @@ Bounce.init = function(config) {
         } else if (Bounce.map[y][x] == SquareType.STARTANDFINISH) {
           Bounce.start_ = {x: x, y: y};
           Bounce.finish_ = {x: x, y: y};
+        } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
+          Bounce.ballStart_ = {x: x, y: y};
         }
       }
     }
@@ -648,6 +733,10 @@ BlocklyApps.reset = function(first) {
   Bounce.pegmanX = Bounce.start_.x;
   Bounce.pegmanY = Bounce.start_.y;
 
+  // Move Ball into position.
+  Bounce.ballX = Bounce.ballStart_.x;
+  Bounce.ballY = Bounce.ballStart_.y;
+  
   if (first) {
     Bounce.pegmanD = Bounce.startDirection + 1;
     Bounce.scheduleFinish(false);
@@ -661,6 +750,9 @@ BlocklyApps.reset = function(first) {
     Bounce.pegmanD = Bounce.startDirection;
     Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4);
   }
+  
+  Bounce.ballD = AngleDirection.SOUTHWEST;
+  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 0);
 
   var svg = document.getElementById('svgBounce');
 
@@ -821,7 +913,7 @@ Bounce.onReportComplete = function(response) {
 Bounce.execute = function() {
   BlocklyApps.log = [];
   BlocklyApps.ticks = 100; //TODO: Set higher for some levels
-  var code = Blockly.Generator.workspaceToCode('JavaScript');
+  var code = Blockly.Generator.workspaceToCode('JavaScript', 'bounce_whenRun');
   Bounce.result = ResultType.UNSET;
   Bounce.testResults = BlocklyApps.TestResults.NO_TESTS_RUN;
   Bounce.waitingForReport = false;
@@ -850,6 +942,14 @@ Bounce.execute = function() {
       }
     }
   }
+  
+  var codeWallCollided = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenWallCollided');
+  Bounce.whenWallCollided = codegen.functionFromCode(
+                                     codeWallCollided, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
 
   // Try running the user's code.  There are four possible outcomes:
   // 1. If pegman reaches the finish [SUCCESS], true is thrown.
@@ -1366,6 +1466,25 @@ Bounce.displayPegman = function(x, y, d) {
   var clipRect = document.getElementById('clipRect');
   clipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
   clipRect.setAttribute('y', pegmanIcon.getAttribute('y'));
+};
+
+/**
+ * Display Ball at the specified location, facing the specified direction.
+ * @param {number} x Horizontal grid (or fraction thereof).
+ * @param {number} y Vertical grid (or fraction thereof).
+ * @param {number} d Direction (0 - 15) or dance (16 - 17).
+ */
+Bounce.displayBall = function(x, y, d) {
+  // console.log("displayBall x=" + x + " y=" + y + " d=" + d);
+  var ballIcon = document.getElementById('ball');
+  ballIcon.setAttribute('x',
+                        x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
+  ballIcon.setAttribute('y',
+                        y * Bounce.SQUARE_SIZE + Bounce.PEGMAN_Y_OFFSET - 8);
+  
+  var ballClipRect = document.getElementById('ballClipRect');
+  ballClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
+  ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
 };
 
 var scheduleDirtChange = function(options) {
