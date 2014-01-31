@@ -1318,7 +1318,8 @@ Maze.setTileTransparent = function() {
       if (tileElement) {
         tileElement.setAttribute('opacity', 0);
       }
-      if (tileAnimation) {
+      if (tileAnimation && tileAnimation.beginElement) {
+        // IE doesn't support beginElement, so check for it.
         tileAnimation.beginElement();
       }
       tileId++;
