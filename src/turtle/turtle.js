@@ -110,7 +110,7 @@ Turtle.init = function(config) {
     // Add to reserved word list: API, local variables in execution evironment
     // (execute) and the infinite loop detection function.
     //XXX Not sure if this is still right.
-     Blockly.JavaScript.addReservedWords('Turtle,code');
+    Blockly.JavaScript.addReservedWords('Turtle,code');
  
     // Helper for creating canvas elements.
     var createCanvas = function(id, width, height) {
