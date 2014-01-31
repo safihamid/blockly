@@ -39,6 +39,9 @@ open http://localhost:8000
 grunt test
 ```
 
+One of the node modules, node-canvas, depends on Cairo being installed.
+Instructions for installing Cairo can be found at https://github.com/LearnBoost/node-canvas/wiki.
+
 ## Project Specification
 
 Both of these tutorials are found on code.org/learn or csedweek.org/learn. At
