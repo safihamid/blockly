@@ -93,7 +93,6 @@ Turtle.init = function(config) {
     assetUrl: BlocklyApps.assetUrl,
     data: {
       localeDirection: BlocklyApps.localeDirection(),
-      visualization: require('./visualization.html')(),
       controls: require('./controls.html')({assetUrl: BlocklyApps.assetUrl}),
       blockUsed : undefined,
       idealBlockNumber : undefined,
@@ -111,21 +110,36 @@ Turtle.init = function(config) {
     // Add to reserved word list: API, local variables in execution evironment
     // (execute) and the infinite loop detection function.
     //XXX Not sure if this is still right.
-    Blockly.JavaScript.addReservedWords('Turtle,code');
-
-    // Get the canvases and set their initial contents.
-    Turtle.ctxDisplay = document.getElementById('display').getContext('2d');
-    Turtle.ctxAnswer = document.getElementById('answer').getContext('2d');
-    Turtle.ctxImages = document.getElementById('images').getContext('2d');
-    Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
-    Turtle.ctxFeedback = document.getElementById('feedback').getContext('2d');
+     Blockly.JavaScript.addReservedWords('Turtle,code');
+ 
+    // Helper for creating canvas elements.
+    var createCanvas = function(id, width, height) {
+      var el = document.createElement('canvas');
+      el.id = id;
+      el.width = width;
+      el.height = height;
+      return el;
+    };
+  
+    // Create hidden canvases.
+    Turtle.ctxAnswer = createCanvas('answer', 400, 400).getContext('2d');
+    Turtle.ctxImages = createCanvas('images', 400, 400).getContext('2d');
+    Turtle.ctxScratch = createCanvas('scratch', 400, 400).getContext('2d');    
+    Turtle.ctxFeedback = createCanvas('feedback', 154, 154).getContext('2d');
+  
+    // Create display canvas.
+    var display = createCanvas('display', 400, 400);
+    var visualization = document.getElementById('visualization');
+    visualization.appendChild(display);
+    Turtle.ctxDisplay = display.getContext('2d');
+    
+    // Set their initial contents.
     Turtle.loadTurtle();
     Turtle.drawImages();
     Turtle.drawAnswer();
 
     // Adjust visualization and belowVisualization width.
     var drawAreaWidth = config.getDisplayWidth();
-    var visualization = document.getElementById('visualization');
     visualization.style.width = drawAreaWidth + 'px';
     var belowVisualization = document.getElementById('belowVisualization');
     belowVisualization.style.width = drawAreaWidth + 'px';
@@ -552,6 +566,7 @@ Turtle.checkAnswer = function() {
   var answerImage =
       Turtle.ctxAnswer.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
   var len = Math.min(userImage.data.length, answerImage.data.length);
+  var total = 0;
   var delta = 0;
   // Pixels are in RGBA format.  Only check the Alpha bytes.
   for (var i = 3; i < len; i += 4) {
@@ -560,6 +575,14 @@ Turtle.checkAnswer = function() {
     if (Math.abs(userImage.data[i] - answerImage.data[i]) > 250) {
       delta++;
     }
+    if ((userImage.data[i] !== 0) || (answerImage.data[i] !== 0)) {
+      total++;
+    }
+  }
+
+  // Sanity check empty canvases for unit tests.
+  if (total === 0) {
+    throw new Error('Blank images');
   }
 
   // Allow some number of pixels to be off, but be stricter
@@ -662,7 +685,7 @@ var getFeedbackImage = function() {
   // Copy the user layer
   Turtle.ctxFeedback.globalCompositeOperation = 'copy';
   Turtle.ctxFeedback.drawImage(Turtle.ctxScratch.canvas, 0, 0, 154, 154);
-  var feedbackCanvas = document.getElementById('feedback');
+  var feedbackCanvas = Turtle.ctxFeedback.canvas;
   return encodeURIComponent(
       feedbackCanvas.toDataURL("image/png").split(',')[1]);
 };

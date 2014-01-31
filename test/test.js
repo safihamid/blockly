@@ -12,6 +12,7 @@ var assert = require('chai').assert;
 var jsdom = require('jsdom').jsdom;
 var xmldom = require('xmldom');
 var wrench = require('wrench');
+var canvas = require('canvas');
 
 var VENDOR_CODE =
   fs.readFileSync(path.join(__dirname, '../build/package/js/en_us/vendor.js'));
@@ -29,11 +30,29 @@ var window_ = global.window = document_.parentWindow;
 window_.DOMParser = global.DOMParser = xmldom.DOMParser;
 window_.XMLSerializer = global.XMLSerializer = xmldom.XMLSerializer;
 window_.Blockly = global.Blockly = initBlockly(window_);
+global.Image = canvas.Image;
 
 // Asynchronously test a level inside a virtual browser environment.
 var runLevel = function(app, level, onAttempt) {
   require('../build/js/' + app + '/main');
-  var main = window_[app + 'Main'];  
+
+  // app specific hacks
+  switch (app.toLowerCase()) {
+    case 'turtle':
+      global.Turtle = window.Turtle;    
+      // hack drawTurtle to be a noop, as it's not needed to verify solutions,
+      // and drawImage was having issues in a node environment
+      global.Turtle.drawTurtle = function () {};
+      break;
+    case 'maze':
+      // disable animations, otherwise these continue to run after our test is
+      // finished, which gets us into trouble if we switch to another app.
+      // long term, better fix would be to have each app run in its own context
+      global.Maze.animate = function () {};
+      break;
+  }
+
+  var main = window_[app + 'Main'];    
   main({
     skinId: 'farmer', // XXX Doesn't apply to Turtle, should come from level.
     level: level,
@@ -66,12 +85,12 @@ var runTestCollection = function (path) {
           level.scale = {};
         }
         level.scale.stepSpeed = 0;
+        level.sliderSpeed = 1;        
 
         // Override start blocks to load the solution;      
         level.startBlocks = testData.xml;
 
-        runLevel(app, level, function (report) {          
-          // todo - see what happens with empty/bad expected
+        runLevel(app, level, function (report) {
           exceptions = [];
 
           // Validate successful solution.
