@@ -537,7 +537,7 @@ var displayFeedback = function() {
     message: Turtle.message,
     response: Turtle.response,
     level: level,
-    feedbackImage: document.getElementById('scratch').toDataURL("image/png"),
+    feedbackImage: Turtle.ctxScratch.canvas.toDataURL("image/png"),
     showingSharing: true
     });
 };
