@@ -76,10 +76,19 @@ var runTestCollection = function (path) {
 
   var exceptions, messages;
 
-  describe('app: ' + app + ', levelFile: ' + testCollection.levelFile +
-    ', levelId: ' + testCollection.levelId, function () {        
+  describe(path, function () {
     testCollection.tests.forEach(function (testData) {
       it(testData.description, function (done) {
+        // can specify a test specific timeout in json file.
+        if (testData.timeout !== undefined) {
+          this.timeout(testData.timeout);
+        }
+        if (process.execArgv.indexOf('--debug') !== -1 ||
+          process.execArgv.indexOf('--debug-brk') !== -1) {
+          // Don't timeout while we're debugging
+          this.timeout(0);
+        }
+
         // Warp Speed!
         if (!level.scale) {
           level.scale = {};
