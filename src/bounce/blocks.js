@@ -88,7 +88,7 @@ exports.install = function(blockly, skin) {
   };
   
   blockly.Blocks.bounce_whenWallCollided = {
-    // Block to handle event when a wall collision occurs.
+    // Block to handle event when a wall/ball collision occurs.
     helpUrl: '',
     init: function() {
       this.setHSV(140, 1.00, 0.74);
@@ -101,7 +101,25 @@ exports.install = function(blockly, skin) {
   };
   
   generator.bounce_whenWallCollided = function() {
-    // Generate JavaScript for handling when a wall collision occurs.
+    // Generate JavaScript for handling when a wall/ball collision occurs.
+    return '\n';
+  };
+  
+  blockly.Blocks.bounce_whenPaddleCollided = {
+    // Block to handle event when a wall collision occurs.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenPaddleCollided());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenPaddleCollidedTooltip());
+    }
+  };
+  
+  generator.bounce_whenPaddleCollided = function() {
+    // Generate JavaScript for handling when a paddle/ball collision occurs.
     return '\n';
   };
   
@@ -159,22 +177,22 @@ exports.install = function(blockly, skin) {
     return 'Bounce.playSound(\'block_id_' + this.id + '\');\n';
   };
   
-  blockly.Blocks.bounce_isWall = {
-    // Block for checking if this is a wall.
+  blockly.Blocks.bounce_bounceBall = {
+    // Block for bouncing the ball.
     helpUrl: '',
     init: function() {
-      this.setHSV(196, 1.0, 0.79);
-      this.setOutput(true, 'Boolean');
+      this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.isWall());
-      this.setTooltip(msg.isWallTooltip());
+        .appendTitle(msg.bounceBall());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.bounceBallTooltip());
     }
   };
-
-  generator.bounce_isWall = function() {
-    // Generate JavaScript for checking if there is a wall.
-    var code = 'Bounce.isWall()';
-    return [code, generator.ORDER_FUNCTION_CALL];
+  
+  generator.bounce_bounceBall = function() {
+    // Generate JavaScript for moving forward.
+    return 'Bounce.bounceBall(\'block_id_' + this.id + '\');\n';
   };
 
   delete blockly.Blocks.procedures_defreturn;

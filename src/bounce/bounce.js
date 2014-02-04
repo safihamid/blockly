@@ -57,7 +57,7 @@ var loadLevel = function() {
   // Load maps.
   Bounce.map = level.map;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  Bounce.startDirection = level.startDirection;
+  Bounce.ballCount = level.ballCount;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
   // Override scalars.
@@ -263,55 +263,63 @@ var drawMap = function() {
     }
   }
 
-  // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
-  var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  ballClip.setAttribute('id', 'ballClipPath');
-  var ballClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  ballClipRect.setAttribute('id', 'ballClipRect');
-  ballClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
-  ballClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  ballClip.appendChild(ballClipRect);
-  svg.appendChild(ballClip);
-  
-  // Add ball.
-  var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-  ballIcon.setAttribute('id', 'ball');
-  ballIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                          skin.avatar);
-  ballIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-  ballIcon.setAttribute('clip-path', 'url(#ballClipPath)');
-  svg.appendChild(ballIcon);
+  if (Bounce.ballStart_) {
+    var i;
+    for (i = 0; i < Bounce.ballCount; i++) {
+      // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
+      var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+      ballClip.setAttribute('id', 'ballClipPath' + i);
+      var ballClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+      ballClipRect.setAttribute('id', 'ballClipRect' + i);
+      ballClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
+      ballClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+      ballClip.appendChild(ballClipRect);
+      svg.appendChild(ballClip);
+      
+      // Add ball.
+      var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+      ballIcon.setAttribute('id', 'ball' + i);
+      ballIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.avatar);
+      ballIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+      ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+      ballIcon.setAttribute('clip-path', 'url(#ballClipPath' + i + ')');
+      svg.appendChild(ballIcon);
+    }
+  }
 
-  // Paddle's clipPath element, whose (x, y) is reset by Bounce.displayPaddle
-  var paddleClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  paddleClip.setAttribute('id', 'paddleClipPath');
-  var paddleClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  paddleClipRect.setAttribute('id', 'paddleClipRect');
-  paddleClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
-  paddleClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  paddleClip.appendChild(paddleClipRect);
-  svg.appendChild(paddleClip);
+  if (Bounce.paddleStart_) {
+    // Paddle's clipPath element, whose (x, y) is reset by Bounce.displayPaddle
+    var paddleClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+    paddleClip.setAttribute('id', 'paddleClipPath');
+    var paddleClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+    paddleClipRect.setAttribute('id', 'paddleClipRect');
+    paddleClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
+    paddleClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+    paddleClip.appendChild(paddleClipRect);
+    svg.appendChild(paddleClip);
+    
+    // Add paddle.
+    var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    paddleIcon.setAttribute('id', 'paddle');
+    paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.avatar);
+    paddleIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+    paddleIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+    paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
+    svg.appendChild(paddleIcon);
+  }
   
-  // Add ball.
-  var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-  paddleIcon.setAttribute('id', 'paddle');
-  paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.avatar);
-  paddleIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  paddleIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-  paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
-  svg.appendChild(paddleIcon);
-
-  if (Bounce.finish_) {
+  if (Bounce.paddleFinish_) {
     // Add finish marker.
-    var finishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-    finishMarker.setAttribute('id', 'finish');
-    finishMarker.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.goal);
-    finishMarker.setAttribute('height', Bounce.MARKER_HEIGHT);
-    finishMarker.setAttribute('width', Bounce.MARKER_WIDTH);
-    svg.appendChild(finishMarker);
+    var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
+    paddleFinishMarker.setAttribute('id', 'paddlefinish');
+    paddleFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
+                                      'xlink:href',
+                                      skin.goal);
+    paddleFinishMarker.setAttribute('height', Bounce.MARKER_HEIGHT);
+    paddleFinishMarker.setAttribute('width', Bounce.MARKER_WIDTH);
+    svg.appendChild(paddleFinishMarker);
   }
 
   // Add wall hitting animation
@@ -348,66 +356,101 @@ var drawMap = function() {
   }
 };
 
+Bounce.calcDistance = function(xDist, yDist) {
+  return Math.sqrt(xDist * xDist + yDist * yDist);
+};
+
+var essentiallyEqual = function(float1, float2) {
+  return (Math.abs(float1 - float2) < 0.01);
+};
+
 Bounce.onTick = function() {
-  var deltaX = 0;
-  var deltaY = 0;
-  var collision = false;
-  
-  switch (Bounce.ballD) {
-    case AngleDirection.NORTHEAST:
-      deltaY = -0.05;
-      deltaX = 0.05;
-      break;
-    case AngleDirection.NORTHWEST:
-      deltaY = -0.05;
-      deltaX = -0.05;
-      break;
-    case AngleDirection.SOUTHEAST:
-      deltaY = 0.05;
-      deltaX = 0.05;
-      break;
-    case AngleDirection.SOUTHWEST:
-      deltaY = 0.05;
-      deltaX = -0.05;
-      break;
-  }
-
-  Bounce.ballX += deltaX;
-  Bounce.ballY += deltaY;
-  
-  if (Bounce.ballX < 0) {
-    Bounce.ballX = 0;
-    Bounce.ballD += 1;
-    collision = true;
-  } else if (Bounce.ballX > (Bounce.COLS - 1)) {
-    Bounce.ballX = Bounce.COLS - 1;
-    Bounce.ballD += 1;
-    collision = true;
-  }
-
-  if (Bounce.ballY < 0) {
-    Bounce.ballY = 0;
-    Bounce.ballD += 1;
-    collision = true;
-  } else if (Bounce.ballY > (Bounce.ROWS - 1)) {
-    Bounce.ballY = Bounce.ROWS - 1;
-    Bounce.ballD += 1;
-    collision = true;
-  }
-  
-  if (collision) {
-    Bounce.ballD %= 4;
-    console.log("collision");
-    try {
-      Bounce.whenWallCollided(BlocklyApps, api);
-    }
-    catch (e) {
+  // Run key event handlers for any keys that are down:
+  var key;
+  for (key in Keycodes) {
+    if (Bounce.keyState[Keycodes[key]] && Bounce.keyState[Keycodes[key]] == "keydown") {
+      switch (Keycodes[key]) {
+        case Keycodes.LEFT:
+          try { Bounce.whenLeft(BlocklyApps, api); } catch (e) { }
+          break;
+        case Keycodes.UP:
+          try { Bounce.whenUp(BlocklyApps, api); } catch (e) { }
+          break;
+        case Keycodes.RIGHT:
+          try { Bounce.whenRight(BlocklyApps, api); } catch (e) { }
+          break;
+        case Keycodes.DOWN:
+          try { Bounce.whenDown(BlocklyApps, api); } catch (e) { }
+          break;
+      }
     }
   }
+
+  if (Bounce.ballStart_) {
+    var i;
+    for (i = 0; i < Bounce.ballCount; i++) {
+      var deltaX = 0;
+      var deltaY = 0;
+      var collision = false;
+      
+      switch (Bounce.ballD[i]) {
+        case AngleDirection.NORTHEAST:
+          deltaY = -0.05;
+          deltaX = 0.05;
+          break;
+        case AngleDirection.NORTHWEST:
+          deltaY = -0.05;
+          deltaX = -0.05;
+          break;
+        case AngleDirection.SOUTHEAST:
+          deltaY = 0.05;
+          deltaX = 0.05;
+          break;
+        case AngleDirection.SOUTHWEST:
+          deltaY = 0.05;
+          deltaX = -0.05;
+          break;
+      }
+
+      Bounce.ballX[i] += deltaX;
+      Bounce.ballY[i] += deltaY;
+      
+      if (essentiallyEqual(Bounce.ballX[i], -0.05)) {
+        collision = true;
+      } else if (essentiallyEqual(Bounce.ballX[i], Bounce.COLS + 0.05 - 1)) {
+        collision = true;
+      }
+
+      if (essentiallyEqual(Bounce.ballY[i], -0.05)) {
+        collision = true;
+      }
+      
+      if (collision) {
+        try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
+      }
+      
+      var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
+      var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
+      var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
+      
+      if (distPaddleBall < 1) {
+        // paddle ball collision
+        try { Bounce.whenPaddleCollided(BlocklyApps, api); } catch (e) { }
+      }
+    
+      Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+    }
+  }
   
-  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 8);
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
+  
+  if (Bounce.checkSuccess()) {
+    Bounce.result = ResultType.SUCCESS;
+    Bounce.onPuzzleComplete();
+  }
 }
+
+Bounce.keyState = {};
 
 Keycodes = {
   LEFT: 37,
@@ -416,21 +459,8 @@ Keycodes = {
   DOWN: 40
 };
 
-Bounce.onKeyDown = function(e) {
-  switch (e.keyCode) {
-    case Keycodes.LEFT:
-      try { Bounce.whenLeft(BlocklyApps, api); } catch (e) { }
-      break;
-    case Keycodes.UP:
-      try { Bounce.whenUp(BlocklyApps, api); } catch (e) { }
-      break;
-    case Keycodes.RIGHT:
-      try { Bounce.whenRight(BlocklyApps, api); } catch (e) { }
-      break;
-    case Keycodes.DOWN:
-      try { Bounce.whenDown(BlocklyApps, api); } catch (e) { }
-      break;
-  }
+Bounce.onKey = function(e) {
+  Bounce.keyState[e.keyCode] = e.type;
 };
 
 /**
@@ -438,16 +468,13 @@ Bounce.onKeyDown = function(e) {
  */
 Bounce.init = function(config) {
   Bounce.intervalId = 0;
-  Bounce.whenWallCollided = null;
-  Bounce.whenDown = null;
-  Bounce.whenLeft = null;
-  Bounce.whenRight = null;
-  Bounce.whenUp = null;
+  Bounce.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
   loadLevel();
   
-  window.addEventListener("keydown", Bounce.onKeyDown, false);
+  window.addEventListener("keydown", Bounce.onKey, false);
+  window.addEventListener("keyup", Bounce.onKey, false);
 
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
@@ -487,19 +514,29 @@ Bounce.init = function(config) {
     Blockly.HSV_SATURATION = 0.6;
 
     Blockly.SNAP_RADIUS *= Bounce.scale.snapRadius;
+    
+    var currentBallIndex = 0;
+    
+    if (Bounce.ballCount) {
+      Bounce.ballStart_ = [];
+      Bounce.ballX = [];
+      Bounce.ballY = [];
+      Bounce.ballD = [];
+    }
 
     // Locate the start and finish squares.
     for (var y = 0; y < Bounce.ROWS; y++) {
       for (var x = 0; x < Bounce.COLS; x++) {
         if (Bounce.map[y][x] == SquareType.START) {
           Bounce.start_ = {x: x, y: y};
-        } else if (Bounce.map[y][x] == SquareType.FINISH) {
-          Bounce.finish_ = {x: x, y: y};
+        } else if (Bounce.map[y][x] == SquareType.PADDLEFINISH) {
+          Bounce.paddleFinish_ = {x: x, y: y};
         } else if (Bounce.map[y][x] == SquareType.STARTANDFINISH) {
           Bounce.start_ = {x: x, y: y};
-          Bounce.finish_ = {x: x, y: y};
+          Bounce.paddleFinish_ = {x: x, y: y};
         } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
-          Bounce.ballStart_ = {x: x, y: y};
+          Bounce.ballStart_[currentBallIndex] = {x: x, y: y};
+          currentBallIndex++;
         } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
         }
@@ -518,42 +555,60 @@ Bounce.init = function(config) {
 };
 
 /**
- * Reset the maze to the start position and kill any pending animation tasks.
- * @param {boolean} first True if an opening animation is to be played.
+ * Clear the event handlers and stop the onTick timer.
  */
-BlocklyApps.reset = function(first) {
-  // Clear event handlers and kill onTick timer
+Bounce.clearEventHandlersKillTickLoop = function() {
   Bounce.whenWallCollided = null;
+  Bounce.whenPaddleCollided = null;
   Bounce.whenDown = null;
   Bounce.whenLeft = null;
   Bounce.whenRight = null;
   Bounce.whenUp = null;
   window.clearInterval(Bounce.intervalId);
+}
+
+/**
+ * Reset the maze to the start position and kill any pending animation tasks.
+ * @param {boolean} first True if an opening animation is to be played.
+ */
+BlocklyApps.reset = function(first) {
+  Bounce.clearEventHandlersKillTickLoop();
   
   // Move Ball into position.
-  Bounce.ballX = Bounce.ballStart_.x;
-  Bounce.ballY = Bounce.ballStart_.y;
+  if (Bounce.ballStart_) {
+    var i;
+    for (i = 0; i < Bounce.ballCount; i++) {
+      Bounce.ballX[i] = Bounce.ballStart_[i].x;
+      Bounce.ballY[i] = Bounce.ballStart_[i].y;
+      Bounce.ballD[i] = AngleDirection.SOUTHWEST;
+
+      Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+    }
+  }
   
   // Move Paddle into position.
   Bounce.paddleX = Bounce.paddleStart_.x;
   Bounce.paddleY = Bounce.paddleStart_.y;
   
-  Bounce.ballD = AngleDirection.SOUTHWEST;
-  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 8);
-  
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
 
   var svg = document.getElementById('svgBounce');
 
-  if (Bounce.finish_) {
+  if (Bounce.paddleFinish_) {
     // Move the finish icon into position.
-    var finishIcon = document.getElementById('finish');
-    finishIcon.setAttribute('x', Bounce.SQUARE_SIZE * (Bounce.finish_.x + 0.5) -
-        finishIcon.getAttribute('width') / 2);
-    finishIcon.setAttribute('y', Bounce.SQUARE_SIZE * (Bounce.finish_.y + 0.9) -
-        finishIcon.getAttribute('height'));
-    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.goal);
+    var paddleFinishIcon = document.getElementById('paddlefinish');
+    paddleFinishIcon.setAttribute(
+        'x',
+        Bounce.SQUARE_SIZE * (Bounce.paddleFinish_.x + 0.5) -
+        paddleFinishIcon.getAttribute('width') / 2);
+    paddleFinishIcon.setAttribute(
+        'y',
+        Bounce.SQUARE_SIZE * (Bounce.paddleFinish_.y + 0.9) -
+        paddleFinishIcon.getAttribute('height'));
+    paddleFinishIcon.setAttributeNS(
+        'http://www.w3.org/1999/xlink',
+        'xlink:href',
+        skin.goal);
   }
 
   // Reset the obstacle image.
@@ -695,6 +750,14 @@ Bounce.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
+  var codePaddleCollided = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenPaddleCollided');
+  var whenPaddleCollidedFunc = codegen.functionFromCode(
+                                     codePaddleCollided, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
   var codeLeft = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'bounce_whenLeft');
@@ -717,12 +780,16 @@ Bounce.execute = function() {
   
   // Set event handlers and start the onTick timer
   Bounce.whenWallCollided = whenWallCollidedFunc;
+  Bounce.whenPaddleCollided = whenPaddleCollidedFunc;
   Bounce.whenLeft = whenLeftFunc;
   Bounce.whenRight = whenRightFunc;
   Bounce.intervalId = window.setInterval(Bounce.onTick, Bounce.scale.stepSpeed);
 };
 
-Bounce.foo = function() {
+Bounce.onPuzzleComplete = function() {
+  // Stop everything on screen
+  Bounce.clearEventHandlersKillTickLoop();
+
   // If we know they succeeded, mark levelComplete true
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Bounce.result == ResultType.SUCCESS);
@@ -731,8 +798,8 @@ Bounce.foo = function() {
   
   if (level.editCode) {
     Bounce.testResults = BlocklyApps.levelComplete ?
-    BlocklyApps.TestResults.ALL_PASS :
-    BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
+      BlocklyApps.TestResults.ALL_PASS :
+      BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
   
   if (level.failForOther1Star && !BlocklyApps.levelComplete) {
@@ -803,18 +870,19 @@ Bounce.setTileTransparent = function() {
 
 /**
  * Display Ball at the specified location, facing the specified direction.
+ * @param {number} i Ball index..
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
-Bounce.displayBall = function(x, y, d) {
-  var ballIcon = document.getElementById('ball');
+Bounce.displayBall = function(i, x, y, d) {
+  var ballIcon = document.getElementById('ball' + i);
   ballIcon.setAttribute('x',
                         x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
   ballIcon.setAttribute('y',
                         y * Bounce.SQUARE_SIZE + Bounce.PEGMAN_Y_OFFSET - 8);
   
-  var ballClipRect = document.getElementById('ballClipRect');
+  var ballClipRect = document.getElementById('ballClipRect' + i);
   ballClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
   ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
 };
@@ -865,16 +933,15 @@ Bounce.constrainDirection16 = function(d) {
   return d;
 };
 
-var atFinish = function() {
-  return !Bounce.finish_ ||
-      (Bounce.pegmanX == Bounce.finish_.x && Bounce.pegmanY == Bounce.finish_.y);
+var atPaddleFinish = function() {
+  return Bounce.paddleFinish_ &&
+      (Bounce.paddleX == Bounce.paddleFinish_.x &&
+       Bounce.paddleY == Bounce.paddleFinish_.y);
 };
 
 Bounce.checkSuccess = function() {
-  if (atFinish()) {
-    // Finished.  Terminate the user's program.
-    BlocklyApps.log.push(['finish', null]);
-    throw true;
+  if (atPaddleFinish()) {
+    return true;
   }
   return false;
 };
