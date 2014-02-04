@@ -66,15 +66,39 @@ var runLevel = function(app, level, onAttempt) {
   });
 };
 
+// Clone's an answer, which means a two-level deep clone
+var cloneAnswer = function (answer) {
+  if (answer === undefined) {
+    return answer;
+  }
+  var clone = [];
+  answer.forEach(function (item) {
+    clone.push(item.slice());
+  });
+  return clone;
+};
+
 // Loads a test collection at path an runs all the tests specified in it.
 var runTestCollection = function (path) {
   var testCollection = require('./' + path);
   var app = testCollection.app;
 
   var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
-  var level = levels[testCollection.levelId];
+  var level = levels[testCollection.levelId];  
 
   var exceptions, messages;
+
+  // Warp Speed!
+  if (!level.scale) {
+    level.scale = {};
+  }
+  level.scale.stepSpeed = 0;
+  level.sliderSpeed = 1;
+
+  // clone answer and requiredBlocks as blockly modifies these as it draws
+  // the answer
+  var answer = cloneAnswer(level.answer);
+  var requiredBlocks = level.requiredBlocks ? level.requiredBlocks.slice() : [];
 
   describe(path, function () {
     testCollection.tests.forEach(function (testData) {
@@ -89,15 +113,12 @@ var runTestCollection = function (path) {
           this.timeout(0);
         }
 
-        // Warp Speed!
-        if (!level.scale) {
-          level.scale = {};
-        }
-        level.scale.stepSpeed = 0;
-        level.sliderSpeed = 1;        
-
         // Override start blocks to load the solution;      
         level.startBlocks = testData.xml;
+
+        // reset answer/requiredBlocks to previously cloned value
+        level.requiredBlocks = requiredBlocks.slice();
+        level.answer = cloneAnswer(answer);
 
         runLevel(app, level, function (report) {
           exceptions = [];
