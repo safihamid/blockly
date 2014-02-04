@@ -325,5 +325,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['rebuild', 'test']);
 
-  config.mochaTest.all.options.grep = grunt.option('grep');
+  config.mochaTest.all.options.grep = new RegExp(grunt.option('grep'));
 };
