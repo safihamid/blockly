@@ -88,6 +88,22 @@ exports.playSound = function(id) {
   BlocklyApps.playAudio('wall', {volume: 0.5});
 }
 
+exports.moveLeft = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.paddleX -= 0.05;
+  if (Bounce.paddleX < 0) {
+    Bounce.paddleX = 0;
+  }
+}
+
+exports.moveRight = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.paddleX += 0.05;
+  if (Bounce.paddleX > (Bounce.COLS - 1)) {
+    Bounce.paddleX = Bounce.COLS - 1;
+  }
+}
+
 exports.isWall = function(id) {
   return true;
 };
