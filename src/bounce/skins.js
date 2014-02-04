@@ -6,18 +6,15 @@
 // background: Number of 400x400 background images. Randomly select one if
 // specified, otherwise, use background.png.
 // graph: Colour of optional grid lines, or false.
-// look: Colour of sonar-like look icon.
 
 var skinsBase = require('../skins');
 
 var CONFIGS = {
 
   bounce: {
-    look: '#FFF',
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
-    background: 4,
-    dirtSound: true
+    background: 4
   }
 
 };
@@ -44,16 +41,6 @@ exports.load = function(assetUrl, id) {
   skin.obstacleScale = config.obstacleScale || 1.0;
   skin.largerObstacleAnimationTiles =
       skin.assetUrl(config.largerObstacleAnimationTiles);
-  skin.idlePegmanAnimation =
-      skin.assetUrl(config.idlePegmanAnimation);
-  skin.wallPegmanAnimation =
-      skin.assetUrl(config.wallPegmanAnimation);
-  skin.movePegmanAnimation =
-      skin.assetUrl(config.movePegmanAnimation);
-  skin.movePegmanAnimationSpeedScale =
-      config.movePegmanAnimationSpeedScale || 1;
-  // This is required when move pegman animation is set
-  skin.movePegmanAnimationFrameNumber = config.movePegmanAnimationFrameNumber;
   skin.hittingWallAnimation =
       skin.assetUrl(config.hittingWallAnimation);
   skin.approachingGoalAnimation =
@@ -69,14 +56,9 @@ exports.load = function(assetUrl, id) {
   skin.wall2Sound = [skin.assetUrl('wall2.mp3'), skin.assetUrl('wall2.ogg')];
   skin.wall3Sound = [skin.assetUrl('wall3.mp3'), skin.assetUrl('wall3.ogg')];
   skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
-  skin.fillSound = [skin.assetUrl('fill.mp3'), skin.assetUrl('fill.ogg')];
-  skin.digSound = [skin.assetUrl('dig.mp3'), skin.assetUrl('dig.ogg')];
   skin.additionalSound = config.additionalSound;
-  skin.dirtSound = config.dirtSound;
   // Settings
   skin.graph = config.graph;
-  skin.look = config.look;
-  skin.dirt = skin.assetUrl('dirt.png');
   if (config.background !== undefined) {
     var index = Math.floor(Math.random() * config.background);
     skin.background = skin.assetUrl('background' + index + '.png');

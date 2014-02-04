@@ -15,21 +15,75 @@ exports.install = function(blockly, skin) {
   var generator = blockly.Generator.get('JavaScript');
   blockly.JavaScript = generator;
 
-  blockly.Blocks.bounce_whenRun = {
-    // Block to handle event when Run button is pressed.
+  blockly.Blocks.bounce_whenLeft = {
+    // Block to handle event when the Left arrow button is pressed.
     helpUrl: '',
     init: function() {
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.whenRun());
+        .appendTitle(msg.whenLeft());
       this.setPreviousStatement(false);
       this.setNextStatement(true);
-      this.setTooltip(msg.whenRunTooltip());
+      this.setTooltip(msg.whenLeftTooltip());
     }
   };
   
-  generator.bounce_whenRun = function() {
-    // Generate JavaScript for handling Run button event.
+  generator.bounce_whenLeft = function() {
+    // Generate JavaScript for handling Left arrow button event.
+    return '\n';
+  };
+  
+  blockly.Blocks.bounce_whenRight = {
+    // Block to handle event when the Right arrow button is pressed.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenRight());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenRightTooltip());
+    }
+  };
+  
+  generator.bounce_whenRight = function() {
+    // Generate JavaScript for handling Right arrow button event.
+    return '\n';
+  };
+  
+  blockly.Blocks.bounce_whenUp = {
+    // Block to handle event when the Up arrow button is pressed.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenUp());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenUpTooltip());
+    }
+  };
+  
+  generator.bounce_whenUp = function() {
+    // Generate JavaScript for handling Up arrow button event.
+    return '\n';
+  };
+  
+  blockly.Blocks.bounce_whenDown = {
+    // Block to handle event when the Down arrow button is pressed.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenDown());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenDownTooltip());
+    }
+  };
+  
+  generator.bounce_whenDown = function() {
+    // Generate JavaScript for handling Down arrow button event.
     return '\n';
   };
   
@@ -51,22 +105,40 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
   
-  blockly.Blocks.bounce_moveForward = {
-    // Block for moving forward.
+  blockly.Blocks.bounce_moveLeft = {
+    // Block for moving left.
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.moveForward());
+        .appendTitle(msg.moveLeft());
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.moveForwardTooltip());
+      this.setTooltip(msg.moveLeftTooltip());
     }
   };
   
-  generator.bounce_moveForward = function() {
-    // Generate JavaScript for moving forward.
-    return 'Bounce.moveForward(\'block_id_' + this.id + '\');\n';
+  generator.bounce_moveLeft = function() {
+    // Generate JavaScript for moving left.
+    return 'Bounce.moveLeft(\'block_id_' + this.id + '\');\n';
+  };
+  
+  blockly.Blocks.bounce_moveRight = {
+    // Block for moving right.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.moveRight());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.moveRightTooltip());
+    }
+  };
+  
+  generator.bounce_moveRight = function() {
+    // Generate JavaScript for moving right.
+    return 'Bounce.moveRight(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_playSound = {

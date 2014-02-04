@@ -1,21 +1,8 @@
 var Direction = require('./tiles').Direction;
 
-//TODO: Fix hacky level-number-dependent toolbox.
-var toolbox = function(page, level) {
-  return require('./toolbox.xml')({
-    page: page,
-    level: level
-  });
+var tb = function(blocks) {
+  return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
 };
-
-//TODO: Fix hacky level-number-dependent startBlocks.
-var startBlocks = function(page, level) {
-  return require('./startBlocks.xml')({
-    page: page,
-    level: level
-  });
-};
-
 
 /*
  * Configuration for all levels.
@@ -23,14 +10,12 @@ var startBlocks = function(page, level) {
 module.exports = {
 
   '1_1': {
-    'toolbox': toolbox(1, 1),
     'ideal': 3,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'bounce_moveForward'}]
     ],
     'scale': {
-      'snapRadius': 2,
-      'stepSpeed': 12
+      'snapRadius': 2
     },
     'startDirection': Direction.EAST,
     'map': [
@@ -38,11 +23,19 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [2, 1, 1, 1, 1, 1, 1, 3],
-      [0, 0, 0, 0, 0, 6, 0, 0],
+      [0, 0, 0, 0, 0, 0, 6, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 7, 0, 0, 0, 3]
     ],
-    'startBlocks': startBlocks(1, 1)
+    'toolbox':
+      tb('<block type="bounce_moveLeft"></block> \
+          <block type="bounce_moveRight"></block> \
+          <block type="bounce_isWall"></block> \
+          <block type="bounce_playSound"></block>'),
+    'startBlocks':
+     '<block type="bounce_whenLeft" x="20" y="20"></block> \
+      <block type="bounce_whenRight" x="20" y="120"></block> \
+      <block type="bounce_whenWallCollided" x="180" y="20"></block>'
   }
 };

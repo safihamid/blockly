@@ -50,15 +50,13 @@ BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
 // Default Scalings
 Bounce.scale = {
   'snapRadius': 1,
-  'stepSpeed': 5
+  'stepSpeed': 33
 };
 
 var loadLevel = function() {
   // Load maps.
   Bounce.map = level.map;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  Bounce.initialDirtMap = level.initialDirt;
-  Bounce.finalDirtMap = level.finalDirt;
   Bounce.startDirection = level.startDirection;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
@@ -82,12 +80,6 @@ var loadLevel = function() {
   // Height and width of the goal and obstacles.
   Bounce.MARKER_HEIGHT = 43;
   Bounce.MARKER_WIDTH = 50;
-  // Height and width of the dirt piles/holes.
-  Bounce.DIRT_HEIGHT = 50;
-  Bounce.DIRT_WIDTH = 50;
-  // The number line is [-inf, min, min+1, ... no zero ..., max-1, max, +inf]
-  Bounce.DIRT_MAX = 10;
-  Bounce.DIRT_COUNT = Bounce.DIRT_MAX * 2 + 2;
 
   Bounce.MAZE_WIDTH = Bounce.SQUARE_SIZE * Bounce.COLS;
   Bounce.MAZE_HEIGHT = Bounce.SQUARE_SIZE * Bounce.ROWS;
@@ -101,11 +93,6 @@ var initWallMap = function() {
     Bounce.wallMap[y] = new Array(Bounce.COLS);
   }
 };
-
-/**
- * PIDs of animation tasks currently executing.
- */
-Bounce.pidList = [];
 
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/West/South/East squares.
@@ -232,12 +219,6 @@ var drawMap = function() {
           Bounce.wallMap[y][x] = wallIdx;
           tile = 'null' + wallIdx;
         }
-
-        // For the first 3 levels in maze, only show the null0 image.
-        if (level.id == '2_1' || level.id == '2_2' || level.id == '2_3') {
-          Bounce.wallMap[y][x] = 0;
-          tile = 'null0';
-        }
       }
       var left = TILE_SHAPES[tile][0];
       var top = TILE_SHAPES[tile][1];
@@ -282,26 +263,6 @@ var drawMap = function() {
     }
   }
 
-  // Pegman's clipPath element, whose (x, y) is reset by Bounce.displayPegman
-  var pegmanClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  pegmanClip.setAttribute('id', 'pegmanClipPath');
-  var clipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  clipRect.setAttribute('id', 'clipRect');
-  clipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
-  clipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  pegmanClip.appendChild(clipRect);
-  svg.appendChild(pegmanClip);
-  
-  // Add pegman.
-  var pegmanIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-  pegmanIcon.setAttribute('id', 'pegman');
-  pegmanIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.avatar);
-  pegmanIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  pegmanIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-  pegmanIcon.setAttribute('clip-path', 'url(#pegmanClipPath)');
-  svg.appendChild(pegmanIcon);
-
   // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
   var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
   ballClip.setAttribute('id', 'ballClipPath');
@@ -321,6 +282,26 @@ var drawMap = function() {
   ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
   ballIcon.setAttribute('clip-path', 'url(#ballClipPath)');
   svg.appendChild(ballIcon);
+
+  // Paddle's clipPath element, whose (x, y) is reset by Bounce.displayPaddle
+  var paddleClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+  paddleClip.setAttribute('id', 'paddleClipPath');
+  var paddleClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  paddleClipRect.setAttribute('id', 'paddleClipRect');
+  paddleClipRect.setAttribute('width', Bounce.PEGMAN_WIDTH);
+  paddleClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+  paddleClip.appendChild(paddleClipRect);
+  svg.appendChild(paddleClip);
+  
+  // Add ball.
+  var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+  paddleIcon.setAttribute('id', 'paddle');
+  paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.avatar);
+  paddleIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
+  paddleIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+  paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
+  svg.appendChild(paddleIcon);
 
   if (Bounce.finish_) {
     // Add finish marker.
@@ -365,38 +346,6 @@ var drawMap = function() {
       ++obsId;
     }
   }
-
-  // Add idle pegman.
-  if (skin.idlePegmanAnimation) {
-    createPegmanAnimation({
-      idStr: 'idle',
-      pegmanImage: skin.idlePegmanAnimation,
-      row: Bounce.start_.y,
-      col: Bounce.start_.x,
-      direction: Bounce.startDirection
-    });
-  }
-
-  // Add the hidden dazed pegman when hitting the wall.
-  if (skin.wallPegmanAnimation) {
-    createPegmanAnimation({
-      idStr: 'wall',
-      pegmanImage: skin.wallPegmanAnimation
-    });
-  }
-
-  // Add the hidden moving pegman animation.
-  if (skin.movePegmanAnimation) {
-    createPegmanAnimation({
-      idStr: 'move',
-      pegmanImage: skin.movePegmanAnimation,
-      numColPegman: 4,
-      numRowPegman: 9
-    });
-  }
-  
-  window.setInterval(Bounce.onTick, 33);
-
 };
 
 Bounce.onTick = function() {
@@ -448,7 +397,7 @@ Bounce.onTick = function() {
   
   if (collision) {
     Bounce.ballD %= 4;
-    console.log("collission");
+    console.log("collision");
     try {
       Bounce.whenWallCollided(BlocklyApps, api);
     }
@@ -456,19 +405,31 @@ Bounce.onTick = function() {
     }
   }
   
-  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 0);
+  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 8);
+  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
 }
 
-var resetDirt = function() {
-  // Init the dirt so that all places are empty
-  Bounce.dirt_ = new Array(Bounce.ROWS);
-  // Locate the dirt in dirt_map
-  for (var y = 0; y < Bounce.ROWS; y++) {
-    if (Bounce.initialDirtMap) {
-      Bounce.dirt_[y] = Bounce.initialDirtMap[y].slice(0);
-    } else {
-      Bounce.dirt_[y] = new Array(Bounce.COLS);
-    }
+Keycodes = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40
+};
+
+Bounce.onKeyDown = function(e) {
+  switch (e.keyCode) {
+    case Keycodes.LEFT:
+      try { Bounce.whenLeft(BlocklyApps, api); } catch (e) { }
+      break;
+    case Keycodes.UP:
+      try { Bounce.whenUp(BlocklyApps, api); } catch (e) { }
+      break;
+    case Keycodes.RIGHT:
+      try { Bounce.whenRight(BlocklyApps, api); } catch (e) { }
+      break;
+    case Keycodes.DOWN:
+      try { Bounce.whenDown(BlocklyApps, api); } catch (e) { }
+      break;
   }
 };
 
@@ -476,10 +437,17 @@ var resetDirt = function() {
  * Initialize Blockly and the maze.  Called on page load.
  */
 Bounce.init = function(config) {
-
+  Bounce.intervalId = 0;
+  Bounce.whenWallCollided = null;
+  Bounce.whenDown = null;
+  Bounce.whenLeft = null;
+  Bounce.whenRight = null;
+  Bounce.whenUp = null;
   skin = config.skin;
   level = config.level;
   loadLevel();
+  
+  window.addEventListener("keydown", Bounce.onKeyDown, false);
 
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
@@ -507,10 +475,6 @@ Bounce.init = function(config) {
       Blockly.loadAudio_(skin.wall4Sound, 'wall4');
       Blockly.loadAudio_(skin.winGoalSound, 'winGoal');
     }
-    if (skin.dirtSound) {
-      Blockly.loadAudio_(skin.fillSound, 'fill');
-      Blockly.loadAudio_(skin.digSound, 'dig');
-    }
   };
 
   config.afterInject = function() {
@@ -536,11 +500,11 @@ Bounce.init = function(config) {
           Bounce.finish_ = {x: x, y: y};
         } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
           Bounce.ballStart_ = {x: x, y: y};
+        } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
+          Bounce.paddleStart_ = {x: x, y: y};
         }
       }
     }
-
-    resetDirt();
 
     drawMap();
   };
@@ -553,206 +517,31 @@ Bounce.init = function(config) {
   BlocklyApps.init(config);
 };
 
-var dirtPositionToIndex = function(row, col) {
-  return Bounce.COLS * row + col;
-};
-
-var createDirt = function(row, col) {
-  var pegmanIcon = document.getElementById('pegman');
-  var svg = document.getElementById('svgBounce');
-  var index = dirtPositionToIndex(row, col);
-  // Create clip path.
-  var clip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  clip.setAttribute('id', 'dirtClip' + index);
-  var rect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  rect.setAttribute('x', col * Bounce.DIRT_WIDTH);
-  rect.setAttribute('y', row * Bounce.DIRT_HEIGHT);
-  rect.setAttribute('width', Bounce.DIRT_WIDTH);
-  rect.setAttribute('height', Bounce.DIRT_HEIGHT);
-  clip.appendChild(rect);
-  svg.insertBefore(clip, pegmanIcon);
-  // Create image.
-  var img = document.createElementNS(Blockly.SVG_NS, 'image');
-  img.setAttributeNS(
-      'http://www.w3.org/1999/xlink', 'xlink:href', skin.dirt);
-  img.setAttribute('height', Bounce.DIRT_HEIGHT);
-  img.setAttribute('width', Bounce.DIRT_WIDTH * Bounce.DIRT_COUNT);
-  img.setAttribute('clip-path', 'url(#dirtClip' + index + ')');
-  img.setAttribute('id', 'dirt' + index);
-  svg.insertBefore(img, pegmanIcon);
-};
-
-/**
- * Set the image based on the amount of dirt at the location.
- * @param {number} row Row index.
- * @param {number} col Column index.
- */
-var updateDirt = function(row, col) {
-  // Calculate spritesheet index.
-  var n = Bounce.dirt_[row][col];
-  var spriteIndex;
-  if (n < -Bounce.DIRT_MAX) {
-    spriteIndex = 0;
-  } else if (n < 0) {
-    spriteIndex = Bounce.DIRT_MAX + n + 1;
-  } else if (n > Bounce.DIRT_MAX) {
-    spriteIndex = Bounce.DIRT_COUNT - 1;
-  } else if (n > 0) {
-    spriteIndex = Bounce.DIRT_MAX + n;
-  } else {
-    throw new Error('Expected non-zero dirt.');
-  }
-  // Update dirt icon & clip path.
-  var dirtIndex = dirtPositionToIndex(row, col);
-  var img = document.getElementById('dirt' + dirtIndex);
-  var x = Bounce.SQUARE_SIZE * (col - spriteIndex + 0.5) - Bounce.DIRT_HEIGHT / 2;
-  var y = Bounce.SQUARE_SIZE * (row + 0.5) - Bounce.DIRT_WIDTH / 2;
-  img.setAttribute('x', x);
-  img.setAttribute('y', y);
-};
-
-var removeDirt = function(row, col) {
-  var svg = document.getElementById('svgBounce');
-  var index = dirtPositionToIndex(row, col);
-  var img = document.getElementById('dirt' + index);
-  if (img) {
-    svg.removeChild(img);
-  }
-  var clip = document.getElementById('dirtClip' + index);
-  if (clip) {
-    svg.removeChild(clip);
-  }
-};
-
-/**
- * Calculate the y coordinates for pegman sprite.
- */
-var getPegmanYCoordinate = function(options) {
-  var y = Bounce.SQUARE_SIZE * (options.mazeRow + 0.5) - Bounce.PEGMAN_HEIGHT / 2 -
-      (options.pegmanRow || 0) * Bounce.PEGMAN_HEIGHT + Bounce.PEGMAN_Y_OFFSET - 8;
-  return Math.floor(y);
-};
-
-/**
-  * Create sprite assets for pegman.
-  * @param options Specify different features of the pegman animation.
-  * idStr required identifier for the pegman.
-  * pegmanImage required which image to use for the animation.
-  * col which column the pegman is at.
-  * row which row the pegman is at.
-  * direction which direction the pegman is facing at.
-  * rowIdx which column of the pegman the animation needs, default is 0.
-  * numColPegman number of the pegman in each row, default is 4.
-  * numRowPegman number of the pegman in each column, default is 1.
-  */
-var createPegmanAnimation = function(options) {
-  var svg = document.getElementById('svgBounce');
-  // Create clip path.
-  var clip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  clip.setAttribute('id', options.idStr + 'PegmanClip');
-  var rect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  rect.setAttribute('id', options.idStr + 'PegmanClipRect');
-  if (options.col !== undefined) {
-    rect.setAttribute('x', options.col * Bounce.SQUARE_SIZE + 1);
-  }
-  if (options.row !== undefined) {
-    rect.setAttribute('y', getPegmanYCoordinate({
-      mazeRow : options.row
-    }));
-  }
-  rect.setAttribute('width', Bounce.PEGMAN_WIDTH);
-  rect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-  clip.appendChild(rect);
-  svg.appendChild(clip);
-  // Create image.
-  // Add a random number to force it to reload everytime.
-  var imgSrc = options.pegmanImage + '&time=' + (new Date()).getTime();
-  var img = document.createElementNS(Blockly.SVG_NS, 'image');
-  img.setAttributeNS(
-      'http://www.w3.org/1999/xlink', 'xlink:href', imgSrc);
-  img.setAttribute('height', Bounce.PEGMAN_HEIGHT * (options.numRowPegman || 1));
-  img.setAttribute('width', Bounce.PEGMAN_WIDTH * (options.numColPegman || 4));
-  img.setAttribute('clip-path', 'url(#' + options.idStr + 'PegmanClip)');
-  img.setAttribute('id', options.idStr + 'Pegman');
-  svg.appendChild(img);
-  // Update pegman icon & clip path.
-  if (options.col !== undefined && options.direction !== undefined) {
-    var x = Bounce.SQUARE_SIZE * options.col -
-        options.direction * Bounce.PEGMAN_WIDTH + 1;
-    img.setAttribute('x', x);
-  }
-  if (options.row !== undefined) {
-    var y = getPegmanYCoordinate({
-      mazeRow : options.row,
-      pegmanRow : options.rowIdx
-    });
-    img.setAttribute('y', y);
-  }
-};
-
-/**
-  * Update sprite assets for pegman.
-  * @param options Specify different features of the pegman animation.
-  * idStr required identifier for the pegman.
-  * col required which column the pegman is at.
-  * row required which row the pegman is at.
-  * direction required which direction the pegman is facing at.
-  * rowIdx which column of the pegman the animation needs, default is 0.
-  */
-var updatePegmanAnimation = function(options) {
-  var rect = document.getElementById(options.idStr + 'PegmanClipRect');
-  rect.setAttribute('x', options.col * Bounce.SQUARE_SIZE + 1);
-  rect.setAttribute('y', getPegmanYCoordinate({
-    mazeRow : options.row
-  }));
-  var img = document.getElementById(options.idStr + 'Pegman');
-  var x = Bounce.SQUARE_SIZE * options.col -
-      options.direction * Bounce.PEGMAN_WIDTH + 1;
-  img.setAttribute('x', x);
-  var y = getPegmanYCoordinate({
-    mazeRow : options.row,
-    pegmanRow : options.rowIdx
-  });
-  img.setAttribute('y', y);
-  img.setAttribute('visibility', 'visible');
-};
-
 /**
  * Reset the maze to the start position and kill any pending animation tasks.
  * @param {boolean} first True if an opening animation is to be played.
  */
 BlocklyApps.reset = function(first) {
-  var i;
-  // Kill all tasks.
-  for (i = 0; i < Bounce.pidList.length; i++) {
-    window.clearTimeout(Bounce.pidList[i]);
-  }
-  Bounce.pidList = [];
-
-  // Move Pegman into position.
-  Bounce.pegmanX = Bounce.start_.x;
-  Bounce.pegmanY = Bounce.start_.y;
-
+  // Clear event handlers and kill onTick timer
+  Bounce.whenWallCollided = null;
+  Bounce.whenDown = null;
+  Bounce.whenLeft = null;
+  Bounce.whenRight = null;
+  Bounce.whenUp = null;
+  window.clearInterval(Bounce.intervalId);
+  
   // Move Ball into position.
   Bounce.ballX = Bounce.ballStart_.x;
   Bounce.ballY = Bounce.ballStart_.y;
   
-  if (first) {
-    Bounce.pegmanD = Bounce.startDirection + 1;
-    Bounce.scheduleFinish(false);
-    Bounce.pidList.push(window.setTimeout(function() {
-      stepSpeed = 100;
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4 - 4]);
-      Bounce.pegmanD++;
-    }, stepSpeed * 5));
-  } else {
-    Bounce.pegmanD = Bounce.startDirection;
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4);
-  }
+  // Move Paddle into position.
+  Bounce.paddleX = Bounce.paddleStart_.x;
+  Bounce.paddleY = Bounce.paddleStart_.y;
   
   Bounce.ballD = AngleDirection.SOUTHWEST;
-  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 0);
+  Bounce.displayBall(Bounce.ballX, Bounce.ballY, 8);
+  
+  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
 
   var svg = document.getElementById('svgBounce');
 
@@ -765,49 +554,6 @@ BlocklyApps.reset = function(first) {
         finishIcon.getAttribute('height'));
     finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                               skin.goal);
-  }
-
-  // Make 'look' icon invisible and promote to top.
-  var lookIcon = document.getElementById('look');
-  lookIcon.style.display = 'none';
-  lookIcon.parentNode.appendChild(lookIcon);
-  var paths = lookIcon.getElementsByTagName('path');
-  for (i = 0; i < paths.length; i++) {
-    var path = paths[i];
-    path.setAttribute('stroke', skin.look);
-  }
-
-  // Reset pegman's visibility.
-  var pegmanIcon = document.getElementById('pegman');
-  if (skin.idlePegmanAnimation) {
-    pegmanIcon.setAttribute('visibility', 'hidden');
-    var idlePegmanIcon = document.getElementById('idlePegman');
-    idlePegmanIcon.setAttribute('visibility', 'visible');
-  } else {
-    pegmanIcon.setAttribute('visibility', 'visible');
-  }
-
-  if (skin.wallPegmanAnimation) {
-    var wallPegmanIcon = document.getElementById('wallPegman');
-    wallPegmanIcon.setAttribute('visibility', 'hidden');
-  }
-
-  if (skin.movePegmanAnimation) {
-    var movePegmanIcon = document.getElementById('movePegman');
-    movePegmanIcon.setAttribute('visibility', 'hidden');
-  }
-
-  // Move the init dirt marker icons into position.
-  resetDirt();
-  for (var row = 0; row < Bounce.ROWS; row++) {
-    for (var col = 0; col < Bounce.COLS; col++) {
-      removeDirt(row, col);
-      if (getTile(Bounce.dirt_, col, row) !== 0 &&
-          getTile(Bounce.dirt_, col, row) !== undefined) {
-        createDirt(row, col);
-        updateDirt(row, col);
-      }
-    }
   }
 
   // Reset the obstacle image.
@@ -839,7 +585,6 @@ BlocklyApps.reset = function(first) {
       tileId++;
     }
   }
-
 };
 
 /**
@@ -883,7 +628,7 @@ var ResultType = {
  * BlocklyApps.displayFeedback when appropriate
  */
 var displayFeedback = function() {
-  if (!Bounce.waitingForReport && !Bounce.waitingForAnimate) {
+  if (!Bounce.waitingForReport) {
     BlocklyApps.displayFeedback({
       app: 'bounce', //XXX
       skin: skin.id,
@@ -917,7 +662,6 @@ Bounce.execute = function() {
   Bounce.result = ResultType.UNSET;
   Bounce.testResults = BlocklyApps.TestResults.NO_TESTS_RUN;
   Bounce.waitingForReport = false;
-  Bounce.waitingForAnimate = false;
   Bounce.response = null;
 
   // Check for empty top level blocks to warn user about bugs,
@@ -946,294 +690,70 @@ Bounce.execute = function() {
   var codeWallCollided = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'bounce_whenWallCollided');
-  Bounce.whenWallCollided = codegen.functionFromCode(
+  var whenWallCollidedFunc = codegen.functionFromCode(
                                      codeWallCollided, {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
-  // Try running the user's code.  There are four possible outcomes:
-  // 1. If pegman reaches the finish [SUCCESS], true is thrown.
-  // 2. If the program is terminated due to running too long [TIMEOUT],
-  //    false is thrown.
-  // 3. If another error occurs [ERROR], that error is thrown.
-  // 4. If the program ended normally but without solving the maze [FAILURE],
-  //    no error or exception is thrown.
-  // The animation should be fast if execution was successful, slow otherwise
-  // to help the user see the mistake.
-  BlocklyApps.playAudio('start', {volume: 0.5});
-  try {
-    codegen.evalWith(code, {
-      BlocklyApps: BlocklyApps,
-      Bounce: api
-    });
-    Bounce.checkSuccess();
-    // If did not finish, shedule a failure.
-    BlocklyApps.log.push(['finish', null]);
-    Bounce.result = ResultType.FAILURE;
-    stepSpeed = 150;
-  } catch (e) {
-    // A boolean is thrown for normal termination. XXX Except when it isn't...
-    // Abnormal termination is a user error.
-    if (e === Infinity) {
-      Bounce.result = ResultType.TIMEOUT;
-      stepSpeed = 0;  // Go infinitely fast so program ends quickly.
-    } else if (e === true) {
-      Bounce.result = ResultType.SUCCESS;
-      stepSpeed = 100;
-    } else if (e === false) {
-      Bounce.result = ResultType.ERROR;
-      stepSpeed = 150;
-    } else {
-      // Syntax error, can't happen.
-      Bounce.result = ResultType.ERROR;
-      window.alert(e);
-      return;
-    }
-  }
+  var codeLeft = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenLeft');
+  var whenLeftFunc = codegen.functionFromCode(
+                                     codeLeft, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
 
+  var codeRight = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenRight');
+  var whenRightFunc = codegen.functionFromCode(
+                                     codeRight, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
+  BlocklyApps.playAudio('start', {volume: 0.5});
+
+  BlocklyApps.reset(false);
+  
+  // Set event handlers and start the onTick timer
+  Bounce.whenWallCollided = whenWallCollidedFunc;
+  Bounce.whenLeft = whenLeftFunc;
+  Bounce.whenRight = whenRightFunc;
+  Bounce.intervalId = window.setInterval(Bounce.onTick, Bounce.scale.stepSpeed);
+};
+
+Bounce.foo = function() {
   // If we know they succeeded, mark levelComplete true
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Bounce.result == ResultType.SUCCESS);
-
+  
   Bounce.testResults = BlocklyApps.getTestResults();
-
+  
   if (level.editCode) {
     Bounce.testResults = BlocklyApps.levelComplete ?
-      BlocklyApps.TestResults.ALL_PASS :
-      BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
+    BlocklyApps.TestResults.ALL_PASS :
+    BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
-
+  
   if (level.failForOther1Star && !BlocklyApps.levelComplete) {
     Bounce.testResults = BlocklyApps.TestResults.OTHER_1_STAR_FAIL;
   }
-
+  
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   var textBlocks = Blockly.Xml.domToText(xml);
-
+  
   Bounce.waitingForReport = true;
-  Bounce.waitingForAnimate = true;
-
+  
   // Report result to server.
   BlocklyApps.report({
-    app: 'bounce',
-    level: level.id,
-    result: Bounce.result === ResultType.SUCCESS,
-    testResult: Bounce.testResults,
-    program: encodeURIComponent(textBlocks),
-    onComplete: Bounce.onReportComplete
-  });
-
-  // BlocklyApps.log now contains a transcript of all the user's actions.
-  // Reset the maze and animate the transcript.
-  BlocklyApps.reset(false);
-
-
-  // Removing the idle animation and replace with pegman sprite
-  if (skin.idlePegmanAnimation) {
-    var pegmanIcon = document.getElementById('pegman');
-    var idlePegmanIcon = document.getElementById('idlePegman');
-    idlePegmanIcon.setAttribute('visibility', 'hidden');
-    pegmanIcon.setAttribute('visibility', 'visible');
-  }
-
-  // Speeding up specific levels
-  var scaledStepSpeed =
-      stepSpeed * Bounce.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  Bounce.pidList.push(window.setTimeout(Bounce.animate,scaledStepSpeed));
-};
-
-/**
- * Iterate through the recorded path and animate pegman's actions.
- */
-Bounce.animate = function() {
-  // All tasks should be complete now.  Clean up the PID list.
-  Bounce.pidList = [];
-
-  var action = BlocklyApps.log.shift();
-  if (!action) {
-    BlocklyApps.highlight(null);
-    if (Bounce.result == ResultType.TIMEOUT) {
-      Bounce.waitingForAnimate = false;
-      displayFeedback();
-    } else {
-      window.setTimeout(function() {
-        Bounce.waitingForAnimate = false;
-        displayFeedback();
-      }, 1000);
-    }
-    return;
-  }
-
-  BlocklyApps.highlight(action[1]);
-
-  switch (action[0]) {
-    case 'north':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX, Bounce.pegmanY - 1, Bounce.pegmanD * 4]);
-      Bounce.pegmanY--;
-      break;
-    case 'east':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX + 1, Bounce.pegmanY, Bounce.pegmanD * 4]);
-      Bounce.pegmanX++;
-      break;
-    case 'south':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX, Bounce.pegmanY + 1, Bounce.pegmanD * 4]);
-      Bounce.pegmanY++;
-      break;
-    case 'west':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX - 1, Bounce.pegmanY, Bounce.pegmanD * 4]);
-      Bounce.pegmanX--;
-      break;
-    case 'look_north':
-      Bounce.scheduleLook(Direction.NORTH);
-      break;
-    case 'look_east':
-      Bounce.scheduleLook(Direction.EAST);
-      break;
-    case 'look_south':
-      Bounce.scheduleLook(Direction.SOUTH);
-      break;
-    case 'look_west':
-      Bounce.scheduleLook(Direction.WEST);
-      break;
-    case 'fail_forward':
-      Bounce.scheduleFail(true);
-      break;
-    case 'fail_backward':
-      Bounce.scheduleFail(false);
-      break;
-    case 'left':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4 - 4]);
-      Bounce.pegmanD = Bounce.constrainDirection4(Bounce.pegmanD - 1);
-      break;
-    case 'right':
-      Bounce.schedule([Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4],
-                    [Bounce.pegmanX, Bounce.pegmanY, Bounce.pegmanD * 4 + 4]);
-      Bounce.pegmanD = Bounce.constrainDirection4(Bounce.pegmanD + 1);
-      break;
-    case 'finish':
-      // Only schedule victory animation for certain conditions:
-      switch (Bounce.testResults) {
-        case BlocklyApps.TestResults.FREE_PLAY:
-        case BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL:
-        case BlocklyApps.TestResults.ALL_PASS:
-          Bounce.scheduleFinish(true);
-          break;
-        default:
-          Bounce.pidList.push(window.setTimeout(function() {
-            BlocklyApps.playAudio('failure', {volume: 0.5});
-          }, stepSpeed));
-          break;
-      }
-      break;
-    case 'putdown':
-      Bounce.scheduleFill();
-      break;
-    case 'pickup':
-      Bounce.scheduleDig();
-      break;
-    case 'tile_transparent':
-      Bounce.setTileTransparent();
-      break;
-    default:
-      // action[0] is null if generated by BlocklyApps.checkTimeout().
-      break;
-  }
-
-  // Speeding up specific levels
-  var scaledStepSpeed =
-      stepSpeed * Bounce.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  Bounce.pidList.push(window.setTimeout(Bounce.animate, scaledStepSpeed));
-};
-
-/**
- * Schedule the animations for a move or turn.
- * @param {!Array.<number>} startPos X, Y and direction starting points.
- * @param {!Array.<number>} endPos X, Y and direction ending points.
- */
-Bounce.schedule = function(startPos, endPos) {
-  function updateMoveFrame(frameIdx) {
-    Bounce.pidList.push(window.setTimeout(function() {
-      pegmanIcon.setAttribute('visibility', 'hidden');
-      updatePegmanAnimation({
-        idStr: 'move',
-        col: startPos[0] + deltaX * frameIdx,
-        row: startPos[1] + deltaY * frameIdx,
-        direction: direction,
-        rowIdx: frameIdx
-      });
-    }, stepSpeed * 6 / numFrames * frameIdx));
-  }
-
-  var deltaX, deltaY, deltaDirection, numFrames;
-  if (skin.movePegmanAnimation && endPos[2] - startPos[2] === 0) {
-    // If move animation of pegman is set, and this is not a turn.
-    // Show the animation.
-    var pegmanIcon = document.getElementById('pegman');
-    var movePegmanIcon = document.getElementById('movePegman');
-
-    numFrames = skin.movePegmanAnimationFrameNumber;
-    deltaX = (endPos[0] - startPos[0]) / numFrames;
-    deltaY = (endPos[1] - startPos[1]) / numFrames;
-    deltaDirection = (endPos[2] - startPos[2]) / numFrames;
-    var direction = startPos[2] / 4;
-    var frameIdx;
-
-    for (frameIdx = 0; frameIdx < numFrames; frameIdx++) {
-      updateMoveFrame(frameIdx);
-    }
-
-    // Hide movePegman and set pegman to the end position.
-    Bounce.pidList.push(window.setTimeout(function() {
-      movePegmanIcon.setAttribute('visibility', 'hidden');
-      pegmanIcon.setAttribute('visibility', 'visible');
-      Bounce.displayPegman(endPos[0], endPos[1],
-                         Bounce.constrainDirection16(endPos[2]));
-    }, stepSpeed * 6 / numFrames * frameIdx));
-  } else {
-    numFrames = 4;
-    deltaX = (endPos[0] - startPos[0]) / numFrames;
-    deltaY = (endPos[1] - startPos[1]) / numFrames;
-    deltaDirection = (endPos[2] - startPos[2]) / numFrames;
-    Bounce.displayPegman(startPos[0] + deltaX,
-                       startPos[1] + deltaY,
-                       Bounce.constrainDirection16(startPos[2] + deltaDirection));
-    Bounce.pidList.push(window.setTimeout(function() {
-        Bounce.displayPegman(
-            startPos[0] + deltaX * 2,
-            startPos[1] + deltaY * 2,
-            Bounce.constrainDirection16(startPos[2] + deltaDirection * 2));
-    }, stepSpeed));
-    Bounce.pidList.push(window.setTimeout(function() {
-        Bounce.displayPegman(
-            startPos[0] + deltaX * 3,
-            startPos[1] + deltaY * 3,
-            Bounce.constrainDirection16(startPos[2] + deltaDirection * 3));
-    }, stepSpeed * 2));
-      Bounce.pidList.push(window.setTimeout(function() {
-          Bounce.displayPegman(endPos[0], endPos[1],
-                             Bounce.constrainDirection16(endPos[2]));
-    }, stepSpeed * 3));
-  }
-
-  if (skin.approachingGoalAnimation) {
-    var finishIcon = document.getElementById('finish');
-    // If pegman is close to the goal
-    // Replace the goal file with approachingGoalAnimation
-    if (Bounce.finish_ && Math.abs(endPos[0] - Bounce.finish_.x) <= 1 &&
-        Math.abs(endPos[1] - Bounce.finish_.y) <= 1) {
-      finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.approachingGoalAnimation);
-    } else {
-      finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.goal);
-    }
-  }
-};
+                     app: 'bounce',
+                     level: level.id,
+                     result: Bounce.result === ResultType.SUCCESS,
+                     testResult: Bounce.testResults,
+                     program: encodeURIComponent(textBlocks),
+                     onComplete: Bounce.onReportComplete
+                     });
+}
 
 /**
  * Replace the tiles surronding the obstacle with broken tiles.
@@ -1261,132 +781,6 @@ Bounce.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
 };
 
 /**
- * Schedule the animations and sounds for a failed move.
- * @param {boolean} forward True if forward, false if backward.
- */
-Bounce.scheduleFail = function(forward) {
-  var deltaX = 0;
-  var deltaY = 0;
-  switch (Bounce.pegmanD) {
-    case Direction.NORTH:
-      deltaY = -1;
-      break;
-    case Direction.EAST:
-      deltaX = 1;
-      break;
-    case Direction.SOUTH:
-      deltaY = 1;
-      break;
-    case Direction.WEST:
-      deltaX = -1;
-      break;
-  }
-  if (!forward) {
-    deltaX = -deltaX;
-    deltaY = -deltaY;
-  }
-
-  var targetX = Bounce.pegmanX + deltaX;
-  var targetY = Bounce.pegmanY + deltaY;
-  var direction16 = Bounce.constrainDirection16(Bounce.pegmanD * 4);
-  Bounce.displayPegman(Bounce.pegmanX + deltaX / 4,
-                     Bounce.pegmanY + deltaY / 4,
-                     direction16);
-  // Play sound and animation for hitting wall or obstacle
-  var squareType = Bounce.map[targetY] && Bounce.map[targetY][targetX];
-  if (squareType === SquareType.WALL || squareType === undefined) {
-    // Play the sound
-    BlocklyApps.playAudio('wall', {volume: 0.5});
-    if (squareType !== undefined) {
-      // Check which type of wall pegman is hitting
-      BlocklyApps.playAudio('wall' + Bounce.wallMap[targetY][targetX],
-                            {volume: 0.5});
-    }
-
-    // Play the animation of hitting the wall
-    if (skin.hittingWallAnimation) {
-      Bounce.pidList.push(window.setTimeout(function() {
-        var wallAnimationIcon = document.getElementById('wallAnimation');
-        wallAnimationIcon.setAttribute(
-            'x',
-            Bounce.SQUARE_SIZE * (Bounce.pegmanX + 0.5 + deltaX * 0.5) -
-            wallAnimationIcon.getAttribute('width') / 2);
-        wallAnimationIcon.setAttribute(
-            'y',
-            Bounce.SQUARE_SIZE * (Bounce.pegmanY + 1 + deltaY * 0.5) -
-            wallAnimationIcon.getAttribute('height'));
-        wallAnimationIcon.setAttribute('visibility', 'visible');
-        wallAnimationIcon.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href',
-          skin.hittingWallAnimation);
-      }, stepSpeed / 2));
-    }
-    Bounce.pidList.push(window.setTimeout(function() {
-      Bounce.displayPegman(Bounce.pegmanX,
-                         Bounce.pegmanY,
-                         direction16);
-    }, stepSpeed));
-    Bounce.pidList.push(window.setTimeout(function() {
-      Bounce.displayPegman(Bounce.pegmanX + deltaX / 4,
-                         Bounce.pegmanY + deltaY / 4,
-                         direction16);
-      BlocklyApps.playAudio('failure', {volume: 0.5});
-    }, stepSpeed * 2));
-    Bounce.pidList.push(window.setTimeout(function() {
-      Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, direction16);
-    }, stepSpeed * 3));
-    if (skin.wallPegmanAnimation) {
-      Bounce.pidList.push(window.setTimeout(function() {
-        var pegmanIcon = document.getElementById('pegman');
-        pegmanIcon.setAttribute('visibility', 'hidden');
-        updatePegmanAnimation({
-          idStr: 'wall',
-          row: Bounce.pegmanY,
-          col: Bounce.pegmanX,
-          direction: Bounce.pegmanD
-        });
-      }, stepSpeed * 4));
-    }
-  } else if (squareType == SquareType.OBSTACLE) {
-    // Play the sound
-    BlocklyApps.playAudio('obstacle', {volume: 0.5});
-
-    // Play the animation
-    var obsId = targetX + Bounce.COLS * targetY;
-    var obsIcon = document.getElementById('obstacle' + obsId);
-    obsIcon.setAttributeNS(
-        'http://www.w3.org/1999/xlink', 'xlink:href',
-        skin.obstacleAnimation);
-    Bounce.pidList.push(window.setTimeout(function() {
-      Bounce.displayPegman(Bounce.pegmanX + deltaX / 2,
-                         Bounce.pegmanY + deltaY / 2,
-                         direction16);
-    }, stepSpeed));
-
-    // Replace the objects around obstacles with broken objects
-    if (skin.largerObstacleAnimationTiles) {
-      Bounce.pidList.push(window.setTimeout(function() {
-        Bounce.updateSurroundingTiles(
-            targetY, targetX, skin.largerObstacleAnimationTiles);
-      }, stepSpeed));
-    }
-
-    // Remove pegman
-    if (!skin.nonDisappearingPegmanHittingObstacle) {
-      var svgBounce = document.getElementById('svgBounce');
-      var pegmanIcon = document.getElementById('pegman');
-
-      Bounce.pidList.push(window.setTimeout(function() {
-        pegmanIcon.setAttribute('visibility', 'hidden');
-      }, stepSpeed * 2));
-    }
-    Bounce.pidList.push(window.setTimeout(function() {
-      BlocklyApps.playAudio('failure', {volume: 0.5});
-    }, stepSpeed));
-  }
-};
-
-/**
  * Set the tiles to be transparent gradually.
  */
 Bounce.setTileTransparent = function() {
@@ -1408,74 +802,12 @@ Bounce.setTileTransparent = function() {
 };
 
 /**
- * Schedule the animations and sound for a victory dance.
- * @param {boolean} sound Play the victory sound.
- */
-Bounce.scheduleFinish = function(sound) {
-  var direction16 = Bounce.constrainDirection16(Bounce.pegmanD * 4);
-  Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, 16);
-
-  // Setting the tiles to be transparent
-  if (sound && skin.transparentTileEnding) {
-    BlocklyApps.log.push(['tile_transparent', null]);
-  }
-
-  // If sound == true, play the goal animation, else reset it
-  var finishIcon = document.getElementById('finish');
-  if (sound && finishIcon) {
-    BlocklyApps.playAudio('winGoal', {volumne: 0.5});
-    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.goalAnimation);
-  }
-
-  if (sound) {
-    BlocklyApps.playAudio('win', {volume: 0.5});
-  }
-  stepSpeed = 150;  // Slow down victory animation a bit.
-  Bounce.pidList.push(window.setTimeout(function() {
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, 18);
-  }, stepSpeed));
-  Bounce.pidList.push(window.setTimeout(function() {
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, 20);
-  }, stepSpeed * 2));
-  Bounce.pidList.push(window.setTimeout(function() {
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, 18);
-  }, stepSpeed * 3));
-  Bounce.pidList.push(window.setTimeout(function() {
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, 20);
-  }, stepSpeed * 4));
-  Bounce.pidList.push(window.setTimeout(function() {
-    Bounce.displayPegman(Bounce.pegmanX, Bounce.pegmanY, direction16);
-  }, stepSpeed * 5));
-};
-
-/**
- * Display Pegman at the specified location, facing the specified direction.
- * @param {number} x Horizontal grid (or fraction thereof).
- * @param {number} y Vertical grid (or fraction thereof).
- * @param {number} d Direction (0 - 15) or dance (16 - 17).
- */
-Bounce.displayPegman = function(x, y, d) {
-  var pegmanIcon = document.getElementById('pegman');
-  pegmanIcon.setAttribute('x',
-      x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
-  pegmanIcon.setAttribute('y', getPegmanYCoordinate({
-    mazeRow : y
-  }));
-
-  var clipRect = document.getElementById('clipRect');
-  clipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
-  clipRect.setAttribute('y', pegmanIcon.getAttribute('y'));
-};
-
-/**
  * Display Ball at the specified location, facing the specified direction.
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
 Bounce.displayBall = function(x, y, d) {
-  // console.log("displayBall x=" + x + " y=" + y + " d=" + d);
   var ballIcon = document.getElementById('ball');
   ballIcon.setAttribute('x',
                         x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
@@ -1487,95 +819,22 @@ Bounce.displayBall = function(x, y, d) {
   ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
 };
 
-var scheduleDirtChange = function(options) {
-  var col = Bounce.pegmanX;
-  var row = Bounce.pegmanY;
-  var previous = Bounce.dirt_[row][col];
-  var current = previous + options.amount;
-  Bounce.dirt_[row][col] = current;
-  if (previous === 0 && current !== 0) {
-    createDirt(row, col);
-  }
-  if (current === 0) {
-    removeDirt(row, col);
-  } else {
-    updateDirt(row, col);
-  }
-  BlocklyApps.playAudio(options.sound, {volume: 0.5});
-};
-
 /**
- * Schedule to add dirt at pegman's current position.
+ * Display Paddle at the specified location
+ * @param {number} x Horizontal grid (or fraction thereof).
+ * @param {number} y Vertical grid (or fraction thereof).
+ * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
-Bounce.scheduleFill = function() {
-  scheduleDirtChange({
-    amount: 1,
-    sound: 'fill'
-  });
-};
-
-/**
- * Schedule to remove dirt at pegman's current location.
- */
-Bounce.scheduleDig = function() {
-  scheduleDirtChange({
-    amount: -1,
-    sound: 'dig'
-  });
-};
-
-/**
- * Display the look icon at Pegman's current location,
- * in the specified direction.
- * @param {!Direction} d Direction (0 - 3).
- */
-Bounce.scheduleLook = function(d) {
-  var x = Bounce.pegmanX;
-  var y = Bounce.pegmanY;
-  switch (d) {
-    case Direction.NORTH:
-      x += 0.5;
-      break;
-    case Direction.EAST:
-      x += 1;
-      y += 0.5;
-      break;
-    case Direction.SOUTH:
-      x += 0.5;
-      y += 1;
-      break;
-    case Direction.WEST:
-      y += 0.5;
-      break;
-  }
-  x *= Bounce.SQUARE_SIZE;
-  y *= Bounce.SQUARE_SIZE;
-  d = d * 90 - 45;
-
-  var lookIcon = document.getElementById('look');
-  lookIcon.setAttribute('transform',
-      'translate(' + x + ', ' + y + ') ' +
-      'rotate(' + d + ' 0 0) scale(.4)');
-  var paths = lookIcon.getElementsByTagName('path');
-  lookIcon.style.display = 'inline';
-  for (var i = 0; i < paths.length; i++) {
-    var path = paths[i];
-    Bounce.scheduleLookStep(path, stepSpeed * i);
-  }
-};
-
-/**
- * Schedule one of the 'look' icon's waves to appear, then disappear.
- * @param {!Element} path Element to make appear.
- * @param {number} delay Milliseconds to wait before making wave appear.
- */
-Bounce.scheduleLookStep = function(path, delay) {
-  Bounce.pidList.push(window.setTimeout(function() {
-    path.style.display = 'inline';
-    window.setTimeout(function() {
-      path.style.display = 'none';
-    }, stepSpeed * 2);
-  }, delay));
+Bounce.displayPaddle = function(x, y, d) {
+  var paddleIcon = document.getElementById('paddle');
+  paddleIcon.setAttribute('x',
+                          x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
+  paddleIcon.setAttribute('y',
+                          y * Bounce.SQUARE_SIZE + Bounce.PEGMAN_Y_OFFSET - 8);
+  
+  var paddleClipRect = document.getElementById('paddleClipRect');
+  paddleClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
+  paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
 };
 
 /**
@@ -1611,19 +870,8 @@ var atFinish = function() {
       (Bounce.pegmanX == Bounce.finish_.x && Bounce.pegmanY == Bounce.finish_.y);
 };
 
-var isDirtCorrect = function() {
-  for (var y = 0; y < Bounce.ROWS; y++) {
-    for (var x = 0; x < Bounce.COLS; x++) {
-      if (getTile(Bounce.dirt_, x, y) != getTile(Bounce.finalDirtMap, x, y)) {
-        return false;
-      }
-    }
-  }
-  return true;
-};
-
 Bounce.checkSuccess = function() {
-  if (atFinish() && isDirtCorrect()) {
+  if (atFinish()) {
     // Finished.  Terminate the user's program.
     BlocklyApps.log.push(['finish', null]);
     throw true;

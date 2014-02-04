@@ -31,5 +31,6 @@ exports.SquareType = {
   FINISH: 3,
   OBSTACLE: 4,
   STARTANDFINISH: 5,
-  BALLSTART: 6
+  BALLSTART: 6,
+  PADDLESTART: 7
 };
