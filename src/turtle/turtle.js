@@ -566,7 +566,6 @@ Turtle.checkAnswer = function() {
   var answerImage =
       Turtle.ctxAnswer.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
   var len = Math.min(userImage.data.length, answerImage.data.length);
-  var total = 0;
   var delta = 0;
   // Pixels are in RGBA format.  Only check the Alpha bytes.
   for (var i = 3; i < len; i += 4) {
@@ -575,14 +574,6 @@ Turtle.checkAnswer = function() {
     if (Math.abs(userImage.data[i] - answerImage.data[i]) > 250) {
       delta++;
     }
-    if ((userImage.data[i] !== 0) || (answerImage.data[i] !== 0)) {
-      total++;
-    }
-  }
-
-  // Sanity check empty canvases for unit tests.
-  if (total === 0) {
-    throw new Error('Blank images');
   }
 
   // Allow some number of pixels to be off, but be stricter
