@@ -57,7 +57,6 @@ var loadLevel = function() {
   // Load maps.
   Bounce.map = level.map;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  Bounce.ballCount = level.ballCount;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
   // Override scalars.
@@ -311,15 +310,18 @@ var drawMap = function() {
   }
   
   if (Bounce.paddleFinish_) {
-    // Add finish marker.
-    var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-    paddleFinishMarker.setAttribute('id', 'paddlefinish');
-    paddleFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
-                                      'xlink:href',
-                                      skin.goal);
-    paddleFinishMarker.setAttribute('height', Bounce.MARKER_HEIGHT);
-    paddleFinishMarker.setAttribute('width', Bounce.MARKER_WIDTH);
-    svg.appendChild(paddleFinishMarker);
+    var i;
+    for (i = 0; i < Bounce.paddleFinishCount; i++) {
+      // Add finish markers.
+      var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
+      paddleFinishMarker.setAttribute('id', 'paddlefinish' + i);
+      paddleFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
+                                        'xlink:href',
+                                        skin.goal);
+      paddleFinishMarker.setAttribute('height', Bounce.MARKER_HEIGHT);
+      paddleFinishMarker.setAttribute('width', Bounce.MARKER_WIDTH);
+      svg.appendChild(paddleFinishMarker);
+    }
   }
 
   // Add wall hitting animation
@@ -515,28 +517,27 @@ Bounce.init = function(config) {
 
     Blockly.SNAP_RADIUS *= Bounce.scale.snapRadius;
     
-    var currentBallIndex = 0;
+    Bounce.ballCount = 0;
+    Bounce.paddleFinishCount = 0;
     
-    if (Bounce.ballCount) {
-      Bounce.ballStart_ = [];
-      Bounce.ballX = [];
-      Bounce.ballY = [];
-      Bounce.ballD = [];
-    }
-
     // Locate the start and finish squares.
     for (var y = 0; y < Bounce.ROWS; y++) {
       for (var x = 0; x < Bounce.COLS; x++) {
-        if (Bounce.map[y][x] == SquareType.START) {
-          Bounce.start_ = {x: x, y: y};
-        } else if (Bounce.map[y][x] == SquareType.PADDLEFINISH) {
-          Bounce.paddleFinish_ = {x: x, y: y};
-        } else if (Bounce.map[y][x] == SquareType.STARTANDFINISH) {
-          Bounce.start_ = {x: x, y: y};
-          Bounce.paddleFinish_ = {x: x, y: y};
+        if (Bounce.map[y][x] == SquareType.PADDLEFINISH) {
+          if (0 == Bounce.paddleFinishCount) {
+            Bounce.paddleFinish_ = [];
+          }
+          Bounce.paddleFinish_[Bounce.paddleFinishCount] = {x: x, y: y};
+          Bounce.paddleFinishCount++;
         } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
-          Bounce.ballStart_[currentBallIndex] = {x: x, y: y};
-          currentBallIndex++;
+          if (0 == Bounce.ballCount) {
+            Bounce.ballStart_ = [];
+            Bounce.ballX = [];
+            Bounce.ballY = [];
+            Bounce.ballD = [];
+          }
+          Bounce.ballStart_[Bounce.ballCount] = {x: x, y: y};
+          Bounce.ballCount++;
         } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
         }
@@ -595,20 +596,26 @@ BlocklyApps.reset = function(first) {
   var svg = document.getElementById('svgBounce');
 
   if (Bounce.paddleFinish_) {
-    // Move the finish icon into position.
-    var paddleFinishIcon = document.getElementById('paddlefinish');
-    paddleFinishIcon.setAttribute(
-        'x',
-        Bounce.SQUARE_SIZE * (Bounce.paddleFinish_.x + 0.5) -
-        paddleFinishIcon.getAttribute('width') / 2);
-    paddleFinishIcon.setAttribute(
-        'y',
-        Bounce.SQUARE_SIZE * (Bounce.paddleFinish_.y + 0.9) -
-        paddleFinishIcon.getAttribute('height'));
-    paddleFinishIcon.setAttributeNS(
-        'http://www.w3.org/1999/xlink',
-        'xlink:href',
-        skin.goal);
+    var i;
+    for (i = 0; i < Bounce.paddleFinishCount; i++) {
+      // Mark each finish as incomplete.
+      Bounce.paddleFinish_[i].finished = false;
+
+      // Move the finish icons into position.
+      var paddleFinishIcon = document.getElementById('paddlefinish' + i);
+      paddleFinishIcon.setAttribute(
+          'x',
+          Bounce.SQUARE_SIZE * (Bounce.paddleFinish_[i].x + 0.5) -
+          paddleFinishIcon.getAttribute('width') / 2);
+      paddleFinishIcon.setAttribute(
+          'y',
+          Bounce.SQUARE_SIZE * (Bounce.paddleFinish_[i].y + 0.9) -
+          paddleFinishIcon.getAttribute('height'));
+      paddleFinishIcon.setAttributeNS(
+          'http://www.w3.org/1999/xlink',
+          'xlink:href',
+          skin.goal);
+    }
   }
 
   // Reset the obstacle image.
@@ -933,14 +940,29 @@ Bounce.constrainDirection16 = function(d) {
   return d;
 };
 
-var atPaddleFinish = function() {
-  return Bounce.paddleFinish_ &&
-      (Bounce.paddleX == Bounce.paddleFinish_.x &&
-       Bounce.paddleY == Bounce.paddleFinish_.y);
+var allPaddleFinishesComplete = function() {
+  if (Bounce.paddleFinish_) {
+    var i, finished;
+    for (i = 0, finished = 0; i < Bounce.paddleFinishCount; i++) {
+      if (!Bounce.paddleFinish_[i].finished) {
+        if (Bounce.paddleX == Bounce.paddleFinish_[i].x &&
+            Bounce.paddleY == Bounce.paddleFinish_[i].y) {
+          Bounce.paddleFinish_[i].finished = true;
+          finished++;
+        }
+      } else {
+        finished++;
+      }
+    }
+    return (finished == Bounce.paddleFinishCount);
+  }
+  else {
+    return false;
+  }
 };
 
 Bounce.checkSuccess = function() {
-  if (atPaddleFinish()) {
+  if (allPaddleFinishesComplete()) {
     return true;
   }
   return false;
