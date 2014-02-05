@@ -2,9 +2,8 @@
   "blocklyMessage": "Parçalı",
   "catActions": "İşlemler",
   "catColour": "Renk",
-  "catCondition": "Koşullar",
-  "catLists": "Listeler",
   "catLogic": "Mantık",
+  "catLists": "Listeler",
   "catLoops": "Döngüler",
   "catMath": "Matematik",
   "catProcedures": "Fonksiyonlar",
@@ -55,9 +54,9 @@
   "infinity": "Sonsuz",
   "rotateText": "Cihazınızı döndürün.",
   "orientationLock": "Yönlendirme kilidini aygıt ayarlarından devre dışı bırakın.",
-  "shareDrawing": "Share your drawing:",
-  "wantToLearn": "Want to learn to code?",
-  "watchVideo": "Watch the Video",
-  "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "shareDrawing": "Kendi çiziminizi paylaşın:",
+  "wantToLearn": "Kod yazmayı öğrenmek ister misiniz?",
+  "watchVideo": "Videoyu İzle",
+  "tryHOC": "Kodlama Saati'ni Deneyin",
+  "signup": "Giriş dersi için üye olun"
 }

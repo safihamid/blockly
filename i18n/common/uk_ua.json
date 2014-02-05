@@ -2,9 +2,8 @@
   "blocklyMessage": "Блоклі",
   "catActions": "Дії",
   "catColour": "Колір",
-  "catCondition": "Умови",
-  "catLists": "Списки",
   "catLogic": "Логіка",
+  "catLists": "Списки",
   "catLoops": "Цикли",
   "catMath": "Математика",
   "catProcedures": "Функції",
@@ -55,9 +54,9 @@
   "infinity": "Нескінченність",
   "rotateText": "Повертайте свій пристрій.",
   "orientationLock": "Увімкніть блокування повороту у налаштування пристрою.",
-  "shareDrawing": "Share your drawing:",
+  "shareDrawing": "Поділіться своїм малюнком:",
   "wantToLearn": "Хочете навчитись програмувати?",
-  "watchVideo": "Watch the Video",
-  "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "watchVideo": "Переглянути відео",
+  "tryHOC": "Спробуйте годину коду",
+  "signup": "Підпишіться на вступний курс"
 }

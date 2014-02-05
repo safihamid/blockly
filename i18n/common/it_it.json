@@ -2,9 +2,8 @@
   "blocklyMessage": "Blockly",
   "catActions": "Azioni",
   "catColour": "Colore",
-  "catCondition": "Condizionali",
-  "catLists": "Elenchi",
   "catLogic": "Logica",
+  "catLists": "Elenchi",
   "catLoops": "Ripetizioni",
   "catMath": "Matematica",
   "catProcedures": "Funzioni",
@@ -58,6 +57,6 @@
   "shareDrawing": "Condividi il tuo disegno:",
   "wantToLearn": "Vuoi imparare a programmare?",
   "watchVideo": "Guarda il video",
-  "tryHOC": "Prova l'ora di programmazione",
+  "tryHOC": "Prova l'Ora di Programmazione",
   "signup": "Iscriviti al corso introduttivo"
 }

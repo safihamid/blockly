@@ -2,9 +2,8 @@
   "blocklyMessage": "Blockly",
   "catActions": "Acties",
   "catColour": "Kleur",
-  "catCondition": "Voorwaardelijke instructies",
-  "catLists": "Lijsten",
   "catLogic": "Logica",
+  "catLists": "Lijsten",
   "catLoops": "Lussen",
   "catMath": "wiskundige",
   "catProcedures": "Functies",
@@ -55,9 +54,9 @@
   "infinity": "Oneindig",
   "rotateText": "Draai je apparaat.",
   "orientationLock": "Schakel de orientatie blokkering uit in de instellingen van je apparaat.",
-  "shareDrawing": "Share your drawing:",
-  "wantToLearn": "Want to learn to code?",
-  "watchVideo": "Watch the Video",
-  "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "shareDrawing": "Deel je tekening:",
+  "wantToLearn": "Wil je leren programmeren?",
+  "watchVideo": "Bekijk de video",
+  "tryHOC": "Probeer \"Hour of Code\"",
+  "signup": "Neem deel aan de introductie cursus"
 }
