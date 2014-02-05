@@ -280,7 +280,8 @@ config.jshint = {
 config.mochaTest = {
   all: {
     options: {
-      reporter: 'spec'
+      reporter: 'spec',
+      timeout: 3000
     },
     src: ['test/**/*.js']
   }
@@ -323,4 +324,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'mochaTest']);
 
   grunt.registerTask('default', ['rebuild', 'test']);
+
+  config.mochaTest.all.options.grep = new RegExp(grunt.option('grep'));
 };
