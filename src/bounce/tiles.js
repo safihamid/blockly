@@ -27,10 +27,8 @@ exports.AngleDirection = {
 exports.SquareType = {
   WALL: 0,
   OPEN: 1,
-  START: 2,
   PADDLEFINISH: 3,
   OBSTACLE: 4,
-  STARTANDFINISH: 5,
   BALLSTART: 6,
   PADDLESTART: 7
 };
