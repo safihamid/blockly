@@ -90,7 +90,7 @@ var runTestCollection = function (path) {
   var app = testCollection.app;
 
   var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
-  var level = levels[testCollection.levelId];  
+  var level = levels[testCollection.levelId]; 
 
   var exceptions, messages;
 
