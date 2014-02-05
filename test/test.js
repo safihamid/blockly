@@ -6,6 +6,12 @@
  * JSON.stringify(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)));
  */
 
+// todo - There's some sort of leak here, where as we run tests, they take
+// longer and longer (even if we run the same test a bunch of times).  I've
+// tracked it down to Blockly.BlockSvg.prototype.render somwhere.  I've
+// validated that we call this function the same number of times from test
+// to test, but that the calls in later tests take longer.
+
 var path = require('path');
 var fs = require('fs');
 var assert = require('chai').assert;
