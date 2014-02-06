@@ -14,6 +14,7 @@ var CONFIGS = {
   bounce: {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
+    additionalSound: true,
     background: 4
   }
 
@@ -25,6 +26,7 @@ exports.load = function(assetUrl, id) {
   // Images
   skin.tiles = skin.assetUrl('tiles.png');
   skin.goal = skin.assetUrl('goal.png');
+  skin.goalSuccess = skin.assetUrl('goal_success.png');
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.obstacle = skin.assetUrl('obstacle.png');
   skin.obstacleAnimation = skin.assetUrl('obstacle.gif');

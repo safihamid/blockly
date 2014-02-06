@@ -159,6 +159,42 @@ exports.install = function(blockly, skin) {
     return 'Bounce.moveRight(\'block_id_' + this.id + '\');\n';
   };
   
+  blockly.Blocks.bounce_moveUp = {
+    // Block for moving up.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.moveUp());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.moveUpTooltip());
+    }
+  };
+  
+  generator.bounce_moveUp = function() {
+    // Generate JavaScript for moving up.
+    return 'Bounce.moveUp(\'block_id_' + this.id + '\');\n';
+  };
+  
+  blockly.Blocks.bounce_moveDown = {
+    // Block for moving down.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.moveDown());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.moveDownTooltip());
+    }
+  };
+  
+  generator.bounce_moveDown = function() {
+    // Generate JavaScript for moving down.
+    return 'Bounce.moveDown(\'block_id_' + this.id + '\');\n';
+  };
+  
   blockly.Blocks.bounce_playSound = {
     // Block for playing sound.
     helpUrl: '',

@@ -19,6 +19,8 @@ exports.AngleDirection = {
   NORTHWEST: 3
 };
 
+exports.PADDLE_BALL_COLLIDE_DISTANCE = 0.7;
+
 /**
  * The types of squares in the maze, which is represented
  * as a 2D array of SquareType values.
@@ -27,6 +29,7 @@ exports.AngleDirection = {
 exports.SquareType = {
   WALL: 0,
   OPEN: 1,
+  BALLFINISH: 2,
   PADDLEFINISH: 3,
   OBSTACLE: 4,
   BALLSTART: 6,
