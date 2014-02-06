@@ -56,6 +56,7 @@ Bounce.scale = {
 var loadLevel = function() {
   // Load maps.
   Bounce.map = level.map;
+  Bounce.timeoutFailure = level.timeoutFailure || Infinity;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
@@ -324,6 +325,18 @@ var drawMap = function() {
     }
   }
 
+  if (Bounce.ballFinish_) {
+    // Add ball finish marker.
+    var ballFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
+    ballFinishMarker.setAttribute('id', 'ballfinish');
+    ballFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
+                                    'xlink:href',
+                                    skin.goal);
+    ballFinishMarker.setAttribute('height', Bounce.MARKER_HEIGHT);
+    ballFinishMarker.setAttribute('width', Bounce.MARKER_WIDTH);
+    svg.appendChild(ballFinishMarker);
+  }
+
   // Add wall hitting animation
   if (skin.hittingWallAnimation) {
     var wallAnimationIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -362,8 +375,9 @@ Bounce.calcDistance = function(xDist, yDist) {
   return Math.sqrt(xDist * xDist + yDist * yDist);
 };
 
-var essentiallyEqual = function(float1, float2) {
-  return (Math.abs(float1 - float2) < 0.01);
+var essentiallyEqual = function(float1, float2, opt_variance) {
+  var variance = opt_variance || 0.01;
+  return (Math.abs(float1 - float2) < variance);
 };
 
 Bounce.onTick = function() {
@@ -435,7 +449,7 @@ Bounce.onTick = function() {
       var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
       var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
       
-      if (distPaddleBall < 1) {
+      if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
         // paddle ball collision
         try { Bounce.whenPaddleCollided(BlocklyApps, api); } catch (e) { }
       }
@@ -446,8 +460,11 @@ Bounce.onTick = function() {
   
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
   
-  if (Bounce.checkSuccess()) {
+  if (Bounce.allFinishesComplete()) {
     Bounce.result = ResultType.SUCCESS;
+    Bounce.onPuzzleComplete();
+  } else if (Bounce.timedOut()) {
+    Bounce.result = ResultType.FAILURE;
     Bounce.onPuzzleComplete();
   }
 }
@@ -462,14 +479,20 @@ Keycodes = {
 };
 
 Bounce.onKey = function(e) {
+  // Store the most recent event type per-key
   Bounce.keyState[e.keyCode] = e.type;
+  
+  // If we are actively running our tick loop, suppress default event handling
+  if (Bounce.intervalId &&
+      e.keyCode >= Keycodes.LEFT && e.keyCode <= Keycodes.DOWN) {
+    e.preventDefault();
+  }
 };
 
 /**
- * Initialize Blockly and the maze.  Called on page load.
+ * Initialize Blockly and the Bounce app.  Called on page load.
  */
 Bounce.init = function(config) {
-  Bounce.intervalId = 0;
   Bounce.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
@@ -540,6 +563,8 @@ Bounce.init = function(config) {
           Bounce.ballCount++;
         } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
+        } else if (Bounce.map[y][x] == SquareType.BALLFINISH) {
+          Bounce.ballFinish_ = {x: x, y: y};
         }
       }
     }
@@ -565,7 +590,11 @@ Bounce.clearEventHandlersKillTickLoop = function() {
   Bounce.whenLeft = null;
   Bounce.whenRight = null;
   Bounce.whenUp = null;
-  window.clearInterval(Bounce.intervalId);
+  if (Bounce.intervalId) {
+    window.clearInterval(Bounce.intervalId);
+  }
+  Bounce.intervalId = 0;
+  Bounce.lastTickStart = 0;
 }
 
 /**
@@ -616,6 +645,23 @@ BlocklyApps.reset = function(first) {
           'xlink:href',
           skin.goal);
     }
+  }
+
+  if (Bounce.ballFinish_) {
+    // Move the finish icon into position.
+    var ballFinishIcon = document.getElementById('ballfinish');
+    ballFinishIcon.setAttribute(
+        'x',
+        Bounce.SQUARE_SIZE * (Bounce.ballFinish_.x + 0.5) -
+        ballFinishIcon.getAttribute('width') / 2);
+    ballFinishIcon.setAttribute(
+        'y',
+        Bounce.SQUARE_SIZE * (Bounce.ballFinish_.y + 0.9) -
+        ballFinishIcon.getAttribute('height'));
+    ballFinishIcon.setAttributeNS(
+        'http://www.w3.org/1999/xlink',
+        'xlink:href',
+        skin.goal);
   }
 
   // Reset the obstacle image.
@@ -781,6 +827,22 @@ Bounce.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
+  var codeUp = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenUp');
+  var whenUpFunc = codegen.functionFromCode(
+                                     codeUp, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
+  var codeDown = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenDown');
+  var whenDownFunc = codegen.functionFromCode(
+                                     codeDown, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
@@ -790,6 +852,9 @@ Bounce.execute = function() {
   Bounce.whenPaddleCollided = whenPaddleCollidedFunc;
   Bounce.whenLeft = whenLeftFunc;
   Bounce.whenRight = whenRightFunc;
+  Bounce.whenUp = whenUpFunc;
+  Bounce.whenDown = whenDownFunc;
+  Bounce.lastTickStart = new Date().getTime();
   Bounce.intervalId = window.setInterval(Bounce.onTick, Bounce.scale.stepSpeed);
 };
 
@@ -940,30 +1005,56 @@ Bounce.constrainDirection16 = function(d) {
   return d;
 };
 
-var allPaddleFinishesComplete = function() {
+Bounce.timedOut = function() {
+  var timeElapsed = (new Date().getTime()) - Bounce.lastTickStart;
+  return timeElapsed > Bounce.timeoutFailure * 1000;
+};
+
+Bounce.allFinishesComplete = function() {
   if (Bounce.paddleFinish_) {
-    var i, finished;
+    var i, finished, playSound;
     for (i = 0, finished = 0; i < Bounce.paddleFinishCount; i++) {
       if (!Bounce.paddleFinish_[i].finished) {
-        if (Bounce.paddleX == Bounce.paddleFinish_[i].x &&
-            Bounce.paddleY == Bounce.paddleFinish_[i].y) {
+        if (essentiallyEqual(Bounce.paddleX, Bounce.paddleFinish_[i].x, 0.2) &&
+            essentiallyEqual(Bounce.paddleY, Bounce.paddleFinish_[i].y, 0.2)) {
           Bounce.paddleFinish_[i].finished = true;
           finished++;
+          playSound = true;
+
+          // Change the finish icon to goalSuccess.
+          var paddleFinishIcon = document.getElementById('paddlefinish' + i);
+          paddleFinishIcon.setAttributeNS(
+              'http://www.w3.org/1999/xlink',
+              'xlink:href',
+              skin.goalSuccess);
         }
       } else {
         finished++;
       }
     }
+    if (playSound) {
+      BlocklyApps.playAudio(
+          (finished == Bounce.paddleFinishCount) ? 'win' : 'winGoal',
+          {volume: 0.5});
+    }
     return (finished == Bounce.paddleFinishCount);
   }
-  else {
-    return false;
-  }
-};
-
-Bounce.checkSuccess = function() {
-  if (allPaddleFinishesComplete()) {
-    return true;
+  else if (Bounce.ballFinish_) {
+    var i;
+    for (i = 0; i < Bounce.ballCount; i++) {
+      if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.2) &&
+          essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.2)) {
+        // Change the finish icon to goalSuccess.
+        var ballFinishIcon = document.getElementById('ballfinish');
+        ballFinishIcon.setAttributeNS(
+            'http://www.w3.org/1999/xlink',
+            'xlink:href',
+            skin.goalSuccess);
+        
+        BlocklyApps.playAudio('win', {volume: 0.5});
+        return true;
+      }
+    }
   }
   return false;
 };

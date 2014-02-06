@@ -24,6 +24,22 @@ exports.moveRight = function(id) {
   }
 };
 
+exports.moveUp = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.paddleY -= 0.1;
+  if (Bounce.paddleY < 0) {
+    Bounce.paddleY = 0;
+  }
+};
+
+exports.moveDown = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.paddleY += 0.1;
+  if (Bounce.paddleY > (Bounce.ROWS - 1)) {
+    Bounce.paddleY = Bounce.ROWS - 1;
+  }
+};
+
 exports.bounceBall = function(id) {
   BlocklyApps.highlight(id);
 
@@ -52,7 +68,7 @@ exports.bounceBall = function(id) {
     var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
     var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
     
-    if (distPaddleBall < 1) {
+    if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
       // paddle ball collision
       if ((Bounce.ballD[i] == AngleDirection.SOUTHEAST) ||
           (Bounce.ballD[i] == AngleDirection.SOUTHWEST)) {
