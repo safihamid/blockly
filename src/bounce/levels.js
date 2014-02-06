@@ -1,3 +1,5 @@
+/*jshint multistr: true */
+
 var Direction = require('./tiles').Direction;
 
 var tb = function(blocks) {

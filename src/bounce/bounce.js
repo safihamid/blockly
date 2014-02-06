@@ -27,6 +27,15 @@ var SquareType = tiles.SquareType;
  */
 var Bounce = module.exports;
 
+Bounce.keyState = {};
+
+var Keycodes = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40
+};
+
 var level;
 var skin;
 
@@ -122,7 +131,7 @@ var TILE_SHAPES = {
 
 var drawMap = function() {
   var svg = document.getElementById('svgBounce');
-  var x, y, k, tile;
+  var i, x, y, k, tile;
 
   // Draw the outer square.
   var square = document.createElementNS(Blockly.SVG_NS, 'rect');
@@ -264,7 +273,6 @@ var drawMap = function() {
   }
 
   if (Bounce.ballStart_) {
-    var i;
     for (i = 0; i < Bounce.ballCount; i++) {
       // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
       var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
@@ -311,7 +319,6 @@ var drawMap = function() {
   }
   
   if (Bounce.paddleFinish_) {
-    var i;
     for (i = 0; i < Bounce.paddleFinishCount; i++) {
       // Add finish markers.
       var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -467,15 +474,6 @@ Bounce.onTick = function() {
     Bounce.result = ResultType.FAILURE;
     Bounce.onPuzzleComplete();
   }
-}
-
-Bounce.keyState = {};
-
-Keycodes = {
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
-  DOWN: 40
 };
 
 Bounce.onKey = function(e) {
@@ -547,13 +545,13 @@ Bounce.init = function(config) {
     for (var y = 0; y < Bounce.ROWS; y++) {
       for (var x = 0; x < Bounce.COLS; x++) {
         if (Bounce.map[y][x] == SquareType.PADDLEFINISH) {
-          if (0 == Bounce.paddleFinishCount) {
+          if (0 === Bounce.paddleFinishCount) {
             Bounce.paddleFinish_ = [];
           }
           Bounce.paddleFinish_[Bounce.paddleFinishCount] = {x: x, y: y};
           Bounce.paddleFinishCount++;
         } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
-          if (0 == Bounce.ballCount) {
+          if (0 === Bounce.ballCount) {
             Bounce.ballStart_ = [];
             Bounce.ballX = [];
             Bounce.ballY = [];
@@ -595,18 +593,18 @@ Bounce.clearEventHandlersKillTickLoop = function() {
   }
   Bounce.intervalId = 0;
   Bounce.lastTickStart = 0;
-}
+};
 
 /**
  * Reset the maze to the start position and kill any pending animation tasks.
  * @param {boolean} first True if an opening animation is to be played.
  */
 BlocklyApps.reset = function(first) {
+  var i;
   Bounce.clearEventHandlersKillTickLoop();
   
   // Move Ball into position.
   if (Bounce.ballStart_) {
-    var i;
     for (i = 0; i < Bounce.ballCount; i++) {
       Bounce.ballX[i] = Bounce.ballStart_[i].x;
       Bounce.ballY[i] = Bounce.ballStart_[i].y;
@@ -625,7 +623,6 @@ BlocklyApps.reset = function(first) {
   var svg = document.getElementById('svgBounce');
 
   if (Bounce.paddleFinish_) {
-    var i;
     for (i = 0; i < Bounce.paddleFinishCount; i++) {
       // Mark each finish as incomplete.
       Bounce.paddleFinish_[i].finished = false;
@@ -892,7 +889,7 @@ Bounce.onPuzzleComplete = function() {
                      program: encodeURIComponent(textBlocks),
                      onComplete: Bounce.onReportComplete
                      });
-}
+};
 
 /**
  * Replace the tiles surronding the obstacle with broken tiles.
@@ -1011,8 +1008,9 @@ Bounce.timedOut = function() {
 };
 
 Bounce.allFinishesComplete = function() {
+  var i;
   if (Bounce.paddleFinish_) {
-    var i, finished, playSound;
+    var finished, playSound;
     for (i = 0, finished = 0; i < Bounce.paddleFinishCount; i++) {
       if (!Bounce.paddleFinish_[i].finished) {
         if (essentiallyEqual(Bounce.paddleX, Bounce.paddleFinish_[i].x, 0.2) &&
@@ -1040,7 +1038,6 @@ Bounce.allFinishesComplete = function() {
     return (finished == Bounce.paddleFinishCount);
   }
   else if (Bounce.ballFinish_) {
-    var i;
     for (i = 0; i < Bounce.ballCount; i++) {
       if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.2) &&
           essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.2)) {
