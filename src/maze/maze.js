@@ -1343,7 +1343,7 @@ Maze.scheduleFinish = function(sound) {
   // If sound == true, play the goal animation, else reset it
   var finishIcon = document.getElementById('finish');
   if (sound && finishIcon) {
-    BlocklyApps.playAudio('winGoal', {volumne: 0.5});
+    BlocklyApps.playAudio('winGoal', {volume: 0.5});
     finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                               skin.goalAnimation);
   }
