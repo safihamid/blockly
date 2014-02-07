@@ -7,7 +7,7 @@
   "catLoops": "Vòng lặp",
   "catMath": "Thuật toán",
   "catProcedures": "Chức năng",
-  "catText": "Nội dung",
+  "catText": "văn bản",
   "catVariables": "Các biến",
   "codeTooltip": "Xem mã \"JavaScript\" đã được tạo ra.",
   "continue": "Tiếp tục",
@@ -54,9 +54,9 @@
   "infinity": "Vô cùng",
   "rotateText": "Xoay thiết bị của bạn.",
   "orientationLock": "Tắt khóa hướng trong cài đặt thiết bị.",
-  "shareDrawing": "Share your drawing:",
+  "shareDrawing": "Chia sẻ bản vẽ của bạn:",
   "wantToLearn": "Want to learn to code?",
-  "watchVideo": "Watch the Video",
-  "tryHOC": "Try the Hour of Code",
+  "watchVideo": "Xem Video",
+  "tryHOC": "Học thử Hour of Code",
   "signup": "Sign up for the intro course"
 }
