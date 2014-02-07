@@ -743,10 +743,19 @@ module.exports = {
     toolbox: toolbox(4, 1),
     startBlocks: startBlocks(4, 1),
     requiredBlocks: [
-      [MOVE_FORWARD_INLINE],
+      [{
+        // allow move forward or backward, but show forward block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_move_by_constant';
+        },
+        type: 'draw_move_by_constant'
+      }],
       [repeat(3)],
       [{
-        test: 'turnRight',
+        // allow turn right or left, but show turn right block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_turn_by_constant';
+        },
         type: 'draw_turn_by_constant',
         titles: {VALUE: '???'}
       }]
