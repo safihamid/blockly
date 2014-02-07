@@ -87,6 +87,14 @@ function drawASnowman(number) {
 // earlier levels of the tutorial.
 var MOVE_FORWARD_INLINE = {test: 'moveForward', type: 'draw_move_by_constant'};
 
+// allow move forward or backward, but show forward block if they've done neither
+var MOVE_FORWARD_OR_BACKWARD_INLINE = {
+  test: function(block) {
+    return block.type == 'draw_move_by_constant';
+  },
+  type: 'draw_move_by_constant'
+};
+
 // This tests for and creates the limited "move forward" block used on the
 // earlier levels of the tutorial with the given pixel number.
 var moveForwardInline = function(pixels) {
@@ -266,13 +274,7 @@ module.exports = {
     toolbox: toolbox(1, 4),
     startBlocks: startBlocks(1, 4),
     requiredBlocks: [
-      [{
-        // allow move forward or backward, but show forward block if they've done neither
-        test: function(block) {
-          return block.type == 'draw_move_by_constant';
-        },
-        type: 'draw_move_by_constant'
-      }],
+      [MOVE_FORWARD_OR_BACKWARD_INLINE],
       [repeat(3)],
       [{
         // allow turn right or left, but show turn right block if they've done neither
@@ -743,13 +745,7 @@ module.exports = {
     toolbox: toolbox(4, 1),
     startBlocks: startBlocks(4, 1),
     requiredBlocks: [
-      [{
-        // allow move forward or backward, but show forward block if they've done neither
-        test: function(block) {
-          return block.type == 'draw_move_by_constant';
-        },
-        type: 'draw_move_by_constant'
-      }],
+      [MOVE_FORWARD_OR_BACKWARD_INLINE],
       [repeat(3)],
       [{
         // allow turn right or left, but show turn right block if they've done neither
