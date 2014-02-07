@@ -2,6 +2,7 @@
   "app": "turtle",    
   "levelFile": "levels",
   "levelId": "1_7",
+  "timeout": 5000,
   "tests" : [
     {
       "description": "Top solve: 4x {Right 90, Forward 100}, Left 90, Forward 50, 4x {Forward 100, Left 90}",
