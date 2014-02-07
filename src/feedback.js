@@ -490,7 +490,7 @@ var getMissingRequiredBlocks = function() {
   var missingBlocks = [];
   var code = null;  // JavaScript code, which is initalized lazily.
   if (BlocklyApps.REQUIRED_BLOCKS && BlocklyApps.REQUIRED_BLOCKS.length) {
-    var blocks = getUserBlocks();
+    var userBlocks = getUserBlocks();
     // For each list of required blocks
     // Keep track of the number of the missing block lists. It should not be
     // bigger than BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG
@@ -499,13 +499,13 @@ var getMissingRequiredBlocks = function() {
          i < BlocklyApps.REQUIRED_BLOCKS.length &&
              missingBlockNum < BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG;
          i++) {
-      var tests = BlocklyApps.REQUIRED_BLOCKS[i];
+      var blocks = BlocklyApps.REQUIRED_BLOCKS[i];
       // For each of the test
       // If at least one of the tests succeeded, we consider the required block
       // is used
       var usedRequiredBlock = false;
-      for (var testId = 0; testId < tests.length; testId++) {
-        var test = tests[testId].test;
+      for (var testId = 0; testId < blocks.length; testId++) {
+        var test = blocks[testId].test;
         if (typeof test === 'string') {
           if (!code) {
             code = Blockly.Generator.workspaceToCode('JavaScript');
@@ -516,7 +516,7 @@ var getMissingRequiredBlocks = function() {
             break;
           }
         } else if (typeof test === 'function') {
-          if (blocks.some(test)) {
+          if (userBlocks.some(test)) {
             // Succeeded, moving to the next list of tests
             usedRequiredBlock = true;
             break;
