@@ -939,5 +939,14 @@ module.exports = {
     startBlocks: startBlocks(5, 6),
     startDirection: 0,
     sliderSpeed: 1.0
+  },
+  'builder': {
+    answer: answer(5, 6),
+    freePlay: true,
+    initialY: 300,
+    toolbox: toolbox(5, 6),
+    startBlocks: '',
+    startDirection: 0,
+    sliderSpeed: 1.0
   }
 };
