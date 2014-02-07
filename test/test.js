@@ -12,6 +12,9 @@
 // validated that we call this function the same number of times from test
 // to test, but that the calls in later tests take longer.
 
+// todo - should we also have tests around which blocks to show as part of the
+// feedback when a user gets the puzzle wrong?
+
 var path = require('path');
 var fs = require('fs');
 var assert = require('chai').assert;
@@ -45,7 +48,7 @@ var runLevel = function(app, level, onAttempt) {
   // app specific hacks
   switch (app.toLowerCase()) {
     case 'turtle':
-      global.Turtle = window.Turtle;    
+      global.Turtle = window.Turtle;
       // hack drawTurtle to be a noop, as it's not needed to verify solutions,
       // and drawImage was having issues in a node environment
       global.Turtle.drawTurtle = function () {};

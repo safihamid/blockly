@@ -132,23 +132,27 @@ var turnRight = function(degrees) {
   return {
     test: function(block) {
       return block.type == 'draw_turn' &&
-          Blockly.JavaScript.valueToCode(
-            block, 'VALUE', Blockly.JavaScript.ORDER_NONE) == degrees;
-    },
+        block.getTitleValue('DIR') == 'turnRight';
+      },
     type: 'draw_turn',
-    values: {'VALUE': makeMathNumber(degrees)}};
+    titles: {'DIR': 'turnRight'},
+    values: {'VALUE': makeMathNumber(degrees)}
+  };
 };
 
 // This tests for and creates a left draw_turn block with the specified
 // number of degrees as its input.  This method is not appropriate for the
 // earliest levels of the tutorial, which do not provide draw_turn.
 var turnLeft = function(degrees) {
-  return {test: function(block) {
-    return block.type == 'draw_turn' &&
-        block.getTitleValue('DIR') == 'turnLeft'; },
-          type: 'draw_turn',
-          titles: {'DIR': 'turnLeft'},
-          values: {'VALUE': makeMathNumber(degrees)}};
+  return {
+    test: function(block) {
+      return block.type == 'draw_turn' &&
+        block.getTitleValue('DIR') == 'turnLeft';
+      },
+    type: 'draw_turn',
+    titles: {'DIR': 'turnLeft'},
+    values: {'VALUE': makeMathNumber(degrees)}
+  };
 };
 
 // This tests for any draw_move block and, if not present, creates
@@ -262,10 +266,19 @@ module.exports = {
     toolbox: toolbox(1, 4),
     startBlocks: startBlocks(1, 4),
     requiredBlocks: [
-      [MOVE_FORWARD_INLINE],
+      [{
+        // allow move forward or backward, but show forward block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_move_by_constant';
+        },
+        type: 'draw_move_by_constant'
+      }],
       [repeat(3)],
       [{
-        test: 'turnRight',
+        // allow turn right or left, but show turn right block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_turn_by_constant_restricted';
+        },
         type: 'draw_turn_by_constant',
         titles: {VALUE: '???'}
       }]
