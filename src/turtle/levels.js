@@ -363,8 +363,23 @@ module.exports = {
     startBlocks: startBlocks(2, 1),
     requiredBlocks: [
       [repeat(4)],
-      [turnRight(90)],
-      [move(100)]
+      [{
+        // allow turn right or left, but show turn right block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_turn';
+        },
+        type: 'draw_turn',
+        titles: {'DIR': 'turnRight'},
+        values: {'VALUE': makeMathNumber(90)}
+      }],
+      [{
+        // allow move forward or backward, but show forward block if they've done neither
+        test: function(block) {
+          return block.type == 'draw_move';
+        },
+        type: 'draw_move',
+        values: {'VALUE': makeMathNumber(100)}
+      }],
     ],
     freePlay: false
   },
