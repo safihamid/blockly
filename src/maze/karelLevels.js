@@ -1070,7 +1070,6 @@ module.exports = {
       [MOVE_FORWARD],
       [FILL_HOLES],
       [IF_OPT_PILE_PRESENT, IF_ELSE],
-      [IF_OPT_HOLE_PRESENT, IF_ELSE],
       [UNTIL_BLOCKED, REPEAT]
     ],
     'scale': {

@@ -1,5 +1,5 @@
 {
-  "app": "turtle",    
+  "app": "turtle",
   "levelFile": "levels",
   "levelId": "1_4",
   "tests" : [
@@ -15,7 +15,7 @@
       "description": "Going backwards through same steps as top solve",
       "expected": {
         "result": true,
-        "testResult": 10
+        "testResult": 100
       },
       "xml": "<xml><block type=\"controls_repeat\"><title name=\"TIMES\">3</title><statement name=\"DO\"><block type=\"draw_colour\" inline=\"true\"><value name=\"COLOUR\"><block type=\"colour_random\"></block></value><next><block type=\"draw_turn_by_constant_restricted\"><title name=\"DIR\">turnLeft</title><title name=\"VALUE\">120</title><next><block type=\"draw_move_by_constant\"><title name=\"DIR\">moveBackward</title><title name=\"VALUE\">100</title></block></next></block></next></block></statement></block></xml>"
     },
