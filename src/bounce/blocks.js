@@ -105,6 +105,42 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
   
+  blockly.Blocks.bounce_whenBallInGoal = {
+    // Block to handle event when a ball enters a goal.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenBallInGoal());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenBallInGoalTooltip());
+    }
+  };
+  
+  generator.bounce_whenBallInGoal = function() {
+    // Generate JavaScript for handling when a ball in goal event occurs.
+    return '\n';
+  };
+  
+  blockly.Blocks.bounce_whenBallMissesPaddle = {
+    // Block to handle event when a ball misses the paddle.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenBallMissesPaddle());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenBallMissesPaddleTooltip());
+    }
+  };
+  
+  generator.bounce_whenBallMissesPaddle = function() {
+    // Generate JavaScript for handling when a ball misses the paddle.
+    return '\n';
+  };
+  
   blockly.Blocks.bounce_whenPaddleCollided = {
     // Block to handle event when a wall collision occurs.
     helpUrl: '',
@@ -209,8 +245,44 @@ exports.install = function(blockly, skin) {
   };
   
   generator.bounce_playSound = function() {
-    // Generate JavaScript for moving forward.
+    // Generate JavaScript for playing a sound.
     return 'Bounce.playSound(\'block_id_' + this.id + '\');\n';
+  };
+  
+  blockly.Blocks.bounce_incrementPlayerScore = {
+    // Block for incrementing the player's score.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.incrementPlayerScore());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.incrementPlayerScoreTooltip());
+    }
+  };
+  
+  generator.bounce_incrementPlayerScore = function() {
+    // Generate JavaScript for incrementing the player's score.
+    return 'Bounce.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
+  };
+  
+  blockly.Blocks.bounce_incrementOpponentScore = {
+    // Block for incrementing the opponent's score.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.incrementOpponentScore());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.incrementOpponentScoreTooltip());
+    }
+  };
+  
+  generator.bounce_incrementOpponentScore = function() {
+    // Generate JavaScript for incrementing the opponent's score.
+    return 'Bounce.incrementOpponentScore(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_bounceBall = {

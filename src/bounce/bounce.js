@@ -19,7 +19,6 @@ var feedback = require('../feedback.js');
 var dom = require('../dom');
 
 var Direction = tiles.Direction;
-var AngleDirection = tiles.AngleDirection;
 var SquareType = tiles.SquareType;
 
 /**
@@ -102,6 +101,11 @@ var initWallMap = function() {
     Bounce.wallMap[y] = new Array(Bounce.COLS);
   }
 };
+
+/**
+ * PIDs of async tasks currently executing.
+ */
+Bounce.pidList = [];
 
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/West/South/East squares.
@@ -387,6 +391,20 @@ var essentiallyEqual = function(float1, float2, opt_variance) {
   return (Math.abs(float1 - float2) < variance);
 };
 
+/**
+ * @param scope Object :  The scope in which to execute the delegated function.
+ * @param func Function : The function to execute
+ * @param data Object or Array : The data to pass to the function. If the function is also passed arguments, the data is appended to the arguments list. If the data is an Array, each item is appended as a new argument.
+ */
+var delegate = function(scope, func, data)
+{
+  return function()
+  {
+    var args = Array.prototype.slice.apply(arguments).concat(data);
+    func.apply(scope, args);
+  }
+};
+
 Bounce.onTick = function() {
   // Run key event handlers for any keys that are down:
   var key;
@@ -410,46 +428,37 @@ Bounce.onTick = function() {
   }
 
   if (Bounce.ballStart_) {
-    var i;
-    for (i = 0; i < Bounce.ballCount; i++) {
-      var deltaX = 0;
-      var deltaY = 0;
-      var collision = false;
+    for (var i = 0; i < Bounce.ballCount; i++) {
+      var deltaX = 0.1 * Math.sin(Bounce.ballD[i]);
+      var deltaY = -0.1 * Math.cos(Bounce.ballD[i]);
       
-      switch (Bounce.ballD[i]) {
-        case AngleDirection.NORTHEAST:
-          deltaY = -0.05;
-          deltaX = 0.05;
-          break;
-        case AngleDirection.NORTHWEST:
-          deltaY = -0.05;
-          deltaX = -0.05;
-          break;
-        case AngleDirection.SOUTHEAST:
-          deltaY = 0.05;
-          deltaX = 0.05;
-          break;
-        case AngleDirection.SOUTHWEST:
-          deltaY = 0.05;
-          deltaX = -0.05;
-          break;
-      }
+      var wasXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
+      var wasYOK = Bounce.ballY[i] >= 0;
+      var wasYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
 
       Bounce.ballX[i] += deltaX;
       Bounce.ballY[i] += deltaY;
       
-      if (essentiallyEqual(Bounce.ballX[i], -0.05)) {
-        collision = true;
-      } else if (essentiallyEqual(Bounce.ballX[i], Bounce.COLS + 0.05 - 1)) {
-        collision = true;
-      }
-
-      if (essentiallyEqual(Bounce.ballY[i], -0.05)) {
-        collision = true;
+      var nowXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
+      var nowYOK = Bounce.ballY[i] >= 0;
+      var nowYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
+      
+      if (wasXOK && !nowXOK) {
+        try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
       }
       
-      if (collision) {
-        try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
+      if (wasYOK && !nowYOK) {
+        if (Bounce.map[0][Math.floor(Bounce.ballX[i])] == SquareType.GOAL) {
+          try { Bounce.whenBallInGoal(BlocklyApps, api); } catch (e) { }
+          Bounce.pidList.push(window.setTimeout(
+              delegate(this, Bounce.moveBallOffscreen, i),
+              1000));
+          Bounce.pidList.push(window.setTimeout(
+              delegate(this, Bounce.playSoundAndResetBall, i),
+              3000));
+        } else {
+          try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
+        }
       }
       
       var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
@@ -459,6 +468,15 @@ Bounce.onTick = function() {
       if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
         // paddle ball collision
         try { Bounce.whenPaddleCollided(BlocklyApps, api); } catch (e) { }
+      } else if (wasYAboveBottom && !nowYAboveBottom) {
+        // ball missed paddle
+        try { Bounce.whenBallMissesPaddle(BlocklyApps, api); } catch (e) { }
+        Bounce.pidList.push(window.setTimeout(
+            delegate(this, Bounce.moveBallOffscreen, i),
+            1000));
+        Bounce.pidList.push(window.setTimeout(
+            delegate(this, Bounce.playSoundAndResetBall, i),
+            3000));
       }
     
       Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
@@ -504,6 +522,7 @@ Bounce.init = function(config) {
     data: {
       localeDirection: BlocklyApps.localeDirection(),
       visualization: require('./visualization.html')(),
+      controls: require('./controls.html')({assetUrl: BlocklyApps.assetUrl}),
       blockUsed: undefined,
       idealBlockNumber: undefined,
       blockCounterClass: 'block-counter-default'
@@ -557,12 +576,15 @@ Bounce.init = function(config) {
             Bounce.ballY = [];
             Bounce.ballD = [];
           }
-          Bounce.ballStart_[Bounce.ballCount] = {x: x, y: y};
+          Bounce.ballStart_[Bounce.ballCount] =
+              {x: x, y: y, d: level.ballDirection || 0};
           Bounce.ballCount++;
         } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
         } else if (Bounce.map[y][x] == SquareType.BALLFINISH) {
           Bounce.ballFinish_ = {x: x, y: y};
+        } else if (Bounce.map[y][x] == SquareType.GOAL) {
+          Bounce.goalLocated_ = true;
         }
       }
     }
@@ -583,6 +605,8 @@ Bounce.init = function(config) {
  */
 Bounce.clearEventHandlersKillTickLoop = function() {
   Bounce.whenWallCollided = null;
+  Bounce.whenBallInGoal = null;
+  Bounce.whenBallMissesPaddle = null;
   Bounce.whenPaddleCollided = null;
   Bounce.whenDown = null;
   Bounce.whenLeft = null;
@@ -596,21 +620,60 @@ Bounce.clearEventHandlersKillTickLoop = function() {
 };
 
 /**
- * Reset the maze to the start position and kill any pending animation tasks.
+ * Move ball to a safe place off of the screen.
+ * @param {int} i Index of ball to be moved.
+ */
+Bounce.moveBallOffscreen = function(i) {
+  Bounce.ballX[i] = 100;
+  Bounce.ballY[i] = 100;
+  Bounce.ballD[i] = Math.PI / 2;
+};
+
+/**
+ * Play a start sound and reset the ball at index i and redraw it.
+ * @param {int} i Index of ball to be reset.
+ */
+Bounce.playSoundAndResetBall = function(i) {
+  Bounce.resetBall(i);
+  BlocklyApps.playAudio('start', {volume: 0.5});
+};
+
+/**
+ * Reset the ball from index i to the start position and redraw it.
+ * @param {int} i Index of ball to be reset.
+ */
+Bounce.resetBall = function(i) {
+  Bounce.ballX[i] = Bounce.ballStart_[i].x;
+  Bounce.ballY[i] = Bounce.ballStart_[i].y;
+  Bounce.ballD[i] = Bounce.ballStart_[i].d || 1.25 * Math.PI;
+  
+  Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+};
+
+/**
+ * Reset the app to the start position and kill any pending animation tasks.
  * @param {boolean} first True if an opening animation is to be played.
  */
 BlocklyApps.reset = function(first) {
   var i;
   Bounce.clearEventHandlersKillTickLoop();
+
+  // Kill all tasks.
+  for (i = 0; i < Bounce.pidList.length; i++) {
+    window.clearTimeout(Bounce.pidList[i]);
+  }
+  Bounce.pidList = [];
+  
+  // Reset the score.
+  Bounce.playerScore = 0, Bounce.opponentScore = 0;
+  if (Bounce.goalLocated_) {
+    Bounce.displayScore();
+  }
   
   // Move Ball into position.
   if (Bounce.ballStart_) {
     for (i = 0; i < Bounce.ballCount; i++) {
-      Bounce.ballX[i] = Bounce.ballStart_[i].x;
-      Bounce.ballY[i] = Bounce.ballStart_[i].y;
-      Bounce.ballD[i] = AngleDirection.SOUTHWEST;
-
-      Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+      Bounce.resetBall(i);
     }
   }
   
@@ -800,6 +863,22 @@ Bounce.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
+  var codeBallInGoal = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenBallInGoal');
+  var whenBallInGoalFunc = codegen.functionFromCode(
+                                     codeBallInGoal, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
+  var codeBallMissesPaddle = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenBallMissesPaddle');
+  var whenBallMissesPaddleFunc = codegen.functionFromCode(
+                                     codeBallMissesPaddle, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
   var codePaddleCollided = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'bounce_whenPaddleCollided');
@@ -846,6 +925,8 @@ Bounce.execute = function() {
   
   // Set event handlers and start the onTick timer
   Bounce.whenWallCollided = whenWallCollidedFunc;
+  Bounce.whenBallInGoal = whenBallInGoalFunc;
+  Bounce.whenBallMissesPaddle = whenBallMissesPaddleFunc;
   Bounce.whenPaddleCollided = whenPaddleCollidedFunc;
   Bounce.whenLeft = whenLeftFunc;
   Bounce.whenRight = whenRightFunc;
@@ -972,6 +1053,17 @@ Bounce.displayPaddle = function(x, y, d) {
   var paddleClipRect = document.getElementById('paddleClipRect');
   paddleClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
   paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
+};
+
+/**
+ * Display the score in the span element below the visualization.
+ */
+Bounce.displayScore = function() {
+  var scoreElement = document.getElementById('bounce-score');
+  scoreElement.innerText = bounceMsg.scoreText({
+    playerScore: Bounce.playerScore,
+    opponentScore: Bounce.opponentScore
+  });
 };
 
 /**
