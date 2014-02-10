@@ -5,7 +5,6 @@
   "tests" : [
     {
       "description": "Excepected solution",
-      "timeout": "5000",
       "expected": {
         "result": true,
         "testResult": 100

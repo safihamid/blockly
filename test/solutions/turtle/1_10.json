@@ -2,11 +2,9 @@
   "app": "turtle",    
   "levelFile": "levels",
   "levelId": "1_10",
-    
   "tests" : [
     {
       "description": "Some random code for the freeplay level",
-      "timeout": 0,
       "expected": {
         "result": true,
         "testResult": 30
