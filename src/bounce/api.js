@@ -1,6 +1,5 @@
 var tiles = require('./tiles');
 var Direction = tiles.Direction;
-var AngleDirection = tiles.AngleDirection;
 var SquareType = tiles.SquareType;
 
 exports.playSound = function(id) {
@@ -40,6 +39,18 @@ exports.moveDown = function(id) {
   }
 };
 
+exports.incrementOpponentScore = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.opponentScore++;
+  Bounce.displayScore();
+};
+
+exports.incrementPlayerScore = function(id) {
+  BlocklyApps.highlight(id);
+  Bounce.playerScore++;
+  Bounce.displayScore();
+};
+
 exports.bounceBall = function(id) {
   BlocklyApps.highlight(id);
 
@@ -47,34 +58,37 @@ exports.bounceBall = function(id) {
   for (i = 0; i < Bounce.ballCount; i++) {
     if (Bounce.ballX[i] < 0) {
       Bounce.ballX[i] = 0;
-      Bounce.ballD[i] = (Bounce.ballD[i] == AngleDirection.NORTHWEST) ?
-                          AngleDirection.NORTHEAST :
-                          AngleDirection.SOUTHEAST;
+      Bounce.ballD[i] = 2 * Math.PI - Bounce.ballD[i];
     } else if (Bounce.ballX[i] > (Bounce.COLS - 1)) {
       Bounce.ballX[i] = Bounce.COLS - 1;
-      Bounce.ballD[i] = (Bounce.ballD[i] == AngleDirection.NORTHEAST) ?
-                          AngleDirection.NORTHWEST :
-                          AngleDirection.SOUTHWEST;
+      Bounce.ballD[i] = 2 * Math.PI - Bounce.ballD[i];
     }
 
     if (Bounce.ballY[i] < 0) {
       Bounce.ballY[i] = 0;
-      Bounce.ballD[i] = (Bounce.ballD[i] == AngleDirection.NORTHEAST) ?
-                          AngleDirection.SOUTHEAST :
-                          AngleDirection.SOUTHWEST;
+      Bounce.ballD[i] = Math.PI - Bounce.ballD[i];
     }
 
     var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
     var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
     var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
-    
+
     if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
       // paddle ball collision
-      if ((Bounce.ballD[i] == AngleDirection.SOUTHEAST) ||
-          (Bounce.ballD[i] == AngleDirection.SOUTHWEST)) {
-        Bounce.ballD[i] = (Bounce.ballD[i] == AngleDirection.SOUTHEAST) ?
-                        AngleDirection.NORTHEAST :
-                        AngleDirection.NORTHWEST;
+      if (Math.cos(Bounce.ballD[i]) < 0) {
+        // rather than just bounce the ball off a flat paddle, we offset the
+        // angle after collision based on whether you hit the left or right side
+        // of the paddle.  And then we cap the resulting angle to be in a
+        // certain range of radians so the resulting angle isn't too flat
+        var paddleAngleBias = (3 * Math.PI / 8) *
+            (xPaddleBall / tiles.PADDLE_BALL_COLLIDE_DISTANCE);
+        // Add 5 PI instead of PI to ensure that the resulting angle is positive
+        // to simplify the ternary operation in the next statement
+        Bounce.ballD[i] = ((Math.PI * 5) + paddleAngleBias - Bounce.ballD[i])
+                            % (Math.PI * 2);
+        Bounce.ballD[i] = (Bounce.ballD[i] < Math.PI) ?
+                            Math.min((Math.PI / 2) - 0.2, Bounce.ballD[i]) :
+                            Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballD[i]);
       }
     }
   }

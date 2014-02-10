@@ -12,13 +12,6 @@ exports.Direction = {
   WEST: 3
 };
 
-exports.AngleDirection = {
-  NORTHEAST: 0,
-  SOUTHEAST: 1,
-  SOUTHWEST: 2,
-  NORTHWEST: 3
-};
-
 exports.PADDLE_BALL_COLLIDE_DISTANCE = 0.7;
 
 /**
@@ -32,6 +25,7 @@ exports.SquareType = {
   BALLFINISH: 2,
   PADDLEFINISH: 3,
   OBSTACLE: 4,
+  GOAL: 5,
   BALLSTART: 6,
   PADDLESTART: 7
 };
