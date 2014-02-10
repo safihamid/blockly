@@ -940,9 +940,20 @@ module.exports = {
     startDirection: 0,
     sliderSpeed: 1.0
   },
+  // The level for building new levels.
   'builder': {
     answer: answer(5, 6),
     freePlay: true,
+    initialY: 300,
+    toolbox: toolbox(5, 6),
+    startBlocks: '',
+    startDirection: 0,
+    sliderSpeed: 1.0
+  },
+  // The default level newly created levels use.
+  'custom': {
+    answer: answer(5, 6),
+    freePlay: false,
     initialY: 300,
     toolbox: toolbox(5, 6),
     startBlocks: '',
