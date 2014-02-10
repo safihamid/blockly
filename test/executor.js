@@ -40,10 +40,6 @@ var runLevel = function(app, level, onAttempt) {
       global.Turtle.drawTurtle = function () {};
       break;
     case 'maze':
-      // disable animations, otherwise these continue to run after our test is
-      // finished, which gets us into trouble if we switch to another app.
-      // long term, better fix would be to have each app run in its own context
-      // global.Maze.animate = function () {};
       break;
   }
 
