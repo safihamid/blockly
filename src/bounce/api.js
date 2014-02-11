@@ -84,8 +84,8 @@ exports.bounceBall = function(id) {
             (xPaddleBall / tiles.PADDLE_BALL_COLLIDE_DISTANCE);
         // Add 5 PI instead of PI to ensure that the resulting angle is positive
         // to simplify the ternary operation in the next statement
-        Bounce.ballD[i] = ((Math.PI * 5) + paddleAngleBias - Bounce.ballD[i])
-                            % (Math.PI * 2);
+        Bounce.ballD[i] = ((Math.PI * 5) + paddleAngleBias - Bounce.ballD[i]) %
+                           (Math.PI * 2);
         Bounce.ballD[i] = (Bounce.ballD[i] < Math.PI) ?
                             Math.min((Math.PI / 2) - 0.2, Bounce.ballD[i]) :
                             Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballD[i]);
