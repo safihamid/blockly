@@ -402,7 +402,7 @@ var delegate = function(scope, func, data)
   {
     var args = Array.prototype.slice.apply(arguments).concat(data);
     func.apply(scope, args);
-  }
+  };
 };
 
 Bounce.onTick = function() {
@@ -665,7 +665,8 @@ BlocklyApps.reset = function(first) {
   Bounce.pidList = [];
   
   // Reset the score.
-  Bounce.playerScore = 0, Bounce.opponentScore = 0;
+  Bounce.playerScore = 0;
+  Bounce.opponentScore = 0;
   if (Bounce.goalLocated_) {
     Bounce.displayScore();
   }
