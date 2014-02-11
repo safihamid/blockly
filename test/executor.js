@@ -24,7 +24,7 @@ var setGlobals = function () {
   window_.XMLSerializer = global.XMLSerializer = xmldom.XMLSerializer;
   window_.Blockly = global.Blockly = initBlockly(window_);
   global.Image = canvas.Image;
-}
+};
 
 // Asynchronously test a level inside a virtual browser environment.
 var runLevel = function(app, level, onAttempt) {
