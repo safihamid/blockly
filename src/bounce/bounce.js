@@ -27,6 +27,19 @@ var SquareType = tiles.SquareType;
 var Bounce = module.exports;
 
 Bounce.keyState = {};
+Bounce.btnState = {};
+
+var ButtonState = {
+  UP: 0,
+  DOWN: 1
+};
+
+var ArrowIds = {
+  LEFT: 'leftButton',
+  UP: 'upButton',
+  RIGHT: 'rightButton',
+  DOWN: 'downButton'
+};
 
 var Keycodes = {
   LEFT: 37,
@@ -64,7 +77,9 @@ Bounce.scale = {
 var loadLevel = function() {
   // Load maps.
   Bounce.map = level.map;
-  Bounce.timeoutFailure = level.timeoutFailure || Infinity;
+  Bounce.timeoutFailureTick = level.timeoutFailureTick || Infinity;
+  Bounce.softButtons_ = level.softButtons || [];
+  Bounce.respawnBalls = level.respawnBalls || false;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
@@ -406,10 +421,12 @@ var delegate = function(scope, func, data)
 };
 
 Bounce.onTick = function() {
+  Bounce.tickCount++;
+  
   // Run key event handlers for any keys that are down:
-  var key;
-  for (key in Keycodes) {
-    if (Bounce.keyState[Keycodes[key]] && Bounce.keyState[Keycodes[key]] == "keydown") {
+  for (var key in Keycodes) {
+    if (Bounce.keyState[Keycodes[key]] &&
+        Bounce.keyState[Keycodes[key]] == "keydown") {
       switch (Keycodes[key]) {
         case Keycodes.LEFT:
           try { Bounce.whenLeft(BlocklyApps, api); } catch (e) { }
@@ -421,6 +438,26 @@ Bounce.onTick = function() {
           try { Bounce.whenRight(BlocklyApps, api); } catch (e) { }
           break;
         case Keycodes.DOWN:
+          try { Bounce.whenDown(BlocklyApps, api); } catch (e) { }
+          break;
+      }
+    }
+  }
+  
+  for (var btn in ArrowIds) {
+    if (Bounce.btnState[ArrowIds[btn]] &&
+        Bounce.btnState[ArrowIds[btn]] == ButtonState.DOWN) {
+      switch (ArrowIds[btn]) {
+        case ArrowIds.LEFT:
+          try { Bounce.whenLeft(BlocklyApps, api); } catch (e) { }
+          break;
+        case ArrowIds.UP:
+          try { Bounce.whenUp(BlocklyApps, api); } catch (e) { }
+          break;
+        case ArrowIds.RIGHT:
+          try { Bounce.whenRight(BlocklyApps, api); } catch (e) { }
+          break;
+        case ArrowIds.DOWN:
           try { Bounce.whenDown(BlocklyApps, api); } catch (e) { }
           break;
       }
@@ -453,9 +490,11 @@ Bounce.onTick = function() {
           Bounce.pidList.push(window.setTimeout(
               delegate(this, Bounce.moveBallOffscreen, i),
               1000));
-          Bounce.pidList.push(window.setTimeout(
-              delegate(this, Bounce.playSoundAndResetBall, i),
-              3000));
+          if (Bounce.respawnBalls) {
+            Bounce.pidList.push(window.setTimeout(
+                delegate(this, Bounce.playSoundAndResetBall, i),
+                3000));
+          }
         } else {
           try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
         }
@@ -474,9 +513,11 @@ Bounce.onTick = function() {
         Bounce.pidList.push(window.setTimeout(
             delegate(this, Bounce.moveBallOffscreen, i),
             1000));
-        Bounce.pidList.push(window.setTimeout(
-            delegate(this, Bounce.playSoundAndResetBall, i),
-            3000));
+        if (Bounce.respawnBalls) {
+          Bounce.pidList.push(window.setTimeout(
+              delegate(this, Bounce.playSoundAndResetBall, i),
+              3000));
+        }
       }
     
       Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
@@ -503,6 +544,23 @@ Bounce.onKey = function(e) {
       e.keyCode >= Keycodes.LEFT && e.keyCode <= Keycodes.DOWN) {
     e.preventDefault();
   }
+};
+
+Bounce.onArrowButtonDown = function(e, idBtn) {
+  // Store the most recent event type per-button
+  Bounce.btnState[idBtn] = ButtonState.DOWN;
+  e.preventDefault();  // Stop normal events so we see mouseup later.
+};
+
+Bounce.onArrowButtonUp = function(e, idBtn) {
+  // Store the most recent event type per-button
+  Bounce.btnState[idBtn] = ButtonState.UP;
+};
+
+Bounce.onMouseUp = function(e) {
+  console.log("onMouseUp");
+  // Reset btnState on mouse up
+  Bounce.btnState = {};
 };
 
 /**
@@ -547,6 +605,19 @@ Bounce.init = function(config) {
   };
 
   config.afterInject = function() {
+    // Connect up arrow button event handlers
+    for (var btn in ArrowIds) {
+      dom.addClickTouchEvent(document.getElementById(ArrowIds[btn]),
+                             delegate(this,
+                                      Bounce.onArrowButtonUp,
+                                      ArrowIds[btn]));
+      dom.addMouseDownTouchEvent(document.getElementById(ArrowIds[btn]),
+                                 delegate(this,
+                                          Bounce.onArrowButtonDown,
+                                          ArrowIds[btn]));
+    }
+    document.addEventListener('mouseup', Bounce.onMouseUp, false);
+  
     /**
      * The richness of block colours, regardless of the hue.
      * MOOC blocks should be brighter (target audience is younger).
@@ -616,7 +687,6 @@ Bounce.clearEventHandlersKillTickLoop = function() {
     window.clearInterval(Bounce.intervalId);
   }
   Bounce.intervalId = 0;
-  Bounce.lastTickStart = 0;
 };
 
 /**
@@ -663,11 +733,24 @@ BlocklyApps.reset = function(first) {
     window.clearTimeout(Bounce.pidList[i]);
   }
   Bounce.pidList = [];
+
+  // Soft buttons
+  var softButtonCount = 0;
+  for (i = 0; i < Bounce.softButtons_.length; i++) {
+    document.getElementById(Bounce.softButtons_[i]).style.display = 'inline';
+    softButtonCount++;
+  }
+  if (softButtonCount) {
+    var softButtonsCell = document.getElementById('soft-buttons');
+    softButtonsCell.className = 'soft-buttons-' + softButtonCount;
+  }
   
   // Reset the score.
   Bounce.playerScore = 0;
   Bounce.opponentScore = 0;
   if (Bounce.goalLocated_) {
+    var scoreCell = document.getElementById('score-cell');
+    scoreCell.className = 'score-cell-enabled';
     Bounce.displayScore();
   }
   
@@ -933,7 +1016,7 @@ Bounce.execute = function() {
   Bounce.whenRight = whenRightFunc;
   Bounce.whenUp = whenUpFunc;
   Bounce.whenDown = whenDownFunc;
-  Bounce.lastTickStart = new Date().getTime();
+  Bounce.tickCount = 0;
   Bounce.intervalId = window.setInterval(Bounce.onTick, Bounce.scale.stepSpeed);
 };
 
@@ -1096,8 +1179,7 @@ Bounce.constrainDirection16 = function(d) {
 };
 
 Bounce.timedOut = function() {
-  var timeElapsed = (new Date().getTime()) - Bounce.lastTickStart;
-  return timeElapsed > Bounce.timeoutFailure * 1000;
+  return Bounce.tickCount > Bounce.timeoutFailureTick;
 };
 
 Bounce.allFinishesComplete = function() {
