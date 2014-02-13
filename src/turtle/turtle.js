@@ -136,7 +136,7 @@ Turtle.init = function(config) {
     // Set their initial contents.
     Turtle.loadTurtle();
     Turtle.drawImages();
-    Turtle.drawAnswer();
+    Turtle.drawAnswer(level.solutionBlocks);
 
     // Adjust visualization and belowVisualization width.
     var drawAreaWidth = config.getDisplayWidth();
@@ -155,8 +155,16 @@ Turtle.init = function(config) {
 /**
  * On startup draw the expected answer and save it to the answer canvas.
  */
-Turtle.drawAnswer = function() {
-  BlocklyApps.log = level.answer;
+Turtle.drawAnswer = function(blocks) {
+  if (blocks) {
+    var domBlocks = Blockly.Xml.textToDom(blocks);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, domBlocks);
+    var code = Blockly.Generator.workspaceToCode('JavaScript');
+    Turtle.evalCode(code);
+    Blockly.mainWorkspace.clear();
+  } else {
+    BlocklyApps.log = level.answer;
+  }
   BlocklyApps.reset();
   while (BlocklyApps.log.length) {
     var tuple = BlocklyApps.log.shift();
@@ -313,16 +321,9 @@ BlocklyApps.runButtonClick = function() {
   Turtle.execute();
 };
 
-/**
- * Execute the user's code.  Heaven help us...
- */
-Turtle.execute = function() {
-  BlocklyApps.log = [];
-  BlocklyApps.ticks = 1000000;
-
-  Turtle.code = Blockly.Generator.workspaceToCode('JavaScript');
+Turtle.evalCode = function(code) {
   try {
-    codegen.evalWith(Turtle.code, {
+    codegen.evalWith(code, {
       BlocklyApps: BlocklyApps,
       Turtle: api
     });
@@ -333,6 +334,17 @@ Turtle.execute = function() {
       window.alert(e);
     }
   }
+};
+
+/**
+ * Execute the user's code.  Heaven help us...
+ */
+Turtle.execute = function() {
+  BlocklyApps.log = [];
+  BlocklyApps.ticks = 1000000;
+
+  Turtle.code = Blockly.Generator.workspaceToCode('JavaScript');
+  Turtle.evalCode(Turtle.code);
 
   // BlocklyApps.log now contains a transcript of all the user's actions.
   // Reset the graphic and animate the transcript.
