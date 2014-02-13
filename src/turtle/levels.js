@@ -942,7 +942,7 @@ module.exports = {
   },
   // The level for building new levels.
   'builder': {
-    answer: answer(5, 6),
+    answer: [],
     freePlay: true,
     initialY: 300,
     toolbox: toolbox(5, 6),
@@ -952,7 +952,7 @@ module.exports = {
   },
   // The default level newly created levels use.
   'custom': {
-    answer: answer(5, 6),
+    answer: [],
     freePlay: false,
     initialY: 300,
     toolbox: toolbox(5, 6),

@@ -159,11 +159,8 @@ Turtle.drawAnswer = function(blocks) {
   if (blocks) {
     var domBlocks = Blockly.Xml.textToDom(blocks);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, domBlocks);
-    Turtle.code = Blockly.Generator.workspaceToCode('JavaScript');
-    codegen.evalWith(Turtle.code, {
-      BlocklyApps: BlocklyApps,
-      Turtle: api
-    });
+    var code = Blockly.Generator.workspaceToCode('JavaScript');
+    Turtle.evalCode(code);
     Blockly.mainWorkspace.clear();
   } else {
     BlocklyApps.log = level.answer;
@@ -324,16 +321,9 @@ BlocklyApps.runButtonClick = function() {
   Turtle.execute();
 };
 
-/**
- * Execute the user's code.  Heaven help us...
- */
-Turtle.execute = function() {
-  BlocklyApps.log = [];
-  BlocklyApps.ticks = 1000000;
-
-  Turtle.code = Blockly.Generator.workspaceToCode('JavaScript');
+Turtle.evalCode = function(code) {
   try {
-    codegen.evalWith(Turtle.code, {
+    codegen.evalWith(code, {
       BlocklyApps: BlocklyApps,
       Turtle: api
     });
@@ -344,6 +334,17 @@ Turtle.execute = function() {
       window.alert(e);
     }
   }
+};
+
+/**
+ * Execute the user's code.  Heaven help us...
+ */
+Turtle.execute = function() {
+  BlocklyApps.log = [];
+  BlocklyApps.ticks = 1000000;
+
+  Turtle.code = Blockly.Generator.workspaceToCode('JavaScript');
+  Turtle.evalCode(Turtle.code);
 
   // BlocklyApps.log now contains a transcript of all the user's actions.
   // Reset the graphic and animate the transcript.
