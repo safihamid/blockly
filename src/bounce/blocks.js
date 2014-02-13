@@ -230,23 +230,28 @@ exports.install = function(blockly, skin) {
     // Generate JavaScript for moving down.
     return 'Bounce.moveDown(\'block_id_' + this.id + '\');\n';
   };
-  
+
   blockly.Blocks.bounce_playSound = {
     // Block for playing sound.
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.playSound());
+          .appendTitle(new blockly.FieldDropdown(this.SOUNDS), 'SOUND');
       this.setPreviousStatement(true);
       this.setNextStatement(true);
       this.setTooltip(msg.playSoundTooltip());
     }
   };
+
+  blockly.Blocks.bounce_playSound.SOUNDS =
+      [[msg.playSoundBounce(), 'wall'],
+       [msg.playSoundCrunch(), 'wall0']];
   
   generator.bounce_playSound = function() {
     // Generate JavaScript for playing a sound.
-    return 'Bounce.playSound(\'block_id_' + this.id + '\');\n';
+    return 'Bounce.playSound(\'block_id_' + this.id + '\', \'' +
+               this.getTitleValue('SOUND') + '\');\n';
   };
   
   blockly.Blocks.bounce_incrementPlayerScore = {
