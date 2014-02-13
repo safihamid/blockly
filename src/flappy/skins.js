@@ -1,5 +1,5 @@
 /**
- * Load Skin for Bounce.
+ * Load Skin for Flappy.
  */
 // tiles: A 250x200 set of 20 map images.
 // goal: A 20x34 goal image.
@@ -11,7 +11,7 @@ var skinsBase = require('../skins');
 
 var CONFIGS = {
 
-  bounce: {
+  flappy: {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
     additionalSound: true,

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-var msg = require('../../locale/current/bounce');
+var msg = require('../../locale/current/flappy');
 var codegen = require('../codegen');
 
 // Install extensions to Blockly's language and JavaScript generator.
@@ -174,7 +174,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_moveLeft = function() {
     // Generate JavaScript for moving left.
-    return 'Bounce.moveLeft(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.moveLeft(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_moveRight = {
@@ -192,7 +192,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_moveRight = function() {
     // Generate JavaScript for moving right.
-    return 'Bounce.moveRight(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.moveRight(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_moveUp = {
@@ -210,7 +210,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_moveUp = function() {
     // Generate JavaScript for moving up.
-    return 'Bounce.moveUp(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.moveUp(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_moveDown = {
@@ -228,7 +228,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_moveDown = function() {
     // Generate JavaScript for moving down.
-    return 'Bounce.moveDown(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.moveDown(\'block_id_' + this.id + '\');\n';
   };
 
   blockly.Blocks.bounce_playSound = {
@@ -250,7 +250,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_playSound = function() {
     // Generate JavaScript for playing a sound.
-    return 'Bounce.playSound(\'block_id_' + this.id + '\', \'' +
+    return 'Flappy.playSound(\'block_id_' + this.id + '\', \'' +
                this.getTitleValue('SOUND') + '\');\n';
   };
   
@@ -269,7 +269,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_incrementPlayerScore = function() {
     // Generate JavaScript for incrementing the player's score.
-    return 'Bounce.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_incrementOpponentScore = {
@@ -287,7 +287,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_incrementOpponentScore = function() {
     // Generate JavaScript for incrementing the opponent's score.
-    return 'Bounce.incrementOpponentScore(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.incrementOpponentScore(\'block_id_' + this.id + '\');\n';
   };
   
   blockly.Blocks.bounce_bounceBall = {
@@ -305,7 +305,7 @@ exports.install = function(blockly, skin) {
   
   generator.bounce_bounceBall = function() {
     // Generate JavaScript for moving forward.
-    return 'Bounce.bounceBall(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.bounceBall(\'block_id_' + this.id + '\');\n';
   };
 
   delete blockly.Blocks.procedures_defreturn;
