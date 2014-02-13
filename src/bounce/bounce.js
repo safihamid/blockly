@@ -530,6 +530,7 @@ Bounce.onTick = function() {
     Bounce.result = ResultType.SUCCESS;
     Bounce.onPuzzleComplete();
   } else if (Bounce.timedOut()) {
+    BlocklyApps.playAudio('failure', {volume: 0.5});
     Bounce.result = ResultType.FAILURE;
     Bounce.onPuzzleComplete();
   }
@@ -558,7 +559,6 @@ Bounce.onArrowButtonUp = function(e, idBtn) {
 };
 
 Bounce.onMouseUp = function(e) {
-  console.log("onMouseUp");
   // Reset btnState on mouse up
   Bounce.btnState = {};
 };

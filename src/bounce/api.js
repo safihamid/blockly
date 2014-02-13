@@ -2,9 +2,9 @@ var tiles = require('./tiles');
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
 
-exports.playSound = function(id) {
+exports.playSound = function(id, soundName) {
   BlocklyApps.highlight(id);
-  BlocklyApps.playAudio('wall', {volume: 0.5});
+  BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
 exports.moveLeft = function(id) {
