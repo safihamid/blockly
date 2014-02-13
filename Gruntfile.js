@@ -6,7 +6,8 @@ var config = {};
 var APPS = [
   'maze',
   'turtle',
-  'bounce'
+  'bounce',
+  'flappy'
 ];
 
 // Parse options from environment.

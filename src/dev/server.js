@@ -49,4 +49,8 @@ app.get('/bounce', function(req, res) {
   renderApp('bounce', req, res);
 });
 
+app.get('/flappy', function(req, res) {
+  renderApp('flappy', req, res);
+});
+
 module.exports = app;
