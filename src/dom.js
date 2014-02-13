@@ -18,8 +18,9 @@ exports.setText = function(node, string) {
   }
 };
 
-exports.addClickTouchEvent = function(element, handler) {
-  element.addEventListener('click', handler, false);
+
+var addEvent = function(element, eventName, handler) {
+  element.addEventListener(eventName, handler, false);
 
   var isIE11Touch = window.navigator.pointerEnabled;
   var isIE10Touch = window.navigator.msPointerEnabled;
@@ -34,12 +35,20 @@ exports.addClickTouchEvent = function(element, handler) {
     key = "standard";
   }
   if (key) {
-    var touchEvent = TOUCH_MAP.click[key];
+    var touchEvent = TOUCH_MAP[eventName][key];
     element.addEventListener(touchEvent, function(e) {
       e.preventDefault();  // Stop mouse events.
       handler(e);
     }, false);
   }
+};
+
+exports.addMouseDownTouchEvent = function(element, handler) {
+  addEvent(element, 'mousedown', handler);
+};
+
+exports.addClickTouchEvent = function(element, handler) {
+  addEvent(element, 'click', handler);
 };
 
 // A map from standard touch events to various aliases.

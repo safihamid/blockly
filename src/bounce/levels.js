@@ -19,6 +19,9 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton'
+    ],
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -44,6 +47,10 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,6 +76,9 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'upButton'
+    ],
     'map': [
       [0, 0, 0, 3, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -98,6 +108,12 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton',
+      'downButton',
+      'upButton'
+    ],
     'map': [
       [0, 0, 3, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -121,13 +137,17 @@ module.exports = {
   },
   '5': {
     'ideal': 2,
-    'timeoutFailure': 4.5,
+    'timeoutFailureTick': 100,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
     ],
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'ballDirection': (1.285 * Math.PI),
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -149,13 +169,17 @@ module.exports = {
   },
   '6': {
     'ideal': 4,
-    'timeoutFailure': 6.5,
+    'timeoutFailureTick': 140,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
     ],
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'ballDirection': (1.285 * Math.PI),
     'map': [
       [0, 0, 2, 0, 0, 0, 0, 0],
@@ -184,6 +208,10 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -213,6 +241,10 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'map': [
       [0, 0, 0, 0, 6, 0, 0, 0],
       [0, 0, 6, 0, 0, 0, 0, 0],
@@ -242,6 +274,10 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
     'map': [
       [0, 6, 0, 6, 0, 6, 0, 6],
       [6, 0, 6, 0, 6, 0, 6, 0],
@@ -264,13 +300,18 @@ module.exports = {
       <block type="bounce_whenWallCollided" deletable="false" movable="false" x="20" y="220"></block>'
   },
   '10': {
-    'ideal': 8,
+    'ideal': 12,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
     ],
     'scale': {
       'snapRadius': 2
     },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
+    'respawnBalls' : true,
     'map': [
       [0, 0, 0, 5, 5, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
