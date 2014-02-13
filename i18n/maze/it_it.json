@@ -11,7 +11,7 @@
   "elseCode": "altrimenti",
   "fill": "riempire 1",
   "fillN": "riempire {shovelfuls}",
-  "fillStack": "Riempi ricopre i buchi di {shovelfuls}",
+  "fillStack": "Riempi una colonna di {shovelfuls} buche",
   "fillSquare": "riempire il quadrato",
   "fillTooltip": "posto 1 unità di polvere",
   "finalLevel": "Complimenti! Hai risolto il puzzle finale.",
