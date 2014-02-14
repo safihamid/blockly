@@ -279,30 +279,6 @@ var drawMap = function() {
     }
   }
 
-  if (Flappy.ballStart_) {
-    for (i = 0; i < Flappy.ballCount; i++) {
-      // Ball's clipPath element, whose (x, y) is reset by Flappy.displayBall
-      var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-      ballClip.setAttribute('id', 'ballClipPath' + i);
-      var ballClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-      ballClipRect.setAttribute('id', 'ballClipRect' + i);
-      ballClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
-      ballClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-      ballClip.appendChild(ballClipRect);
-      svg.appendChild(ballClip);
-
-      // Add ball.
-      var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-      ballIcon.setAttribute('id', 'ball' + i);
-      ballIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.avatar);
-      ballIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-      ballIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-      ballIcon.setAttribute('clip-path', 'url(#ballClipPath' + i + ')');
-      svg.appendChild(ballIcon);
-    }
-  }
-
   if (Flappy.paddleStart_) {
     // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
     var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
@@ -323,65 +299,6 @@ var drawMap = function() {
     birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
     birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
     svg.appendChild(birdIcon);
-  }
-  
-  if (Flappy.paddleFinish_) {
-    for (i = 0; i < Flappy.paddleFinishCount; i++) {
-      // Add finish markers.
-      var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-      paddleFinishMarker.setAttribute('id', 'paddlefinish' + i);
-      paddleFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
-                                        'xlink:href',
-                                        skin.goal);
-      paddleFinishMarker.setAttribute('height', Flappy.MARKER_HEIGHT);
-      paddleFinishMarker.setAttribute('width', Flappy.MARKER_WIDTH);
-      svg.appendChild(paddleFinishMarker);
-    }
-  }
-
-  if (Flappy.ballFinish_) {
-    // Add ball finish marker.
-    var ballFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-    ballFinishMarker.setAttribute('id', 'ballfinish');
-    ballFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
-                                    'xlink:href',
-                                    skin.goal);
-    ballFinishMarker.setAttribute('height', Flappy.MARKER_HEIGHT);
-    ballFinishMarker.setAttribute('width', Flappy.MARKER_WIDTH);
-    svg.appendChild(ballFinishMarker);
-  }
-
-  // Add wall hitting animation
-  if (skin.hittingWallAnimation) {
-    var wallAnimationIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    wallAnimationIcon.setAttribute('id', 'wallAnimation');
-    wallAnimationIcon.setAttribute('height', Flappy.SQUARE_SIZE);
-    wallAnimationIcon.setAttribute('width', Flappy.SQUARE_SIZE);
-    wallAnimationIcon.setAttribute('visibility', 'hidden');
-    svg.appendChild(wallAnimationIcon);
-  }
-
-  // Add obstacles.
-  var obsId = 0;
-  for (y = 0; y < Flappy.ROWS; y++) {
-    for (x = 0; x < Flappy.COLS; x++) {
-      if (Flappy.map[y][x] == SquareType.OBSTACLE) {
-        var obsIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-        obsIcon.setAttribute('id', 'obstacle' + obsId);
-        obsIcon.setAttribute('height', Flappy.MARKER_HEIGHT * skin.obstacleScale);
-        obsIcon.setAttribute('width', Flappy.MARKER_WIDTH * skin.obstacleScale);
-        obsIcon.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', skin.obstacle);
-        obsIcon.setAttribute('x',
-                             Flappy.SQUARE_SIZE * (x + 0.5) -
-                             obsIcon.getAttribute('width') / 2);
-        obsIcon.setAttribute('y',
-                             Flappy.SQUARE_SIZE * (y + 0.9) -
-                             obsIcon.getAttribute('height'));
-        svg.appendChild(obsIcon);
-      }
-      ++obsId;
-    }
   }
 };
 
@@ -607,7 +524,7 @@ BlocklyApps.reset = function(first) {
     var softButtonsCell = document.getElementById('soft-buttons');
     softButtonsCell.className = 'soft-buttons-' + softButtonCount;
   }
-  
+
   // Reset the score.
   Flappy.playerScore = 0;
   Flappy.opponentScore = 0;
@@ -625,70 +542,17 @@ BlocklyApps.reset = function(first) {
       Flappy.resetBall(i);
     }
   }
-  
+
   // Move Paddle into position.
   Flappy.paddleX = Flappy.paddleStart_.x;
   Flappy.paddleY = Flappy.paddleStart_.y;
-  
+
   Flappy.displayBird(Flappy.paddleX, Flappy.paddleY, 0);
 
   var svg = document.getElementById('svgBounce');
 
-  if (Flappy.paddleFinish_) {
-    for (i = 0; i < Flappy.paddleFinishCount; i++) {
-      // Mark each finish as incomplete.
-      Flappy.paddleFinish_[i].finished = false;
-
-      // Move the finish icons into position.
-      var paddleFinishIcon = document.getElementById('paddlefinish' + i);
-      paddleFinishIcon.setAttribute(
-          'x',
-          Flappy.SQUARE_SIZE * (Flappy.paddleFinish_[i].x + 0.5) -
-          paddleFinishIcon.getAttribute('width') / 2);
-      paddleFinishIcon.setAttribute(
-          'y',
-          Flappy.SQUARE_SIZE * (Flappy.paddleFinish_[i].y + 0.9) -
-          paddleFinishIcon.getAttribute('height'));
-      paddleFinishIcon.setAttributeNS(
-          'http://www.w3.org/1999/xlink',
-          'xlink:href',
-          skin.goal);
-    }
-  }
-
-  if (Flappy.ballFinish_) {
-    // Move the finish icon into position.
-    var ballFinishIcon = document.getElementById('ballfinish');
-    ballFinishIcon.setAttribute(
-        'x',
-        Flappy.SQUARE_SIZE * (Flappy.ballFinish_.x + 0.5) -
-        ballFinishIcon.getAttribute('width') / 2);
-    ballFinishIcon.setAttribute(
-        'y',
-        Flappy.SQUARE_SIZE * (Flappy.ballFinish_.y + 0.9) -
-        ballFinishIcon.getAttribute('height'));
-    ballFinishIcon.setAttributeNS(
-        'http://www.w3.org/1999/xlink',
-        'xlink:href',
-        skin.goal);
-  }
-
-  // Reset the obstacle image.
-  var obsId = 0;
-  var x, y;
-  for (y = 0; y < Flappy.ROWS; y++) {
-    for (x = 0; x < Flappy.COLS; x++) {
-      var obsIcon = document.getElementById('obstacle' + obsId);
-      if (obsIcon) {
-        obsIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                               skin.obstacle);
-      }
-      ++obsId;
-    }
-  }
-
   // Reset the tiles
-  var tileId = 0;
+  var tileId = 0, y, x;
   for (y = 0; y < Flappy.ROWS; y++) {
     for (x = 0; x < Flappy.COLS; x++) {
       // Tile's clipPath element.
@@ -813,72 +677,6 @@ Flappy.execute = function() {
                                       Flappy: api } );
 
 
-
-
-  var codeWallCollided = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenWallCollided');
-  var whenWallCollidedFunc = codegen.functionFromCode(
-                                     codeWallCollided, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeBallInGoal = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenBallInGoal');
-  var whenBallInGoalFunc = codegen.functionFromCode(
-                                     codeBallInGoal, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeBallMissesPaddle = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenBallMissesPaddle');
-  var whenBallMissesPaddleFunc = codegen.functionFromCode(
-                                     codeBallMissesPaddle, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codePaddleCollided = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenPaddleCollided');
-  var whenPaddleCollidedFunc = codegen.functionFromCode(
-                                     codePaddleCollided, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeLeft = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenLeft');
-  var whenLeftFunc = codegen.functionFromCode(
-                                     codeLeft, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeRight = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenRight');
-  var whenRightFunc = codegen.functionFromCode(
-                                     codeRight, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeUp = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenUp');
-  var whenUpFunc = codegen.functionFromCode(
-                                     codeUp, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
-  var codeDown = Blockly.Generator.workspaceToCode(
-                                    'JavaScript',
-                                    'bounce_whenDown');
-  var whenDownFunc = codegen.functionFromCode(
-                                     codeDown, {
-                                      BlocklyApps: BlocklyApps,
-                                      Flappy: api } );
-
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
@@ -886,14 +684,6 @@ Flappy.execute = function() {
   // Set event handlers and start the onTick timer
   Flappy.whenClick = whenClickFunc;
 
-  Flappy.whenWallCollided = whenWallCollidedFunc;
-  Flappy.whenBallInGoal = whenBallInGoalFunc;
-  Flappy.whenBallMissesPaddle = whenBallMissesPaddleFunc;
-  Flappy.whenPaddleCollided = whenPaddleCollidedFunc;
-  Flappy.whenLeft = whenLeftFunc;
-  Flappy.whenRight = whenRightFunc;
-  Flappy.whenUp = whenUpFunc;
-  Flappy.whenDown = whenDownFunc;
   Flappy.tickCount = 0;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
 };
@@ -905,24 +695,24 @@ Flappy.onPuzzleComplete = function() {
   // If we know they succeeded, mark levelComplete true
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Flappy.result == ResultType.SUCCESS);
-  
+
   Flappy.testResults = BlocklyApps.getTestResults();
-  
+
   if (level.editCode) {
     Flappy.testResults = BlocklyApps.levelComplete ?
       BlocklyApps.TestResults.ALL_PASS :
       BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
-  
+
   if (level.failForOther1Star && !BlocklyApps.levelComplete) {
     Flappy.testResults = BlocklyApps.TestResults.OTHER_1_STAR_FAIL;
   }
-  
+
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   var textBlocks = Blockly.Xml.domToText(xml);
-  
+
   Flappy.waitingForReport = true;
-  
+
   // Report result to server.
   BlocklyApps.report({
                      app: 'flappy',
@@ -978,25 +768,6 @@ Flappy.setTileTransparent = function() {
       tileId++;
     }
   }
-};
-
-/**
- * Display Ball at the specified location, facing the specified direction.
- * @param {number} i Ball index..
- * @param {number} x Horizontal grid (or fraction thereof).
- * @param {number} y Vertical grid (or fraction thereof).
- * @param {number} d Direction (0 - 15) or dance (16 - 17).
- */
-Flappy.displayBall = function(i, x, y, d) {
-  var ballIcon = document.getElementById('ball' + i);
-  ballIcon.setAttribute('x',
-                        x * Flappy.SQUARE_SIZE - d * Flappy.PEGMAN_WIDTH + 1);
-  ballIcon.setAttribute('y',
-                        y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8);
-
-  var ballClipRect = document.getElementById('ballClipRect' + i);
-  ballClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
-  ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
 };
 
 /**
