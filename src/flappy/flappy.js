@@ -26,12 +26,15 @@ var SquareType = tiles.SquareType;
  */
 var Flappy = module.exports;
 
+// Don't start the game until first click
+Flappy.firstClick = false;
+
 Flappy.keyState = {};
 Flappy.btnState = {};
 Flappy.clickPending = false;
 
-Flappy.birdVelocity = 0; // Measured in fractional blocks
-Flappy.gravity = 0;
+Flappy.birdVelocity = 0; // Measured in fractional grid squares
+Flappy.gravity = 0.005; // Measured in fractional grid squares
 
 var ButtonState = {
   UP: 0,
@@ -494,8 +497,10 @@ Flappy.onTick = function() {
     }
   }
 
-  Flappy.birdVelocity += Flappy.gravity;
-  Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
+  if (Flappy.firstClick) {
+    Flappy.birdVelocity += Flappy.gravity;
+    Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
+  }
 
   Flappy.displayPaddle(Flappy.paddleX, Flappy.paddleY, 0);
 
@@ -513,6 +518,7 @@ Flappy.onMouseDown = function (e) {
   if (Flappy.intervalId) {
     // todo - validate inside window
     Flappy.clickPending = true;
+    Flappy.firstClick = true;
   }
 };
 

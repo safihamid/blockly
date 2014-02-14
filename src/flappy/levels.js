@@ -357,6 +357,10 @@ module.exports = {
     'toolbox':
       tb('<block type="flappy_flap"></block>'),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" movable="false" x="20" y="20"></block>'
+     '<block type="flappy_whenClick" deletable="false" movable="false" x="20" y="20"></block> \
+      <block type="flappy_whenCollideGround" deletable="false" movable="false" x="200" y="20"></block> \
+      <block type="flappy_whenCollidePipe" deletable="false" movable="false" x="20" y="100"></block> \
+      <block type="flappy_whenEnterPipe" deletable="false" movable="false" x="200" y="100"></block> \
+      <block type="flappy_whenRunButtonClick" deletable="false" movable="false" x="20" y="180"></block>'
   }
 };

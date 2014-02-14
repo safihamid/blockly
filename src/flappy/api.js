@@ -9,39 +9,6 @@ exports.playSound = function(id, soundName) {
 
 exports.flap = function (id, velocity) {
   Flappy.birdVelocity = velocity;
-  Flappy.gravity = 0.005;
-};
-
-exports.moveLeft = function(id) {
-  BlocklyApps.highlight(id);
-  Flappy.paddleX -= 0.1;
-  if (Flappy.paddleX < 0) {
-    Flappy.paddleX = 0;
-  }
-};
-
-exports.moveRight = function(id) {
-  BlocklyApps.highlight(id);
-  Flappy.paddleX += 0.1;
-  if (Flappy.paddleX > (Flappy.COLS - 1)) {
-    Flappy.paddleX = Flappy.COLS - 1;
-  }
-};
-
-exports.moveUp = function(id) {
-  BlocklyApps.highlight(id);
-  Flappy.paddleY -= 0.1;
-  if (Flappy.paddleY < 0) {
-    Flappy.paddleY = 0;
-  }
-};
-
-exports.moveDown = function(id) {
-  BlocklyApps.highlight(id);
-  Flappy.paddleY += 0.1;
-  if (Flappy.paddleY > (Flappy.ROWS - 1)) {
-    Flappy.paddleY = Flappy.ROWS - 1;
-  }
 };
 
 exports.incrementOpponentScore = function(id) {
