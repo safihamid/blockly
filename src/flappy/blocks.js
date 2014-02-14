@@ -126,7 +126,7 @@ exports.install = function(blockly, skin) {
   generator.flappy_flap = function (velocity) {
     // Generate JavaScript for moving left.
     // todo - dont hardcode velocity
-    return 'Flappy.flap(\'block_id_' + this.id + '\', -0.15);\n';
+    return 'Flappy.flap(\'block_id_' + this.id + '\', -15);\n';
   };
 
 

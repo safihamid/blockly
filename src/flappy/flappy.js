@@ -33,8 +33,8 @@ Flappy.keyState = {};
 Flappy.btnState = {};
 Flappy.clickPending = false;
 
-Flappy.birdVelocity = 0; // Measured in fractional grid squares
-Flappy.gravity = 0.005; // Measured in fractional grid squares
+Flappy.birdVelocity = 0;
+Flappy.gravity = 1;
 
 var level;
 var skin;
@@ -288,7 +288,7 @@ var drawMap = function() {
     birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
     birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
     birdClip.appendChild(birdClipRect);
-    svg.appendChild(birdClip);
+    // svg.appendChild(birdClip);
 
     // Add bird.
     var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -306,7 +306,7 @@ var drawMap = function() {
   clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
   clickRect.setAttribute('fill-opacity', 0);
   // todo - add to pid list?
-  clickRect.addEventListener('click', function (e) {
+  clickRect.addEventListener('mousedown', function (e) {
     Flappy.onMouseDown(e);
   });
   svg.appendChild(clickRect);
@@ -555,8 +555,8 @@ BlocklyApps.reset = function(first) {
   }
 
   // Move Paddle into position.
-  Flappy.birdX = Flappy.paddleStart_.x;
-  Flappy.birdY = Flappy.paddleStart_.y;
+  Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
+  Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
 
@@ -783,21 +783,19 @@ Flappy.setTileTransparent = function() {
 
 /**
  * Display Bird at the specified location
- * @param {number} x Horizontal grid (or fraction thereof).
- * @param {number} y Vertical grid (or fraction thereof).
- * @param {number} d Direction (0 - 15) or dance (16 - 17).
+ * @param {number} x Pixel location.
+ * @param {number} y Vertical grid Pixel location.
  */
-// todo - introduce animation frame for bird (and rename to displayBird)
-Flappy.displayBird = function(x, y, d) {
-  var birdIcon = document.getElementById('bird');
-  birdIcon.setAttribute('x',
-                          x * Flappy.SQUARE_SIZE - d * Flappy.PEGMAN_WIDTH + 1);
-  birdIcon.setAttribute('y',
-                          y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8);
 
-  var birdClipRect = document.getElementById('birdClipRect');
-  birdClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
-  birdClipRect.setAttribute('y', birdIcon.getAttribute('y'));
+Flappy.displayBird = function(x, y) {
+  var birdIcon = document.getElementById('bird');
+  birdIcon.setAttribute('x', x);
+  birdIcon.setAttribute('y', y);
+
+  // todo - introduce animation frame for bird
+  // var birdClipRect = document.getElementById('birdClipRect');
+  // birdClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
+  // birdClipRect.setAttribute('y', birdIcon.getAttribute('y'));
 };
 
 /**
