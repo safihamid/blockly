@@ -95,6 +95,9 @@ var loadLevel = function() {
   Flappy.MAZE_WIDTH = Flappy.SQUARE_SIZE * Flappy.COLS;
   Flappy.MAZE_HEIGHT = Flappy.SQUARE_SIZE * Flappy.ROWS;
   Flappy.PATH_WIDTH = Flappy.SQUARE_SIZE / 3;
+
+  Flappy.GROUND_WIDTH = 50;
+  Flappy.GROUND_HEIGHT = 65;
 };
 
 
@@ -301,6 +304,21 @@ var drawMap = function() {
     svg.appendChild(birdIcon);
   }
 
+  // todo - make this conditional on something, as first level wont have ground
+  {
+    // todo - can almost certainly do better than having a bunch of individual icons
+    for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+      var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+      groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.ground);
+      groundIcon.setAttribute('id', 'ground' + i);
+      groundIcon.setAttribute('height', Flappy.GROUND_HEIGHT);
+      groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
+      // groundIcon.setAttribute('clip-path', 'url(#groundClipPath)');
+      svg.appendChild(groundIcon);
+    }
+  }
+
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
   clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
@@ -351,6 +369,7 @@ Flappy.onTick = function() {
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
+  Flappy.displayGround(Flappy.tickCount);
 
 
   if (Flappy.allFinishesComplete()) {
@@ -507,7 +526,7 @@ Flappy.resetBall = function(i) {
   Flappy.ballX[i] = Flappy.ballStart_[i].x;
   Flappy.ballY[i] = Flappy.ballStart_[i].y;
   Flappy.ballD[i] = Flappy.ballStart_[i].d || 1.25 * Math.PI;
-  
+
   Flappy.displayBall(i, Flappy.ballX[i], Flappy.ballY[i], 8);
 };
 
@@ -559,6 +578,7 @@ BlocklyApps.reset = function(first) {
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
+  Flappy.displayGround(0); // todo
 
   var svg = document.getElementById('svgBounce');
 
@@ -783,8 +803,8 @@ Flappy.setTileTransparent = function() {
 
 /**
  * Display Bird at the specified location
- * @param {number} x Pixel location.
- * @param {number} y Vertical grid Pixel location.
+ * @param {number} x Horizontal Pixel location.
+ * @param {number} y Vertical Pixel location.
  */
 
 Flappy.displayBird = function(x, y) {
@@ -796,6 +816,20 @@ Flappy.displayBird = function(x, y) {
   var birdClipRect = document.getElementById('birdClipRect');
   birdClipRect.setAttribute('x', x);
   birdClipRect.setAttribute('y', y);
+};
+
+/**
+ * Display ground at specified location
+ * @param {number} ground
+ */
+Flappy.displayGround = function(offset) {
+  offset *= 2;
+  offset = offset % Flappy.GROUND_WIDTH;
+  for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+    var ground = document.getElementById('ground' + i);
+    ground.setAttribute('x', -offset + i * Flappy.GROUND_WIDTH);
+    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  }
 };
 
 /**
