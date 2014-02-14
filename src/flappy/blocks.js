@@ -129,6 +129,29 @@ exports.install = function(blockly, skin) {
     return 'Flappy.flap(\'block_id_' + this.id + '\', -15);\n';
   };
 
+  blockly.Blocks.flappy_playSound = {
+    // Block for playing sound.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(this.SOUNDS), 'SOUND');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.playSoundTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_playSound.SOUNDS =
+      [[msg.playSoundBounce(), 'wall'],
+       [msg.playSoundCrunch(), 'wall0']];
+
+  generator.flappy_playSound = function() {
+    // Generate JavaScript for playing a sound.
+    return 'Flappy.playSound(\'block_id_' + this.id + '\', \'' +
+               this.getTitleValue('SOUND') + '\');\n';
+  };
+
 
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
