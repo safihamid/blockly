@@ -36,25 +36,6 @@ Flappy.clickPending = false;
 Flappy.birdVelocity = 0; // Measured in fractional grid squares
 Flappy.gravity = 0.005; // Measured in fractional grid squares
 
-var ButtonState = {
-  UP: 0,
-  DOWN: 1
-};
-
-var ArrowIds = {
-  LEFT: 'leftButton',
-  UP: 'upButton',
-  RIGHT: 'rightButton',
-  DOWN: 'downButton'
-};
-
-var Keycodes = {
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
-  DOWN: 40
-};
-
 var level;
 var skin;
 
@@ -456,47 +437,6 @@ Flappy.onTick = function() {
     Flappy.clickPending = false;
   }
 
-  // Run key event handlers for any keys that are down:
-  for (var key in Keycodes) {
-    if (Flappy.keyState[Keycodes[key]] &&
-        Flappy.keyState[Keycodes[key]] == "keydown") {
-      switch (Keycodes[key]) {
-        case Keycodes.LEFT:
-          try { Flappy.whenLeft(BlocklyApps, api); } catch (e) { }
-          break;
-        case Keycodes.UP:
-          try { Flappy.whenUp(BlocklyApps, api); } catch (e) { }
-          break;
-        case Keycodes.RIGHT:
-          try { Flappy.whenRight(BlocklyApps, api); } catch (e) { }
-          break;
-        case Keycodes.DOWN:
-          try { Flappy.whenDown(BlocklyApps, api); } catch (e) { }
-          break;
-      }
-    }
-  }
-
-  for (var btn in ArrowIds) {
-    if (Flappy.btnState[ArrowIds[btn]] &&
-        Flappy.btnState[ArrowIds[btn]] == ButtonState.DOWN) {
-      switch (ArrowIds[btn]) {
-        case ArrowIds.LEFT:
-          try { Flappy.whenLeft(BlocklyApps, api); } catch (e) { }
-          break;
-        case ArrowIds.UP:
-          try { Flappy.whenUp(BlocklyApps, api); } catch (e) { }
-          break;
-        case ArrowIds.RIGHT:
-          try { Flappy.whenRight(BlocklyApps, api); } catch (e) { }
-          break;
-        case ArrowIds.DOWN:
-          try { Flappy.whenDown(BlocklyApps, api); } catch (e) { }
-          break;
-      }
-    }
-  }
-
   if (Flappy.firstClick) {
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
@@ -521,34 +461,6 @@ Flappy.onMouseDown = function (e) {
     Flappy.firstClick = true;
   }
 };
-
-Flappy.onKey = function(e) {
-  // Store the most recent event type per-key
-  Flappy.keyState[e.keyCode] = e.type;
-
-  // If we are actively running our tick loop, suppress default event handling
-  if (Flappy.intervalId &&
-      e.keyCode >= Keycodes.LEFT && e.keyCode <= Keycodes.DOWN) {
-    e.preventDefault();
-  }
-};
-
-Flappy.onArrowButtonDown = function(e, idBtn) {
-  // Store the most recent event type per-button
-  Flappy.btnState[idBtn] = ButtonState.DOWN;
-  e.preventDefault();  // Stop normal events so we see mouseup later.
-};
-
-Flappy.onArrowButtonUp = function(e, idBtn) {
-  // Store the most recent event type per-button
-  Flappy.btnState[idBtn] = ButtonState.UP;
-};
-
-Flappy.onMouseUp = function(e) {
-  // Reset btnState on mouse up
-  Flappy.btnState = {};
-};
-
 /**
  * Initialize Blockly and the Flappy app.  Called on page load.
  */
@@ -557,9 +469,6 @@ Flappy.init = function(config) {
   skin = config.skin;
   level = config.level;
   loadLevel();
-  
-  window.addEventListener("keydown", Flappy.onKey, false);
-  window.addEventListener("keyup", Flappy.onKey, false);
 
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
@@ -591,18 +500,6 @@ Flappy.init = function(config) {
   };
 
   config.afterInject = function() {
-    // Connect up arrow button event handlers
-    for (var btn in ArrowIds) {
-      dom.addClickTouchEvent(document.getElementById(ArrowIds[btn]),
-                             delegate(this,
-                                      Flappy.onArrowButtonUp,
-                                      ArrowIds[btn]));
-      dom.addMouseDownTouchEvent(document.getElementById(ArrowIds[btn]),
-                                 delegate(this,
-                                          Flappy.onArrowButtonDown,
-                                          ArrowIds[btn]));
-    }
-    document.addEventListener('mouseup', Flappy.onMouseUp, false);
     document.addEventListener('mousedown', Flappy.onMouseDown, false);
 
     /**
@@ -742,7 +639,7 @@ BlocklyApps.reset = function(first) {
   }
 
   Flappy.birdVelocity = 0;
-  
+
   // Move Ball into position.
   if (Flappy.ballStart_) {
     for (i = 0; i < Flappy.ballCount; i++) {
