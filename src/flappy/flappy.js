@@ -300,6 +300,18 @@ var drawMap = function() {
     birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
     svg.appendChild(birdIcon);
   }
+
+  var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
+  clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
+  clickRect.setAttribute('fill-opacity', 0);
+  // todo - add to pid list?
+  clickRect.addEventListener('click', function (e) {
+    Flappy.onMouseDown(e);
+  });
+  svg.appendChild(clickRect);
+
+
 };
 
 Flappy.calcDistance = function(xDist, yDist) {
@@ -335,10 +347,11 @@ Flappy.onTick = function() {
 
   if (Flappy.firstClick) {
     Flappy.birdVelocity += Flappy.gravity;
-    Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
+    Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
   }
 
-  Flappy.displayBird(Flappy.paddleX, Flappy.paddleY, 0);
+  Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
+
 
   if (Flappy.allFinishesComplete()) {
     Flappy.result = ResultType.SUCCESS;
@@ -396,8 +409,6 @@ Flappy.init = function(config) {
   };
 
   config.afterInject = function() {
-    document.addEventListener('mousedown', Flappy.onMouseDown, false);
-
     /**
      * The richness of block colours, regardless of the hue.
      * MOOC blocks should be brighter (target audience is younger).
@@ -544,10 +555,10 @@ BlocklyApps.reset = function(first) {
   }
 
   // Move Paddle into position.
-  Flappy.paddleX = Flappy.paddleStart_.x;
-  Flappy.paddleY = Flappy.paddleStart_.y;
+  Flappy.birdX = Flappy.paddleStart_.x;
+  Flappy.birdY = Flappy.paddleStart_.y;
 
-  Flappy.displayBird(Flappy.paddleX, Flappy.paddleY, 0);
+  Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
 
   var svg = document.getElementById('svgBounce');
 
@@ -838,8 +849,8 @@ Flappy.allFinishesComplete = function() {
     var finished, playSound;
     for (i = 0, finished = 0; i < Flappy.paddleFinishCount; i++) {
       if (!Flappy.paddleFinish_[i].finished) {
-        if (essentiallyEqual(Flappy.paddleX, Flappy.paddleFinish_[i].x, 0.2) &&
-            essentiallyEqual(Flappy.paddleY, Flappy.paddleFinish_[i].y, 0.2)) {
+        if (essentiallyEqual(Flappy.birdX, Flappy.paddleFinish_[i].x, 0.2) &&
+            essentiallyEqual(Flappy.birdY, Flappy.paddleFinish_[i].y, 0.2)) {
           Flappy.paddleFinish_[i].finished = true;
           finished++;
           playSound = true;
