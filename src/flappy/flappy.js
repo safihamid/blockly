@@ -279,27 +279,6 @@ var drawMap = function() {
     }
   }
 
-  if (Flappy.birdVelocity) {
-    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-    birdClip.setAttribute('id', 'birdClipPath');
-    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-    birdClipRect.setAttribute('id', 'birdClipRect');
-    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    ballClip.appendChild(birdClipRect);
-    svg.appendChild(birdClip);
-
-    // Add bird.
-    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    birdIcon.setAttribute('id', 'bird');
-    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.avatar);
-    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-    birdIcon.setAttribute('clip-path', 'url(#birdClipPath' + i + ')');
-    svg.appendChild(birdIcon);
-  }
-
   if (Flappy.ballStart_) {
     for (i = 0; i < Flappy.ballCount; i++) {
       // Ball's clipPath element, whose (x, y) is reset by Flappy.displayBall
@@ -325,25 +304,25 @@ var drawMap = function() {
   }
 
   if (Flappy.paddleStart_) {
-    // Paddle's clipPath element, whose (x, y) is reset by Flappy.displayPaddle
-    var paddleClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-    paddleClip.setAttribute('id', 'paddleClipPath');
-    var paddleClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-    paddleClipRect.setAttribute('id', 'paddleClipRect');
-    paddleClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    paddleClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    paddleClip.appendChild(paddleClipRect);
-    svg.appendChild(paddleClip);
+    // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
+    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+    birdClip.setAttribute('id', 'birdClipPath');
+    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+    birdClipRect.setAttribute('id', 'birdClipRect');
+    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
+    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    birdClip.appendChild(birdClipRect);
+    svg.appendChild(birdClip);
 
-    // Add paddle.
-    var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    paddleIcon.setAttribute('id', 'paddle');
-    paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.avatar);
-    paddleIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    paddleIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-    paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
-    svg.appendChild(paddleIcon);
+    // Add bird.
+    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    birdIcon.setAttribute('id', 'bird');
+    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.avatar);
+    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+    birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
+    svg.appendChild(birdIcon);
   }
   
   if (Flappy.paddleFinish_) {
@@ -442,7 +421,7 @@ Flappy.onTick = function() {
     Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
   }
 
-  Flappy.displayPaddle(Flappy.paddleX, Flappy.paddleY, 0);
+  Flappy.displayBird(Flappy.paddleX, Flappy.paddleY, 0);
 
   if (Flappy.allFinishesComplete()) {
     Flappy.result = ResultType.SUCCESS;
@@ -651,7 +630,7 @@ BlocklyApps.reset = function(first) {
   Flappy.paddleX = Flappy.paddleStart_.x;
   Flappy.paddleY = Flappy.paddleStart_.y;
   
-  Flappy.displayPaddle(Flappy.paddleX, Flappy.paddleY, 0);
+  Flappy.displayBird(Flappy.paddleX, Flappy.paddleY, 0);
 
   var svg = document.getElementById('svgBounce');
 
@@ -1021,22 +1000,22 @@ Flappy.displayBall = function(i, x, y, d) {
 };
 
 /**
- * Display Paddle at the specified location
+ * Display Bird at the specified location
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
 // todo - introduce animation frame for bird (and rename to displayBird)
-Flappy.displayPaddle = function(x, y, d) {
-  var paddleIcon = document.getElementById('paddle');
-  paddleIcon.setAttribute('x',
+Flappy.displayBird = function(x, y, d) {
+  var birdIcon = document.getElementById('bird');
+  birdIcon.setAttribute('x',
                           x * Flappy.SQUARE_SIZE - d * Flappy.PEGMAN_WIDTH + 1);
-  paddleIcon.setAttribute('y',
+  birdIcon.setAttribute('y',
                           y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8);
 
-  var paddleClipRect = document.getElementById('paddleClipRect');
-  paddleClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
-  paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
+  var birdClipRect = document.getElementById('birdClipRect');
+  birdClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
+  birdClipRect.setAttribute('y', birdIcon.getAttribute('y'));
 };
 
 /**
