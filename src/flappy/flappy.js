@@ -288,7 +288,7 @@ var drawMap = function() {
     birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
     birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
     birdClip.appendChild(birdClipRect);
-    // svg.appendChild(birdClip);
+    svg.appendChild(birdClip);
 
     // Add bird.
     var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -793,9 +793,9 @@ Flappy.displayBird = function(x, y) {
   birdIcon.setAttribute('y', y);
 
   // todo - introduce animation frame for bird
-  // var birdClipRect = document.getElementById('birdClipRect');
-  // birdClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
-  // birdClipRect.setAttribute('y', birdIcon.getAttribute('y'));
+  var birdClipRect = document.getElementById('birdClipRect');
+  birdClipRect.setAttribute('x', x);
+  birdClipRect.setAttribute('y', y);
 };
 
 /**
