@@ -15,6 +15,49 @@ exports.install = function(blockly, skin) {
   var generator = blockly.Generator.get('JavaScript');
   blockly.JavaScript = generator;
 
+  blockly.Blocks.flappy_whenClick = {
+    // Block to handle event where mouse is clicked
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenClick());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenClickTooltip());
+    }
+  };
+
+  generator.flappy_whenClick = function () {
+    // Generate JavaScript for handling click event.
+    return '\n';
+  };
+
+  blockly.Blocks.flappy_flap = {
+    // Block for flapping (flying upwards)
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.flap());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.flapTooltip());
+    }
+  };
+
+  generator.flappy_flap = function (velocity) {
+    // Generate JavaScript for moving left.
+    // todo - dont hardcode velocity
+    return 'Flappy.flap(\'block_id_' + this.id + '\', -0.15);\n';
+  };
+
+
+
+
+
+
+
   blockly.Blocks.bounce_whenLeft = {
     // Block to handle event when the Left arrow button is pressed.
     helpUrl: '',
@@ -27,12 +70,12 @@ exports.install = function(blockly, skin) {
       this.setTooltip(msg.whenLeftTooltip());
     }
   };
-  
+
   generator.bounce_whenLeft = function() {
     // Generate JavaScript for handling Left arrow button event.
     return '\n';
   };
-  
+
   blockly.Blocks.bounce_whenRight = {
     // Block to handle event when the Right arrow button is pressed.
     helpUrl: '',
@@ -45,7 +88,7 @@ exports.install = function(blockly, skin) {
       this.setTooltip(msg.whenRightTooltip());
     }
   };
-  
+
   generator.bounce_whenRight = function() {
     // Generate JavaScript for handling Right arrow button event.
     return '\n';

@@ -337,4 +337,26 @@ module.exports = {
       <block type="bounce_whenBallInGoal" deletable="false" movable="false" x="20" y="260"></block> \
       <block type="bounce_whenBallMissesPaddle" deletable="false" movable="false" x="20" y="340"></block>'
   },
+  '11': {
+    'ideal': 12,
+    'requiredBlocks': [
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 7, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'toolbox':
+      tb('<block type="flappy_flap"></block>'),
+    'startBlocks':
+     '<block type="flappy_whenClick" deletable="false" movable="false" x="20" y="20"></block>'
+  }
 };

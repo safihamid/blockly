@@ -28,6 +28,10 @@ var Flappy = module.exports;
 
 Flappy.keyState = {};
 Flappy.btnState = {};
+Flappy.clickPending = false;
+
+Flappy.birdVelocity = 0; // Measured in fractional blocks
+Flappy.gravity = 0;
 
 var ButtonState = {
   UP: 0,
@@ -291,6 +295,27 @@ var drawMap = function() {
     }
   }
 
+  if (Flappy.birdVelocity) {
+    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+    birdClip.setAttribute('id', 'birdClipPath');
+    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+    birdClipRect.setAttribute('id', 'birdClipRect');
+    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
+    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    ballClip.appendChild(birdClipRect);
+    svg.appendChild(birdClip);
+
+    // Add bird.
+    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    birdIcon.setAttribute('id', 'bird');
+    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.avatar);
+    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+    birdIcon.setAttribute('clip-path', 'url(#birdClipPath' + i + ')');
+    svg.appendChild(birdIcon);
+  }
+
   if (Flappy.ballStart_) {
     for (i = 0; i < Flappy.ballCount; i++) {
       // Ball's clipPath element, whose (x, y) is reset by Flappy.displayBall
@@ -302,7 +327,7 @@ var drawMap = function() {
       ballClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
       ballClip.appendChild(ballClipRect);
       svg.appendChild(ballClip);
-      
+
       // Add ball.
       var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
       ballIcon.setAttribute('id', 'ball' + i);
@@ -325,7 +350,7 @@ var drawMap = function() {
     paddleClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
     paddleClip.appendChild(paddleClipRect);
     svg.appendChild(paddleClip);
-    
+
     // Add paddle.
     var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
     paddleIcon.setAttribute('id', 'paddle');
@@ -422,7 +447,12 @@ var delegate = function(scope, func, data)
 
 Flappy.onTick = function() {
   Flappy.tickCount++;
-  
+
+  if (Flappy.clickPending) {
+    try { Flappy.whenClick(BlocklyApps, api); } catch (e) { }
+    Flappy.clickPending = false;
+  }
+
   // Run key event handlers for any keys that are down:
   for (var key in Keycodes) {
     if (Flappy.keyState[Keycodes[key]] &&
@@ -443,7 +473,7 @@ Flappy.onTick = function() {
       }
     }
   }
-  
+
   for (var btn in ArrowIds) {
     if (Flappy.btnState[ArrowIds[btn]] &&
         Flappy.btnState[ArrowIds[btn]] == ButtonState.DOWN) {
@@ -464,68 +494,11 @@ Flappy.onTick = function() {
     }
   }
 
-  if (Flappy.ballStart_) {
-    for (var i = 0; i < Flappy.ballCount; i++) {
-      var deltaX = 0.1 * Math.sin(Flappy.ballD[i]);
-      var deltaY = -0.1 * Math.cos(Flappy.ballD[i]);
-      
-      var wasXOK = Flappy.ballX[i] >= 0 && Flappy.ballX[i] <= Flappy.COLS - 1;
-      var wasYOK = Flappy.ballY[i] >= 0;
-      var wasYAboveBottom = Flappy.ballY[i] <= Flappy.ROWS - 1;
+  Flappy.birdVelocity += Flappy.gravity;
+  Flappy.paddleY = Flappy.paddleY + Flappy.birdVelocity;
 
-      Flappy.ballX[i] += deltaX;
-      Flappy.ballY[i] += deltaY;
-      
-      var nowXOK = Flappy.ballX[i] >= 0 && Flappy.ballX[i] <= Flappy.COLS - 1;
-      var nowYOK = Flappy.ballY[i] >= 0;
-      var nowYAboveBottom = Flappy.ballY[i] <= Flappy.ROWS - 1;
-      
-      if (wasXOK && !nowXOK) {
-        try { Flappy.whenWallCollided(BlocklyApps, api); } catch (e) { }
-      }
-      
-      if (wasYOK && !nowYOK) {
-        if (Flappy.map[0][Math.floor(Flappy.ballX[i])] == SquareType.GOAL) {
-          try { Flappy.whenBallInGoal(BlocklyApps, api); } catch (e) { }
-          Flappy.pidList.push(window.setTimeout(
-              delegate(this, Flappy.moveBallOffscreen, i),
-              1000));
-          if (Flappy.respawnBalls) {
-            Flappy.pidList.push(window.setTimeout(
-                delegate(this, Flappy.playSoundAndResetBall, i),
-                3000));
-          }
-        } else {
-          try { Flappy.whenWallCollided(BlocklyApps, api); } catch (e) { }
-        }
-      }
-      
-      var xPaddleBall = Flappy.ballX[i] - Flappy.paddleX;
-      var yPaddleBall = Flappy.ballY[i] - Flappy.paddleY;
-      var distPaddleBall = Flappy.calcDistance(xPaddleBall, yPaddleBall);
-      
-      if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
-        // paddle ball collision
-        try { Flappy.whenPaddleCollided(BlocklyApps, api); } catch (e) { }
-      } else if (wasYAboveBottom && !nowYAboveBottom) {
-        // ball missed paddle
-        try { Flappy.whenBallMissesPaddle(BlocklyApps, api); } catch (e) { }
-        Flappy.pidList.push(window.setTimeout(
-            delegate(this, Flappy.moveBallOffscreen, i),
-            1000));
-        if (Flappy.respawnBalls) {
-          Flappy.pidList.push(window.setTimeout(
-              delegate(this, Flappy.playSoundAndResetBall, i),
-              3000));
-        }
-      }
-    
-      Flappy.displayBall(i, Flappy.ballX[i], Flappy.ballY[i], 8);
-    }
-  }
-  
   Flappy.displayPaddle(Flappy.paddleX, Flappy.paddleY, 0);
-  
+
   if (Flappy.allFinishesComplete()) {
     Flappy.result = ResultType.SUCCESS;
     Flappy.onPuzzleComplete();
@@ -536,10 +509,17 @@ Flappy.onTick = function() {
   }
 };
 
+Flappy.onMouseDown = function (e) {
+  if (Flappy.intervalId) {
+    // todo - validate inside window
+    Flappy.clickPending = true;
+  }
+};
+
 Flappy.onKey = function(e) {
   // Store the most recent event type per-key
   Flappy.keyState[e.keyCode] = e.type;
-  
+
   // If we are actively running our tick loop, suppress default event handling
   if (Flappy.intervalId &&
       e.keyCode >= Keycodes.LEFT && e.keyCode <= Keycodes.DOWN) {
@@ -617,7 +597,8 @@ Flappy.init = function(config) {
                                           ArrowIds[btn]));
     }
     document.addEventListener('mouseup', Flappy.onMouseUp, false);
-  
+    document.addEventListener('mousedown', Flappy.onMouseDown, false);
+
     /**
      * The richness of block colours, regardless of the hue.
      * MOOC blocks should be brighter (target audience is younger).
@@ -627,10 +608,10 @@ Flappy.init = function(config) {
     Blockly.HSV_SATURATION = 0.6;
 
     Blockly.SNAP_RADIUS *= Flappy.scale.snapRadius;
-    
+
     Flappy.ballCount = 0;
     Flappy.paddleFinishCount = 0;
-    
+
     // Locate the start and finish squares.
     for (var y = 0; y < Flappy.ROWS; y++) {
       for (var x = 0; x < Flappy.COLS; x++) {
@@ -938,7 +919,18 @@ Flappy.execute = function() {
       }
     }
   }
-  
+
+  var codeClick = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'flappy_whenClick');
+  var whenClickFunc = codegen.functionFromCode(
+                                     codeClick, {
+                                      BlocklyApps: BlocklyApps,
+                                      Flappy: api } );
+
+
+
+
   var codeWallCollided = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'bounce_whenWallCollided');
@@ -1006,8 +998,10 @@ Flappy.execute = function() {
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
-  
+
   // Set event handlers and start the onTick timer
+  Flappy.whenClick = whenClickFunc;
+
   Flappy.whenWallCollided = whenWallCollidedFunc;
   Flappy.whenBallInGoal = whenBallInGoalFunc;
   Flappy.whenBallMissesPaddle = whenBallMissesPaddleFunc;
@@ -1115,7 +1109,7 @@ Flappy.displayBall = function(i, x, y, d) {
                         x * Flappy.SQUARE_SIZE - d * Flappy.PEGMAN_WIDTH + 1);
   ballIcon.setAttribute('y',
                         y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8);
-  
+
   var ballClipRect = document.getElementById('ballClipRect' + i);
   ballClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
   ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
@@ -1127,13 +1121,14 @@ Flappy.displayBall = function(i, x, y, d) {
  * @param {number} y Vertical grid (or fraction thereof).
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
+// todo - introduce animation frame for bird (and rename to displayBird)
 Flappy.displayPaddle = function(x, y, d) {
   var paddleIcon = document.getElementById('paddle');
   paddleIcon.setAttribute('x',
                           x * Flappy.SQUARE_SIZE - d * Flappy.PEGMAN_WIDTH + 1);
   paddleIcon.setAttribute('y',
                           y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8);
-  
+
   var paddleClipRect = document.getElementById('paddleClipRect');
   paddleClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE + 1);
   paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
@@ -1222,7 +1217,7 @@ Flappy.allFinishesComplete = function() {
             'http://www.w3.org/1999/xlink',
             'xlink:href',
             skin.goalSuccess);
-        
+
         BlocklyApps.playAudio('win', {volume: 0.5});
         return true;
       }

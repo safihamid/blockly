@@ -7,6 +7,11 @@ exports.playSound = function(id, soundName) {
   BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
+exports.flap = function (id, velocity) {
+  Flappy.birdVelocity = velocity;
+  Flappy.gravity = 0.005;
+};
+
 exports.moveLeft = function(id) {
   BlocklyApps.highlight(id);
   Flappy.paddleX -= 0.1;
