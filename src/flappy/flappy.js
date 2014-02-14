@@ -740,6 +740,8 @@ BlocklyApps.reset = function(first) {
     scoreCell.className = 'score-cell-enabled';
     Flappy.displayScore();
   }
+
+  Flappy.birdVelocity = 0;
   
   // Move Ball into position.
   if (Flappy.ballStart_) {
