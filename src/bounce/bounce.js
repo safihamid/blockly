@@ -99,7 +99,8 @@ var loadLevel = function() {
   Bounce.SQUARE_SIZE = 50;
   Bounce.PEGMAN_HEIGHT = skin.pegmanHeight;
   Bounce.PEGMAN_WIDTH = skin.pegmanWidth;
-  Bounce.PEGMAN_Y_OFFSET = skin.pegmanYOffset;
+  Bounce.BALL_Y_OFFSET = skin.ballYOffset;
+  Bounce.PADDLE_Y_OFFSET = skin.paddleYOffset;
   // Height and width of the goal and obstacles.
   Bounce.MARKER_HEIGHT = 43;
   Bounce.MARKER_WIDTH = 50;
@@ -123,29 +124,28 @@ var initWallMap = function() {
 Bounce.pidList = [];
 
 // Map each possible shape to a sprite.
-// Input: Binary string representing Centre/North/West/South/East squares.
+// Input: Binary string representing Centre/North/East/South/West squares.
 // Output: [x, y] coordinates of each tile's sprite in tiles.png.
-var TILE_SHAPES = {
-  '10010': [4, 0],  // Dead ends
-  '10001': [3, 3],
-  '11000': [0, 1],
-  '10100': [0, 2],
-  '11010': [4, 1],  // Vertical
-  '10101': [3, 2],  // Horizontal
-  '10110': [0, 0],  // Elbows
-  '10011': [2, 0],
-  '11001': [4, 2],
-  '11100': [2, 3],
-  '11110': [1, 1],  // Junctions
-  '10111': [1, 0],
-  '11011': [2, 1],
-  '11101': [1, 2],
-  '11111': [2, 2],  // Cross
-  'null0': [4, 3],  // Empty
-  'null1': [3, 0],
-  'null2': [3, 1],
-  'null3': [0, 3],
-  'null4': [1, 3]
+var WALL_TILE_SHAPES = {
+  '1X101': [1, 0],  // Horiz top
+  '11X10': [2, 1],  // Vert right
+  '11XX0': [2, 1],  // Bottom right corner
+  '1XX11': [2, 0],  // Top right corner
+  '1X001': [1, 0],  // Top horiz right end
+  '1X100': [1, 0],  // Top horiz left end
+  '1101X': [0, 1],  // Vert left
+  '110XX': [0, 1],  // Bottom left corner
+  '1X11X': [0, 0],  // Top left corner
+  'null0': [1, 1],  // Empty
+};
+
+var GOAL_TILE_SHAPES = {
+  '1X101': [2, 3],  // Horiz top
+  '1XX11': [3, 3],  // Top right corner
+  '1X001': [3, 3],  // Top horiz right end
+  '1X11X': [0, 2],  // Top left corner
+  '1X100': [0, 2],  // Top horiz left end
+  'null0': [1, 1],  // Empty
 };
 
 var drawMap = function() {
@@ -217,75 +217,96 @@ var drawMap = function() {
 
   // Draw the tiles making up the maze map.
 
-  // Return a value of '0' if the specified square is wall or out of bounds '1'
-  // otherwise (empty, obstacle, start, finish).
-  var normalize = function(x, y) {
+  // Return a value of '0' if the specified square is not a wall, '1' for
+  // a wall, 'X' for out of bounds
+  var wallNormalize = function(x, y) {
     return ((Bounce.map[y] === undefined) ||
-            (Bounce.map[y][x] === undefined) ||
-            (Bounce.map[y][x] == SquareType.WALL)) ? '0' : '1';
+            (Bounce.map[y][x] === undefined)) ? 'X' :
+              (Bounce.map[y][x] & SquareType.WALL) ? '1' : '0';
+  };
+
+  // Return a value of '0' if the specified square is not a wall, '1' for
+  // a wall, 'X' for out of bounds
+  var goalNormalize = function(x, y) {
+    return ((Bounce.map[y] === undefined) ||
+            (Bounce.map[y][x] === undefined)) ? 'X' :
+              (Bounce.map[y][x] & SquareType.GOAL) ? '1' : '0';
   };
 
   // Compute and draw the tile for each square.
   var tileId = 0;
   for (y = 0; y < Bounce.ROWS; y++) {
     for (x = 0; x < Bounce.COLS; x++) {
+      var left;
+      var top;
+      var image;
       // Compute the tile index.
-      tile = normalize(x, y) +
-          normalize(x, y - 1) +  // North.
-          normalize(x + 1, y) +  // West.
-          normalize(x, y + 1) +  // South.
-          normalize(x - 1, y);   // East.
+      tile = wallNormalize(x, y) +
+          wallNormalize(x, y - 1) +  // North.
+          wallNormalize(x + 1, y) +  // East.
+          wallNormalize(x, y + 1) +  // South.
+          wallNormalize(x - 1, y);   // West.
 
       // Draw the tile.
-      if (!TILE_SHAPES[tile]) {
-        // Empty square.  Use null0 for large areas, with null1-4 for borders.
-        if (tile == '00000' && Math.random() > 0.3) {
-          Bounce.wallMap[y][x] = 0;
-          tile = 'null0';
-        } else {
-          var wallIdx = Math.floor(1 + Math.random() * 4);
-          Bounce.wallMap[y][x] = wallIdx;
-          tile = 'null' + wallIdx;
-        }
+      if (WALL_TILE_SHAPES[tile]) {
+        left = WALL_TILE_SHAPES[tile][0];
+        top = WALL_TILE_SHAPES[tile][1];
+        image = skin.tiles;
       }
-      var left = TILE_SHAPES[tile][0];
-      var top = TILE_SHAPES[tile][1];
-      // Tile's clipPath element.
-      var tileClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-      tileClip.setAttribute('id', 'tileClipPath' + tileId);
-      var tileClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-      tileClipRect.setAttribute('width', Bounce.SQUARE_SIZE);
-      tileClipRect.setAttribute('height', Bounce.SQUARE_SIZE);
+      else {
+        // Compute the tile index.
+        tile = goalNormalize(x, y) +
+            goalNormalize(x, y - 1) +  // North.
+            goalNormalize(x + 1, y) +  // East.
+            goalNormalize(x, y + 1) +  // South.
+            goalNormalize(x - 1, y);   // West.
 
-      tileClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
-      tileClipRect.setAttribute('y', y * Bounce.SQUARE_SIZE);
+        if (!GOAL_TILE_SHAPES[tile]) {
+          // Empty square.  Use null0.
+          tile = 'null0';
+        }
+        left = GOAL_TILE_SHAPES[tile][0];
+        top = GOAL_TILE_SHAPES[tile][1];
+        image = skin.goalTiles;
+      }
+      if (tile != 'null0') {
+        // Tile's clipPath element.
+        var tileClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+        tileClip.setAttribute('id', 'tileClipPath' + tileId);
+        var tileClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+        tileClipRect.setAttribute('width', Bounce.SQUARE_SIZE);
+        tileClipRect.setAttribute('height', Bounce.SQUARE_SIZE);
 
-      tileClip.appendChild(tileClipRect);
-      svg.appendChild(tileClip);
-      // Tile sprite.
-      var tileElement = document.createElementNS(Blockly.SVG_NS, 'image');
-      tileElement.setAttribute('id', 'tileElement' + tileId);
-      tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
-                                 'xlink:href',
-                                 skin.tiles);
-      tileElement.setAttribute('height', Bounce.SQUARE_SIZE * 4);
-      tileElement.setAttribute('width', Bounce.SQUARE_SIZE * 5);
-      tileElement.setAttribute('clip-path',
-                               'url(#tileClipPath' + tileId + ')');
-      tileElement.setAttribute('x', (x - left) * Bounce.SQUARE_SIZE);
-      tileElement.setAttribute('y', (y - top) * Bounce.SQUARE_SIZE);
-      svg.appendChild(tileElement);
-      // Tile animation
-      var tileAnimation = document.createElementNS(Blockly.SVG_NS,
-                                                   'animate');
-      tileAnimation.setAttribute('id', 'tileAnimation' + tileId);
-      tileAnimation.setAttribute('attributeType', 'CSS');
-      tileAnimation.setAttribute('attributeName', 'opacity');
-      tileAnimation.setAttribute('from', 1);
-      tileAnimation.setAttribute('to', 0);
-      tileAnimation.setAttribute('dur', '1s');
-      tileAnimation.setAttribute('begin', 'indefinite');
-      tileElement.appendChild(tileAnimation);
+        tileClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
+        tileClipRect.setAttribute('y', y * Bounce.SQUARE_SIZE);
+
+        tileClip.appendChild(tileClipRect);
+        svg.appendChild(tileClip);
+        // Tile sprite.
+        var tileElement = document.createElementNS(Blockly.SVG_NS, 'image');
+        tileElement.setAttribute('id', 'tileElement' + tileId);
+        tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
+                                   'xlink:href',
+                                   image);
+        tileElement.setAttribute('height', Bounce.SQUARE_SIZE * 4);
+        tileElement.setAttribute('width', Bounce.SQUARE_SIZE * 5);
+        tileElement.setAttribute('clip-path',
+                                 'url(#tileClipPath' + tileId + ')');
+        tileElement.setAttribute('x', (x - left) * Bounce.SQUARE_SIZE);
+        tileElement.setAttribute('y', (y - top) * Bounce.SQUARE_SIZE);
+        svg.appendChild(tileElement);
+        // Tile animation
+        var tileAnimation = document.createElementNS(Blockly.SVG_NS,
+                                                     'animate');
+        tileAnimation.setAttribute('id', 'tileAnimation' + tileId);
+        tileAnimation.setAttribute('attributeType', 'CSS');
+        tileAnimation.setAttribute('attributeName', 'opacity');
+        tileAnimation.setAttribute('from', 1);
+        tileAnimation.setAttribute('to', 0);
+        tileAnimation.setAttribute('dur', '1s');
+        tileAnimation.setAttribute('begin', 'indefinite');
+        tileElement.appendChild(tileAnimation);
+      }
 
       tileId++;
     }
@@ -307,9 +328,9 @@ var drawMap = function() {
       var ballIcon = document.createElementNS(Blockly.SVG_NS, 'image');
       ballIcon.setAttribute('id', 'ball' + i);
       ballIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.avatar);
+                              skin.ball);
       ballIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-      ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+      ballIcon.setAttribute('width', Bounce.PEGMAN_WIDTH);
       ballIcon.setAttribute('clip-path', 'url(#ballClipPath' + i + ')');
       svg.appendChild(ballIcon);
     }
@@ -330,9 +351,9 @@ var drawMap = function() {
     var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
     paddleIcon.setAttribute('id', 'paddle');
     paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.avatar);
+                              skin.paddle);
     paddleIcon.setAttribute('height', Bounce.PEGMAN_HEIGHT);
-    paddleIcon.setAttribute('width', Bounce.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+    paddleIcon.setAttribute('width', Bounce.PEGMAN_WIDTH);
     paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
     svg.appendChild(paddleIcon);
   }
@@ -485,7 +506,7 @@ Bounce.onTick = function() {
       }
       
       if (wasYOK && !nowYOK) {
-        if (Bounce.map[0][Math.floor(Bounce.ballX[i])] == SquareType.GOAL) {
+        if (Bounce.map[0][Math.floor(Bounce.ballX[i])] & SquareType.GOAL) {
           try { Bounce.whenBallInGoal(BlocklyApps, api); } catch (e) { }
           Bounce.pidList.push(window.setTimeout(
               delegate(this, Bounce.moveBallOffscreen, i),
@@ -520,11 +541,11 @@ Bounce.onTick = function() {
         }
       }
     
-      Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+      Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
     }
   }
   
-  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
+  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
   
   if (Bounce.allFinishesComplete()) {
     Bounce.result = ResultType.SUCCESS;
@@ -634,13 +655,13 @@ Bounce.init = function(config) {
     // Locate the start and finish squares.
     for (var y = 0; y < Bounce.ROWS; y++) {
       for (var x = 0; x < Bounce.COLS; x++) {
-        if (Bounce.map[y][x] == SquareType.PADDLEFINISH) {
+        if (Bounce.map[y][x] & SquareType.PADDLEFINISH) {
           if (0 === Bounce.paddleFinishCount) {
             Bounce.paddleFinish_ = [];
           }
           Bounce.paddleFinish_[Bounce.paddleFinishCount] = {x: x, y: y};
           Bounce.paddleFinishCount++;
-        } else if (Bounce.map[y][x] == SquareType.BALLSTART) {
+        } else if (Bounce.map[y][x] & SquareType.BALLSTART) {
           if (0 === Bounce.ballCount) {
             Bounce.ballStart_ = [];
             Bounce.ballX = [];
@@ -650,11 +671,11 @@ Bounce.init = function(config) {
           Bounce.ballStart_[Bounce.ballCount] =
               {x: x, y: y, d: level.ballDirection || 0};
           Bounce.ballCount++;
-        } else if (Bounce.map[y][x] == SquareType.PADDLESTART) {
+        } else if (Bounce.map[y][x] & SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
-        } else if (Bounce.map[y][x] == SquareType.BALLFINISH) {
+        } else if (Bounce.map[y][x] & SquareType.BALLFINISH) {
           Bounce.ballFinish_ = {x: x, y: y};
-        } else if (Bounce.map[y][x] == SquareType.GOAL) {
+        } else if (Bounce.map[y][x] & SquareType.GOAL) {
           Bounce.goalLocated_ = true;
         }
       }
@@ -717,7 +738,7 @@ Bounce.resetBall = function(i) {
   Bounce.ballY[i] = Bounce.ballStart_[i].y;
   Bounce.ballD[i] = Bounce.ballStart_[i].d || 1.25 * Math.PI;
   
-  Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i], 8);
+  Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
 };
 
 /**
@@ -765,7 +786,7 @@ BlocklyApps.reset = function(first) {
   Bounce.paddleX = Bounce.paddleStart_.x;
   Bounce.paddleY = Bounce.paddleStart_.y;
   
-  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY, 0);
+  Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
 
   var svg = document.getElementById('svgBounce');
 
@@ -828,12 +849,14 @@ BlocklyApps.reset = function(first) {
     for (x = 0; x < Bounce.COLS; x++) {
       // Tile's clipPath element.
       var tileClip = document.getElementById('tileClipPath' + tileId);
-      tileClip.setAttribute('visibility', 'visible');
+      if (tileClip) {
+        tileClip.setAttribute('visibility', 'visible');
+      }
       // Tile sprite.
       var tileElement = document.getElementById('tileElement' + tileId);
-      tileElement.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', skin.tiles);
-      tileElement.setAttribute('opacity', 1);
+      if (tileElement) {
+        tileElement.setAttribute('opacity', 1);
+      }
       tileId++;
     }
   }
@@ -1057,31 +1080,6 @@ Bounce.onPuzzleComplete = function() {
 };
 
 /**
- * Replace the tiles surronding the obstacle with broken tiles.
- */
-Bounce.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
-  var tileCoords = [
-    [obstacleY - 1, obstacleX - 1],
-    [obstacleY - 1, obstacleX],
-    [obstacleY - 1, obstacleX + 1],
-    [obstacleY, obstacleX - 1],
-    [obstacleY, obstacleX],
-    [obstacleY, obstacleX + 1],
-    [obstacleY + 1, obstacleX - 1],
-    [obstacleY + 1, obstacleX],
-    [obstacleY + 1, obstacleX + 1]
-  ];
-  for (var idx = 0; idx < tileCoords.length; ++idx) {
-    var tileIdx = tileCoords[idx][1] + Bounce.COLS * tileCoords[idx][0];
-    var tileElement = document.getElementById('tileElement' + tileIdx);
-    if (tileElement) {
-      tileElement.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', brokenTiles);
-    }
-  }
-};
-
-/**
  * Set the tiles to be transparent gradually.
  */
 Bounce.setTileTransparent = function() {
@@ -1107,17 +1105,16 @@ Bounce.setTileTransparent = function() {
  * @param {number} i Ball index..
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
- * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
-Bounce.displayBall = function(i, x, y, d) {
+Bounce.displayBall = function(i, x, y) {
   var ballIcon = document.getElementById('ball' + i);
   ballIcon.setAttribute('x',
-                        x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
+                        x * Bounce.SQUARE_SIZE);
   ballIcon.setAttribute('y',
-                        y * Bounce.SQUARE_SIZE + Bounce.PEGMAN_Y_OFFSET - 8);
+                        y * Bounce.SQUARE_SIZE + Bounce.BALL_Y_OFFSET);
   
   var ballClipRect = document.getElementById('ballClipRect' + i);
-  ballClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
+  ballClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
   ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
 };
 
@@ -1125,17 +1122,16 @@ Bounce.displayBall = function(i, x, y, d) {
  * Display Paddle at the specified location
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
- * @param {number} d Direction (0 - 15) or dance (16 - 17).
  */
-Bounce.displayPaddle = function(x, y, d) {
+Bounce.displayPaddle = function(x, y) {
   var paddleIcon = document.getElementById('paddle');
   paddleIcon.setAttribute('x',
-                          x * Bounce.SQUARE_SIZE - d * Bounce.PEGMAN_WIDTH + 1);
+                          x * Bounce.SQUARE_SIZE);
   paddleIcon.setAttribute('y',
-                          y * Bounce.SQUARE_SIZE + Bounce.PEGMAN_Y_OFFSET - 8);
+                          y * Bounce.SQUARE_SIZE + Bounce.PADDLE_Y_OFFSET);
   
   var paddleClipRect = document.getElementById('paddleClipRect');
-  paddleClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE + 1);
+  paddleClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
   paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
 };
 
@@ -1148,34 +1144,6 @@ Bounce.displayScore = function() {
     playerScore: Bounce.playerScore,
     opponentScore: Bounce.opponentScore
   });
-};
-
-/**
- * Keep the direction within 0-3, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Bounce.constrainDirection4 = function(d) {
-  if (d < 0) {
-    d += 4;
-  } else if (d > 3) {
-    d -= 4;
-  }
-  return d;
-};
-
-/**
- * Keep the direction within 0-15, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Bounce.constrainDirection16 = function(d) {
-  if (d < 0) {
-    d += 16;
-  } else if (d > 15) {
-    d -= 16;
-  }
-  return d;
 };
 
 Bounce.timedOut = function() {

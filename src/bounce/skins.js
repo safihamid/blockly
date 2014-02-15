@@ -15,7 +15,7 @@ var CONFIGS = {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
     additionalSound: true,
-    background: 4
+    ballYOffset: 10
   }
 
 };
@@ -24,9 +24,12 @@ exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
   // Images
-  skin.tiles = skin.assetUrl('tiles.png');
+  skin.tiles = skin.assetUrl('tiles_wall.png');
+  skin.goalTiles = skin.assetUrl('tiles_goal.png');
   skin.goal = skin.assetUrl('goal.png');
   skin.goalSuccess = skin.assetUrl('goal_success.png');
+  skin.ball = skin.assetUrl('ball.png');
+  skin.paddle = skin.assetUrl('paddle.png');
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.obstacle = skin.assetUrl('obstacle.png');
   skin.obstacleAnimation = skin.assetUrl('obstacle.gif');
@@ -69,6 +72,7 @@ exports.load = function(assetUrl, id) {
   }
   skin.pegmanHeight = config.pegmanHeight || 52;
   skin.pegmanWidth = config.pegmanWidth || 49;
-  skin.pegmanYOffset = config.pegmanYOffset || 0;
+  skin.ballYOffset = config.ballYOffset || 0;
+  skin.paddleYOffset = config.paddleYOffset || 0;
   return skin;
 };
