@@ -55,6 +55,12 @@ var getTile = function(map, x, y) {
   }
 };
 
+var randomPipeHeight = function () {
+  var min = Flappy.MIN_PIPE_HEIGHT;
+  var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.MIN_PIPE_HEIGHT - Flappy.GAP_SIZE;
+  return Math.floor((Math.random() * (max - min)) + min);
+};
+
 //The number of blocks to show as feedback.
 BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
 
@@ -105,8 +111,8 @@ var loadLevel = function() {
   Flappy.PIPE_HEIGHT = 320;
   Flappy.MIN_PIPE_HEIGHT = 48;
 
-  Flappy.GAP_SIZE = 75;
-  Flappy.SPEED = 3;
+  Flappy.GAP_SIZE = 100;
+  Flappy.SPEED = 4;
 
   Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
 
@@ -114,7 +120,7 @@ var loadLevel = function() {
   for (var i = 0; i < numPipes; i++) {
     Flappy.pipes.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.PIPE_SPACING,
-      gapTopY: 150 // todo - randomize
+      gapStart: 0 // y coordinate of the top of the gap
     });
   }
 };
@@ -323,21 +329,6 @@ var drawMap = function() {
     svg.appendChild(birdIcon);
   }
 
-  // todo - make this conditional on something, as first level wont have ground
-  {
-    // todo - can almost certainly do better than having a bunch of individual icons
-    for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
-      var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-      groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.ground);
-      groundIcon.setAttribute('id', 'ground' + i);
-      groundIcon.setAttribute('height', Flappy.GROUND_HEIGHT);
-      groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
-      // groundIcon.setAttribute('clip-path', 'url(#groundClipPath)');
-      svg.appendChild(groundIcon);
-    }
-  }
-
   // Add pipes
   Flappy.pipes.forEach (function (pipe, index) {
     var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -356,6 +347,20 @@ var drawMap = function() {
     pipeBottomIcon.setAttribute('width', Flappy.PIPE_WIDTH);
     svg.appendChild(pipeBottomIcon);
   });
+
+  // todo - make this conditional on something, as first level wont have ground
+  {
+    // todo - can almost certainly do better than having a bunch of individual icons
+    for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+      var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+      groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.ground);
+      groundIcon.setAttribute('id', 'ground' + i);
+      groundIcon.setAttribute('height', Flappy.GROUND_HEIGHT);
+      groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
+      svg.appendChild(groundIcon);
+    }
+  }
 
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
@@ -409,14 +414,14 @@ Flappy.onTick = function() {
       pipe.x -= Flappy.SPEED; // todo - make this configurable
       if (pipe.x + Flappy.PIPE_WIDTH < 0) {
         pipe.x += Flappy.pipes.length * Flappy.PIPE_SPACING;
+        pipe.gapStart = randomPipeHeight();
       }
     });
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
-  Flappy.displayGround(Flappy.tickCount);
   Flappy.displayPipes();
-
+  Flappy.displayGround(Flappy.tickCount);
 
   if (Flappy.allFinishesComplete()) {
     Flappy.result = ResultType.SUCCESS;
@@ -615,6 +620,7 @@ BlocklyApps.reset = function(first) {
   // Reset pipes
   Flappy.pipes.forEach(function (pipe, index) {
     pipe.x = Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING;
+    pipe.gapStart = randomPipeHeight();
   });
 
   // Move Ball into position.
@@ -629,9 +635,8 @@ BlocklyApps.reset = function(first) {
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
-  Flappy.displayGround(0); // todo
-
   Flappy.displayPipes();
+  Flappy.displayGround(0); // todo
 
   var svg = document.getElementById('svgBounce');
 
@@ -893,11 +898,11 @@ Flappy.displayPipes = function () {
     var pipe = Flappy.pipes[i];
     var topIcon = document.getElementById('pipe_top' + i);
     topIcon.setAttribute('x', pipe.x);
-    topIcon.setAttribute('y', pipe.gapTopY - Flappy.PIPE_HEIGHT);
+    topIcon.setAttribute('y', pipe.gapStart - Flappy.PIPE_HEIGHT);
 
     var bottomIcon = document.getElementById('pipe_bottom' + i);
     bottomIcon.setAttribute('x', pipe.x);
-    bottomIcon.setAttribute('y', pipe.gapTopY + Flappy.GAP_SIZE);
+    bottomIcon.setAttribute('y', pipe.gapStart + Flappy.GAP_SIZE);
 
     // todo - crop bottom
   }
