@@ -66,8 +66,8 @@ exports.load = function(assetUrl, id) {
   // Settings
   skin.graph = config.graph;
   skin.background = skin.assetUrl('background.png');
-  skin.pegmanHeight = config.pegmanHeight || 52;
-  skin.pegmanWidth = config.pegmanWidth || 49;
+  skin.pegmanHeight = config.pegmanHeight || 24;
+  skin.pegmanWidth = config.pegmanWidth || 34;
   skin.pegmanYOffset = config.pegmanYOffset || 0;
   return skin;
 };

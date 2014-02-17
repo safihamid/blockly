@@ -111,6 +111,8 @@ var loadLevel = function() {
   Flappy.PIPE_HEIGHT = 320;
   Flappy.MIN_PIPE_HEIGHT = 48;
 
+
+  // todo - make sure somewhere that MIN_PIPE_HEIGHT + GAP_SIZE + PIPE_HEIGHT always gets us over MAZE_HEIGHT
   Flappy.GAP_SIZE = 100;
   Flappy.SPEED = 4;
 
@@ -324,7 +326,7 @@ var drawMap = function() {
     birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                             skin.avatar);
     birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
+    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
     birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
     svg.appendChild(birdIcon);
   }
@@ -406,6 +408,9 @@ Flappy.onTick = function() {
     Flappy.clickPending = false;
   }
 
+  var birdWasAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+
+  // Don't start until user's first click
   if (Flappy.firstClick) {
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
@@ -419,7 +424,12 @@ Flappy.onTick = function() {
     });
   }
 
-  Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
+  var birdIsAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  if (birdWasAboveGround && !birdIsAboveGround) {
+    try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
+  }
+
+  Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
   Flappy.displayGround(Flappy.tickCount);
 
@@ -435,7 +445,6 @@ Flappy.onTick = function() {
 
 Flappy.onMouseDown = function (e) {
   if (Flappy.intervalId) {
-    // todo - validate inside window
     Flappy.clickPending = true;
     Flappy.firstClick = true;
   }
@@ -634,7 +643,7 @@ BlocklyApps.reset = function(first) {
   Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
 
-  Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
+  Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
   Flappy.displayGround(0); // todo
 
@@ -765,6 +774,13 @@ Flappy.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
+  var codeCollideGround = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'flappy_whenCollideGround');
+  var whenCollideGroundFunc = codegen.functionFromCode(
+                                     codeCollideGround, {
+                                      BlocklyApps: BlocklyApps,
+                                      Flappy: api } );
 
   BlocklyApps.playAudio('start', {volume: 0.5});
 
@@ -772,6 +788,7 @@ Flappy.execute = function() {
 
   // Set event handlers and start the onTick timer
   Flappy.whenClick = whenClickFunc;
+  Flappy.whenCollideGround = whenCollideGroundFunc;
 
   Flappy.tickCount = 0;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
