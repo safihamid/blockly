@@ -65,12 +65,7 @@ exports.load = function(assetUrl, id) {
   skin.additionalSound = config.additionalSound;
   // Settings
   skin.graph = config.graph;
-  if (config.background !== undefined) {
-    var index = Math.floor(Math.random() * config.background);
-    skin.background = skin.assetUrl('background' + index + '.png');
-  } else {
-    skin.background = skin.assetUrl('background.png');
-  }
+  skin.background = skin.assetUrl('background.png');
   skin.pegmanHeight = config.pegmanHeight || 52;
   skin.pegmanWidth = config.pegmanWidth || 49;
   skin.pegmanYOffset = config.pegmanYOffset || 0;

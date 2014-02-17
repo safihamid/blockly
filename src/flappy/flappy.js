@@ -98,18 +98,25 @@ var loadLevel = function() {
   Flappy.MAZE_HEIGHT = Flappy.SQUARE_SIZE * Flappy.ROWS;
   Flappy.PATH_WIDTH = Flappy.SQUARE_SIZE / 3;
 
-  Flappy.GROUND_WIDTH = 50;
-  Flappy.GROUND_HEIGHT = 65;
+  Flappy.GROUND_WIDTH = 24;
+  Flappy.GROUND_HEIGHT = 48;
 
   Flappy.PIPE_WIDTH = 52;
   Flappy.PIPE_HEIGHT = 320;
   Flappy.MIN_PIPE_HEIGHT = 48;
 
-  Flappy.pipes.push({
-    x: Flappy.MAZE_WIDTH * 1.5, // start off screen
-    gapTopY: 150,
-    gapSize: 50
-  });
+  Flappy.GAP_SIZE = 75;
+  Flappy.SPEED = 3;
+
+  Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
+
+  var numPipes = 2 * Flappy.MAZE_WIDTH / Flappy.PIPE_SPACING;
+  for (var i = 0; i < numPipes; i++) {
+    Flappy.pipes.push({
+      x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.PIPE_SPACING,
+      gapTopY: 150 // todo - randomize
+    });
+  }
 };
 
 
@@ -332,7 +339,6 @@ var drawMap = function() {
   }
 
   // Add pipes
-  // todo - think about how this works as we cycle pipes
   Flappy.pipes.forEach (function (pipe, index) {
     var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
     pipeTopIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
@@ -400,9 +406,11 @@ Flappy.onTick = function() {
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
 
     Flappy.pipes.forEach(function (pipe) {
-      pipe.x -= 5; // todo - make this configurable
+      pipe.x -= Flappy.SPEED; // todo - make this configurable
+      if (pipe.x + Flappy.PIPE_WIDTH < 0) {
+        pipe.x += Flappy.pipes.length * Flappy.PIPE_SPACING;
+      }
     });
-
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
@@ -604,6 +612,11 @@ BlocklyApps.reset = function(first) {
 
   Flappy.birdVelocity = 0;
 
+  // Reset pipes
+  Flappy.pipes.forEach(function (pipe, index) {
+    pipe.x = Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING;
+  });
+
   // Move Ball into position.
   if (Flappy.ballStart_) {
     for (i = 0; i < Flappy.ballCount; i++) {
@@ -614,9 +627,6 @@ BlocklyApps.reset = function(first) {
   // Move Bird into position.
   Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
-
-  // Reset pipes - todo
-  Flappy.pipes[0].x = Flappy.MAZE_WIDTH * 1.5;
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
   Flappy.displayGround(0); // todo
@@ -866,7 +876,7 @@ Flappy.displayBird = function(x, y) {
  * @param {number} ground
  */
 Flappy.displayGround = function(offset) {
-  offset *= 2;
+  offset *= Flappy.SPEED;
   offset = offset % Flappy.GROUND_WIDTH;
   for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
     var ground = document.getElementById('ground' + i);
@@ -887,7 +897,7 @@ Flappy.displayPipes = function () {
 
     var bottomIcon = document.getElementById('pipe_bottom' + i);
     bottomIcon.setAttribute('x', pipe.x);
-    bottomIcon.setAttribute('y', pipe.gapTopY + pipe.gapSize);
+    bottomIcon.setAttribute('y', pipe.gapTopY + Flappy.GAP_SIZE);
 
     // todo - crop bottom
   }
