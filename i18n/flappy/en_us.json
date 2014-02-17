@@ -51,7 +51,7 @@
   "repeatUntil": "repeat until",
   "repeatUntilBlocked": "while path ahead",
   "repeatUntilFinish": "repeat until finish",
-  "scoreText": "Score: {playerScore} : {opponentScore}",
+  "scoreText": "Score: {playerScore}",
   "turnLeft": "turn left",
   "turnRight": "turn right",
   "turnTooltip": "Turns me left or right by 90 degrees.",

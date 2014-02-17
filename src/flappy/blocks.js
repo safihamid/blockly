@@ -152,6 +152,23 @@ exports.install = function(blockly, skin) {
                this.getTitleValue('SOUND') + '\');\n';
   };
 
+  blockly.Blocks.flappy_incrementPlayerScore = {
+    // Block for incrementing the player's score.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.incrementPlayerScore());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.incrementPlayerScoreTooltip());
+    }
+  };
+
+  generator.flappy_incrementPlayerScore = function() {
+    // Generate JavaScript for incrementing the player's score.
+    return 'Flappy.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
+  };
 
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;

@@ -401,22 +401,37 @@ var delegate = function(scope, func, data)
 };
 
 Flappy.onTick = function() {
+  var birdWasAboveGround, birdIsAboveGround;
+
   Flappy.tickCount++;
 
+  // Check for click
   if (Flappy.clickPending) {
     try { Flappy.whenClick(BlocklyApps, api); } catch (e) { }
     Flappy.clickPending = false;
   }
 
-  var birdWasAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  birdWasAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
-  // Don't start until user's first click
+  // todo - potentially show Get Ready text
+  // Action doesn't start until user's first click
   if (Flappy.firstClick) {
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
 
+    // never let the bird go too far off the top or bottom
+    Flappy.birdY = Math.min(Flappy.birdY, Flappy.MAZE_HEIGHT * 1.5);
+    Flappy.birdY = Math.max(Flappy.birdY, Flappy.MAZE_HEIGHT * -0.5);
+
     Flappy.pipes.forEach(function (pipe) {
-      pipe.x -= Flappy.SPEED; // todo - make this configurable
+      var wasRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+      pipe.x -= Flappy.SPEED;
+      var isRightOfBird = pipe.x >= (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+      if (wasRightOfBird && !isRightOfBird) {
+        try { Flappy.whenEnterPipe(BlocklyApps, api); } catch (e) { }
+        // todo - could also mean collide with pipe
+      }
+
       if (pipe.x + Flappy.PIPE_WIDTH < 0) {
         pipe.x += Flappy.pipes.length * Flappy.PIPE_SPACING;
         pipe.gapStart = randomPipeHeight();
@@ -424,7 +439,8 @@ Flappy.onTick = function() {
     });
   }
 
-  var birdIsAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  // check for ground collision
+  birdIsAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
   if (birdWasAboveGround && !birdIsAboveGround) {
     try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
   }
@@ -617,12 +633,9 @@ BlocklyApps.reset = function(first) {
 
   // Reset the score.
   Flappy.playerScore = 0;
-  Flappy.opponentScore = 0;
-  if (Flappy.goalLocated_) {
-    var scoreCell = document.getElementById('score-cell');
-    scoreCell.className = 'score-cell-enabled';
-    Flappy.displayScore();
-  }
+  var scoreCell = document.getElementById('score-cell');
+  scoreCell.className = 'score-cell-enabled';
+  Flappy.displayScore();
 
   Flappy.birdVelocity = 0;
 
@@ -782,6 +795,14 @@ Flappy.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
+  var codeEnterPipe = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'flappy_whenEnterPipe');
+  var whenEnterPipeFunc = codegen.functionFromCode(
+                                     codeEnterPipe, {
+                                      BlocklyApps: BlocklyApps,
+                                      Flappy: api } );
+
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
@@ -789,6 +810,7 @@ Flappy.execute = function() {
   // Set event handlers and start the onTick timer
   Flappy.whenClick = whenClickFunc;
   Flappy.whenCollideGround = whenCollideGroundFunc;
+  Flappy.whenEnterPipe = whenEnterPipeFunc;
 
   Flappy.tickCount = 0;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
@@ -920,8 +942,6 @@ Flappy.displayPipes = function () {
     var bottomIcon = document.getElementById('pipe_bottom' + i);
     bottomIcon.setAttribute('x', pipe.x);
     bottomIcon.setAttribute('y', pipe.gapStart + Flappy.GAP_SIZE);
-
-    // todo - crop bottom
   }
 };
 
@@ -929,10 +949,9 @@ Flappy.displayPipes = function () {
  * Display the score in the span element below the visualization.
  */
 Flappy.displayScore = function() {
-  var scoreElement = document.getElementById('bounce-score');
+  var scoreElement = document.getElementById('flappy-score');
   scoreElement.innerText = flappyMsg.scoreText({
-    playerScore: Flappy.playerScore,
-    opponentScore: Flappy.opponentScore
+    playerScore: Flappy.playerScore
   });
 };
 
