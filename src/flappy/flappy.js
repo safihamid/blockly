@@ -39,6 +39,8 @@ Flappy.gravity = 1;
 var level;
 var skin;
 
+Flappy.pipes = [];
+
 /**
  * Milliseconds between each animation frame.
  */
@@ -98,6 +100,16 @@ var loadLevel = function() {
 
   Flappy.GROUND_WIDTH = 50;
   Flappy.GROUND_HEIGHT = 65;
+
+  Flappy.PIPE_WIDTH = 52;
+  Flappy.PIPE_HEIGHT = 320;
+  Flappy.MIN_PIPE_HEIGHT = 48;
+
+  Flappy.pipes.push({
+    x: Flappy.MAZE_WIDTH * 1.5, // start off screen
+    gapTopY: 150,
+    gapSize: 50
+  });
 };
 
 
@@ -307,7 +319,7 @@ var drawMap = function() {
   // todo - make this conditional on something, as first level wont have ground
   {
     // todo - can almost certainly do better than having a bunch of individual icons
-    for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+    for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
       var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
       groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                               skin.ground);
@@ -318,6 +330,26 @@ var drawMap = function() {
       svg.appendChild(groundIcon);
     }
   }
+
+  // Add pipes
+  // todo - think about how this works as we cycle pipes
+  Flappy.pipes.forEach (function (pipe, index) {
+    var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    pipeTopIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.pipe_top);
+    pipeTopIcon.setAttribute('id', 'pipe_top' + index);
+    pipeTopIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
+    pipeTopIcon.setAttribute('width', Flappy.PIPE_WIDTH);
+    svg.appendChild(pipeTopIcon);
+
+    var pipeBottomIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    pipeBottomIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.pipe_bottom);
+    pipeBottomIcon.setAttribute('id', 'pipe_bottom' + index);
+    pipeBottomIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
+    pipeBottomIcon.setAttribute('width', Flappy.PIPE_WIDTH);
+    svg.appendChild(pipeBottomIcon);
+  });
 
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
@@ -366,10 +398,16 @@ Flappy.onTick = function() {
   if (Flappy.firstClick) {
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
+
+    Flappy.pipes.forEach(function (pipe) {
+      pipe.x -= 5; // todo - make this configurable
+    });
+
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
   Flappy.displayGround(Flappy.tickCount);
+  Flappy.displayPipes();
 
 
   if (Flappy.allFinishesComplete()) {
@@ -573,12 +611,17 @@ BlocklyApps.reset = function(first) {
     }
   }
 
-  // Move Paddle into position.
+  // Move Bird into position.
   Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
 
+  // Reset pipes - todo
+  Flappy.pipes[0].x = Flappy.MAZE_WIDTH * 1.5;
+
   Flappy.displayBird(Flappy.birdX, Flappy.birdY, 0);
   Flappy.displayGround(0); // todo
+
+  Flappy.displayPipes();
 
   var svg = document.getElementById('svgBounce');
 
@@ -829,6 +872,24 @@ Flappy.displayGround = function(offset) {
     var ground = document.getElementById('ground' + i);
     ground.setAttribute('x', -offset + i * Flappy.GROUND_WIDTH);
     ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  }
+};
+
+/**
+ * Display all pipes
+ */
+Flappy.displayPipes = function () {
+  for (var i = 0; i < Flappy.pipes.length; i++) {
+    var pipe = Flappy.pipes[i];
+    var topIcon = document.getElementById('pipe_top' + i);
+    topIcon.setAttribute('x', pipe.x);
+    topIcon.setAttribute('y', pipe.gapTopY - Flappy.PIPE_HEIGHT);
+
+    var bottomIcon = document.getElementById('pipe_bottom' + i);
+    bottomIcon.setAttribute('x', pipe.x);
+    bottomIcon.setAttribute('y', pipe.gapTopY + pipe.gapSize);
+
+    // todo - crop bottom
   }
 };
 
