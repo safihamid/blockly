@@ -44,7 +44,7 @@
   "tooMuchWork": "Je laat me veel werk doen! Kun je proberen minder te herhalen?",
   "toolboxHeader": "Blokken",
   "openWorkspace": "Hoe het werkt",
-  "totalNumLinesOfCodeWritten": "Totale tijd: {numBlocks, plural, one {1 regel} other {# regels}} code.",
+  "totalNumLinesOfCodeWritten": "Totale tijd: {numLines, plural, one {1 regel} other {# regels}} code.",
   "tryAgain": "Probeer opnieuw",
   "backToPreviousLevel": "Terug naar het vorige niveau",
   "typeCode": "Typ jouw JavaScript-code onder deze instructies.",
