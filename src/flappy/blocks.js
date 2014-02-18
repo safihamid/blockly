@@ -176,6 +176,23 @@ exports.install = function(blockly, skin) {
     return 'Flappy.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
   };
 
+  blockly.Blocks.flappy_endGame = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.endGame());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.endGameTooltip());
+    }
+  };
+
+  generator.flappy_endGame = function() {
+    // Generate JavaScript for incrementing the player's score.
+    return 'Flappy.endGame(\'block_id_' + this.id + '\');\n';
+  };
+
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
 };

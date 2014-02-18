@@ -8,6 +8,8 @@
   "dirW": "W",
   "doCode": "do",
   "elseCode": "else",
+  "endGame": "end game",
+  "endGameTooltip": "Ends the game.",
   "finalLevel": "Congratulations! You have solved the final puzzle.",
   "flap": "Flap",
   "flapTooltip": "Fly Flappy upwards.",

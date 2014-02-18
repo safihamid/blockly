@@ -32,7 +32,7 @@ Flappy.firstClick = false;
 Flappy.keyState = {};
 Flappy.btnState = {};
 Flappy.clickPending = false;
-Flappy.collisionSafeZone = 0;
+Flappy.endingGame = false;
 
 Flappy.birdVelocity = 0;
 Flappy.gravity = 1;
@@ -427,7 +427,7 @@ Flappy.onTick = function() {
   Flappy.tickCount++;
 
   // Check for click
-  if (Flappy.clickPending) {
+  if (Flappy.clickPending && !Flappy.endingGame) {
     try { Flappy.whenClick(BlocklyApps, api); } catch (e) { }
     Flappy.clickPending = false;
   }
@@ -437,7 +437,7 @@ Flappy.onTick = function() {
 
   // todo - potentially show Get Ready text
   // Action doesn't start until user's first click
-  if (Flappy.firstClick) {
+  if (Flappy.firstClick && !Flappy.endingGame) {
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
 
@@ -469,13 +469,23 @@ Flappy.onTick = function() {
         pipe.reset(Flappy.pipes.length * Flappy.PIPE_SPACING);
       }
     });
+
+    // check for ground collision
+    birdIsAboveGround = (Flappy.birdY + Flappy.PEGMAN_HEIGHT) <
+      (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+    if (birdWasAboveGround && !birdIsAboveGround) {
+      try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
+    }
   }
 
-  // check for ground collision
-  birdIsAboveGround = (Flappy.birdY + Flappy.PEGMAN_HEIGHT) <
-    (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
-  if (birdWasAboveGround && !birdIsAboveGround) {
-    try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
+  if (Flappy.endingGame) {
+    Flappy.birdY += 15;
+    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_HEIGHT + 1;
+    if (Flappy.birdY >= max) {
+      Flappy.birdY = max;
+      Flappy.clearEventHandlersKillTickLoop();
+      // todo - think about interaction of this and puzzle completion
+    }
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
@@ -599,14 +609,10 @@ Flappy.init = function(config) {
  * Clear the event handlers and stop the onTick timer.
  */
 Flappy.clearEventHandlersKillTickLoop = function() {
-  Flappy.whenWallCollided = null;
-  Flappy.whenBallInGoal = null;
-  Flappy.whenBallMissesPaddle = null;
-  Flappy.whenPaddleCollided = null;
-  Flappy.whenDown = null;
-  Flappy.whenLeft = null;
-  Flappy.whenRight = null;
-  Flappy.whenUp = null;
+  Flappy.whenClick = null;
+  Flappy.whenCollideGround = null;
+  Flappy.whenCollidePipe = null;
+  Flappy.whenEnterPipe = null;
   if (Flappy.intervalId) {
     window.clearInterval(Flappy.intervalId);
   }
@@ -676,7 +682,7 @@ BlocklyApps.reset = function(first) {
   Flappy.displayScore();
 
   Flappy.birdVelocity = 0;
-  Flappy.collisionSafeZone = 0
+  Flappy.endingGame = false;
 
   // Reset pipes
   Flappy.pipes.forEach(function (pipe, index) {

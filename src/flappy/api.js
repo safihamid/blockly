@@ -8,8 +8,14 @@ exports.playSound = function(id, soundName) {
 };
 
 exports.flap = function (id, velocity) {
+  BlocklyApps.highlight(id);
   Flappy.birdVelocity = velocity;
 };
+
+exports.endGame = function (id) {
+  BlocklyApps.highlight(id);
+  Flappy.endingGame = true;
+}
 
 exports.incrementOpponentScore = function(id) {
   BlocklyApps.highlight(id);
