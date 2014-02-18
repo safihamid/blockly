@@ -41,6 +41,12 @@ grunt test
 
 One of the node modules, node-canvas, depends on Cairo being installed.
 Instructions for installing Cairo can be found at https://github.com/LearnBoost/node-canvas/wiki.
+Instructions for MacOSX:
+```
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"
+brew update
+brew install cairo
+```
 
 ## Project Specification
 
