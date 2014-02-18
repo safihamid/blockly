@@ -28,6 +28,7 @@ var parseXmlElement = require('./xml').parseElement;
 var feedback = require('./feedback.js');
 var dom = require('./dom');
 var utils = require('./utils');
+var builder = require('./builder');
 var Slider = require('./slider');
 
 //TODO: These should be members of a BlocklyApp instance.
@@ -619,7 +620,23 @@ BlocklyApps.report = function(options) {
   // Disable the run button until onReportComplete is called.
   if (!BlocklyApps.share) {
     document.getElementById('runButton').setAttribute('disabled', 'disabled');
-    onAttempt(report);
+
+    var onAttemptCallback = (function() {
+      return function(builderDetails) {
+        for (var option in builderDetails) {
+          report[option] = builderDetails[option];
+        }
+        onAttempt(report);
+      };
+    })();
+
+    // If this is the level builder, go to builderForm to get more info from
+    // the level builder.
+    if (options.builder) {
+      builder.builderForm(onAttemptCallback);
+    } else {
+      onAttemptCallback();
+    }
   }
 };
 

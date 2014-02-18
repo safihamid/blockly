@@ -20,12 +20,12 @@ exports.PADDLE_BALL_COLLIDE_DISTANCE = 0.7;
  * @enum {number}
  */
 exports.SquareType = {
-  WALL: 0,
-  OPEN: 1,
-  BALLFINISH: 2,
-  PADDLEFINISH: 3,
-  OBSTACLE: 4,
-  GOAL: 5,
-  BALLSTART: 6,
-  PADDLESTART: 7
+  OPEN: 0,
+  WALL: 1,
+  GOAL: 2,
+  BALLSTART: 4,
+  PADDLEFINISH: 8,
+  PADDLESTART: 16,
+  BALLFINISH: 32,
+  OBSTACLE: 64
 };

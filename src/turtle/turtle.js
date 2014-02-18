@@ -664,6 +664,7 @@ Turtle.checkAnswer = function() {
     BlocklyApps.report({
       app: 'turtle',
       level: level.id,
+      builder: level.builder,
       result: BlocklyApps.levelComplete,
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
@@ -674,6 +675,7 @@ Turtle.checkAnswer = function() {
     BlocklyApps.report({
       app: 'turtle',
       level: level.id,
+      builder: level.builder,
       result: BlocklyApps.levelComplete,
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
