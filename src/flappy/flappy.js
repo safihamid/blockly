@@ -318,7 +318,6 @@ Flappy.onTick = function() {
   birdWasAboveGround = (Flappy.birdY + Flappy.PEGMAN_HEIGHT) <
     (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
-  // todo - potentially show Get Ready text
   // Action doesn't start until user's first click
   if (Flappy.firstClick && !Flappy.endingGame) {
     Flappy.birdVelocity += Flappy.gravity;
@@ -334,7 +333,7 @@ Flappy.onTick = function() {
 
       pipe.x -= Flappy.SPEED;
 
-      var isRightOfBird = pipe.x >= (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+      var isRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
       if (wasRightOfBird && !isRightOfBird) {
         if (Flappy.birdY > pipe.gapStart &&
           (Flappy.birdY + Flappy.PEGMAN_HEIGHT < pipe.gapStart + Flappy.GAP_SIZE)) {
