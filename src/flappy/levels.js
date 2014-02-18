@@ -360,10 +360,10 @@ module.exports = {
           <block type="flappy_incrementPlayerScore"></block> \
           <block type="flappy_endGame"></block>'),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" movable="false" x="20" y="20"></block> \
-      <block type="flappy_whenCollideGround" deletable="false" movable="false" x="240" y="20"></block> \
-      <block type="flappy_whenCollidePipe" deletable="false" movable="false" x="20" y="140"></block> \
-      <block type="flappy_whenEnterPipe" deletable="false" movable="false" x="240" y="140"></block> \
-      <block type="flappy_whenRunButtonClick" deletable="false" movable="false" x="20" y="260"></block>'
+     '<block type="flappy_whenClick" deletable="false" x="20" y="20"></block> \
+      <block type="flappy_whenCollideGround" deletable="false" x="240" y="20"></block> \
+      <block type="flappy_whenCollidePipe" deletable="false" x="20" y="140"></block> \
+      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="140"></block> \
+      <block type="flappy_whenRunButtonClick" deletable="false" x="20" y="260"></block>'
   }
 };

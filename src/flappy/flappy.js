@@ -430,6 +430,10 @@ Flappy.onTick = function() {
 
   Flappy.tickCount++;
 
+  if (Flappy.tickCount === 1) {
+    try { Flappy.whenRunButton(BlocklyApps, api); } catch (e) { }
+  }
+
   // Check for click
   if (Flappy.clickPending && !Flappy.endingGame) {
     try { Flappy.whenClick(BlocklyApps, api); } catch (e) { }
@@ -503,7 +507,9 @@ Flappy.onTick = function() {
   Flappy.displayPipes();
 
   // todo - stop updating ground if endingGame
-  Flappy.displayGround(Flappy.tickCount);
+  if (!Flappy.endGame) {
+    Flappy.displayGround(Flappy.tickCount);
+  }
 
   if (Flappy.allFinishesComplete()) {
     Flappy.result = ResultType.SUCCESS;
@@ -626,6 +632,7 @@ Flappy.clearEventHandlersKillTickLoop = function() {
   Flappy.whenCollideGround = null;
   Flappy.whenCollidePipe = null;
   Flappy.whenEnterPipe = null;
+  Flappy.whenRunButton = null;
   if (Flappy.intervalId) {
     window.clearInterval(Flappy.intervalId);
   }
@@ -870,6 +877,14 @@ Flappy.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
+  var codeWhenRunButton = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'flappy_whenRunButtonClick');
+  var whenRunButtonFunc = codegen.functionFromCode(
+                                     codeWhenRunButton, {
+                                      BlocklyApps: BlocklyApps,
+                                      Flappy: api } );
+
 
   BlocklyApps.playAudio('start', {volume: 0.5});
 
@@ -880,6 +895,7 @@ Flappy.execute = function() {
   Flappy.whenCollideGround = whenCollideGroundFunc;
   Flappy.whenEnterPipe = whenEnterPipeFunc;
   Flappy.whenCollidePipe = whenCollidePipeFunc;
+  Flappy.whenRunButton = whenRunButtonFunc;
 
   Flappy.tickCount = 0;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
