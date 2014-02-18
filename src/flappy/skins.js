@@ -27,6 +27,9 @@ exports.load = function(assetUrl, id) {
   skin.ground = skin.assetUrl('ground.png');
   skin.pipe_top = skin.assetUrl('pipe_top.png');
   skin.pipe_bottom = skin.assetUrl('pipe_bottom.png');
+  skin.instructions = skin.assetUrl('instructions.png');
+  skin.getready = skin.assetUrl('getready.png');
+  skin.gameover = skin.assetUrl('gameover.png');
 
   skin.tiles = skin.assetUrl('tiles.png');
   skin.goal = skin.assetUrl('goal.png');

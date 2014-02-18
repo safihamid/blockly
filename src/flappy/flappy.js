@@ -352,7 +352,8 @@ var drawMap = function() {
                             skin.avatar);
     birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
     birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
+    // todo - dont think i need this until i start animating bird
+    // birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
     svg.appendChild(birdIcon);
   }
 
@@ -369,6 +370,39 @@ var drawMap = function() {
       svg.appendChild(groundIcon);
     }
   }
+
+  var instructions = document.createElementNS(Blockly.SVG_NS, 'image');
+  instructions.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.instructions);
+  instructions.setAttribute('id', 'instructions');
+  instructions.setAttribute('height', 98);
+  instructions.setAttribute('width', 114);
+  instructions.setAttribute('x', 143);
+  instructions.setAttribute('y', 125);
+  instructions.setAttribute('visibility', 'visible');
+  svg.appendChild(instructions);
+
+  var getready = document.createElementNS(Blockly.SVG_NS, 'image');
+  getready.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.getready);
+  getready.setAttribute('id', 'getready');
+  getready.setAttribute('height', 50);
+  getready.setAttribute('width', 183);
+  getready.setAttribute('x', 108);
+  getready.setAttribute('y', 50);
+  getready.setAttribute('visibility', 'visible');
+  svg.appendChild(getready);
+
+  var gameover = document.createElementNS(Blockly.SVG_NS, 'image');
+  gameover.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.gameover);
+  gameover.setAttribute('id', 'gameover');
+  gameover.setAttribute('height', 41);
+  gameover.setAttribute('width', 192);
+  gameover.setAttribute('x', 104);
+  gameover.setAttribute('y', 50);
+  gameover.setAttribute('visibility', 'hidden');
+  svg.appendChild(gameover);
 
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
@@ -498,6 +532,7 @@ Flappy.onTick = function() {
     document.getElementById('bird').setAttribute('transform',
       'translate(' + Flappy.PEGMAN_WIDTH + ', 0) ' +
       'rotate(90, ' + Flappy.birdX + ', ' + Flappy.birdY + ')');
+    document.getElementById('gameover').setAttribute('visibility', 'visibile');
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
@@ -522,6 +557,8 @@ Flappy.onMouseDown = function (e) {
   if (Flappy.intervalId) {
     Flappy.clickPending = true;
     Flappy.firstClick = true;
+    document.getElementById('instructions').setAttribute('visibility', 'hidden');
+    document.getElementById('getready').setAttribute('visibility', 'hidden');
   }
 };
 /**
@@ -718,10 +755,13 @@ BlocklyApps.reset = function(first) {
   Flappy.FLAP_VELOCITY = -11;
 
   // Move Bird into position.
-  Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
-  Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
+  Flappy.birdX = 110;
+  Flappy.birdY = 150;
 
   document.getElementById('bird').removeAttribute('transform');
+  document.getElementById('instructions').setAttribute('visibility', 'visible');
+  document.getElementById('getready').setAttribute('visibility', 'visible');
+  document.getElementById('gameover').setAttribute('visibility', 'hidden');
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
