@@ -479,17 +479,25 @@ Flappy.onTick = function() {
   }
 
   if (Flappy.endingGame) {
-    Flappy.birdY += 15;
-    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_HEIGHT + 1;
+    Flappy.birdY += 10;
+
+    // we use flappy width instead of height bc he has rotated
+    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_WIDTH;
     if (Flappy.birdY >= max) {
       Flappy.birdY = max;
       Flappy.clearEventHandlersKillTickLoop();
       // todo - think about interaction of this and puzzle completion
     }
+
+    document.getElementById('bird').setAttribute('transform',
+      'translate(' + Flappy.PEGMAN_WIDTH + ', 0) ' +
+      'rotate(90, ' + Flappy.birdX + ', ' + Flappy.birdY + ')');
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
+
+  // todo - stop updating ground if endingGame
   Flappy.displayGround(Flappy.tickCount);
 
   if (Flappy.allFinishesComplete()) {
