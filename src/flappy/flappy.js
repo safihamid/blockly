@@ -32,6 +32,7 @@ Flappy.firstClick = false;
 Flappy.keyState = {};
 Flappy.btnState = {};
 Flappy.clickPending = false;
+Flappy.collisionSafeZone = 0;
 
 Flappy.birdVelocity = 0;
 Flappy.gravity = 1;
@@ -111,6 +112,8 @@ var loadLevel = function() {
   Flappy.PIPE_HEIGHT = 320;
   Flappy.MIN_PIPE_HEIGHT = 48;
 
+  Flappy.FLAP_VELOCITY = -10;
+
 
   // todo - make sure somewhere that MIN_PIPE_HEIGHT + GAP_SIZE + PIPE_HEIGHT always gets us over MAZE_HEIGHT
   Flappy.GAP_SIZE = 100;
@@ -122,7 +125,13 @@ var loadLevel = function() {
   for (var i = 0; i < numPipes; i++) {
     Flappy.pipes.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.PIPE_SPACING,
-      gapStart: 0 // y coordinate of the top of the gap
+      gapStart: randomPipeHeight(), // y coordinate of the top of the gap
+      hitBird: false,
+      reset: function (x) {
+        this.x = x;
+        this.gapStart = randomPipeHeight();
+        this.hitBird = false;
+      }
     });
   }
 };
@@ -309,28 +318,6 @@ var drawMap = function() {
     }
   }
 
-  if (Flappy.paddleStart_) {
-    // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
-    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-    birdClip.setAttribute('id', 'birdClipPath');
-    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-    birdClipRect.setAttribute('id', 'birdClipRect');
-    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdClip.appendChild(birdClipRect);
-    svg.appendChild(birdClip);
-
-    // Add bird.
-    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    birdIcon.setAttribute('id', 'bird');
-    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.avatar);
-    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
-    svg.appendChild(birdIcon);
-  }
-
   // Add pipes
   Flappy.pipes.forEach (function (pipe, index) {
     var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -374,7 +361,27 @@ var drawMap = function() {
   });
   svg.appendChild(clickRect);
 
+  if (Flappy.paddleStart_) {
+    // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
+    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+    birdClip.setAttribute('id', 'birdClipPath');
+    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+    birdClipRect.setAttribute('id', 'birdClipRect');
+    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
+    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    birdClip.appendChild(birdClipRect);
+    svg.appendChild(birdClip);
 
+    // Add bird.
+    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    birdIcon.setAttribute('id', 'bird');
+    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.avatar);
+    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
+    birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
+    svg.appendChild(birdIcon);
+  }
 };
 
 Flappy.calcDistance = function(xDist, yDist) {
@@ -400,6 +407,20 @@ var delegate = function(scope, func, data)
   };
 };
 
+/**
+ * Check to see if bird is in collision with given pipe
+ * @param pipe Object : The pipe object we're checking
+ */
+var checkForPipeCollision = function (pipe) {
+  var insidePipeColumn = Flappy.birdX + Flappy.PEGMAN_WIDTH >= pipe.x &&
+    Flappy.birdX <= pipe.x + Flappy.PIPE_WIDTH;
+  if (insidePipeColumn && (Flappy.birdY <= pipe.gapStart ||
+    Flappy.birdY + Flappy.PEGMAN_HEIGHT >= pipe.gapStart + Flappy.GAP_SIZE)) {
+    return true;
+  }
+  return false;
+}
+
 Flappy.onTick = function() {
   var birdWasAboveGround, birdIsAboveGround;
 
@@ -411,7 +432,8 @@ Flappy.onTick = function() {
     Flappy.clickPending = false;
   }
 
-  birdWasAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  birdWasAboveGround = (Flappy.birdY + Flappy.PEGMAN_HEIGHT) <
+    (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
   // todo - potentially show Get Ready text
   // Action doesn't start until user's first click
@@ -420,27 +442,38 @@ Flappy.onTick = function() {
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
 
     // never let the bird go too far off the top or bottom
-    Flappy.birdY = Math.min(Flappy.birdY, Flappy.MAZE_HEIGHT * 1.5);
+    Flappy.birdY = Math.min(Flappy.birdY, Flappy.MAZE_HEIGHT -
+        Flappy.GROUND_HEIGHT - Flappy.PEGMAN_HEIGHT + 1);
     Flappy.birdY = Math.max(Flappy.birdY, Flappy.MAZE_HEIGHT * -0.5);
 
     Flappy.pipes.forEach(function (pipe) {
       var wasRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+
       pipe.x -= Flappy.SPEED;
+
       var isRightOfBird = pipe.x >= (Flappy.birdX + Flappy.PEGMAN_WIDTH);
       if (wasRightOfBird && !isRightOfBird) {
-        try { Flappy.whenEnterPipe(BlocklyApps, api); } catch (e) { }
-        // todo - could also mean collide with pipe
+        if (Flappy.birdY > pipe.gapStart &&
+          (Flappy.birdY + Flappy.PEGMAN_HEIGHT < pipe.gapStart + Flappy.GAP_SIZE)) {
+          try { Flappy.whenEnterPipe(BlocklyApps, api); } catch (e) { }
+        }
       }
 
+      if (!pipe.hitBird && checkForPipeCollision(pipe)) {
+        pipe.hitBird = true;
+        try {Flappy.whenCollidePipe(BlocklyApps, api); } catch (e) { }
+      }
+
+      // If pipe moves off left side, repurpose as a new pipe to our right
       if (pipe.x + Flappy.PIPE_WIDTH < 0) {
-        pipe.x += Flappy.pipes.length * Flappy.PIPE_SPACING;
-        pipe.gapStart = randomPipeHeight();
+        pipe.reset(Flappy.pipes.length * Flappy.PIPE_SPACING);
       }
     });
   }
 
   // check for ground collision
-  birdIsAboveGround = Flappy.birdY < (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  birdIsAboveGround = (Flappy.birdY + Flappy.PEGMAN_HEIGHT) <
+    (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
   if (birdWasAboveGround && !birdIsAboveGround) {
     try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
   }
@@ -499,6 +532,11 @@ Flappy.init = function(config) {
       Blockly.loadAudio_(skin.wall2Sound, 'wall2');
       Blockly.loadAudio_(skin.wall3Sound, 'wall3');
       Blockly.loadAudio_(skin.wall4Sound, 'wall4');
+      Blockly.loadAudio_(skin.dieSound, 'sfx_die');
+      Blockly.loadAudio_(skin.hitSound, 'sfx_hit');
+      Blockly.loadAudio_(skin.pointSound, 'sfx_point');
+      Blockly.loadAudio_(skin.swooshingSound, 'sfx_swooshing');
+      Blockly.loadAudio_(skin.wingSound, 'sfx_wing');
       Blockly.loadAudio_(skin.winGoalSound, 'winGoal');
     }
   };
@@ -638,11 +676,11 @@ BlocklyApps.reset = function(first) {
   Flappy.displayScore();
 
   Flappy.birdVelocity = 0;
+  Flappy.collisionSafeZone = 0
 
   // Reset pipes
   Flappy.pipes.forEach(function (pipe, index) {
-    pipe.x = Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING;
-    pipe.gapStart = randomPipeHeight();
+    pipe.reset(Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING);
   });
 
   // Move Ball into position.
@@ -803,6 +841,15 @@ Flappy.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
+  var codeCollidePipe = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'flappy_whenCollidePipe');
+  var whenCollidePipeFunc = codegen.functionFromCode(
+                                     codeCollidePipe, {
+                                      BlocklyApps: BlocklyApps,
+                                      Flappy: api } );
+
+
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
@@ -811,6 +858,7 @@ Flappy.execute = function() {
   Flappy.whenClick = whenClickFunc;
   Flappy.whenCollideGround = whenCollideGroundFunc;
   Flappy.whenEnterPipe = whenEnterPipeFunc;
+  Flappy.whenCollidePipe = whenCollidePipeFunc;
 
   Flappy.tickCount = 0;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);

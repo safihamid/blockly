@@ -62,6 +62,13 @@ exports.load = function(assetUrl, id) {
   skin.wall2Sound = [skin.assetUrl('wall2.mp3'), skin.assetUrl('wall2.ogg')];
   skin.wall3Sound = [skin.assetUrl('wall3.mp3'), skin.assetUrl('wall3.ogg')];
   skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
+
+  // todo - add oggs
+  skin.dieSound = [skin.assetUrl('sfx_die.mp3')];
+  skin.hitSound = [skin.assetUrl('sfx_hit.mp3')];
+  skin.pointSound = [skin.assetUrl('sfx_point.mp3')];
+  skin.swooshingSound = [skin.assetUrl('sfx_swooshing.mp3')];
+  skin.wingSound = [skin.assetUrl('sfx_wing.mp3')];
   skin.additionalSound = config.additionalSound;
   // Settings
   skin.graph = config.graph;

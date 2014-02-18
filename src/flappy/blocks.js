@@ -126,7 +126,7 @@ exports.install = function(blockly, skin) {
   generator.flappy_flap = function (velocity) {
     // Generate JavaScript for moving left.
     // todo - dont hardcode velocity
-    return 'Flappy.flap(\'block_id_' + this.id + '\', -15);\n';
+    return 'Flappy.flap(\'block_id_' + this.id + '\', ' + Flappy.FLAP_VELOCITY + ');\n';
   };
 
   blockly.Blocks.flappy_playSound = {
@@ -142,9 +142,15 @@ exports.install = function(blockly, skin) {
     }
   };
 
+  // todo - add messages
   blockly.Blocks.flappy_playSound.SOUNDS =
       [[msg.playSoundBounce(), 'wall'],
-       [msg.playSoundCrunch(), 'wall0']];
+       [msg.playSoundCrunch(), 'wall0'],
+       [msg.playSoundDie(), 'sfx_die'],
+       [msg.playSoundHit(), 'sfx_hit'],
+       [msg.playSoundPoint(), 'sfx_point'],
+       [msg.playSoundSwoosh(), 'sfx_swooshing'],
+       [msg.playSoundWing(), 'sfx_wing']];
 
   generator.flappy_playSound = function() {
     // Generate JavaScript for playing a sound.
