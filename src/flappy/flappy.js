@@ -18,7 +18,6 @@ var page = require('../templates/page.html');
 var feedback = require('../feedback.js');
 var dom = require('../dom');
 
-var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
 
 /**
@@ -29,8 +28,6 @@ var Flappy = module.exports;
 // Don't start the game until first click
 Flappy.firstClick = false;
 
-Flappy.keyState = {};
-Flappy.btnState = {};
 Flappy.clickPending = false;
 Flappy.endingGame = false;
 
@@ -50,12 +47,6 @@ var stepSpeed;
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 
-var getTile = function(map, x, y) {
-  if (map && map[y]) {
-    return map[y][x];
-  }
-};
-
 var randomPipeHeight = function () {
   var min = Flappy.MIN_PIPE_HEIGHT;
   var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.MIN_PIPE_HEIGHT - Flappy.GAP_SIZE;
@@ -73,10 +64,7 @@ Flappy.scale = {
 
 var loadLevel = function() {
   // Load maps.
-  Flappy.map = level.map;
   Flappy.timeoutFailureTick = level.timeoutFailureTick || Infinity;
-  Flappy.softButtons_ = level.softButtons || [];
-  Flappy.respawnBalls = level.respawnBalls || false;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
@@ -86,14 +74,7 @@ var loadLevel = function() {
   }
 
   // Measure maze dimensions and set sizes.
-  // ROWS: Number of tiles down.
-  Flappy.ROWS = Flappy.map.length;
-  // COLS: Number of tiles across.
-  Flappy.COLS = Flappy.map[0].length;
-  // Initialize the wallMap.
-  initWallMap();
-  // Pixel height and width of each maze square (i.e. tile).
-  Flappy.SQUARE_SIZE = 50;
+  // todo - rename to bird
   Flappy.PEGMAN_HEIGHT = skin.pegmanHeight;
   Flappy.PEGMAN_WIDTH = skin.pegmanWidth;
   Flappy.PEGMAN_Y_OFFSET = skin.pegmanYOffset;
@@ -101,9 +82,8 @@ var loadLevel = function() {
   Flappy.MARKER_HEIGHT = 43;
   Flappy.MARKER_WIDTH = 50;
 
-  Flappy.MAZE_WIDTH = Flappy.SQUARE_SIZE * Flappy.COLS;
-  Flappy.MAZE_HEIGHT = Flappy.SQUARE_SIZE * Flappy.ROWS;
-  Flappy.PATH_WIDTH = Flappy.SQUARE_SIZE / 3;
+  Flappy.MAZE_WIDTH = 400;
+  Flappy.MAZE_HEIGHT = 400;
 
   Flappy.GROUND_WIDTH = 24;
   Flappy.GROUND_HEIGHT = 48;
@@ -119,6 +99,9 @@ var loadLevel = function() {
   Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
 
   var numPipes = 2 * Flappy.MAZE_WIDTH / Flappy.PIPE_SPACING;
+  if (level.noPipes) {
+    numPipes = 0;
+  }
   for (var i = 0; i < numPipes; i++) {
     Flappy.pipes.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.PIPE_SPACING,
@@ -133,47 +116,13 @@ var loadLevel = function() {
   }
 };
 
-
-var initWallMap = function() {
-  Flappy.wallMap = new Array(Flappy.ROWS);
-  for (var y = 0; y < Flappy.ROWS; y++) {
-    Flappy.wallMap[y] = new Array(Flappy.COLS);
-  }
-};
-
 /**
  * PIDs of async tasks currently executing.
  */
 Flappy.pidList = [];
 
-// Map each possible shape to a sprite.
-// Input: Binary string representing Centre/North/West/South/East squares.
-// Output: [x, y] coordinates of each tile's sprite in tiles.png.
-var TILE_SHAPES = {
-  '10010': [4, 0],  // Dead ends
-  '10001': [3, 3],
-  '11000': [0, 1],
-  '10100': [0, 2],
-  '11010': [4, 1],  // Vertical
-  '10101': [3, 2],  // Horizontal
-  '10110': [0, 0],  // Elbows
-  '10011': [2, 0],
-  '11001': [4, 2],
-  '11100': [2, 3],
-  '11110': [1, 1],  // Junctions
-  '10111': [1, 0],
-  '11011': [2, 1],
-  '11101': [1, 2],
-  '11111': [2, 2],  // Cross
-  'null0': [4, 3],  // Empty
-  'null1': [3, 0],
-  'null2': [3, 1],
-  'null3': [0, 3],
-  'null4': [1, 3]
-};
-
 var drawMap = function() {
-  var svg = document.getElementById('svgBounce');
+  var svg = document.getElementById('svgFlappy');
   var i, x, y, k, tile;
 
   // Draw the outer square.
@@ -213,108 +162,6 @@ var drawMap = function() {
     svg.appendChild(tile);
   }
 
-  if (skin.graph) {
-    // Draw the grid lines.
-    // The grid lines are offset so that the lines pass through the centre of
-    // each square.  A half-pixel offset is also added to as standard SVG
-    // practice to avoid blurriness.
-    var offset = Flappy.SQUARE_SIZE / 2 + 0.5;
-    for (k = 0; k < Flappy.ROWS; k++) {
-      var h_line = document.createElementNS(Blockly.SVG_NS, 'line');
-      h_line.setAttribute('y1', k * Flappy.SQUARE_SIZE + offset);
-      h_line.setAttribute('x2', Flappy.MAZE_WIDTH);
-      h_line.setAttribute('y2', k * Flappy.SQUARE_SIZE + offset);
-      h_line.setAttribute('stroke', skin.graph);
-      h_line.setAttribute('stroke-width', 1);
-      svg.appendChild(h_line);
-    }
-    for (k = 0; k < Flappy.COLS; k++) {
-      var v_line = document.createElementNS(Blockly.SVG_NS, 'line');
-      v_line.setAttribute('x1', k * Flappy.SQUARE_SIZE + offset);
-      v_line.setAttribute('x2', k * Flappy.SQUARE_SIZE + offset);
-      v_line.setAttribute('y2', Flappy.MAZE_HEIGHT);
-      v_line.setAttribute('stroke', skin.graph);
-      v_line.setAttribute('stroke-width', 1);
-      svg.appendChild(v_line);
-    }
-  }
-
-  // Draw the tiles making up the maze map.
-
-  // Return a value of '0' if the specified square is wall or out of bounds '1'
-  // otherwise (empty, obstacle, start, finish).
-  var normalize = function(x, y) {
-    return ((Flappy.map[y] === undefined) ||
-            (Flappy.map[y][x] === undefined) ||
-            (Flappy.map[y][x] == SquareType.WALL)) ? '0' : '1';
-  };
-
-  // Compute and draw the tile for each square.
-  var tileId = 0;
-  for (y = 0; y < Flappy.ROWS; y++) {
-    for (x = 0; x < Flappy.COLS; x++) {
-      // Compute the tile index.
-      tile = normalize(x, y) +
-          normalize(x, y - 1) +  // North.
-          normalize(x + 1, y) +  // West.
-          normalize(x, y + 1) +  // South.
-          normalize(x - 1, y);   // East.
-
-      // Draw the tile.
-      if (!TILE_SHAPES[tile]) {
-        // Empty square.  Use null0 for large areas, with null1-4 for borders.
-        if (tile == '00000' && Math.random() > 0.3) {
-          Flappy.wallMap[y][x] = 0;
-          tile = 'null0';
-        } else {
-          var wallIdx = Math.floor(1 + Math.random() * 4);
-          Flappy.wallMap[y][x] = wallIdx;
-          tile = 'null' + wallIdx;
-        }
-      }
-      var left = TILE_SHAPES[tile][0];
-      var top = TILE_SHAPES[tile][1];
-      // Tile's clipPath element.
-      var tileClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-      tileClip.setAttribute('id', 'tileClipPath' + tileId);
-      var tileClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-      tileClipRect.setAttribute('width', Flappy.SQUARE_SIZE);
-      tileClipRect.setAttribute('height', Flappy.SQUARE_SIZE);
-
-      tileClipRect.setAttribute('x', x * Flappy.SQUARE_SIZE);
-      tileClipRect.setAttribute('y', y * Flappy.SQUARE_SIZE);
-
-      tileClip.appendChild(tileClipRect);
-      svg.appendChild(tileClip);
-      // Tile sprite.
-      var tileElement = document.createElementNS(Blockly.SVG_NS, 'image');
-      tileElement.setAttribute('id', 'tileElement' + tileId);
-      tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
-                                 'xlink:href',
-                                 skin.tiles);
-      tileElement.setAttribute('height', Flappy.SQUARE_SIZE * 4);
-      tileElement.setAttribute('width', Flappy.SQUARE_SIZE * 5);
-      tileElement.setAttribute('clip-path',
-                               'url(#tileClipPath' + tileId + ')');
-      tileElement.setAttribute('x', (x - left) * Flappy.SQUARE_SIZE);
-      tileElement.setAttribute('y', (y - top) * Flappy.SQUARE_SIZE);
-      svg.appendChild(tileElement);
-      // Tile animation
-      var tileAnimation = document.createElementNS(Blockly.SVG_NS,
-                                                   'animate');
-      tileAnimation.setAttribute('id', 'tileAnimation' + tileId);
-      tileAnimation.setAttribute('attributeType', 'CSS');
-      tileAnimation.setAttribute('attributeName', 'opacity');
-      tileAnimation.setAttribute('from', 1);
-      tileAnimation.setAttribute('to', 0);
-      tileAnimation.setAttribute('dur', '1s');
-      tileAnimation.setAttribute('begin', 'indefinite');
-      tileElement.appendChild(tileAnimation);
-
-      tileId++;
-    }
-  }
-
   // Add pipes
   Flappy.pipes.forEach (function (pipe, index) {
     var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -334,31 +181,28 @@ var drawMap = function() {
     svg.appendChild(pipeBottomIcon);
   });
 
-  if (Flappy.paddleStart_) {
-    // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
-    var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-    birdClip.setAttribute('id', 'birdClipPath');
-    var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-    birdClipRect.setAttribute('id', 'birdClipRect');
-    birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdClip.appendChild(birdClipRect);
-    svg.appendChild(birdClip);
+  // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
+  var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+  birdClip.setAttribute('id', 'birdClipPath');
+  var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  birdClipRect.setAttribute('id', 'birdClipRect');
+  birdClipRect.setAttribute('width', Flappy.PEGMAN_WIDTH);
+  birdClipRect.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+  birdClip.appendChild(birdClipRect);
+  svg.appendChild(birdClip);
 
-    // Add bird.
-    var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    birdIcon.setAttribute('id', 'bird');
-    birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.avatar);
-    birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
-    birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
-    // todo - dont think i need this until i start animating bird
-    // birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
-    svg.appendChild(birdIcon);
-  }
+  // Add bird.
+  var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+  birdIcon.setAttribute('id', 'bird');
+  birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                          skin.avatar);
+  birdIcon.setAttribute('height', Flappy.PEGMAN_HEIGHT);
+  birdIcon.setAttribute('width', Flappy.PEGMAN_WIDTH);
+  // todo - dont think i need this until i start animating bird
+  // birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
+  svg.appendChild(birdIcon);
 
-  // todo - make this conditional on something, as first level wont have ground
-  {
+  if (!level.noGround) {
     // todo - can almost certainly do better than having a bunch of individual icons
     for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
       var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -615,38 +459,6 @@ Flappy.init = function(config) {
 
     Blockly.SNAP_RADIUS *= Flappy.scale.snapRadius;
 
-    Flappy.ballCount = 0;
-    Flappy.paddleFinishCount = 0;
-
-    // Locate the start and finish squares.
-    for (var y = 0; y < Flappy.ROWS; y++) {
-      for (var x = 0; x < Flappy.COLS; x++) {
-        if (Flappy.map[y][x] == SquareType.PADDLEFINISH) {
-          if (0 === Flappy.paddleFinishCount) {
-            Flappy.paddleFinish_ = [];
-          }
-          Flappy.paddleFinish_[Flappy.paddleFinishCount] = {x: x, y: y};
-          Flappy.paddleFinishCount++;
-        } else if (Flappy.map[y][x] == SquareType.BALLSTART) {
-          if (0 === Flappy.ballCount) {
-            Flappy.ballStart_ = [];
-            Flappy.ballX = [];
-            Flappy.ballY = [];
-            Flappy.ballD = [];
-          }
-          Flappy.ballStart_[Flappy.ballCount] =
-              {x: x, y: y, d: level.ballDirection || 0};
-          Flappy.ballCount++;
-        } else if (Flappy.map[y][x] == SquareType.PADDLESTART) {
-          Flappy.paddleStart_ = {x: x, y: y};
-        } else if (Flappy.map[y][x] == SquareType.BALLFINISH) {
-          Flappy.ballFinish_ = {x: x, y: y};
-        } else if (Flappy.map[y][x] == SquareType.GOAL) {
-          Flappy.goalLocated_ = true;
-        }
-      }
-    }
-
     drawMap();
   };
 
@@ -674,37 +486,6 @@ Flappy.clearEventHandlersKillTickLoop = function() {
 };
 
 /**
- * Move ball to a safe place off of the screen.
- * @param {int} i Index of ball to be moved.
- */
-Flappy.moveBallOffscreen = function(i) {
-  Flappy.ballX[i] = 100;
-  Flappy.ballY[i] = 100;
-  Flappy.ballD[i] = Math.PI / 2;
-};
-
-/**
- * Play a start sound and reset the ball at index i and redraw it.
- * @param {int} i Index of ball to be reset.
- */
-Flappy.playSoundAndResetBall = function(i) {
-  Flappy.resetBall(i);
-  BlocklyApps.playAudio('start', {volume: 0.5});
-};
-
-/**
- * Reset the ball from index i to the start position and redraw it.
- * @param {int} i Index of ball to be reset.
- */
-Flappy.resetBall = function(i) {
-  Flappy.ballX[i] = Flappy.ballStart_[i].x;
-  Flappy.ballY[i] = Flappy.ballStart_[i].y;
-  Flappy.ballD[i] = Flappy.ballStart_[i].d || 1.25 * Math.PI;
-
-  Flappy.displayBall(i, Flappy.ballX[i], Flappy.ballY[i], 8);
-};
-
-/**
  * Reset the app to the start position and kill any pending animation tasks.
  * @param {boolean} first True if an opening animation is to be played.
  */
@@ -717,17 +498,6 @@ BlocklyApps.reset = function(first) {
     window.clearTimeout(Flappy.pidList[i]);
   }
   Flappy.pidList = [];
-
-  // Soft buttons
-  var softButtonCount = 0;
-  for (i = 0; i < Flappy.softButtons_.length; i++) {
-    document.getElementById(Flappy.softButtons_[i]).style.display = 'inline';
-    softButtonCount++;
-  }
-  if (softButtonCount) {
-    var softButtonsCell = document.getElementById('soft-buttons');
-    softButtonsCell.className = 'soft-buttons-' + softButtonCount;
-  }
 
   // Reset the score.
   Flappy.playerScore = 0;
@@ -767,23 +537,7 @@ BlocklyApps.reset = function(first) {
   Flappy.displayPipes();
   Flappy.displayGround(0); // todo
 
-  var svg = document.getElementById('svgBounce');
-
-  // Reset the tiles
-  var tileId = 0, y, x;
-  for (y = 0; y < Flappy.ROWS; y++) {
-    for (x = 0; x < Flappy.COLS; x++) {
-      // Tile's clipPath element.
-      var tileClip = document.getElementById('tileClipPath' + tileId);
-      tileClip.setAttribute('visibility', 'visible');
-      // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + tileId);
-      tileElement.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', skin.tiles);
-      tileElement.setAttribute('opacity', 1);
-      tileId++;
-    }
-  }
+  var svg = document.getElementById('svgFlappy');
 };
 
 /**
@@ -979,52 +733,6 @@ Flappy.onPuzzleComplete = function() {
 };
 
 /**
- * Replace the tiles surronding the obstacle with broken tiles.
- */
-Flappy.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
-  var tileCoords = [
-    [obstacleY - 1, obstacleX - 1],
-    [obstacleY - 1, obstacleX],
-    [obstacleY - 1, obstacleX + 1],
-    [obstacleY, obstacleX - 1],
-    [obstacleY, obstacleX],
-    [obstacleY, obstacleX + 1],
-    [obstacleY + 1, obstacleX - 1],
-    [obstacleY + 1, obstacleX],
-    [obstacleY + 1, obstacleX + 1]
-  ];
-  for (var idx = 0; idx < tileCoords.length; ++idx) {
-    var tileIdx = tileCoords[idx][1] + Flappy.COLS * tileCoords[idx][0];
-    var tileElement = document.getElementById('tileElement' + tileIdx);
-    if (tileElement) {
-      tileElement.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', brokenTiles);
-    }
-  }
-};
-
-/**
- * Set the tiles to be transparent gradually.
- */
-Flappy.setTileTransparent = function() {
-  var tileId = 0;
-  for (var y = 0; y < Flappy.ROWS; y++) {
-    for (var x = 0; x < Flappy.COLS; x++) {
-      // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + tileId);
-      var tileAnimation = document.getElementById('tileAnimation' + tileId);
-      if (tileElement) {
-        tileElement.setAttribute('opacity', 0);
-      }
-      if (tileAnimation) {
-        tileAnimation.beginElement();
-      }
-      tileId++;
-    }
-  }
-};
-
-/**
  * Display Bird at the specified location
  * @param {number} x Horizontal Pixel location.
  * @param {number} y Vertical Pixel location.
@@ -1046,6 +754,9 @@ Flappy.displayBird = function(x, y) {
  * @param {number} ground
  */
 Flappy.displayGround = function(offset) {
+  if (level.noGround) {
+    return;
+  }
   offset *= Flappy.SPEED;
   offset = offset % Flappy.GROUND_WIDTH;
   for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
@@ -1079,34 +790,6 @@ Flappy.displayScore = function() {
   scoreElement.innerText = flappyMsg.scoreText({
     playerScore: Flappy.playerScore
   });
-};
-
-/**
- * Keep the direction within 0-3, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Flappy.constrainDirection4 = function(d) {
-  if (d < 0) {
-    d += 4;
-  } else if (d > 3) {
-    d -= 4;
-  }
-  return d;
-};
-
-/**
- * Keep the direction within 0-15, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Flappy.constrainDirection16 = function(d) {
-  if (d < 0) {
-    d += 16;
-  } else if (d > 15) {
-    d -= 16;
-  }
-  return d;
 };
 
 Flappy.timedOut = function() {
