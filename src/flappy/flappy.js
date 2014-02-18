@@ -112,12 +112,9 @@ var loadLevel = function() {
   Flappy.PIPE_HEIGHT = 320;
   Flappy.MIN_PIPE_HEIGHT = 48;
 
-  Flappy.FLAP_VELOCITY = -10;
-
 
   // todo - make sure somewhere that MIN_PIPE_HEIGHT + GAP_SIZE + PIPE_HEIGHT always gets us over MAZE_HEIGHT
   Flappy.GAP_SIZE = 100;
-  Flappy.SPEED = 4;
 
   Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
 
@@ -715,6 +712,10 @@ BlocklyApps.reset = function(first) {
       Flappy.resetBall(i);
     }
   }
+
+  // reset configurable values
+  Flappy.SPEED = 4;
+  Flappy.FLAP_VELOCITY = -11;
 
   // Move Bird into position.
   Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;

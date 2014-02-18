@@ -126,7 +126,7 @@ exports.install = function(blockly, skin) {
   generator.flappy_flap = function (velocity) {
     // Generate JavaScript for moving left.
     // todo - dont hardcode velocity
-    return 'Flappy.flap(\'block_id_' + this.id + '\', ' + Flappy.FLAP_VELOCITY + ');\n';
+    return 'Flappy.flap(\'block_id_' + this.id + '\');\n';
   };
 
   blockly.Blocks.flappy_playSound = {
@@ -191,6 +191,70 @@ exports.install = function(blockly, skin) {
   generator.flappy_endGame = function() {
     // Generate JavaScript for incrementing the player's score.
     return 'Flappy.endGame(\'block_id_' + this.id + '\');\n';
+  };
+
+  blockly.Blocks.flappy_setSpeed = {
+    // Block for turning either left or right from among a fixed set of angles.
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUE);
+      dropdown.setValue('normal');
+
+      // this.setHSV(42, 0.89, 0.99);
+      this.setHSV(312, 0.32, 0.62);
+      // this.appendDummyInput()
+      //     .appendTitle(new blockly.FieldDropdown(
+      //         blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+      this.appendDummyInput()
+          .appendTitle(msg.setSpeed())
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setSpeedTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_setSpeed.VALUE =
+      [['very slow', 1],
+       ['slow', 3],
+       ['normal', 4],
+       ['fast', 6],
+       ['very fast', 8]];
+
+  generator.flappy_setSpeed = function() {
+    return 'Flappy.setSpeed(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  blockly.Blocks.flappy_setFlapHeight = {
+    // Block for turning either left or right from among a fixed set of angles.
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUE);
+      dropdown.setValue('normal');
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(msg.setFlapHeight())
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setFlapHeightTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_setFlapHeight.VALUE =
+      [['very small', -6],
+       ['small', -8],
+       ['normal', -11],
+       ['large', -14],
+       ['very large', -17]];
+
+  generator.flappy_setFlapHeight = function() {
+    return 'Flappy.setFlapHeight(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
   };
 
   delete blockly.Blocks.procedures_defreturn;

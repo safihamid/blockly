@@ -2,14 +2,24 @@ var tiles = require('./tiles');
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
 
+exports.setFlapHeight = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.FLAP_VELOCITY = value;
+};
+
+exports.setSpeed = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.SPEED = value;
+};
+
 exports.playSound = function(id, soundName) {
   BlocklyApps.highlight(id);
   BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
-exports.flap = function (id, velocity) {
+exports.flap = function (id) {
   BlocklyApps.highlight(id);
-  Flappy.birdVelocity = velocity;
+  Flappy.birdVelocity = Flappy.FLAP_VELOCITY;
 };
 
 exports.endGame = function (id) {

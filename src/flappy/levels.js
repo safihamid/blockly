@@ -358,7 +358,9 @@ module.exports = {
       tb('<block type="flappy_flap"></block> \
           <block type="flappy_playSound"></block> \
           <block type="flappy_incrementPlayerScore"></block> \
-          <block type="flappy_endGame"></block>'),
+          <block type="flappy_endGame"></block> \
+          <block type="flappy_setSpeed"></block> \
+          <block type="flappy_setFlapHeight"></block>'),
     'startBlocks':
      '<block type="flappy_whenClick" deletable="false" x="20" y="20"></block> \
       <block type="flappy_whenCollideGround" deletable="false" x="240" y="20"></block> \
