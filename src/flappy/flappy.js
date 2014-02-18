@@ -337,30 +337,6 @@ var drawMap = function() {
     svg.appendChild(pipeBottomIcon);
   });
 
-  // todo - make this conditional on something, as first level wont have ground
-  {
-    // todo - can almost certainly do better than having a bunch of individual icons
-    for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
-      var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-      groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.ground);
-      groundIcon.setAttribute('id', 'ground' + i);
-      groundIcon.setAttribute('height', Flappy.GROUND_HEIGHT);
-      groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
-      svg.appendChild(groundIcon);
-    }
-  }
-
-  var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
-  clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
-  clickRect.setAttribute('fill-opacity', 0);
-  // todo - add to pid list?
-  clickRect.addEventListener('mousedown', function (e) {
-    Flappy.onMouseDown(e);
-  });
-  svg.appendChild(clickRect);
-
   if (Flappy.paddleStart_) {
     // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
     var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
@@ -382,6 +358,34 @@ var drawMap = function() {
     birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
     svg.appendChild(birdIcon);
   }
+
+  // todo - make this conditional on something, as first level wont have ground
+  {
+    // todo - can almost certainly do better than having a bunch of individual icons
+    for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+      var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+      groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.ground);
+      groundIcon.setAttribute('id', 'ground' + i);
+      groundIcon.setAttribute('height', Flappy.GROUND_HEIGHT);
+      groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
+      svg.appendChild(groundIcon);
+    }
+  }
+
+  var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
+  clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
+  clickRect.setAttribute('fill-opacity', 0);
+  // todo - add to pid list?
+  clickRect.addEventListener('touchstart', function (e) {
+    Flappy.onMouseDown(e);
+    e.preventDefault(); // don't want to see mouse down
+  });
+  clickRect.addEventListener('mousedown', function (e) {
+    Flappy.onMouseDown(e);
+  });
+  svg.appendChild(clickRect);
 };
 
 Flappy.calcDistance = function(xDist, yDist) {
@@ -481,8 +485,9 @@ Flappy.onTick = function() {
   if (Flappy.endingGame) {
     Flappy.birdY += 10;
 
-    // we use flappy width instead of height bc he has rotated
-    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_WIDTH;
+    // we use avatar width instead of height bc he is rotating
+    // the extra 4 is so that he buries his beak (similar to mobile game)
+    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_WIDTH + 4;
     if (Flappy.birdY >= max) {
       Flappy.birdY = max;
       Flappy.clearEventHandlersKillTickLoop();
@@ -707,6 +712,8 @@ BlocklyApps.reset = function(first) {
   // Move Bird into position.
   Flappy.birdX = Flappy.paddleStart_.x * Flappy.SQUARE_SIZE + 1;
   Flappy.birdY = Flappy.paddleStart_.y * Flappy.SQUARE_SIZE + Flappy.PEGMAN_Y_OFFSET - 8;
+
+  document.getElementById('bird').removeAttribute('transform');
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
