@@ -6,6 +6,27 @@ var tb = function(blocks) {
   return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
 };
 
+var flapBlock = '<block type="flappy_flap"></block>';
+var endGameBlock = '<block type="flappy_endGame"></block>';
+var playSoundBlock =  '<block type="flappy_playSound"></block>';
+var incrementScoreBlock = '<block type="flappy_incrementPlayerScore"></block>';
+
+var setSpeedBlock = '<block type="flappy_setSpeed"></block>';
+var setFlapHeightBlock = '<block type="flappy_setFlapHeight"></block>';
+
+var eventBlock = function (type, x, y, child) {
+  return '<block type="' + type + '" deletable="false"' +
+    ' x="' + x + '"' +
+    ' y="' + y + '">' +
+    (child ? '<next>' + child + '</next>' : '') +
+    '</block>';
+};
+
+// var eventBlock = function (type, x, y, child) {
+//   return '<block type="' + type + '" deletable="false" x="' + x + '" y="' + y +
+//     '"><next>' + child + '</next></block>';
+// };
+
 /*
  * Configuration for all levels.
  */
@@ -32,10 +53,9 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb('<block type="flappy_flap"></block> \
-          <block type="flappy_playSound"></block>'),
+      tb(flapBlock + playSoundBlock),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" x="20" y="20"></block>'
+      eventBlock('flappy_whenClick', 20, 20)
   },
 
   // todo - ideal numbers are inflated bc of room for noises. can i do this better?
@@ -61,12 +81,10 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb('<block type="flappy_flap"></block> \
-          <block type="flappy_endGame"></block> \
-          <block type="flappy_playSound"></block>'),
+      tb(flapBlock + endGameBlock + playSoundBlock),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" x="20" y="20"><next><block type="flappy_flap"></block></next></block> \
-      <block type="flappy_whenCollideGround" deletable="false" x="240" y="20"></block>'
+      eventBlock('flappy_whenClick', 20, 20, flapBlock) +
+      eventBlock('flappy_whenCollideGround', 20, 140)
   },
 
   '3': {
@@ -93,17 +111,11 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb('<block type="flappy_flap"></block> \
-          <block type="flappy_endGame"></block> \
-          <block type="flappy_playSound"></block>'),
+      tb(flapBlock + endGameBlock + playSoundBlock),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" x="20" y="20"> \
-        <next><block type="flappy_flap"></block></next> \
-      </block> \
-      <block type="flappy_whenCollideGround" deletable="false" x="20" y="140"> \
-        <next><block type="flappy_endGame"></block></next> \
-      </block> \
-      <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140"></block>'
+      eventBlock('flappy_whenClick', 20, 20, flapBlock) +
+      eventBlock('flappy_whenCollideGround', 20, 140, endGameBlock) +
+      eventBlock('flappy_whenCollidePipe', 240, 140)
   },
 
   '4': {
@@ -128,21 +140,12 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb('<block type="flappy_flap"></block> \
-          <block type="flappy_endGame"></block> \
-          <block type="flappy_incrementPlayerScore"></block> \
-          <block type="flappy_playSound"></block>'),
+      tb(flapBlock + endGameBlock + incrementScoreBlock + playSoundBlock),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" x="20" y="20"> \
-        <next><block type="flappy_flap"></block></next> \
-      </block> \
-      <block type="flappy_whenCollideGround" deletable="false" x="20" y="140"> \
-        <next><block type="flappy_endGame"></block></next> \
-      </block> \
-      <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140">\
-        <next><block type="flappy_endGame"></block></next> \
-      </block> \
-      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="20"></block>'
+      eventBlock('flappy_whenClick', 20, 20, flapBlock) +
+      eventBlock('flappy_whenCollideGround', 20, 140, endGameBlock) +
+      eventBlock('flappy_whenCollidePipe', 240, 140, endGameBlock) +
+      eventBlock('flappy_whenEnterPipe', 240, 20)
   },
 
   '11': {
@@ -159,17 +162,13 @@ module.exports = {
     },
     'freePlay': true,
     'toolbox':
-      tb('<block type="flappy_flap"></block> \
-          <block type="flappy_playSound"></block> \
-          <block type="flappy_incrementPlayerScore"></block> \
-          <block type="flappy_endGame"></block> \
-          <block type="flappy_setSpeed"></block> \
-          <block type="flappy_setFlapHeight"></block>'),
+      tb(flapBlock + playSoundBlock + incrementScoreBlock + endGameBlock +
+        setSpeedBlock + setFlapHeightBlock),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false" x="20" y="20"></block> \
-      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="20"></block> \
-      <block type="flappy_whenCollideGround" deletable="false" x="20" y="140"></block> \
-      <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140"></block> \
-      <block type="flappy_whenRunButtonClick" deletable="false" x="20" y="260"></block>'
+      eventBlock('flappy_whenClick', 20, 20) +
+      eventBlock('flappy_whenCollideGround', 20, 140) +
+      eventBlock('flappy_whenCollidePipe', 240, 140) +
+      eventBlock('flappy_whenEnterPipe', 240, 20) +
+      eventBlock('flappy_whenRunButtonClick', 20, 260)
   }
 };
