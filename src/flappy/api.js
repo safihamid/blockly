@@ -24,7 +24,7 @@ exports.flap = function (id) {
 
 exports.endGame = function (id) {
   BlocklyApps.highlight(id);
-  Flappy.endingGame = true;
+  Flappy.gameState = Flappy.GameStates.ENDING;
 }
 
 exports.incrementOpponentScore = function(id) {

@@ -25,11 +25,16 @@ var SquareType = tiles.SquareType;
  */
 var Flappy = module.exports;
 
-// Don't start the game until first click
-Flappy.firstClick = false;
+Flappy.GameStates = {
+  WAITING: 0,
+  ACTIVE: 1,
+  ENDING: 2,
+  OVER: 3
+};
+
+Flappy.gameState = Flappy.GameStates.WAITING;
 
 Flappy.clickPending = false;
-Flappy.endingGame = false;
 
 Flappy.birdVelocity = 0;
 Flappy.gravity = 1;
@@ -44,7 +49,8 @@ Flappy.pipes = [];
  */
 var stepSpeed;
 
-var showIntroText;
+// whether to show Get Ready and Game Over
+var infoText;
 
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
@@ -66,11 +72,13 @@ Flappy.scale = {
 
 var loadLevel = function() {
   // Load maps.
-  Flappy.timeoutFailureTick = level.timeoutFailureTick || Infinity;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
-  showIntroText = (level.showIntroText === undefined ? true : level.showIntroText);
+  infoText = (level.infoText === undefined ? true : level.infoText);
+  if (!infoText) {
+    Flappy.gameState = Flappy.GameStates.ACTIVE;
+  }
 
   // Override scalars.
   for (var key in level.scale) {
@@ -105,7 +113,7 @@ var loadLevel = function() {
   Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
 
   var numPipes = 2 * Flappy.MAZE_WIDTH / Flappy.PIPE_SPACING;
-  if (level.noPipes) {
+  if (!level.pipes) {
     numPipes = 0;
   }
   for (var i = 0; i < numPipes; i++) {
@@ -187,18 +195,6 @@ var drawMap = function() {
     svg.appendChild(pipeBottomIcon);
   });
 
-  if (level.goal) {
-    var goal = document.createElementNS(Blockly.SVG_NS, 'image');
-    goal.setAttribute('id', 'goal');
-    goal.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                            skin.goal);
-    goal.setAttribute('height', Flappy.GOAL_SIZE);
-    goal.setAttribute('width', Flappy.GOAL_SIZE);
-    goal.setAttribute('x', level.goal.x);
-    goal.setAttribute('y', level.goal.y);
-    svg.appendChild(goal);
-  }
-
   // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
   var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
   birdClip.setAttribute('id', 'birdClipPath');
@@ -220,7 +216,7 @@ var drawMap = function() {
   // birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
   svg.appendChild(birdIcon);
 
-  if (!level.noGround) {
+  if (level.ground) {
     // todo - can almost certainly do better than having a bunch of individual icons
     for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
       var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -231,6 +227,18 @@ var drawMap = function() {
       groundIcon.setAttribute('width', Flappy.GROUND_WIDTH);
       svg.appendChild(groundIcon);
     }
+  }
+
+  if (level.goal && level.goal.x) {
+    var goal = document.createElementNS(Blockly.SVG_NS, 'image');
+    goal.setAttribute('id', 'goal');
+    goal.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.goal);
+    goal.setAttribute('height', Flappy.GOAL_SIZE);
+    goal.setAttribute('width', Flappy.GOAL_SIZE);
+    goal.setAttribute('x', level.goal.x);
+    goal.setAttribute('y', level.goal.y);
+    svg.appendChild(goal);
   }
 
   var instructions = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -321,6 +329,10 @@ var checkForPipeCollision = function (pipe) {
 Flappy.onTick = function() {
   var birdWasAboveGround, birdIsAboveGround;
 
+  if (Flappy.firstActiveTick < 0 && Flappy.gameState === Flappy.GameStates.ACTIVE) {
+    Flappy.firstActiveTick = Flappy.tickCount;
+  }
+
   Flappy.tickCount++;
 
   if (Flappy.tickCount === 1) {
@@ -328,7 +340,7 @@ Flappy.onTick = function() {
   }
 
   // Check for click
-  if (Flappy.clickPending && !Flappy.endingGame) {
+  if (Flappy.clickPending && Flappy.gameState <= Flappy.GameStates.ACTIVE) {
     try { Flappy.whenClick(BlocklyApps, api); } catch (e) { }
     Flappy.clickPending = false;
   }
@@ -337,15 +349,20 @@ Flappy.onTick = function() {
     (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
   // Action doesn't start until user's first click
-  if (Flappy.firstClick && !Flappy.endingGame) {
+  if (Flappy.gameState === Flappy.GameStates.ACTIVE) {
+    // Update bird's vertical position
     Flappy.birdVelocity += Flappy.gravity;
     Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
 
     // never let the bird go too far off the top or bottom
-    Flappy.birdY = Math.min(Flappy.birdY, Flappy.MAZE_HEIGHT -
-        Flappy.GROUND_HEIGHT - Flappy.PEGMAN_HEIGHT + 1);
+    var bottomLimit = level.ground ?
+      (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_HEIGHT + 1) :
+      (Flappy.MAZE_HEIGHT * 1.5);
+
+    Flappy.birdY = Math.min(Flappy.birdY, bottomLimit);
     Flappy.birdY = Math.max(Flappy.birdY, Flappy.MAZE_HEIGHT * -0.5);
 
+    // Update pipes
     Flappy.pipes.forEach(function (pipe) {
       var wasRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
 
@@ -378,7 +395,7 @@ Flappy.onTick = function() {
     }
   }
 
-  if (Flappy.endingGame) {
+  if (Flappy.gameState === Flappy.GameStates.ENDING) {
     Flappy.birdY += 10;
 
     // we use avatar width instead of height bc he is rotating
@@ -386,40 +403,47 @@ Flappy.onTick = function() {
     var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.PEGMAN_WIDTH + 4;
     if (Flappy.birdY >= max) {
       Flappy.birdY = max;
-      Flappy.clearEventHandlersKillTickLoop();
-      // todo - think about interaction of this and puzzle completion
+      Flappy.gameState = Flappy.GameStates.OVER;
+      // Flappy.clearEventHandlersKillTickLoop();
     }
 
     document.getElementById('bird').setAttribute('transform',
       'translate(' + Flappy.PEGMAN_WIDTH + ', 0) ' +
       'rotate(90, ' + Flappy.birdX + ', ' + Flappy.birdY + ')');
-    if (showIntroText) {
+    if (infoText) {
       document.getElementById('gameover').setAttribute('visibility', 'visibile');
     }
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
   Flappy.displayPipes();
-
-  // todo - stop updating ground if endingGame
-  if (!Flappy.endGame) {
+  if (Flappy.gameState <= Flappy.GameStates.ACTIVE) {
     Flappy.displayGround(Flappy.tickCount);
   }
 
-  if (Flappy.allFinishesComplete()) {
-    Flappy.result = ResultType.SUCCESS;
-    Flappy.onPuzzleComplete();
-  } else if (Flappy.timedOut()) {
-    BlocklyApps.playAudio('failure', {volume: 0.5});
-    Flappy.result = ResultType.FAILURE;
+  if (Flappy.reachedGoalOrTickLimit()) {
+    if (!level.goal.validation || level.goal.validation()) {
+      Flappy.result = ResultType.SUCCESS;
+    } else {
+      Flappy.result = ResultType.FAILURE;
+    }
     Flappy.onPuzzleComplete();
   }
+
+  // todo - consider timeout
+  // else if (Flappy.timedOut()) {
+  //   BlocklyApps.playAudio('failure', {volume: 0.5});
+  //   Flappy.result = ResultType.FAILURE;
+  //   Flappy.onPuzzleComplete();
+  // }
 };
 
 Flappy.onMouseDown = function (e) {
   if (Flappy.intervalId) {
     Flappy.clickPending = true;
-    Flappy.firstClick = true;
+    if (Flappy.gameState === Flappy.GameStates.WAITING) {
+      Flappy.gameState = Flappy.GameStates.ACTIVE;
+    }
     document.getElementById('instructions').setAttribute('visibility', 'hidden');
     document.getElementById('getready').setAttribute('visibility', 'hidden');
   }
@@ -512,6 +536,8 @@ BlocklyApps.reset = function(first) {
   var i;
   Flappy.clearEventHandlersKillTickLoop();
 
+  Flappy.gameState = Flappy.GameStates.WAITING;
+
   // Kill all tasks.
   for (i = 0; i < Flappy.pidList.length; i++) {
     window.clearTimeout(Flappy.pidList[i]);
@@ -520,14 +546,13 @@ BlocklyApps.reset = function(first) {
 
   // Reset the score.
   Flappy.playerScore = 0;
-  if (!level.noScore) {
+  if (level.score) {
     var scoreCell = document.getElementById('score-cell');
     scoreCell.className = 'score-cell-enabled';
     Flappy.displayScore();
   }
 
   Flappy.birdVelocity = 0;
-  Flappy.endingGame = false;
 
   // Reset pipes
   Flappy.pipes.forEach(function (pipe, index) {
@@ -550,8 +575,8 @@ BlocklyApps.reset = function(first) {
   Flappy.birdY = 150;
 
   document.getElementById('bird').removeAttribute('transform');
-  if (showIntroText) {
-    document.getElementById('instructions').setAttribute('visibility', 'visible');
+  document.getElementById('instructions').setAttribute('visibility', 'visible');
+  if (infoText) {
     document.getElementById('getready').setAttribute('visibility', 'visible');
   }
   document.getElementById('gameover').setAttribute('visibility', 'hidden');
@@ -716,10 +741,12 @@ Flappy.execute = function() {
   Flappy.whenRunButton = whenRunButtonFunc;
 
   Flappy.tickCount = 0;
+  Flappy.firstActiveTick = -1;
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
 };
 
 Flappy.onPuzzleComplete = function() {
+  console.log("onPuzzleComplete"); // todo - remove this line
   // Stop everything on screen
   Flappy.clearEventHandlersKillTickLoop();
 
@@ -777,7 +804,7 @@ Flappy.displayBird = function(x, y) {
  * @param {number} ground
  */
 Flappy.displayGround = function(offset) {
-  if (level.noGround) {
+  if (!level.ground) {
     return;
   }
   offset *= Flappy.SPEED;
@@ -815,19 +842,29 @@ Flappy.displayScore = function() {
   });
 };
 
-Flappy.timedOut = function() {
-  return Flappy.tickCount > Flappy.timeoutFailureTick;
-};
-
-Flappy.allFinishesComplete = function() {
+Flappy.reachedGoalOrTickLimit = function() {
   if (level.freePlay) {
     return false;
   }
 
-  var birdCenter = Flappy.birdY + (Flappy.PEGMAN_HEIGHT / 2);
-  var goalCenter = level.goal.y + (Flappy.GOAL_SIZE / 2);
+  var sensitivity = level.goal.sensitivity || 5;
 
-  if (birdCenter < goalCenter) {
+  if (level.tickLimit &&
+    (Flappy.tickCount - Flappy.firstActiveTick) >= level.tickLimit &&
+    (Flappy.gameState === Flappy.GameStates.ACTIVE ||
+    Flappy.gameState === Flappy.GameStates.OVER)) {
+    // We'll ignore tick limit if we're ending so that we fully finish ending
+    // sequence
     return true;
   }
+
+  if (level.goal.x) {
+    var birdCenter = Flappy.birdY + (Flappy.PEGMAN_HEIGHT / 2);
+    var goalCenter = level.goal.y + (Flappy.GOAL_SIZE / 2);
+    var diff = Math.abs(birdCenter - goalCenter);
+
+    return (diff < sensitivity);
+  }
+
+  return false;
 };
