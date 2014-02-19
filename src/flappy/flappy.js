@@ -44,6 +44,8 @@ Flappy.pipes = [];
  */
 var stepSpeed;
 
+var showIntroText;
+
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 
@@ -68,6 +70,8 @@ var loadLevel = function() {
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
+  showIntroText = (level.showIntroText === undefined ? true : level.showIntroText);
+
   // Override scalars.
   for (var key in level.scale) {
     Flappy.scale[key] = level.scale[key];
@@ -87,6 +91,8 @@ var loadLevel = function() {
 
   Flappy.GROUND_WIDTH = 24;
   Flappy.GROUND_HEIGHT = 48;
+
+  Flappy.GOAL_SIZE = 48;
 
   Flappy.PIPE_WIDTH = 52;
   Flappy.PIPE_HEIGHT = 320;
@@ -181,6 +187,18 @@ var drawMap = function() {
     svg.appendChild(pipeBottomIcon);
   });
 
+  if (level.goal) {
+    var goal = document.createElementNS(Blockly.SVG_NS, 'image');
+    goal.setAttribute('id', 'goal');
+    goal.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                            skin.goal);
+    goal.setAttribute('height', Flappy.GOAL_SIZE);
+    goal.setAttribute('width', Flappy.GOAL_SIZE);
+    goal.setAttribute('x', level.goal.x);
+    goal.setAttribute('y', level.goal.y);
+    svg.appendChild(goal);
+  }
+
   // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
   var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
   birdClip.setAttribute('id', 'birdClipPath');
@@ -223,7 +241,7 @@ var drawMap = function() {
   instructions.setAttribute('width', 114);
   instructions.setAttribute('x', 143);
   instructions.setAttribute('y', 125);
-  instructions.setAttribute('visibility', 'visible');
+  instructions.setAttribute('visibility', 'hidden');
   svg.appendChild(instructions);
 
   var getready = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -234,7 +252,7 @@ var drawMap = function() {
   getready.setAttribute('width', 183);
   getready.setAttribute('x', 108);
   getready.setAttribute('y', 50);
-  getready.setAttribute('visibility', 'visible');
+  getready.setAttribute('visibility', 'hidden');
   svg.appendChild(getready);
 
   var gameover = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -375,7 +393,9 @@ Flappy.onTick = function() {
     document.getElementById('bird').setAttribute('transform',
       'translate(' + Flappy.PEGMAN_WIDTH + ', 0) ' +
       'rotate(90, ' + Flappy.birdX + ', ' + Flappy.birdY + ')');
-    document.getElementById('gameover').setAttribute('visibility', 'visibile');
+    if (showIntroText) {
+      document.getElementById('gameover').setAttribute('visibility', 'visibile');
+    }
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
@@ -500,9 +520,11 @@ BlocklyApps.reset = function(first) {
 
   // Reset the score.
   Flappy.playerScore = 0;
-  var scoreCell = document.getElementById('score-cell');
-  scoreCell.className = 'score-cell-enabled';
-  Flappy.displayScore();
+  if (!level.noScore) {
+    var scoreCell = document.getElementById('score-cell');
+    scoreCell.className = 'score-cell-enabled';
+    Flappy.displayScore();
+  }
 
   Flappy.birdVelocity = 0;
   Flappy.endingGame = false;
@@ -528,8 +550,10 @@ BlocklyApps.reset = function(first) {
   Flappy.birdY = 150;
 
   document.getElementById('bird').removeAttribute('transform');
-  document.getElementById('instructions').setAttribute('visibility', 'visible');
-  document.getElementById('getready').setAttribute('visibility', 'visible');
+  if (showIntroText) {
+    document.getElementById('instructions').setAttribute('visibility', 'visible');
+    document.getElementById('getready').setAttribute('visibility', 'visible');
+  }
   document.getElementById('gameover').setAttribute('visibility', 'hidden');
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
@@ -796,50 +820,14 @@ Flappy.timedOut = function() {
 };
 
 Flappy.allFinishesComplete = function() {
-  var i;
-  if (Flappy.paddleFinish_) {
-    var finished, playSound;
-    for (i = 0, finished = 0; i < Flappy.paddleFinishCount; i++) {
-      if (!Flappy.paddleFinish_[i].finished) {
-        if (essentiallyEqual(Flappy.birdX, Flappy.paddleFinish_[i].x, 0.2) &&
-            essentiallyEqual(Flappy.birdY, Flappy.paddleFinish_[i].y, 0.2)) {
-          Flappy.paddleFinish_[i].finished = true;
-          finished++;
-          playSound = true;
-
-          // Change the finish icon to goalSuccess.
-          var paddleFinishIcon = document.getElementById('paddlefinish' + i);
-          paddleFinishIcon.setAttributeNS(
-              'http://www.w3.org/1999/xlink',
-              'xlink:href',
-              skin.goalSuccess);
-        }
-      } else {
-        finished++;
-      }
-    }
-    if (playSound) {
-      BlocklyApps.playAudio(
-          (finished == Flappy.paddleFinishCount) ? 'win' : 'winGoal',
-          {volume: 0.5});
-    }
-    return (finished == Flappy.paddleFinishCount);
+  if (level.freePlay) {
+    return false;
   }
-  else if (Flappy.ballFinish_) {
-    for (i = 0; i < Flappy.ballCount; i++) {
-      if (essentiallyEqual(Flappy.ballX[i], Flappy.ballFinish_.x, 0.2) &&
-          essentiallyEqual(Flappy.ballY[i], Flappy.ballFinish_.y, 0.2)) {
-        // Change the finish icon to goalSuccess.
-        var ballFinishIcon = document.getElementById('ballfinish');
-        ballFinishIcon.setAttributeNS(
-            'http://www.w3.org/1999/xlink',
-            'xlink:href',
-            skin.goalSuccess);
 
-        BlocklyApps.playAudio('win', {volume: 0.5});
-        return true;
-      }
-    }
+  var birdCenter = Flappy.birdY + (Flappy.PEGMAN_HEIGHT / 2);
+  var goalCenter = level.goal.y + (Flappy.GOAL_SIZE / 2);
+
+  if (birdCenter < goalCenter) {
+    return true;
   }
-  return false;
 };

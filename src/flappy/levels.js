@@ -17,6 +17,13 @@ module.exports = {
     ],
     'noPipes': true,
     'noGround': true,
+    'noScore': true,
+    'showIntroText': false,
+    'freePlay': false,
+    'goal': {
+      x: 103,
+      y: 0
+    },
     'scale': {
       'snapRadius': 2
     },
@@ -32,6 +39,7 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
+    'freePlay': true,
     'toolbox':
       tb('<block type="flappy_flap"></block> \
           <block type="flappy_playSound"></block> \
