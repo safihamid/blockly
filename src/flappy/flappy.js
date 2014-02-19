@@ -746,7 +746,6 @@ Flappy.execute = function() {
 };
 
 Flappy.onPuzzleComplete = function() {
-  console.log("onPuzzleComplete"); // todo - remove this line
   // Stop everything on screen
   Flappy.clearEventHandlersKillTickLoop();
 
@@ -859,11 +858,14 @@ Flappy.reachedGoalOrTickLimit = function() {
   }
 
   if (level.goal.x) {
-    var birdCenter = Flappy.birdY + (Flappy.PEGMAN_HEIGHT / 2);
+    var height = document.getElementById('bird').hasAttribute('transform') ?
+      Flappy.PEGMAN_WIDTH : Flappy.PEGMAN_HEIGHT;
+    var birdCenter = Flappy.birdY + (height / 2);
     var goalCenter = level.goal.y + (Flappy.GOAL_SIZE / 2);
     var diff = Math.abs(birdCenter - goalCenter);
+    console.log("diff = " + diff);
 
-    return (diff < sensitivity);
+    return (diff <= sensitivity);
   }
 
   return false;

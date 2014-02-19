@@ -23,6 +23,7 @@ module.exports = {
     'score': false,
     'infoText': false,
     'freePlay': false,
+    'tickLimit': 120,
     'goal': {
       x: 103,
       y: 0
@@ -48,8 +49,9 @@ module.exports = {
     'score': false,
     'infoText': false,
     'freePlay': false,
+    'tickLimit': 120, // how long it takes to fly just past first pipe
     'goal': {
-      x: 103,
+      x: 106,
       y: 320,
       validation: function () {
         return (Flappy.gameState === Flappy.GameStates.OVER);
@@ -63,7 +65,7 @@ module.exports = {
           <block type="flappy_endGame"></block> \
           <block type="flappy_playSound"></block>'),
     'startBlocks':
-     '<block type="flappy_whenClick" deletable="false"><next><block type="flappy_flap"></block></next></block> \
+     '<block type="flappy_whenClick" deletable="false" x="20" y="20"><next><block type="flappy_flap"></block></next></block> \
       <block type="flappy_whenCollideGround" deletable="false" x="240" y="20"></block>'
   },
 
@@ -80,8 +82,11 @@ module.exports = {
     'tickLimit': 140,
     'goal': {
       validation: function () {
+        // todo - right now we can also pass by crashing into ground in pipe
+        // location without ever having attached to pipe collide event
         var pipe0x = document.getElementById('pipe_top0').getAttribute('x');
-        return (pipe0x === "144" && Flappy.gameState === Flappy.GameStates.OVER);
+        return (parseInt(pipe0x, 10) <= 144 &&
+          Flappy.gameState === Flappy.GameStates.OVER);
       }
     },
     'scale': {
@@ -99,6 +104,45 @@ module.exports = {
         <next><block type="flappy_endGame"></block></next> \
       </block> \
       <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140"></block>'
+  },
+
+  '4': {
+    'ideal': 5,
+    'requiredBlocks': [
+      [{'test': 'incrementPlayerScore', 'type': 'flappy_incrementPlayerScore'}]
+    ],
+    'pipes': true,
+    'ground': true,
+    'score': true,
+    'infoText': false,
+    'freePlay': false,
+    'tickLimit': 140,
+    'goal': {
+      validation: function () {
+        // bird got into first pipe and has score of 1
+        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+          Flappy.playerScore === 1);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb('<block type="flappy_flap"></block> \
+          <block type="flappy_endGame"></block> \
+          <block type="flappy_incrementPlayerScore"></block> \
+          <block type="flappy_playSound"></block>'),
+    'startBlocks':
+     '<block type="flappy_whenClick" deletable="false" x="20" y="20"> \
+        <next><block type="flappy_flap"></block></next> \
+      </block> \
+      <block type="flappy_whenCollideGround" deletable="false" x="20" y="140"> \
+        <next><block type="flappy_endGame"></block></next> \
+      </block> \
+      <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140">\
+        <next><block type="flappy_endGame"></block></next> \
+      </block> \
+      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="20"></block>'
   },
 
   '11': {
@@ -123,9 +167,9 @@ module.exports = {
           <block type="flappy_setFlapHeight"></block>'),
     'startBlocks':
      '<block type="flappy_whenClick" deletable="false" x="20" y="20"></block> \
-      <block type="flappy_whenCollideGround" deletable="false" x="240" y="20"></block> \
-      <block type="flappy_whenCollidePipe" deletable="false" x="20" y="140"></block> \
-      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="140"></block> \
+      <block type="flappy_whenEnterPipe" deletable="false" x="240" y="20"></block> \
+      <block type="flappy_whenCollideGround" deletable="false" x="20" y="140"></block> \
+      <block type="flappy_whenCollidePipe" deletable="false" x="240" y="140"></block> \
       <block type="flappy_whenRunButtonClick" deletable="false" x="20" y="260"></block>'
   }
 };
