@@ -18,6 +18,34 @@ exports.LevelSpeed = {
   VERY_FAST: 8
 };
 
+exports.GapHeight = {
+  VERY_SMALL: 50,
+  SMALL: 75,
+  NORMAL: 100,
+  LARGE: 125,
+  VERY_LARGE: 150
+};
+
+exports.setGround = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.setGround(value);
+};
+
+exports.setObstacle = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.setObstacle(value);
+};
+
+exports.setPlayer = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.setPlayer(value);
+};
+
+exports.setGapHeight = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.setGapHeight(value);
+};
+
 exports.setBackground = function (id, value) {
   BlocklyApps.highlight(id);
   Flappy.setBackground(value);
@@ -35,7 +63,7 @@ exports.playSound = function(id, soundName) {
 
 exports.flap = function (id, amount) {
   BlocklyApps.highlight(id);
-  Flappy.birdVelocity = amount;
+  Flappy.birdVelocity = amount || this.FlapHeight.NORMAL;
 };
 
 exports.endGame = function (id) {

@@ -42,7 +42,7 @@ Flappy.gravity = 1;
 var level;
 var skin;
 
-Flappy.pipes = [];
+Flappy.obstacles = [];
 
 /**
  * Milliseconds between each animation frame.
@@ -55,7 +55,7 @@ var infoText;
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 
-var randomPipeHeight = function () {
+var randomObstacleHeight = function () {
   var min = Flappy.MIN_PIPE_HEIGHT;
   var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.MIN_PIPE_HEIGHT - Flappy.GAP_SIZE;
   return Math.floor((Math.random() * (max - min)) + min);
@@ -108,22 +108,22 @@ var loadLevel = function() {
 
 
   // todo - make sure somewhere that MIN_PIPE_HEIGHT + GAP_SIZE + PIPE_HEIGHT always gets us over MAZE_HEIGHT
-  Flappy.GAP_SIZE = 100;
+  Flappy.setGapHeight(api.GapHeight.NORMAL);
 
-  Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of pipes
+  Flappy.PIPE_SPACING = 250; // number of horizontal pixels between the start of obstacles
 
-  var numPipes = 2 * Flappy.MAZE_WIDTH / Flappy.PIPE_SPACING;
-  if (!level.pipes) {
-    numPipes = 0;
+  var numObstacles = 2 * Flappy.MAZE_WIDTH / Flappy.PIPE_SPACING;
+  if (!level.obstacles) {
+    numObstacles = 0;
   }
-  for (var i = 0; i < numPipes; i++) {
-    Flappy.pipes.push({
+  for (var i = 0; i < numObstacles; i++) {
+    Flappy.obstacles.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.PIPE_SPACING,
-      gapStart: randomPipeHeight(), // y coordinate of the top of the gap
+      gapStart: randomObstacleHeight(), // y coordinate of the top of the gap
       hitBird: false,
       reset: function (x) {
         this.x = x;
-        this.gapStart = randomPipeHeight();
+        this.gapStart = randomObstacleHeight();
         this.hitBird = false;
       }
     });
@@ -177,23 +177,23 @@ var drawMap = function() {
     svg.appendChild(tile);
   }
 
-  // Add pipes
-  Flappy.pipes.forEach (function (pipe, index) {
-    var pipeTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    pipeTopIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.pipe_top);
-    pipeTopIcon.setAttribute('id', 'pipe_top' + index);
-    pipeTopIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
-    pipeTopIcon.setAttribute('width', Flappy.PIPE_WIDTH);
-    svg.appendChild(pipeTopIcon);
+  // Add obstacles
+  Flappy.obstacles.forEach (function (obstacle, index) {
+    var obstacleTopIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    obstacleTopIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.obstacle_top);
+    obstacleTopIcon.setAttribute('id', 'obstacle_top' + index);
+    obstacleTopIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
+    obstacleTopIcon.setAttribute('width', Flappy.PIPE_WIDTH);
+    svg.appendChild(obstacleTopIcon);
 
-    var pipeBottomIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    pipeBottomIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.pipe_bottom);
-    pipeBottomIcon.setAttribute('id', 'pipe_bottom' + index);
-    pipeBottomIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
-    pipeBottomIcon.setAttribute('width', Flappy.PIPE_WIDTH);
-    svg.appendChild(pipeBottomIcon);
+    var obstacleBottomIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+    obstacleBottomIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                              skin.obstacle_bottom);
+    obstacleBottomIcon.setAttribute('id', 'obstacle_bottom' + index);
+    obstacleBottomIcon.setAttribute('height', Flappy.PIPE_HEIGHT);
+    obstacleBottomIcon.setAttribute('width', Flappy.PIPE_WIDTH);
+    svg.appendChild(obstacleBottomIcon);
   });
 
   // Bird's clipPath element, whose (x, y) is reset by Flappy.displayBird
@@ -278,7 +278,6 @@ var drawMap = function() {
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
   clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
   clickRect.setAttribute('fill-opacity', 0);
-  // todo - add to pid list?
   clickRect.addEventListener('touchstart', function (e) {
     Flappy.onMouseDown(e);
     e.preventDefault(); // don't want to see mouse down
@@ -313,14 +312,14 @@ var delegate = function(scope, func, data)
 };
 
 /**
- * Check to see if bird is in collision with given pipe
- * @param pipe Object : The pipe object we're checking
+ * Check to see if bird is in collision with given obstacle
+ * @param obstacle Object : The obstacle object we're checking
  */
-var checkForPipeCollision = function (pipe) {
-  var insidePipeColumn = Flappy.birdX + Flappy.PEGMAN_WIDTH >= pipe.x &&
-    Flappy.birdX <= pipe.x + Flappy.PIPE_WIDTH;
-  if (insidePipeColumn && (Flappy.birdY <= pipe.gapStart ||
-    Flappy.birdY + Flappy.PEGMAN_HEIGHT >= pipe.gapStart + Flappy.GAP_SIZE)) {
+var checkForObstacleCollision = function (obstacle) {
+  var insideObstacleColumn = Flappy.birdX + Flappy.PEGMAN_WIDTH >= obstacle.x &&
+    Flappy.birdX <= obstacle.x + Flappy.PIPE_WIDTH;
+  if (insideObstacleColumn && (Flappy.birdY <= obstacle.gapStart ||
+    Flappy.birdY + Flappy.PEGMAN_HEIGHT >= obstacle.gapStart + Flappy.GAP_SIZE)) {
     return true;
   }
   return false;
@@ -362,28 +361,28 @@ Flappy.onTick = function() {
     Flappy.birdY = Math.min(Flappy.birdY, bottomLimit);
     Flappy.birdY = Math.max(Flappy.birdY, Flappy.MAZE_HEIGHT * -0.5);
 
-    // Update pipes
-    Flappy.pipes.forEach(function (pipe) {
-      var wasRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+    // Update obstacles
+    Flappy.obstacles.forEach(function (obstacle) {
+      var wasRightOfBird = obstacle.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
 
-      pipe.x -= Flappy.SPEED;
+      obstacle.x -= Flappy.SPEED;
 
-      var isRightOfBird = pipe.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
+      var isRightOfBird = obstacle.x > (Flappy.birdX + Flappy.PEGMAN_WIDTH);
       if (wasRightOfBird && !isRightOfBird) {
-        if (Flappy.birdY > pipe.gapStart &&
-          (Flappy.birdY + Flappy.PEGMAN_HEIGHT < pipe.gapStart + Flappy.GAP_SIZE)) {
-          try { Flappy.whenEnterPipe(BlocklyApps, api); } catch (e) { }
+        if (Flappy.birdY > obstacle.gapStart &&
+          (Flappy.birdY + Flappy.PEGMAN_HEIGHT < obstacle.gapStart + Flappy.GAP_SIZE)) {
+          try { Flappy.whenEnterObstacle(BlocklyApps, api); } catch (e) { }
         }
       }
 
-      if (!pipe.hitBird && checkForPipeCollision(pipe)) {
-        pipe.hitBird = true;
-        try {Flappy.whenCollidePipe(BlocklyApps, api); } catch (e) { }
+      if (!obstacle.hitBird && checkForObstacleCollision(obstacle)) {
+        obstacle.hitBird = true;
+        try {Flappy.whenCollideObstacle(BlocklyApps, api); } catch (e) { }
       }
 
-      // If pipe moves off left side, repurpose as a new pipe to our right
-      if (pipe.x + Flappy.PIPE_WIDTH < 0) {
-        pipe.reset(Flappy.pipes.length * Flappy.PIPE_SPACING);
+      // If obstacle moves off left side, repurpose as a new obstacle to our right
+      if (obstacle.x + Flappy.PIPE_WIDTH < 0) {
+        obstacle.reset(Flappy.obstacles.length * Flappy.PIPE_SPACING);
       }
     });
 
@@ -416,26 +415,14 @@ Flappy.onTick = function() {
   }
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
-  Flappy.displayPipes();
+  Flappy.displayObstacles();
   if (Flappy.gameState <= Flappy.GameStates.ACTIVE) {
     Flappy.displayGround(Flappy.tickCount);
   }
 
-  if (Flappy.reachedGoalOrTickLimit()) {
-    if (!level.goal.validation || level.goal.validation()) {
-      Flappy.result = ResultType.SUCCESS;
-    } else {
-      Flappy.result = ResultType.FAILURE;
-    }
+  if (checkFinished()) {
     Flappy.onPuzzleComplete();
   }
-
-  // todo - consider timeout
-  // else if (Flappy.timedOut()) {
-  //   BlocklyApps.playAudio('failure', {volume: 0.5});
-  //   Flappy.result = ResultType.FAILURE;
-  //   Flappy.onPuzzleComplete();
-  // }
 };
 
 Flappy.onMouseDown = function (e) {
@@ -511,6 +498,9 @@ Flappy.init = function(config) {
   };
 
   BlocklyApps.init(config);
+
+  var shareButton = document.getElementById('shareButton');
+  dom.addClickTouchEvent(shareButton, Flappy.onPuzzleComplete);
 };
 
 /**
@@ -519,8 +509,8 @@ Flappy.init = function(config) {
 Flappy.clearEventHandlersKillTickLoop = function() {
   Flappy.whenClick = null;
   Flappy.whenCollideGround = null;
-  Flappy.whenCollidePipe = null;
-  Flappy.whenEnterPipe = null;
+  Flappy.whenCollideObstacle = null;
+  Flappy.whenEnterObstacle = null;
   Flappy.whenRunButton = null;
   if (Flappy.intervalId) {
     window.clearInterval(Flappy.intervalId);
@@ -546,29 +536,24 @@ BlocklyApps.reset = function(first) {
 
   // Reset the score.
   Flappy.playerScore = 0;
-  if (level.score) {
-    var scoreCell = document.getElementById('score-cell');
-    scoreCell.className = 'score-cell-enabled';
-    Flappy.displayScore();
-  }
+  var scoreCell = document.getElementById('score-cell');
+  scoreCell.className = 'score-cell-none';
 
   Flappy.birdVelocity = 0;
 
-  // Reset pipes
-  Flappy.pipes.forEach(function (pipe, index) {
-    pipe.reset(Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING);
+  // Reset obstacles
+  Flappy.obstacles.forEach(function (obstacle, index) {
+    obstacle.reset(Flappy.MAZE_WIDTH * 1.5 + index * Flappy.PIPE_SPACING);
   });
-
-  // Move Ball into position.
-  if (Flappy.ballStart_) {
-    for (i = 0; i < Flappy.ballCount; i++) {
-      Flappy.resetBall(i);
-    }
-  }
 
   // reset configurable values
   Flappy.SPEED = 4;
   Flappy.FLAP_VELOCITY = -11;
+  Flappy.setBackground('flappy');
+  Flappy.setObstacle('flappy');
+  Flappy.setPlayer('flappy');
+  Flappy.setGround('flappy');
+  Flappy.setGapHeight(api.GapHeight.NORMAL);
 
   // Move Bird into position.
   Flappy.birdX = 110;
@@ -582,8 +567,8 @@ BlocklyApps.reset = function(first) {
   document.getElementById('gameover').setAttribute('visibility', 'hidden');
 
   Flappy.displayBird(Flappy.birdX, Flappy.birdY);
-  Flappy.displayPipes();
-  Flappy.displayGround(0); // todo
+  Flappy.displayObstacles();
+  Flappy.displayGround(0);
 
   var svg = document.getElementById('svgFlappy');
 };
@@ -611,6 +596,16 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Flappy.execute();
+
+  if (level.freePlay) {
+    var shareCell = document.getElementById('share-cell');
+    shareCell.className = 'share-cell-enabled';
+  }
+  if (level.score) {
+    var scoreCell = document.getElementById('score-cell');
+    scoreCell.className = 'score-cell-enabled';
+    Flappy.displayScore();
+  }
 };
 
 /**
@@ -635,7 +630,8 @@ var displayFeedback = function() {
       skin: skin.id,
       feedbackType: Flappy.testResults,
       response: Flappy.response,
-      level: level
+      level: level,
+      showingSharing: level.freePlay
     });
   }
 };
@@ -692,7 +688,7 @@ Flappy.execute = function() {
                                     'JavaScript',
                                     'flappy_whenClick');
   var whenClickFunc = codegen.functionFromCode(
-                                     codeClick, {
+                                      codeClick, {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
@@ -700,23 +696,23 @@ Flappy.execute = function() {
                                     'JavaScript',
                                     'flappy_whenCollideGround');
   var whenCollideGroundFunc = codegen.functionFromCode(
-                                     codeCollideGround, {
+                                      codeCollideGround, {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
-  var codeEnterPipe = Blockly.Generator.workspaceToCode(
+  var codeEnterObstacle = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
-                                    'flappy_whenEnterPipe');
-  var whenEnterPipeFunc = codegen.functionFromCode(
-                                     codeEnterPipe, {
+                                    'flappy_whenEnterObstacle');
+  var whenEnterObstacleFunc = codegen.functionFromCode(
+                                      codeEnterObstacle, {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
-  var codeCollidePipe = Blockly.Generator.workspaceToCode(
+  var codeCollideObstacle = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
-                                    'flappy_whenCollidePipe');
-  var whenCollidePipeFunc = codegen.functionFromCode(
-                                     codeCollidePipe, {
+                                    'flappy_whenCollideObstacle');
+  var whenCollideObstacleFunc = codegen.functionFromCode(
+                                      codeCollideObstacle, {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
@@ -724,7 +720,7 @@ Flappy.execute = function() {
                                     'JavaScript',
                                     'flappy_whenRunButtonClick');
   var whenRunButtonFunc = codegen.functionFromCode(
-                                     codeWhenRunButton, {
+                                      codeWhenRunButton, {
                                       BlocklyApps: BlocklyApps,
                                       Flappy: api } );
 
@@ -736,8 +732,8 @@ Flappy.execute = function() {
   // Set event handlers and start the onTick timer
   Flappy.whenClick = whenClickFunc;
   Flappy.whenCollideGround = whenCollideGroundFunc;
-  Flappy.whenEnterPipe = whenEnterPipeFunc;
-  Flappy.whenCollidePipe = whenCollidePipeFunc;
+  Flappy.whenEnterObstacle = whenEnterObstacleFunc;
+  Flappy.whenCollideObstacle = whenCollideObstacleFunc;
   Flappy.whenRunButton = whenRunButtonFunc;
 
   Flappy.tickCount = 0;
@@ -746,6 +742,10 @@ Flappy.execute = function() {
 };
 
 Flappy.onPuzzleComplete = function() {
+  if (level.freePlay) {
+    Flappy.result = ResultType.SUCCESS;
+  }
+
   // Stop everything on screen
   Flappy.clearEventHandlersKillTickLoop();
 
@@ -816,18 +816,18 @@ Flappy.displayGround = function(offset) {
 };
 
 /**
- * Display all pipes
+ * Display all obstacles
  */
-Flappy.displayPipes = function () {
-  for (var i = 0; i < Flappy.pipes.length; i++) {
-    var pipe = Flappy.pipes[i];
-    var topIcon = document.getElementById('pipe_top' + i);
-    topIcon.setAttribute('x', pipe.x);
-    topIcon.setAttribute('y', pipe.gapStart - Flappy.PIPE_HEIGHT);
+Flappy.displayObstacles = function () {
+  for (var i = 0; i < Flappy.obstacles.length; i++) {
+    var obstacle = Flappy.obstacles[i];
+    var topIcon = document.getElementById('obstacle_top' + i);
+    topIcon.setAttribute('x', obstacle.x);
+    topIcon.setAttribute('y', obstacle.gapStart - Flappy.PIPE_HEIGHT);
 
-    var bottomIcon = document.getElementById('pipe_bottom' + i);
-    bottomIcon.setAttribute('x', pipe.x);
-    bottomIcon.setAttribute('y', pipe.gapStart + Flappy.GAP_SIZE);
+    var bottomIcon = document.getElementById('obstacle_bottom' + i);
+    bottomIcon.setAttribute('x', obstacle.x);
+    bottomIcon.setAttribute('y', obstacle.gapStart + Flappy.GAP_SIZE);
   }
 };
 
@@ -841,30 +841,69 @@ Flappy.displayScore = function() {
   });
 };
 
-Flappy.setBackground = function (value) {
-  var image;
-  switch (value) {
-    case 'flappy':
-      image = skin.background;
-      break;
-    case 'scifi':
-      image = skin.scifi.background;
-      break;
-  }
-
-  var background = document.getElementById('background');
-  background.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image);
+Flappy.setGapHeight = function (value) {
+  Flappy.GAP_SIZE = value;
 };
 
-Flappy.reachedGoalOrTickLimit = function() {
-  if (level.freePlay) {
+var skinTheme = function (value) {
+  switch (value) {
+    case 'flappy':
+      return skin;
+    case 'scifi':
+      return skin.scifi;
+  }
+
+  console.log("unknown theme: " + value);
+  return skin;
+};
+
+Flappy.setBackground = function (value) {
+  var element = document.getElementById('background');
+  element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    skinTheme(value).background);
+};
+
+Flappy.setPlayer = function (value) {
+  var element = document.getElementById('bird');
+  element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    skinTheme(value).avatar);
+};
+
+Flappy.setObstacle = function (value) {
+  var element;
+  Flappy.obstacles.forEach(function (obstacle, index) {
+    element = document.getElementById('obstacle_top' + index);
+    element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+      skinTheme(value).obstacle_top);
+
+    element = document.getElementById('obstacle_bottom' + index);
+    element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+      skinTheme(value).obstacle_bottom);
+  });
+};
+
+Flappy.setGround = function (value) {
+  if (!level.ground) {
+    return;
+  }
+  var element, i;
+  for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
+    element = document.getElementById('ground' + i);
+    element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+      skinTheme(value).ground);
+  };
+};
+
+var checkValidation = function () {
+  return !level.goal.validation || level.goal.validation();
+};
+
+var checkTickLimit = function() {
+  if (!level.tickLimit) {
     return false;
   }
 
-  var sensitivity = level.goal.sensitivity || 5;
-
-  if (level.tickLimit &&
-    (Flappy.tickCount - Flappy.firstActiveTick) >= level.tickLimit &&
+  if ((Flappy.tickCount - Flappy.firstActiveTick) >= level.tickLimit &&
     (Flappy.gameState === Flappy.GameStates.ACTIVE ||
     Flappy.gameState === Flappy.GameStates.OVER)) {
     // We'll ignore tick limit if we're ending so that we fully finish ending
@@ -872,16 +911,43 @@ Flappy.reachedGoalOrTickLimit = function() {
     return true;
   }
 
-  if (level.goal.x) {
+  return false;
+};
+
+var checkFinished = function () {
+  // We're finished when we hit our location based goal (if we have one) or we
+  // hit our tick limit
+  var hasLocationGoal = (level.goal && level.goal.x !== undefined);
+
+  if (hasLocationGoal) {
+    var sensitivity = level.goal.sensitivity || 5;
+
     var height = document.getElementById('bird').hasAttribute('transform') ?
       Flappy.PEGMAN_WIDTH : Flappy.PEGMAN_HEIGHT;
     var birdCenter = Flappy.birdY + (height / 2);
     var goalCenter = level.goal.y + (Flappy.GOAL_SIZE / 2);
     var diff = Math.abs(birdCenter - goalCenter);
-    console.log("diff = " + diff);
 
-    return (diff <= sensitivity);
+    // we've hit our goal
+    if (diff <= sensitivity) {
+      Flappy.result = checkValidation() ? ResultType.SUCCESS : ResultType.FAILURE;
+      return true;
+    }
   }
 
+  // we haven't hit our goal yet, or we dont have one. check tick limit
+  if (checkTickLimit()) {
+    Flappy.result = (!hasLocationGoal && checkValidation()) ?
+       ResultType.SUCCESS : ResultType.FAILURE;
+    return true;
+  }
   return false;
 };
+
+Flappy.locationGoalPending = function () {
+  if (!level.goal.x) {
+    return false;
+  }
+};
+
+

@@ -25,13 +25,17 @@ exports.load = function(assetUrl, id) {
   var config = CONFIGS[skin.id];
 
   skin.scifi = {
-    background: skin.assetUrl('background_scifi.png')
+    background: skin.assetUrl('background_scifi.png'),
+    avatar: skin.assetUrl('avatar_scifi.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_scifi.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_scifi.png'),
+    ground: skin.assetUrl('ground_scifi.png')
   };
 
   // Images
   skin.ground = skin.assetUrl('ground.png');
-  skin.pipe_top = skin.assetUrl('pipe_top.png');
-  skin.pipe_bottom = skin.assetUrl('pipe_bottom.png');
+  skin.obstacle_top = skin.assetUrl('obstacle_top.png');
+  skin.obstacle_bottom = skin.assetUrl('obstacle_bottom.png');
   skin.instructions = skin.assetUrl('instructions.png');
   skin.getready = skin.assetUrl('getready.png');
   skin.gameover = skin.assetUrl('gameover.png');
@@ -72,11 +76,11 @@ exports.load = function(assetUrl, id) {
   skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
 
   // todo - add oggs
-  skin.dieSound = [skin.assetUrl('sfx_die.mp3')];
-  skin.hitSound = [skin.assetUrl('sfx_hit.mp3')];
-  skin.pointSound = [skin.assetUrl('sfx_point.mp3')];
-  skin.swooshingSound = [skin.assetUrl('sfx_swooshing.mp3')];
-  skin.wingSound = [skin.assetUrl('sfx_wing.mp3')];
+  skin.dieSound = [skin.assetUrl('sfx_die.mp3'), skin.assetUrl('sfx_die.ogg')];
+  skin.hitSound = [skin.assetUrl('sfx_hit.mp3'), skin.assetUrl('sfx_hit.ogg')];
+  skin.pointSound = [skin.assetUrl('sfx_point.mp3'), skin.assetUrl('sfx_point.ogg')];
+  skin.swooshingSound = [skin.assetUrl('sfx_swooshing.mp3'), skin.assetUrl('sfx_swooshing.ogg')];
+  skin.wingSound = [skin.assetUrl('sfx_wing.mp3'), skin.assetUrl('sfx_wing.ogg')];
   skin.additionalSound = config.additionalSound;
   // Settings
   skin.graph = config.graph;

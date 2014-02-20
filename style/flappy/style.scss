@@ -54,39 +54,15 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
   display: none;
 }
 
-button.arrow {
+button.share {
   border: 1px solid #FFA000;
   background-color: #FFA000;
   color: #fff;
   margin-left: 0px;
   margin-right: 5px;
-  display: none;
 }
-button.arrow>img {
-  opacity: 1;
-  vertical-align: text-bottom;
-}
-button.arrow:focus {
+button.share:focus {
   outline-style: none;
-}
-.soft-buttons-none {
-  display: none;
-}
-.soft-buttons-1 {
-  display: table-cell;
-  min-width: 51px;
-}
-.soft-buttons-2 {
-  display: table-cell;
-  min-width: 102px;
-}
-.soft-buttons-3 {
-  display: table-cell;
-  min-width: 153px;
-}
-.soft-buttons-4 {
-  display: table-cell;
-  min-width: 204px;
 }
 .score-cell-none {
   display: none;
@@ -94,3 +70,10 @@ button.arrow:focus {
 .score-cell-enabled {
   min-width: 102px;
 }
+.share-cell-none {
+  display: none;
+}
+.share-cell-enabled {
+  min-width: 102px;
+}
+

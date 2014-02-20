@@ -51,39 +51,39 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
 
-  blockly.Blocks.flappy_whenCollidePipe = {
-    // Block to handle event where flappy hits a pipe
+  blockly.Blocks.flappy_whenCollideObstacle = {
+    // Block to handle event where flappy hits a Obstacle
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.whenCollidePipe());
+        .appendTitle(msg.whenCollideObstacle());
       this.setPreviousStatement(false);
       this.setNextStatement(true);
-      this.setTooltip(msg.whenCollidePipeTooltip());
+      this.setTooltip(msg.whenCollideObstacleTooltip());
     }
   };
 
-  generator.flappy_whenCollidePipe = function () {
-    // Generate JavaScript for handling collide pipe event.
+  generator.flappy_whenCollideObstacle = function () {
+    // Generate JavaScript for handling collide Obstacle event.
     return '\n';
   };
 
-  blockly.Blocks.flappy_whenEnterPipe = {
-    // Block to handle event where flappy enters a pipe
+  blockly.Blocks.flappy_whenEnterObstacle = {
+    // Block to handle event where flappy enters a Obstacle
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.whenEnterPipe());
+        .appendTitle(msg.whenEnterObstacle());
       this.setPreviousStatement(false);
       this.setNextStatement(true);
-      this.setTooltip(msg.whenEnterPipeTooltip());
+      this.setTooltip(msg.whenEnterObstacleTooltip());
     }
   };
 
-  generator.flappy_whenEnterPipe = function () {
-    // Generate JavaScript for handling enter pipe.
+  generator.flappy_whenEnterObstacle = function () {
+    // Generate JavaScript for handling enter Obstacle.
     return '\n';
   };
 
@@ -125,7 +125,7 @@ exports.install = function(blockly, skin) {
 
   generator.flappy_flap = function (velocity) {
     // Generate JavaScript for moving left.
-    return 'Flappy.flap(\'block_id_' + this.id + '\', Flappy.FlapHeight.NORMAL);\n';
+    return 'Flappy.flap(\'block_id_' + this.id + '\');\n';
   };
 
   blockly.Blocks.flappy_flap_height = {
@@ -153,9 +153,6 @@ exports.install = function(blockly, skin) {
 
   generator.flappy_flap_height = function (velocity) {
     // Generate JavaScript for moving left.
-    // todo - send flap param?
-    // todo - currently using bogus id of 0
-
     return 'Flappy.flap(\'block_id_' + this.id + '\', ' +
         this.getTitleValue('HEIGHT') + ');\n';
   };
@@ -223,13 +220,15 @@ exports.install = function(blockly, skin) {
     return 'Flappy.endGame(\'block_id_' + this.id + '\');\n';
   };
 
+  /**
+   * setSpeed
+   */
   blockly.Blocks.flappy_setSpeed = {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
       dropdown.setValue(this.VALUES[2][1]);
 
-      // this.setHSV(42, 0.89, 0.99);
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
           .appendTitle(dropdown, 'VALUE');
@@ -252,19 +251,51 @@ exports.install = function(blockly, skin) {
       this.getTitleValue('VALUE') + ');\n';
   };
 
-  blockly.Blocks.flappy_setBackground = {
+  /**
+   * setGapHeight
+   */
+  blockly.Blocks.flappy_setGapHeight = {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
 
-      // this.setHSV(42, 0.89, 0.99);
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
           .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.setSpeedTooltip());
+      this.setTooltip(msg.setGapHeightTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_setGapHeight.VALUES =
+      [[msg.setGapVerySmall(), 'Flappy.GapHeight.VERY_SMALL'],
+       [msg.setGapSmall(), 'Flappy.GapHeight.SMALL'],
+       [msg.setGapNormal(), 'Flappy.GapHeight.NORMAL'],
+       [msg.setGapLarge(), 'Flappy.GapHeight.LARGE'],
+       [msg.setGapVeryLarge(), 'Flappy.GapHeight.VERY_LARGE']];
+
+  generator.flappy_setGapHeight = function() {
+    return 'Flappy.setGapHeight(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  /**
+   * setBackground
+   */
+  blockly.Blocks.flappy_setBackground = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setBackgroundTooltip());
     }
   };
 
@@ -275,6 +306,90 @@ exports.install = function(blockly, skin) {
 
   generator.flappy_setBackground = function() {
     return 'Flappy.setBackground(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  /**
+   * setPlayer
+   */
+  blockly.Blocks.flappy_setPlayer = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setPlayerTooltip());
+    }
+  };
+
+  // todo - localize
+  blockly.Blocks.flappy_setPlayer.VALUES =
+      [['set player Flappy', '"flappy"'],
+       ['set player Sci-Fi', '"scifi"']];
+
+  generator.flappy_setPlayer = function() {
+    return 'Flappy.setPlayer(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  /**
+   * setObstacle
+   */
+  blockly.Blocks.flappy_setObstacle = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setObstacleTooltip());
+    }
+  };
+
+  // todo - localize
+  blockly.Blocks.flappy_setObstacle.VALUES =
+      [['set obstacle Flappy', '"flappy"'],
+       ['set obstacle Sci-Fi', '"scifi"']];
+
+  generator.flappy_setObstacle = function() {
+    return 'Flappy.setObstacle(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  /**
+   * setGround
+   */
+  blockly.Blocks.flappy_setGround = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setGroundTooltip());
+    }
+  };
+
+  // todo - localize
+  blockly.Blocks.flappy_setGround.VALUES =
+      [['set ground Flappy', '"flappy"'],
+       ['set ground Sci-Fi', '"scifi"']];
+
+  generator.flappy_setGround = function() {
+    return 'Flappy.setGround(\'block_id_' + this.id + '\', ' +
       this.getTitleValue('VALUE') + ');\n';
   };
 
