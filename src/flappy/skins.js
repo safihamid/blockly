@@ -23,6 +23,11 @@ var CONFIGS = {
 exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
+
+  skin.scifi = {
+    background: skin.assetUrl('background_scifi.png')
+  };
+
   // Images
   skin.ground = skin.assetUrl('ground.png');
   skin.pipe_top = skin.assetUrl('pipe_top.png');

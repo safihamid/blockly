@@ -10,6 +10,19 @@ exports.FlapHeight = {
   VERY_LARGE: -17
 };
 
+exports.LevelSpeed = {
+  VERY_SLOW: 1,
+  SLOW: 3,
+  NORMAL: 4,
+  FAST: 6,
+  VERY_FAST: 8
+};
+
+exports.setBackground = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.setBackground(value);
+};
+
 exports.setSpeed = function (id, value) {
   BlocklyApps.highlight(id);
   Flappy.SPEED = value;

@@ -224,19 +224,14 @@ exports.install = function(blockly, skin) {
   };
 
   blockly.Blocks.flappy_setSpeed = {
-    // Block for turning either left or right from among a fixed set of angles.
     helpUrl: '',
     init: function() {
-      var dropdown = new blockly.FieldDropdown(this.VALUE);
-      dropdown.setValue('normal');
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[2][1]);
 
       // this.setHSV(42, 0.89, 0.99);
       this.setHSV(312, 0.32, 0.62);
-      // this.appendDummyInput()
-      //     .appendTitle(new blockly.FieldDropdown(
-      //         blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
-          .appendTitle(msg.setSpeed())
           .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
       this.setPreviousStatement(true);
@@ -245,16 +240,41 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localized
-  blockly.Blocks.flappy_setSpeed.VALUE =
-      [['very slow', 1],
-       ['slow', 3],
-       ['normal', 4],
-       ['fast', 6],
-       ['very fast', 8]];
+  blockly.Blocks.flappy_setSpeed.VALUES =
+      [[msg.speedVerySlow(), 'Flappy.LevelSpeed.VERY_SLOW'],
+       [msg.speedSlow(), 'Flappy.LevelSpeed.SLOW'],
+       [msg.speedNormal(), 'Flappy.LevelSpeed.NORMAL'],
+       [msg.speedFast(), 'Flappy.LevelSpeed.FAST'],
+       [msg.speedVeryFast(), 'Flappy.LevelSpeed.VERY_FAST']];
 
   generator.flappy_setSpeed = function() {
     return 'Flappy.setSpeed(\'block_id_' + this.id + '\', ' +
+      this.getTitleValue('VALUE') + ');\n';
+  };
+
+  blockly.Blocks.flappy_setBackground = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+
+      // this.setHSV(42, 0.89, 0.99);
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setSpeedTooltip());
+    }
+  };
+
+  // todo - localize
+  blockly.Blocks.flappy_setBackground.VALUES =
+      [['set background Flappy', '"flappy"'],
+       ['set background Sci-Fi', '"scifi"']];
+
+  generator.flappy_setBackground = function() {
+    return 'Flappy.setBackground(\'block_id_' + this.id + '\', ' +
       this.getTitleValue('VALUE') + ');\n';
   };
 

@@ -97,7 +97,7 @@ var loadLevel = function() {
   Flappy.MAZE_WIDTH = 400;
   Flappy.MAZE_HEIGHT = 400;
 
-  Flappy.GROUND_WIDTH = 24;
+  Flappy.GROUND_WIDTH = 400;
   Flappy.GROUND_HEIGHT = 48;
 
   Flappy.GOAL_SIZE = 48;
@@ -169,6 +169,7 @@ var drawMap = function() {
     tile = document.createElementNS(Blockly.SVG_NS, 'image');
     tile.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                         skin.background);
+    tile.setAttribute('id', 'background');
     tile.setAttribute('height', Flappy.MAZE_HEIGHT);
     tile.setAttribute('width', Flappy.MAZE_WIDTH);
     tile.setAttribute('x', 0);
@@ -217,7 +218,6 @@ var drawMap = function() {
   svg.appendChild(birdIcon);
 
   if (level.ground) {
-    // todo - can almost certainly do better than having a bunch of individual icons
     for (i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
       var groundIcon = document.createElementNS(Blockly.SVG_NS, 'image');
       groundIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
@@ -839,6 +839,21 @@ Flappy.displayScore = function() {
   scoreElement.innerText = flappyMsg.scoreText({
     playerScore: Flappy.playerScore
   });
+};
+
+Flappy.setBackground = function (value) {
+  var image;
+  switch (value) {
+    case 'flappy':
+      image = skin.background;
+      break;
+    case 'scifi':
+      image = skin.scifi.background;
+      break;
+  }
+
+  var background = document.getElementById('background');
+  background.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image);
 };
 
 Flappy.reachedGoalOrTickLimit = function() {

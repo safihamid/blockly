@@ -13,6 +13,8 @@ var playSoundBlock =  '<block type="flappy_playSound"></block>';
 var incrementScoreBlock = '<block type="flappy_incrementPlayerScore"></block>';
 
 var setSpeedBlock = '<block type="flappy_setSpeed"></block>';
+var setBackgroundBlock = '<block type="flappy_setBackground"></block>';
+
 
 var COL_WIDTH = 240;
 var COL1 = 20;
@@ -202,7 +204,7 @@ module.exports = {
     'freePlay': true,
     'toolbox':
       tb(flapHeightBlock + playSoundBlock + incrementScoreBlock + endGameBlock +
-        setSpeedBlock),
+        setSpeedBlock + setBackgroundBlock),
     'startBlocks':
       eventBlock('flappy_whenClick', COL1, ROW1) +
       eventBlock('flappy_whenCollideGround', COL1, ROW2) +
