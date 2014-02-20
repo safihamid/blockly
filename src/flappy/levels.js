@@ -7,12 +7,21 @@ var tb = function(blocks) {
 };
 
 var flapBlock = '<block type="flappy_flap"></block>';
+var flapHeightBlock = '<block type="flappy_flap_height"></block>';
 var endGameBlock = '<block type="flappy_endGame"></block>';
 var playSoundBlock =  '<block type="flappy_playSound"></block>';
 var incrementScoreBlock = '<block type="flappy_incrementPlayerScore"></block>';
 
 var setSpeedBlock = '<block type="flappy_setSpeed"></block>';
-var setFlapHeightBlock = '<block type="flappy_setFlapHeight"></block>';
+
+var COL_WIDTH = 240;
+var COL1 = 20;
+var COL2 = 20 + COL_WIDTH;
+
+var ROW_HEIGHT = 120;
+var ROW1 = 20;
+var ROW2 = ROW1 + ROW_HEIGHT;
+var ROW3 = ROW2 + ROW_HEIGHT;
 
 var eventBlock = function (type, x, y, child) {
   return '<block type="' + type + '" deletable="false"' +
@@ -55,7 +64,7 @@ module.exports = {
     'toolbox':
       tb(flapBlock + playSoundBlock),
     'startBlocks':
-      eventBlock('flappy_whenClick', 20, 20)
+      eventBlock('flappy_whenClick', COL1, ROW1)
   },
 
   // todo - ideal numbers are inflated bc of room for noises. can i do this better?
@@ -83,8 +92,8 @@ module.exports = {
     'toolbox':
       tb(flapBlock + endGameBlock + playSoundBlock),
     'startBlocks':
-      eventBlock('flappy_whenClick', 20, 20, flapBlock) +
-      eventBlock('flappy_whenCollideGround', 20, 140)
+      eventBlock('flappy_whenClick', COL1, ROW1, flapBlock) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2)
   },
 
   '3': {
@@ -114,8 +123,8 @@ module.exports = {
       tb(flapBlock + endGameBlock + playSoundBlock),
     'startBlocks':
       eventBlock('flappy_whenClick', 20, 20, flapBlock) +
-      eventBlock('flappy_whenCollideGround', 20, 140, endGameBlock) +
-      eventBlock('flappy_whenCollidePipe', 240, 140)
+      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      eventBlock('flappy_whenCollidePipe', COL2, ROW2)
   },
 
   '4': {
@@ -142,10 +151,40 @@ module.exports = {
     'toolbox':
       tb(flapBlock + endGameBlock + incrementScoreBlock + playSoundBlock),
     'startBlocks':
-      eventBlock('flappy_whenClick', 20, 20, flapBlock) +
-      eventBlock('flappy_whenCollideGround', 20, 140, endGameBlock) +
-      eventBlock('flappy_whenCollidePipe', 240, 140, endGameBlock) +
-      eventBlock('flappy_whenEnterPipe', 240, 20)
+      eventBlock('flappy_whenClick', COL1, ROW1, flapBlock) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      eventBlock('flappy_whenCollidePipe', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterPipe', COL2, ROW1)
+  },
+
+  '5': {
+    'ideal': 5,
+    'requiredBlocks': [
+      [{'test': 'flap', 'type': 'flappy_flap_height'}]
+    ],
+    'pipes': true,
+    'ground': true,
+    'score': true,
+    'infoText': false,
+    'freePlay': false,
+    'tickLimit': 140,
+    'goal': {
+      validation: function () {
+        // bird got into first pipe and has score of 1
+        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+          Flappy.playerScore === 1);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      eventBlock('flappy_whenCollidePipe', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterPipe', COL2, ROW1, incrementScoreBlock)
   },
 
   '11': {
@@ -162,13 +201,13 @@ module.exports = {
     },
     'freePlay': true,
     'toolbox':
-      tb(flapBlock + playSoundBlock + incrementScoreBlock + endGameBlock +
-        setSpeedBlock + setFlapHeightBlock),
+      tb(flapHeightBlock + playSoundBlock + incrementScoreBlock + endGameBlock +
+        setSpeedBlock),
     'startBlocks':
-      eventBlock('flappy_whenClick', 20, 20) +
-      eventBlock('flappy_whenCollideGround', 20, 140) +
-      eventBlock('flappy_whenCollidePipe', 240, 140) +
-      eventBlock('flappy_whenEnterPipe', 240, 20) +
-      eventBlock('flappy_whenRunButtonClick', 20, 260)
+      eventBlock('flappy_whenClick', COL1, ROW1) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2) +
+      eventBlock('flappy_whenCollidePipe', COL2, ROW2) +
+      eventBlock('flappy_whenEnterPipe', COL2, ROW1) +
+      eventBlock('flappy_whenRunButtonClick', COL1, ROW3)
   }
 };

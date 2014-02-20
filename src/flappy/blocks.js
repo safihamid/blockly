@@ -125,8 +125,39 @@ exports.install = function(blockly, skin) {
 
   generator.flappy_flap = function (velocity) {
     // Generate JavaScript for moving left.
-    // todo - dont hardcode velocity
-    return 'Flappy.flap(\'block_id_' + this.id + '\');\n';
+    return 'Flappy.flap(\'block_id_' + this.id + '\', Flappy.FlapHeight.NORMAL);\n';
+  };
+
+  blockly.Blocks.flappy_flap_height = {
+    // Block for flapping (flying upwards)
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.HEIGHTS);
+      dropdown.setValue(this.HEIGHTS[2][1]);
+
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'HEIGHT');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.flapTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_flap_height.HEIGHTS =
+      [[msg.flapVerySmall(), 'Flappy.FlapHeight.VERY_SMALL'],
+       [msg.flapSmall(), 'Flappy.FlapHeight.SMALL'],
+       [msg.flapNormal(), 'Flappy.FlapHeight.NORMAL'],
+       [msg.flapLarge(), 'Flappy.FlapHeight.LARGE'],
+       [msg.flapVeryLarge(), 'Flappy.FlapHeight.VERY_LARGE']];
+
+  generator.flappy_flap_height = function (velocity) {
+    // Generate JavaScript for moving left.
+    // todo - send flap param?
+    // todo - currently using bogus id of 0
+
+    return 'Flappy.flap(\'block_id_' + this.id + '\', ' +
+        this.getTitleValue('HEIGHT') + ');\n';
   };
 
   blockly.Blocks.flappy_playSound = {
@@ -142,7 +173,6 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - add messages
   blockly.Blocks.flappy_playSound.SOUNDS =
       [[msg.playSoundBounce(), 'wall'],
        [msg.playSoundCrunch(), 'wall0'],
@@ -215,6 +245,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
+  // todo - localized
   blockly.Blocks.flappy_setSpeed.VALUE =
       [['very slow', 1],
        ['slow', 3],
@@ -224,36 +255,6 @@ exports.install = function(blockly, skin) {
 
   generator.flappy_setSpeed = function() {
     return 'Flappy.setSpeed(\'block_id_' + this.id + '\', ' +
-      this.getTitleValue('VALUE') + ');\n';
-  };
-
-  blockly.Blocks.flappy_setFlapHeight = {
-    // Block for turning either left or right from among a fixed set of angles.
-    helpUrl: '',
-    init: function() {
-      var dropdown = new blockly.FieldDropdown(this.VALUE);
-      dropdown.setValue('normal');
-
-      this.setHSV(312, 0.32, 0.62);
-      this.appendDummyInput()
-          .appendTitle(msg.setFlapHeight())
-          .appendTitle(dropdown, 'VALUE');
-      this.setInputsInline(true);
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.setFlapHeightTooltip());
-    }
-  };
-
-  blockly.Blocks.flappy_setFlapHeight.VALUE =
-      [['very small', -6],
-       ['small', -8],
-       ['normal', -11],
-       ['large', -14],
-       ['very large', -17]];
-
-  generator.flappy_setFlapHeight = function() {
-    return 'Flappy.setFlapHeight(\'block_id_' + this.id + '\', ' +
       this.getTitleValue('VALUE') + ');\n';
   };
 
