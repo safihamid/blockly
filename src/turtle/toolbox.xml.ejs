@@ -145,6 +145,15 @@ Level 10 [free play]
           </block>
         </value>
       </block>
+      <% if (level == 10) { -%>
+        <block id="draw-width" type="draw_width">
+          <value name="WIDTH">
+            <block type="math_number">
+              <title name="NUM">1</title>
+            </block>
+          </value>
+        </block>
+      <% } -%>
     </category>
     <% // Colour: draw_colour with colour_picker and colour_random. -%>
     <category name="<%= msg.catColour() %>">
@@ -264,6 +273,15 @@ Level 10 [free play]
     <block type="draw_turn_by_constant">
       <title name="VALUE">90</title>
     </block>
+    <% if (level == 11) { -%>
+    <block id="draw-width" type="draw_width">
+      <value name="WIDTH">
+        <block type="math_number">
+          <title name="NUM">1</title>
+        </block>
+      </value>
+    </block>
+    <% } -%>
     <% // Colour: draw_colour with colour_picker and colour_random. -%>
     <block id="draw-color" type="draw_colour">
       <value name="COLOUR">
@@ -303,6 +321,13 @@ Level 10 [free play]
         </value>
       </block>
       <block type="draw_pen"></block>
+      <block id="draw-width" type="draw_width">
+        <value name="WIDTH">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
     </category>
     <% // Colour: draw_colour with colour_picker and colour_random. -%>
     <category name="<%= msg.catColour() %>">
