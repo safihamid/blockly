@@ -55,6 +55,7 @@ module.exports = {
     ],
     'obstacles': false,
     'ground': false,
+    'defaultSpeed': 0,
     'score': false,
     'infoText': true,
     'freePlay': false,
@@ -82,6 +83,7 @@ module.exports = {
     ],
     'obstacles': false,
     'ground': true,
+    'defaultSpeed': 0,
     'score': false,
     'infoText': true,
     'freePlay': false,
@@ -111,11 +113,15 @@ module.exports = {
     ],
     'obstacles': true,
     'ground': true,
+    'defaultSpeed': 4,
     'score': false,
     'infoText': true,
-    ' freePlay': false,
+    'freePlay': false,
     'tickLimit': 140,
     'goal': {
+      x: 600 - (56 / 2),
+      y: 400 - 48 - 56 / 2,
+      moving: true,
       validation: function () {
         return Flappy.obstacles[0].hitBird &&
           Flappy.gameState === Flappy.GameStates.OVER;
@@ -128,7 +134,7 @@ module.exports = {
       tb(flapBlock + endGameBlock + playSoundBlock),
     'startBlocks':
       eventBlock('flappy_whenClick', 20, 20, flapBlock) +
-      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      // eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
       eventBlock('flappy_whenCollideObstacle', COL2, ROW2)
   },
 
@@ -138,6 +144,7 @@ module.exports = {
     ],
     'obstacles': true,
     'ground': true,
+    'defaultSpeed': 4,
     'score': true,
     'infoText': true,
     'freePlay': false,
@@ -145,7 +152,7 @@ module.exports = {
     'goal': {
       validation: function () {
         // bird got into first obstacle and has score of 1
-        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+        return (Flappy.obstacles[0].x < Flappy.birdX &&
           Flappy.playerScore === 1);
       }
     },
@@ -167,6 +174,7 @@ module.exports = {
     ],
     'obstacles': true,
     'ground': true,
+    'defaultSpeed': 4,
     'score': true,
     'infoText': true,
     'freePlay': false,
@@ -174,7 +182,7 @@ module.exports = {
     'goal': {
       validation: function () {
         // bird got into first obstacle and has score of 1
-        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+        return (Flappy.obstacles[0].x < Flappy.birdX &&
           Flappy.playerScore === 1);
       }
     },
@@ -196,6 +204,7 @@ module.exports = {
     ],
     'obstacles': true,
     'ground': true,
+    'defaultSpeed': 4,
     'score': true,
     'infoText': true,
     'freePlay': false,
@@ -203,7 +212,7 @@ module.exports = {
     'goal': {
       validation: function () {
         // bird got into first obstacle and has score of 1
-        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+        return (Flappy.obstacles[0].x < Flappy.birdX &&
           Flappy.playerScore === 1);
       }
     },
@@ -221,11 +230,44 @@ module.exports = {
       eventBlock('flappy_whenRunButtonClick', CATEGORY_BUFFER + COL1, ROW3)
   },
 
+  '7': {
+    'requiredBlocks': [
+      [{'test': 'setBackground', 'type': 'flappy_setBackground'}]
+    ],
+    'obstacles': true,
+    'ground': true,
+    'defaultSpeed': 4,
+    'score': true,
+    'infoText': true,
+    'freePlay': false,
+    'tickLimit': 140, // todo - may need to change tickLimit. can i set just an x goal?
+    'goal': {
+      validation: function () {
+        // bird got into first obstacle and has score of 1
+        return (Flappy.obstacles[0].x < Flappy.birdX &&
+          Flappy.playerScore === 1);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
+        setSpeedBlock + setBackgroundBlock + setBackgroundBlock + setBackgroundBlock + setBackgroundBlock + setBackgroundBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      eventBlock('flappy_whenCollideObstacle', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterObstacle', COL2, ROW1, incrementScoreBlock) +
+      eventBlock('flappy_whenRunButtonClick', CATEGORY_BUFFER + COL1, ROW3)
+  },
+
   '11': {
     'requiredBlocks': [
     ],
     'obstacles': true,
     'ground': true,
+    'defaultSpeed': 4,
     'score': true,
     'infoText': true,
     'freePlay': true,
@@ -235,21 +277,17 @@ module.exports = {
     'freePlay': true,
     'toolbox':
       tb(
-        category('game',
-          flapHeightBlock +
-          playSoundBlock +
-          incrementScoreBlock +
-          endGameBlock
-        ) +
-        category('setters',
-          setSpeedBlock +
-          setGapHeightBlock +
-          setBackgroundBlock +
-          setPlayerBlock +
-          setObstacleBlock +
-          setGroundBlock
-          )
-        ),
+        flapHeightBlock +
+        playSoundBlock +
+        incrementScoreBlock +
+        endGameBlock +
+        setSpeedBlock +
+        setGapHeightBlock +
+        setBackgroundBlock +
+        setPlayerBlock +
+        setObstacleBlock +
+        setGroundBlock
+      ),
     'startBlocks':
       eventBlock('flappy_whenClick', CATEGORY_BUFFER + COL1, ROW1) +
       eventBlock('flappy_whenCollideGround', CATEGORY_BUFFER + COL1, ROW2) +
