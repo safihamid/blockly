@@ -1,7 +1,6 @@
 /*jshint multistr: true */
 
 // todo - i think our prepoluated code counts as LOCs
-// todo - some ideal numbers are inflated bc of room for noises. can i do this better?
 
 var Direction = require('./tiles').Direction;
 
@@ -51,7 +50,6 @@ var eventBlock = function (type, x, y, child) {
 
 module.exports = {
   '1': {
-    'ideal': 2,
     'requiredBlocks': [
       [{'test': 'flap', 'type': 'flappy_flap'}]
     ],
@@ -61,9 +59,13 @@ module.exports = {
     'infoText': true,
     'freePlay': false,
     'tickLimit': 80,
+    // top/left coordinate of goal (better would be if we gave center)
     'goal': {
-      x: 103,
-      y: 0
+      x: 100,
+      y: 0,
+      validation: function () {
+        return (Flappy.birdY  <= 20);
+      }
     },
     'scale': {
       'snapRadius': 2
@@ -75,7 +77,6 @@ module.exports = {
   },
 
   '2': {
-    'ideal': 3,
     'requiredBlocks': [
       [{'test': 'endGame', 'type': 'flappy_endGame'}]
     ],
@@ -84,12 +85,14 @@ module.exports = {
     'score': false,
     'infoText': true,
     'freePlay': false,
-    'tickLimit': 120, // how long it takes to fly just past first obstacle
+    'tickLimit': 80, // how long it takes to fly just past first obstacle
     'goal': {
-      x: 106,
-      y: 320,
+      x: 100,
+      y: 400 - 48 - 56 / 2,
       validation: function () {
-        return (Flappy.gameState === Flappy.GameStates.OVER);
+        // this only happens after bird hits ground, and we spin him because of
+        // game over
+        return (Flappy.birdY  === 322 && Flappy.birdX === 110);
       }
     },
     'scale': {
@@ -103,7 +106,6 @@ module.exports = {
   },
 
   '3': {
-    'ideal': 3,
     'requiredBlocks': [
       [{'test': 'endGame', 'type': 'flappy_endGame'}]
     ],
@@ -115,12 +117,8 @@ module.exports = {
     'tickLimit': 140,
     'goal': {
       validation: function () {
-        // meant to test that we're crashing into first obstacle, but right now we
-        // will also pass by crashing into ground in obstacle location without
-        // ever having attached to obstacle collide event
-        var obstacle0x = document.getElementById('obstacle_top0').getAttribute('x');
-        return (parseInt(obstacle0x, 10) <= 144 &&
-          Flappy.gameState === Flappy.GameStates.OVER);
+        return Flappy.obstacles[0].hitBird &&
+          Flappy.gameState === Flappy.GameStates.OVER;
       }
     },
     'scale': {
@@ -135,7 +133,6 @@ module.exports = {
   },
 
   '4': {
-    'ideal': 5,
     'requiredBlocks': [
       [{'test': 'incrementPlayerScore', 'type': 'flappy_incrementPlayerScore'}]
     ],
@@ -165,7 +162,6 @@ module.exports = {
   },
 
   '5': {
-    'ideal': 5,
     'requiredBlocks': [
       [{'test': 'flap', 'type': 'flappy_flap_height'}]
     ],
@@ -192,6 +188,37 @@ module.exports = {
       eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
       eventBlock('flappy_whenCollideObstacle', COL2, ROW2, endGameBlock) +
       eventBlock('flappy_whenEnterObstacle', COL2, ROW1, incrementScoreBlock)
+  },
+
+  '6': {
+    'requiredBlocks': [
+      [{'test': 'setSpeed', 'type': 'flappy_setSpeed'}]
+    ],
+    'obstacles': true,
+    'ground': true,
+    'score': true,
+    'infoText': true,
+    'freePlay': false,
+    'tickLimit': 140, // todo - may need to change tickLimit. can i set just an x goal?
+    'goal': {
+      validation: function () {
+        // bird got into first obstacle and has score of 1
+        return (Flappy.tickCount - Flappy.firstActiveTick >= 114 &&
+          Flappy.playerScore === 1);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
+        setSpeedBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
+      eventBlock('flappy_whenCollideGround', COL1, ROW2, endGameBlock) +
+      eventBlock('flappy_whenCollideObstacle', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterObstacle', COL2, ROW1, incrementScoreBlock) +
+      eventBlock('flappy_whenRunButtonClick', CATEGORY_BUFFER + COL1, ROW3)
   },
 
   '11': {

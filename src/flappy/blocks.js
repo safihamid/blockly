@@ -299,10 +299,9 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setBackground.VALUES =
-      [['set background Flappy', '"flappy"'],
-       ['set background Sci-Fi', '"scifi"']];
+      [[msg.setBackgroundFlappy(), '"flappy"'],
+       [msg.setBackgroundSciFi(), '"scifi"']];
 
   generator.flappy_setBackground = function() {
     return 'Flappy.setBackground(\'block_id_' + this.id + '\', ' +
@@ -327,10 +326,9 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setPlayer.VALUES =
-      [['set player Flappy', '"flappy"'],
-       ['set player Sci-Fi', '"scifi"']];
+      [[msg.setPlayerFlappy(), '"flappy"'],
+       [msg.setPlayerSciFi(), '"scifi"']];
 
   generator.flappy_setPlayer = function() {
     return 'Flappy.setPlayer(\'block_id_' + this.id + '\', ' +
@@ -355,10 +353,9 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setObstacle.VALUES =
-      [['set obstacle Flappy', '"flappy"'],
-       ['set obstacle Sci-Fi', '"scifi"']];
+      [[msg.setObstacleFlappy(), '"flappy"'],
+       [msg.setObstacleSciFi(), '"scifi"']];
 
   generator.flappy_setObstacle = function() {
     return 'Flappy.setObstacle(\'block_id_' + this.id + '\', ' +
@@ -383,10 +380,9 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setGround.VALUES =
-      [['set ground Flappy', '"flappy"'],
-       ['set ground Sci-Fi', '"scifi"']];
+      [[msg.setGroundFlappy(), '"flappy"'],
+       [msg.setGroundSciFi(), '"scifi"']];
 
   generator.flappy_setGround = function() {
     return 'Flappy.setGround(\'block_id_' + this.id + '\', ' +
