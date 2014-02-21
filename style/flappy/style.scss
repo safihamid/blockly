@@ -1,7 +1,8 @@
 $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
 
-#svgBounce {
+#svgFlappy {
   border: solid 1px #DBDBDB;
+  overflow: hidden;
 }
 
 /* 'Look' icon */
@@ -68,6 +69,7 @@ button.share:focus {
   display: none;
 }
 .score-cell-enabled {
+  vertical-align: top;
   min-width: 102px;
 }
 .share-cell-none {
