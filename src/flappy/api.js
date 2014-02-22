@@ -69,7 +69,7 @@ exports.flap = function (id, amount) {
 exports.endGame = function (id) {
   BlocklyApps.highlight(id);
   Flappy.gameState = Flappy.GameStates.ENDING;
-}
+};
 
 exports.incrementPlayerScore = function(id) {
   BlocklyApps.highlight(id);

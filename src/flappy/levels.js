@@ -59,7 +59,7 @@ module.exports = {
     'score': false,
     'infoText': true,
     'freePlay': false,
-    'tickLimit': 80,
+    'tickLimit': 240,
     // top/left coordinate of goal (better would be if we gave center)
     'goal': {
       startX  : 100,
@@ -286,7 +286,6 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
-    'freePlay': true,
     'toolbox':
       tb(
         flapHeightBlock +

@@ -113,16 +113,19 @@ var loadLevel = function() {
   if (!level.obstacles) {
     numObstacles = 0;
   }
+
+  var resetObstacle = function (x) {
+    this.x = x;
+    this.gapStart = randomObstacleHeight();
+    this.hitAvatar = false;
+  };
+
   for (var i = 0; i < numObstacles; i++) {
     Flappy.obstacles.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.OBSTACLE_SPACING,
       gapStart: randomObstacleHeight(), // y coordinate of the top of the gap
       hitAvatar: false,
-      reset: function (x) {
-        this.x = x;
-        this.gapStart = randomObstacleHeight();
-        this.hitAvatar = false;
-      }
+      reset: resetObstacle
     });
   }
 };
@@ -269,7 +272,7 @@ var drawMap = function() {
   clickrun.setAttribute('height', 41);
   clickrun.setAttribute('width', 273);
   clickrun.setAttribute('x', 64);
-  clickrun.setAttribute('y', 50);
+  clickrun.setAttribute('y', 200);
   clickrun.setAttribute('visibility', 'visibile');
   svg.appendChild(clickrun);
 
@@ -333,7 +336,7 @@ var checkForObstacleCollision = function (obstacle) {
     return true;
   }
   return false;
-}
+};
 
 Flappy.onTick = function() {
   var avatarWasAboveGround, avatarIsAboveGround;
@@ -589,7 +592,7 @@ BlocklyApps.reset = function(first) {
   }
 
   document.getElementById('avatar').removeAttribute('transform');
-  document.getElementById('instructions').setAttribute('visibility', 'visible');
+  document.getElementById('instructions').setAttribute('visibility', 'hidden');
   document.getElementById('clickrun').setAttribute('visibility', 'visible');
   document.getElementById('getready').setAttribute('visibility', 'hidden');
   document.getElementById('gameover').setAttribute('visibility', 'hidden');
@@ -620,6 +623,7 @@ BlocklyApps.runButtonClick = function() {
     resetButton.style.minWidth = runButton.offsetWidth + 'px';
   }
   document.getElementById('clickrun').setAttribute('visibility', 'hidden');
+  document.getElementById('instructions').setAttribute('visibility', 'visible');
   if (infoText) {
     document.getElementById('getready').setAttribute('visibility', 'visible');
   }
@@ -934,7 +938,7 @@ Flappy.setGround = function (value) {
     element = document.getElementById('ground' + i);
     element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       skinTheme(value).ground);
-  };
+  }
 };
 
 var checkTickLimit = function() {

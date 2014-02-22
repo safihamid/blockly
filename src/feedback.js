@@ -76,7 +76,9 @@ exports.displayFeedback = function(options) {
     });
   }
 
-  feedbackDialog.show();
+  feedbackDialog.show({
+    staticBackdrop: (options.app === 'flappy')
+  });
 
   if (feedbackBlocks.div) {
     feedbackBlocks.show();
