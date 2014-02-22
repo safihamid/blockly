@@ -339,7 +339,7 @@ exports.install = function(blockly, skin) {
       [[msg.setPlayerFlappy(), '"flappy"'],
        [msg.setPlayerSciFi(), '"scifi"'],
        [msg.setPlayerUnderwater(), '"underwater"'],
-       [msg.setPlayerSanta(), '"underwater"'],
+       [msg.setPlayerSanta(), '"santa"'],
        [msg.setPlayerCave(), '"cave'],
        [msg.setPlayerShark(), '"shark"'],
        [msg.setPlayerEaster(), '"easter"'],
