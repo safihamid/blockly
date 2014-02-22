@@ -120,12 +120,24 @@ var loadLevel = function() {
     this.hitAvatar = false;
   };
 
+  var containsAvatar = function () {
+    var flappyRight = Flappy.avatarX + Flappy.AVATAR_WIDTH;
+    var flappyBottom = Flappy.avatarY + Flappy.AVATAR_HEIGHT;
+    var obstacleRight = this.x + Flappy.OBSTACLE_WIDTH;
+    var obstacleBottom = this.gapStart + Flappy.GAP_SIZE;
+    return (flappyRight > this.x &&
+      flappyRight < obstacleRight &&
+      Flappy.avatarY > this.gapStart &&
+      flappyBottom < obstacleBottom);
+  };
+
   for (var i = 0; i < numObstacles; i++) {
     Flappy.obstacles.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.OBSTACLE_SPACING,
       gapStart: randomObstacleHeight(), // y coordinate of the top of the gap
       hitAvatar: false,
-      reset: resetObstacle
+      reset: resetObstacle,
+      containsAvatar: containsAvatar
     });
   }
 };
@@ -338,6 +350,14 @@ var checkForObstacleCollision = function (obstacle) {
   return false;
 };
 
+Flappy.activeTicks = function () {
+  if (Flappy.firstActiveTick < 0) {
+    return 0;
+  }
+
+  return (Flappy.tickCount - Flappy.firstActiveTick);
+};
+
 Flappy.onTick = function() {
   var avatarWasAboveGround, avatarIsAboveGround;
 
@@ -409,6 +429,10 @@ Flappy.onTick = function() {
     // update goal
     if (level.goal && level.goal.moving) {
       Flappy.goalX -= Flappy.SPEED;
+      if (Flappy.goalX + Flappy.GOAL_SIZE < 0) {
+        // if it disappears off of left, reappear on right
+        Flappy.goalX = Flappy.MAZE_WIDTH + Flappy.GOAL_SIZE;
+      }
     }
   }
 
@@ -574,7 +598,7 @@ BlocklyApps.reset = function(first) {
   });
 
   // reset configurable values
-  Flappy.SPEED = level.defaultSpeed;
+  Flappy.SPEED = 0;
   Flappy.FLAP_VELOCITY = -11;
   Flappy.setBackground('flappy');
   Flappy.setObstacle('flappy');
@@ -795,6 +819,12 @@ Flappy.onPuzzleComplete = function() {
 
   Flappy.testResults = BlocklyApps.getTestResults();
 
+  if (Flappy.testResults === BlocklyApps.TestResults.ALL_PASS) {
+    BlocklyApps.playAudio('win', {volume : 0.5});
+  } else {
+    BlocklyApps.playAudio('failure', {volume : 0.5});
+  }
+
   if (level.editCode) {
     Flappy.testResults = BlocklyApps.levelComplete ?
       BlocklyApps.TestResults.ALL_PASS :
@@ -958,14 +988,17 @@ var checkTickLimit = function() {
 };
 
 var checkFinished = function () {
-  if (level.goal && level.goal.validation && level.goal.validation()) {
+  // if we have a succcess condition and have accomplished it, we're done and successful
+  if (level.goal && level.goal.successCondition && level.goal.successCondition()) {
     Flappy.result = ResultType.SUCCESS;
     return true;
   }
 
-  if (checkTickLimit()) {
+  // if we have a failure condition, and it's been reached, we're done and failed
+  if (level.goal && level.goal.failureCondition && level.goal.failureCondition()) {
     Flappy.result = ResultType.FAILURE;
     return true;
   }
+
   return false;
 };
