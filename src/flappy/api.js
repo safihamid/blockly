@@ -63,13 +63,13 @@ exports.playSound = function(id, soundName) {
 
 exports.flap = function (id, amount) {
   BlocklyApps.highlight(id);
-  Flappy.birdVelocity = amount || this.FlapHeight.NORMAL;
+  Flappy.avatarVelocity = amount || this.FlapHeight.NORMAL;
 };
 
 exports.endGame = function (id) {
   BlocklyApps.highlight(id);
   Flappy.gameState = Flappy.GameStates.ENDING;
-}
+};
 
 exports.incrementPlayerScore = function(id) {
   BlocklyApps.highlight(id);

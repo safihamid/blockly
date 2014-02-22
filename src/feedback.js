@@ -76,7 +76,9 @@ exports.displayFeedback = function(options) {
     });
   }
 
-  feedbackDialog.show();
+  feedbackDialog.show({
+    staticBackdrop: (options.app === 'flappy')
+  });
 
   if (feedbackBlocks.div) {
     feedbackBlocks.show();
@@ -251,7 +253,11 @@ var createSharingDiv = function(options) {
 
     if (options.response && options.response.level_source) {
       var sharingText = document.createElement('div');
-      dom.setText(sharingText, msg.shareDrawing());
+      if (options.app === "flappy") {
+        dom.setText(sharingText, msg.shareGame());
+      } else {
+        dom.setText(sharingText, msg.shareDrawing());
+      }
       sharingText.className = 'shareDrawingMsg';
       sharingDiv.appendChild(sharingText);
 
@@ -297,6 +303,10 @@ var getTrophiesElement = function(options) {
 };
 
 var getShowCodeElement = function(options) {
+  if (options.app === 'flappy') {
+    return null;
+  }
+
   if (exports.canContinueToNextLevel(options.feedbackType)) {
     var linesWritten = exports.getNumBlocksUsed();
     var showCodeDiv = document.createElement('div');

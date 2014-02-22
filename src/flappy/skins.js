@@ -32,11 +32,77 @@ exports.load = function(assetUrl, id) {
     ground: skin.assetUrl('ground_scifi.png')
   };
 
+  skin.underwater = {
+    background: skin.assetUrl('background_underwater.png'),
+    avatar: skin.assetUrl('avatar_underwater.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_underwater.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_underwater.png'),
+    ground: skin.assetUrl('ground_underwater.png')
+  };
+
+  skin.cave = {
+    background: skin.assetUrl('background_cave.png'),
+    avatar: skin.assetUrl('avatar_cave.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_cave.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_cave.png'),
+    ground: skin.assetUrl('ground_cave.png')
+  };
+
+  skin.santa = {
+    background: skin.assetUrl('background_santa.png'),
+    avatar: skin.assetUrl('santa.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_santa.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_santa.png'),
+    ground: skin.assetUrl('ground_santa.png')
+  };
+
+  skin.laser = {
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_laser.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_laser.png')
+  };
+
+  skin.lava = {
+    ground: skin.assetUrl('ground_lava.png')
+  };
+
+  skin.shark = {
+    avatar: skin.assetUrl('shark.png')
+  };
+
+  skin.easter = {
+    avatar: skin.assetUrl('easterbunny.png')
+  };
+
+  skin.batman = {
+    avatar: skin.assetUrl('batman.png')
+  };
+
+  skin.submarine = {
+    avatar: skin.assetUrl('submarine.png')
+  };
+
+  skin.unicorn = {
+    avatar: skin.assetUrl('unicorn.png')
+  };
+
+  skin.fairy = {
+    avatar: skin.assetUrl('fairy.png')
+  };
+
+  skin.superman = {
+    avatar: skin.assetUrl('superman.png')
+  };
+
+  skin.turkey = {
+    avatar: skin.assetUrl('turkey.png')
+  };
+
   // Images
   skin.ground = skin.assetUrl('ground.png');
   skin.obstacle_top = skin.assetUrl('obstacle_top.png');
   skin.obstacle_bottom = skin.assetUrl('obstacle_bottom.png');
   skin.instructions = skin.assetUrl('instructions.png');
+  skin.clickrun = skin.assetUrl('clickrun.png');
   skin.getready = skin.assetUrl('getready.png');
   skin.gameover = skin.assetUrl('gameover.png');
 
@@ -75,12 +141,18 @@ exports.load = function(assetUrl, id) {
   skin.wall3Sound = [skin.assetUrl('wall3.mp3'), skin.assetUrl('wall3.ogg')];
   skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
 
-  // todo - add oggs
   skin.dieSound = [skin.assetUrl('sfx_die.mp3'), skin.assetUrl('sfx_die.ogg')];
   skin.hitSound = [skin.assetUrl('sfx_hit.mp3'), skin.assetUrl('sfx_hit.ogg')];
   skin.pointSound = [skin.assetUrl('sfx_point.mp3'), skin.assetUrl('sfx_point.ogg')];
   skin.swooshingSound = [skin.assetUrl('sfx_swooshing.mp3'), skin.assetUrl('sfx_swooshing.ogg')];
   skin.wingSound = [skin.assetUrl('sfx_wing.mp3'), skin.assetUrl('sfx_wing.ogg')];
+
+  skin.jetSound = [skin.assetUrl('jet.mp3'), skin.assetUrl('jet.ogg')];
+  skin.crashSound = [skin.assetUrl('crash.mp3'), skin.assetUrl('crash.ogg')];
+  skin.jingleSound = [skin.assetUrl('jingle.mp3'), skin.assetUrl('jingle.ogg')];
+  skin.laserSound = [skin.assetUrl('laser.mp3'), skin.assetUrl('laser.ogg')];
+  skin.splashSound = [skin.assetUrl('splash.mp3'), skin.assetUrl('splash.ogg')];
+
   skin.additionalSound = config.additionalSound;
   // Settings
   skin.graph = config.graph;

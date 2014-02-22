@@ -177,7 +177,13 @@ exports.install = function(blockly, skin) {
        [msg.playSoundHit(), 'sfx_hit'],
        [msg.playSoundPoint(), 'sfx_point'],
        [msg.playSoundSwoosh(), 'sfx_swooshing'],
-       [msg.playSoundWing(), 'sfx_wing']];
+       [msg.playSoundWing(), 'sfx_wing'],
+       [msg.playSoundJet(), 'jet'],
+       [msg.playSoundCrash(), 'crash'],
+       [msg.playSoundJingle(), 'jingle'],
+       [msg.playSoundSplash(), 'splash'],
+       [msg.playSoundLaser(), 'laser']
+     ];
 
   generator.flappy_playSound = function() {
     // Generate JavaScript for playing a sound.
@@ -299,10 +305,12 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setBackground.VALUES =
-      [['set background Flappy', '"flappy"'],
-       ['set background Sci-Fi', '"scifi"']];
+      [[msg.setBackgroundFlappy(), '"flappy"'],
+       [msg.setBackgroundSciFi(), '"scifi"'],
+       [msg.setBackgroundUnderwater(), '"underwater"'],
+       [msg.setBackgroundCave(), '"cave"'],
+       [msg.setBackgroundSanta(), '"santa"']];
 
   generator.flappy_setBackground = function() {
     return 'Flappy.setBackground(\'block_id_' + this.id + '\', ' +
@@ -327,10 +335,20 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setPlayer.VALUES =
-      [['set player Flappy', '"flappy"'],
-       ['set player Sci-Fi', '"scifi"']];
+      [[msg.setPlayerFlappy(), '"flappy"'],
+       [msg.setPlayerSciFi(), '"scifi"'],
+       [msg.setPlayerUnderwater(), '"underwater"'],
+       [msg.setPlayerSanta(), '"santa"'],
+       [msg.setPlayerCave(), '"cave"'],
+       [msg.setPlayerShark(), '"shark"'],
+       [msg.setPlayerEaster(), '"easter"'],
+       [msg.setPlayerBatman(), '"batman"'],
+       [msg.setPlayerSubmarine(), '"submarine"'],
+       [msg.setPlayerUnicorn(), '"unicorn"'],
+       [msg.setPlayerFairy(), '"fairy"'],
+       [msg.setPlayerSuperman(), '"superman"'],
+       [msg.setPlayerTurkey(), '"turkey"']];
 
   generator.flappy_setPlayer = function() {
     return 'Flappy.setPlayer(\'block_id_' + this.id + '\', ' +
@@ -355,10 +373,13 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setObstacle.VALUES =
-      [['set obstacle Flappy', '"flappy"'],
-       ['set obstacle Sci-Fi', '"scifi"']];
+      [[msg.setObstacleFlappy(), '"flappy"'],
+       [msg.setObstacleSciFi(), '"scifi"'],
+       [msg.setObstacleUnderwater(), '"underwater"'],
+       [msg.setObstacleCave(), '"cave"'],
+       [msg.setObstacleSanta(), '"santa"'],
+       [msg.setObstacleLaser(), '"laser"']];
 
   generator.flappy_setObstacle = function() {
     return 'Flappy.setObstacle(\'block_id_' + this.id + '\', ' +
@@ -383,10 +404,13 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  // todo - localize
   blockly.Blocks.flappy_setGround.VALUES =
-      [['set ground Flappy', '"flappy"'],
-       ['set ground Sci-Fi', '"scifi"']];
+      [[msg.setGroundFlappy(), '"flappy"'],
+       [msg.setGroundSciFi(), '"scifi"'],
+       [msg.setGroundUnderwater(), '"underwater"'],
+       [msg.setGroundCave(), '"cave"'],
+       [msg.setGroundSanta(), '"santa"'],
+       [msg.setGroundLava(), '"lava"']];
 
   generator.flappy_setGround = function() {
     return 'Flappy.setGround(\'block_id_' + this.id + '\', ' +
