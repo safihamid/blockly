@@ -1,5 +1,8 @@
 var feedback = require('./feedback.js');
 var dom = require('./dom.js');
+// Builds the dom to get more info from the user. After user enters info
+// and click "create level" onAttemptCallback is called to deliver the info
+// to the server.
 exports.builderForm = function(onAttemptCallback) {
   var builderDetails = document.createElement('div');
   builderDetails.innerHTML = require('./templates/builder.html')();
