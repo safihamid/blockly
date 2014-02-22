@@ -771,6 +771,9 @@ Flappy.execute = function() {
 
   Flappy.tickCount = 0;
   Flappy.firstActiveTick = -1;
+  if (Flappy.intervalId) {
+    window.clearInterval(Flappy.intervalId);
+  }
   Flappy.intervalId = window.setInterval(Flappy.onTick, Flappy.scale.stepSpeed);
 };
 
