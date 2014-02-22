@@ -36,7 +36,7 @@ Flappy.gameState = Flappy.GameStates.WAITING;
 
 Flappy.clickPending = false;
 
-Flappy.birdVelocity = 0;
+Flappy.avatarVelocity = 0;
 Flappy.gravity = 1;
 
 var level;
@@ -117,11 +117,11 @@ var loadLevel = function() {
     Flappy.obstacles.push({
       x: Flappy.MAZE_WIDTH * 1.5 + i * Flappy.OBSTACLE_SPACING,
       gapStart: randomObstacleHeight(), // y coordinate of the top of the gap
-      hitBird: false,
+      hitAvatar: false,
       reset: function (x) {
         this.x = x;
         this.gapStart = randomObstacleHeight();
-        this.hitBird = false;
+        this.hitAvatar = false;
       }
     });
   }
@@ -207,38 +207,38 @@ var drawMap = function() {
     }
   }
 
-  if (level.goal && level.goal.x) {
+  if (level.goal && level.goal.startX) {
     var goal = document.createElementNS(Blockly.SVG_NS, 'image');
     goal.setAttribute('id', 'goal');
     goal.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                             skin.goal);
     goal.setAttribute('height', Flappy.GOAL_SIZE);
     goal.setAttribute('width', Flappy.GOAL_SIZE);
-    goal.setAttribute('x', level.goal.x);
-    goal.setAttribute('y', level.goal.y);
+    goal.setAttribute('x', level.goal.startX);
+    goal.setAttribute('y', level.goal.startY);
     svg.appendChild(goal);
   }
 
-  var birdClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-  birdClip.setAttribute('id', 'birdClipPath');
-  var birdClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-  birdClipRect.setAttribute('id', 'birdClipRect');
-  birdClipRect.setAttribute('width', Flappy.MAZE_WIDTH);
-  birdClipRect.setAttribute('height', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
-  birdClip.appendChild(birdClipRect);
-  svg.appendChild(birdClip);
+  var avatArclip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+  avatArclip.setAttribute('id', 'avatArclipPath');
+  var avatArclipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+  avatArclipRect.setAttribute('id', 'avatArclipRect');
+  avatArclipRect.setAttribute('width', Flappy.MAZE_WIDTH);
+  avatArclipRect.setAttribute('height', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+  avatArclip.appendChild(avatArclipRect);
+  svg.appendChild(avatArclip);
 
-  // Add bird.
-  var birdIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-  birdIcon.setAttribute('id', 'bird');
-  birdIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  // Add avatar.
+  var avatarIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+  avatarIcon.setAttribute('id', 'avatar');
+  avatarIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                           skin.avatar);
-  birdIcon.setAttribute('height', Flappy.AVATAR_HEIGHT);
-  birdIcon.setAttribute('width', Flappy.AVATAR_WIDTH);
+  avatarIcon.setAttribute('height', Flappy.AVATAR_HEIGHT);
+  avatarIcon.setAttribute('width', Flappy.AVATAR_WIDTH);
   if (level.ground) {
-    birdIcon.setAttribute('clip-path', 'url(#birdClipPath)');
+    avatarIcon.setAttribute('clip-path', 'url(#avatArclipPath)');
   }
-  svg.appendChild(birdIcon);
+  svg.appendChild(avatarIcon);
 
   var instructions = document.createElementNS(Blockly.SVG_NS, 'image');
   instructions.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
@@ -322,21 +322,21 @@ var delegate = function(scope, func, data)
 };
 
 /**
- * Check to see if bird is in collision with given obstacle
+ * Check to see if avatar is in collision with given obstacle
  * @param obstacle Object : The obstacle object we're checking
  */
 var checkForObstacleCollision = function (obstacle) {
-  var insideObstacleColumn = Flappy.birdX + Flappy.AVATAR_WIDTH >= obstacle.x &&
-    Flappy.birdX <= obstacle.x + Flappy.OBSTACLE_WIDTH;
-  if (insideObstacleColumn && (Flappy.birdY <= obstacle.gapStart ||
-    Flappy.birdY + Flappy.AVATAR_HEIGHT >= obstacle.gapStart + Flappy.GAP_SIZE)) {
+  var insideObstacleColumn = Flappy.avatarX + Flappy.AVATAR_WIDTH >= obstacle.x &&
+    Flappy.avatarX <= obstacle.x + Flappy.OBSTACLE_WIDTH;
+  if (insideObstacleColumn && (Flappy.avatarY <= obstacle.gapStart ||
+    Flappy.avatarY + Flappy.AVATAR_HEIGHT >= obstacle.gapStart + Flappy.GAP_SIZE)) {
     return true;
   }
   return false;
 }
 
 Flappy.onTick = function() {
-  var birdWasAboveGround, birdIsAboveGround;
+  var avatarWasAboveGround, avatarIsAboveGround;
 
   if (Flappy.firstActiveTick < 0 && Flappy.gameState === Flappy.GameStates.ACTIVE) {
     Flappy.firstActiveTick = Flappy.tickCount;
@@ -354,39 +354,39 @@ Flappy.onTick = function() {
     Flappy.clickPending = false;
   }
 
-  birdWasAboveGround = (Flappy.birdY + Flappy.AVATAR_HEIGHT) <
+  avatarWasAboveGround = (Flappy.avatarY + Flappy.AVATAR_HEIGHT) <
     (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
   // Action doesn't start until user's first click
   if (Flappy.gameState === Flappy.GameStates.ACTIVE) {
-    // Update bird's vertical position
-    Flappy.birdVelocity += Flappy.gravity;
-    Flappy.birdY = Flappy.birdY + Flappy.birdVelocity;
+    // Update avatar's vertical position
+    Flappy.avatarVelocity += Flappy.gravity;
+    Flappy.avatarY = Flappy.avatarY + Flappy.avatarVelocity;
 
-    // never let the bird go too far off the top or bottom
+    // never let the avatar go too far off the top or bottom
     var bottomLimit = level.ground ?
       (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.AVATAR_HEIGHT + 1) :
       (Flappy.MAZE_HEIGHT * 1.5);
 
-    Flappy.birdY = Math.min(Flappy.birdY, bottomLimit);
-    Flappy.birdY = Math.max(Flappy.birdY, Flappy.MAZE_HEIGHT * -0.5);
+    Flappy.avatarY = Math.min(Flappy.avatarY, bottomLimit);
+    Flappy.avatarY = Math.max(Flappy.avatarY, Flappy.MAZE_HEIGHT * -0.5);
 
     // Update obstacles
     Flappy.obstacles.forEach(function (obstacle) {
-      var wasRightOfBird = obstacle.x > (Flappy.birdX + Flappy.AVATAR_WIDTH);
+      var wasRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
 
       obstacle.x -= Flappy.SPEED;
 
-      var isRightOfBird = obstacle.x > (Flappy.birdX + Flappy.AVATAR_WIDTH);
-      if (wasRightOfBird && !isRightOfBird) {
-        if (Flappy.birdY > obstacle.gapStart &&
-          (Flappy.birdY + Flappy.AVATAR_HEIGHT < obstacle.gapStart + Flappy.GAP_SIZE)) {
+      var isRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
+      if (wasRightOfAvatar && !isRightOfAvatar) {
+        if (Flappy.avatarY > obstacle.gapStart &&
+          (Flappy.avatarY + Flappy.AVATAR_HEIGHT < obstacle.gapStart + Flappy.GAP_SIZE)) {
           try { Flappy.whenEnterObstacle(BlocklyApps, api); } catch (e) { }
         }
       }
 
-      if (!obstacle.hitBird && checkForObstacleCollision(obstacle)) {
-        obstacle.hitBird = true;
+      if (!obstacle.hitAvatar && checkForObstacleCollision(obstacle)) {
+        obstacle.hitAvatar = true;
         try {Flappy.whenCollideObstacle(BlocklyApps, api); } catch (e) { }
       }
 
@@ -397,38 +397,43 @@ Flappy.onTick = function() {
     });
 
     // check for ground collision
-    birdIsAboveGround = (Flappy.birdY + Flappy.AVATAR_HEIGHT) <
+    avatarIsAboveGround = (Flappy.avatarY + Flappy.AVATAR_HEIGHT) <
       (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
-    if (birdWasAboveGround && !birdIsAboveGround) {
+    if (avatarWasAboveGround && !avatarIsAboveGround) {
       try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
+    }
+
+    // update goal
+    if (level.goal && level.goal.moving) {
+      Flappy.goalX -= Flappy.SPEED;
     }
   }
 
   if (Flappy.gameState === Flappy.GameStates.ENDING) {
-    Flappy.birdY += 10;
+    Flappy.avatarY += 10;
 
     // we use avatar width instead of height bc he is rotating
     // the extra 4 is so that he buries his beak (similar to mobile game)
     var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.AVATAR_WIDTH + 4;
-    if (Flappy.birdY >= max) {
-      Flappy.birdY = max;
+    if (Flappy.avatarY >= max) {
+      Flappy.avatarY = max;
       Flappy.gameState = Flappy.GameStates.OVER;
       // Flappy.clearEventHandlersKillTickLoop();
     }
 
-    document.getElementById('bird').setAttribute('transform',
+    document.getElementById('avatar').setAttribute('transform',
       'translate(' + Flappy.AVATAR_WIDTH + ', 0) ' +
-      'rotate(90, ' + Flappy.birdX + ', ' + Flappy.birdY + ')');
+      'rotate(90, ' + Flappy.avatarX + ', ' + Flappy.avatarY + ')');
     if (infoText) {
       document.getElementById('gameover').setAttribute('visibility', 'visibile');
     }
   }
 
-  Flappy.displayBird(Flappy.birdX, Flappy.birdY);
+  Flappy.displayAvatar(Flappy.avatarX, Flappy.avatarY);
   Flappy.displayObstacles();
   if (Flappy.gameState <= Flappy.GameStates.ACTIVE) {
     Flappy.displayGround(Flappy.tickCount);
-    Flappy.displayGoal(Flappy.tickCount);
+    Flappy.displayGoal();
   }
 
   if (checkFinished()) {
@@ -558,7 +563,7 @@ BlocklyApps.reset = function(first) {
   var scoreCell = document.getElementById('score-cell');
   scoreCell.className = 'score-cell-none';
 
-  Flappy.birdVelocity = 0;
+  Flappy.avatarVelocity = 0;
 
   // Reset obstacles
   Flappy.obstacles.forEach(function (obstacle, index) {
@@ -574,20 +579,25 @@ BlocklyApps.reset = function(first) {
   Flappy.setGround('flappy');
   Flappy.setGapHeight(api.GapHeight.NORMAL);
 
-  // Move Bird into position.
-  Flappy.birdX = 110;
-  Flappy.birdY = 150;
+  // Move Avatar into position.
+  Flappy.avatarX = 110;
+  Flappy.avatarY = 150;
 
-  document.getElementById('bird').removeAttribute('transform');
+  if (level.goal && level.goal.startX) {
+    Flappy.goalX = level.goal.startX;
+    Flappy.goalY = level.goal.startY;
+  }
+
+  document.getElementById('avatar').removeAttribute('transform');
   document.getElementById('instructions').setAttribute('visibility', 'visible');
   document.getElementById('clickrun').setAttribute('visibility', 'visible');
   document.getElementById('getready').setAttribute('visibility', 'hidden');
   document.getElementById('gameover').setAttribute('visibility', 'hidden');
 
-  Flappy.displayBird(Flappy.birdX, Flappy.birdY);
+  Flappy.displayAvatar(Flappy.avatarX, Flappy.avatarY);
   Flappy.displayObstacles();
   Flappy.displayGround(0);
-  Flappy.displayGoal(0);
+  Flappy.displayGoal();
 
   var svg = document.getElementById('svgFlappy');
 };
@@ -805,32 +815,26 @@ Flappy.onPuzzleComplete = function() {
 };
 
 /**
- * Display Bird at the specified location
+ * Display Avatar at the specified location
  * @param {number} x Horizontal Pixel location.
  * @param {number} y Vertical Pixel location.
  */
-Flappy.displayBird = function(x, y) {
-  var birdIcon = document.getElementById('bird');
-  birdIcon.setAttribute('x', x);
-  birdIcon.setAttribute('y', y);
+Flappy.displayAvatar = function(x, y) {
+  var avatarIcon = document.getElementById('avatar');
+  avatarIcon.setAttribute('x', x);
+  avatarIcon.setAttribute('y', y);
 };
 
 /**
  * display moving goal
  */
-Flappy.displayGoal = function(tickCount) {
-  if (!level.goal || !level.goal.x) {
+Flappy.displayGoal = function() {
+  if (!Flappy.goalX) {
     return;
   }
-
-  var diff = 0;
-  if (level.goal.moving && Flappy.firstActiveTick > 0) {
-    diff = (tickCount - Flappy.firstActiveTick) * Flappy.SPEED;
-  }
-
   var goal = document.getElementById('goal');
-  goal.setAttribute('x', level.goal.x - diff);
-  goal.setAttribute('y', level.goal.y);
+  goal.setAttribute('x', Flappy.goalX);
+  goal.setAttribute('y', Flappy.goalY);
 };
 
 
@@ -900,7 +904,7 @@ Flappy.setBackground = function (value) {
 };
 
 Flappy.setPlayer = function (value) {
-  var element = document.getElementById('bird');
+  var element = document.getElementById('avatar');
   element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
     skinTheme(value).avatar);
 };
