@@ -48,6 +48,23 @@ exports.load = function(assetUrl, id) {
     ground: skin.assetUrl('ground_cave.png')
   };
 
+  skin.santa = {
+    background: skin.assetUrl('background_santa.png'),
+    avatar: skin.assetUrl('santa.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_santa.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_santa.png'),
+    ground: skin.assetUrl('ground_santa.png')
+  };
+
+  skin.laser = {
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_laser.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_laser.png')
+  };
+
+  skin.lava = {
+    ground: skin.assetUrl('ground_lava.png')
+  };
+
   skin.shark = {
     avatar: skin.assetUrl('shark.png')
   };
