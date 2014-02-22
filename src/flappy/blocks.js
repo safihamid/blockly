@@ -308,7 +308,8 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setBackground.VALUES =
       [[msg.setBackgroundFlappy(), '"flappy"'],
        [msg.setBackgroundSciFi(), '"scifi"'],
-       [msg.setBackgroundUnderwater(), '"underwater"']];
+       [msg.setBackgroundUnderwater(), '"underwater"'],
+       [msg.setBackgroundCave(), '"cave"']];
 
   generator.flappy_setBackground = function() {
     return 'Flappy.setBackground(\'block_id_' + this.id + '\', ' +
@@ -336,7 +337,8 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setPlayer.VALUES =
       [[msg.setPlayerFlappy(), '"flappy"'],
        [msg.setPlayerSciFi(), '"scifi"'],
-       [msg.setPlayerUnderwater(), '"fish'],
+       [msg.setPlayerUnderwater(), '"underwater'],
+       [msg.setPlayerCave(), '"cave'],
        [msg.setPlayerShark(), '"shark"'],
        [msg.setPlayerEaster(), '"easter"'],
        [msg.setPlayerBatman(), '"batman"'],
@@ -372,7 +374,8 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setObstacle.VALUES =
       [[msg.setObstacleFlappy(), '"flappy"'],
        [msg.setObstacleSciFi(), '"scifi"'],
-       [msg.setObstacleUnderwater(), '"underwater"']];
+       [msg.setObstacleUnderwater(), '"underwater"'],
+       [msg.setObstacleCave(), '"cave"']];
 
   generator.flappy_setObstacle = function() {
     return 'Flappy.setObstacle(\'block_id_' + this.id + '\', ' +
@@ -400,7 +403,8 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setGround.VALUES =
       [[msg.setGroundFlappy(), '"flappy"'],
        [msg.setGroundSciFi(), '"scifi"'],
-       [msg.setGroundUnderwater(), '"underwater"']];
+       [msg.setGroundUnderwater(), '"underwater"'],
+       [msg.setGroundCave(), '"cave"']];
 
   generator.flappy_setGround = function() {
     return 'Flappy.setGround(\'block_id_' + this.id + '\', ' +

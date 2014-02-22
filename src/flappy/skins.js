@@ -40,6 +40,14 @@ exports.load = function(assetUrl, id) {
     ground: skin.assetUrl('ground_underwater.png')
   };
 
+  skin.cave = {
+    background: skin.assetUrl('background_cave.png'),
+    avatar: skin.assetUrl('avatar_cave.png'),
+    obstacle_bottom: skin.assetUrl('obstacle_bottom_cave.png'),
+    obstacle_top: skin.assetUrl('obstacle_top_cave.png'),
+    ground: skin.assetUrl('ground_cave.png')
+  };
+
   skin.shark = {
     avatar: skin.assetUrl('shark.png')
   };

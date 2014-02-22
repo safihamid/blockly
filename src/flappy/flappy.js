@@ -449,7 +449,7 @@ Flappy.onMouseDown = function (e) {
     }
     document.getElementById('instructions').setAttribute('visibility', 'hidden');
     document.getElementById('getready').setAttribute('visibility', 'hidden');
-  } else {
+  } else if (Flappy.gameState === Flappy.GameStates.WAITING) {
     BlocklyApps.runButtonClick();
   }
 };
