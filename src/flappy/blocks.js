@@ -264,6 +264,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[2][1]);
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
