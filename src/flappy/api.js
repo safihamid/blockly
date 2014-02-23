@@ -26,6 +26,11 @@ exports.GapHeight = {
   VERY_LARGE: 150
 };
 
+exports.random = function (values) {
+  var key = Math.floor(Math.random() * values.length); 
+  return values[key];
+};
+
 exports.setGround = function (id, value) {
   BlocklyApps.highlight(id);
   Flappy.setGround(value);
