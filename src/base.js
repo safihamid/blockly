@@ -204,9 +204,13 @@ BlocklyApps.init = function(config) {
   }
 
   var div = document.getElementById('blockly');
-  BlocklyApps.inject(div, {
+  var options = {
     toolbox: config.level.toolbox
-  });
+  };
+  if (config.trashcan !== undefined) {
+    options.trashcan = config.trashcan;
+  }
+  BlocklyApps.inject(div, options);
 
   if (config.afterInject) {
     config.afterInject();
@@ -574,6 +578,7 @@ BlocklyApps.TestResults = {
   OTHER_1_STAR_FAIL: 11,      // Application-specific 1-star failure.
   TOO_MANY_BLOCKS_FAIL: 20,   // 2 stars, try again or continue.
   OTHER_2_STAR_FAIL: 21,      // Application-specific 2-star failure.
+  FLAPPY_SPECIFIC_FAIL: 22,   // Flappy failure
   FREE_PLAY: 30,              // 2 stars.
   ALL_PASS: 100               // 3 stars.
 };

@@ -165,6 +165,9 @@ var getFeedbackMessage = function(options) {
     case BlocklyApps.TestResults.OTHER_2_STAR_FAIL:
       message = msg.tooMuchWork();
       break;
+    case BlocklyApps.TestResults.FLAPPY_SPECIFIC_FAIL:
+      message = msg.flappySpecificFail();
+      break;
     case BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED:
       /* fallthrough */
     case BlocklyApps.TestResults.MISSING_BLOCK_FINISHED:
@@ -303,10 +306,6 @@ var getTrophiesElement = function(options) {
 };
 
 var getShowCodeElement = function(options) {
-  if (options.app === 'flappy') {
-    return null;
-  }
-
   if (exports.canContinueToNextLevel(options.feedbackType)) {
     var linesWritten = exports.getNumBlocksUsed();
     var showCodeDiv = document.createElement('div');
@@ -334,8 +333,14 @@ var getShowCodeElement = function(options) {
       button.style.display = 'none';
     });
 
-    showCodeDiv.appendChild(lines);
-    showCodeDiv.appendChild(showCodeLink);
+    // For now we want to hide lines of code for flappy app
+    if (options.app === 'flappy') {
+      lines.innerHTML = '<br>';
+      showCodeDiv.appendChild(lines);
+    } else {
+      showCodeDiv.appendChild(lines);
+      showCodeDiv.appendChild(showCodeLink);
+    }
 
     return showCodeDiv;
   }

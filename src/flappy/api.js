@@ -6,8 +6,8 @@ exports.FlapHeight = {
   VERY_SMALL: -6,
   SMALL: -8,
   NORMAL: -11,
-  LARGE: -14,
-  VERY_LARGE: -17
+  LARGE: -13,
+  VERY_LARGE: -15
 };
 
 exports.LevelSpeed = {
@@ -19,11 +19,16 @@ exports.LevelSpeed = {
 };
 
 exports.GapHeight = {
-  VERY_SMALL: 50,
+  VERY_SMALL: 65,
   SMALL: 75,
   NORMAL: 100,
   LARGE: 125,
   VERY_LARGE: 150
+};
+
+exports.random = function (values) {
+  var key = Math.floor(Math.random() * values.length); 
+  return values[key];
 };
 
 exports.setGround = function (id, value) {

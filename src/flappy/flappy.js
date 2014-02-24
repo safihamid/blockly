@@ -41,6 +41,7 @@ Flappy.gravity = 1;
 
 var level;
 var skin;
+var onSharePage;
 
 Flappy.obstacles = [];
 
@@ -487,6 +488,7 @@ Flappy.init = function(config) {
   Flappy.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
+  onSharePage = config.share;
   loadLevel();
 
   config.html = page({
@@ -548,10 +550,14 @@ Flappy.init = function(config) {
     return visualization.getBoundingClientRect().width;
   };
 
+  config.trashcan = false;
+
   BlocklyApps.init(config);
 
-  var shareButton = document.getElementById('shareButton');
-  dom.addClickTouchEvent(shareButton, Flappy.onPuzzleComplete);
+  if (!onSharePage) {
+    var shareButton = document.getElementById('shareButton');
+    dom.addClickTouchEvent(shareButton, Flappy.onPuzzleComplete);
+  }
 };
 
 /**
@@ -658,7 +664,7 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.attempts++;
   Flappy.execute();
 
-  if (level.freePlay) {
+  if (level.freePlay && !onSharePage) {
     var shareCell = document.getElementById('share-cell');
     shareCell.className = 'share-cell-enabled';
   }
@@ -817,9 +823,25 @@ Flappy.onPuzzleComplete = function() {
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Flappy.result == ResultType.SUCCESS);
 
-  Flappy.testResults = BlocklyApps.getTestResults();
+  // If the current level is a free play, always return the free play
+  // result type
+  if (level.freePlay) {
+    Flappy.testResults = BlocklyApps.TestResults.FREE_PLAY;
+  } else {
+    Flappy.testResults = BlocklyApps.getTestResults();
+  }
 
-  if (Flappy.testResults === BlocklyApps.TestResults.ALL_PASS) {
+  // Special case for Flappy level 1 where you have the right blocks, but you
+  // don't flap to the goal.  Note: this currently depends on us getting
+  // TOO_FEW_BLOCKS_FAIL, when really we should probably be getting
+  // LEVEL_INCOMPLETE_FAIL here. (see pivotal item 66362504)
+  if (level.id === "1" &&
+    Flappy.testResults === BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL) {
+    Flappy.testResults = BlocklyApps.TestResults.FLAPPY_SPECIFIC_FAIL;
+  }
+
+
+  if (Flappy.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
     BlocklyApps.playAudio('win', {volume : 0.5});
   } else {
     BlocklyApps.playAudio('failure', {volume : 0.5});
@@ -887,7 +909,7 @@ Flappy.displayGround = function(tickCount) {
   for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
     var ground = document.getElementById('ground' + i);
     ground.setAttribute('x', -offset + i * Flappy.GROUND_WIDTH);
-    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
+    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT + 1);
   }
 };
 
