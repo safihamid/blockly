@@ -543,8 +543,6 @@ Flappy.init = function(config) {
     Blockly.SNAP_RADIUS *= Flappy.scale.snapRadius;
 
     drawMap();
-
-    //BlocklyApps.loadBlocks(level.startBlocksDelayed);
   };
 
   config.getDisplayWidth = function() {
@@ -831,6 +829,15 @@ Flappy.onPuzzleComplete = function() {
     Flappy.testResults = BlocklyApps.TestResults.FREE_PLAY;
   } else {
     Flappy.testResults = BlocklyApps.getTestResults();
+  }
+
+  // Special case for Flappy level 1 where you have the right blocks, but you
+  // don't flap to the goal.  Note: this currently depends on us getting
+  // TOO_FEW_BLOCKS_FAIL, when really we should probably be getting
+  // LEVEL_INCOMPLETE_FAIL here. (see pivotal item 66362504)
+  if (level.id === "1" &&
+    Flappy.testResults === BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL) {
+    Flappy.testResults = BlocklyApps.TestResults.FLAPPY_SPECIFIC_FAIL;
   }
 
 

@@ -165,6 +165,9 @@ var getFeedbackMessage = function(options) {
     case BlocklyApps.TestResults.OTHER_2_STAR_FAIL:
       message = msg.tooMuchWork();
       break;
+    case BlocklyApps.TestResults.FLAPPY_SPECIFIC_FAIL:
+      message = msg.flappySpecificFail();
+      break;
     case BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED:
       /* fallthrough */
     case BlocklyApps.TestResults.MISSING_BLOCK_FINISHED:
