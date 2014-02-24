@@ -552,6 +552,8 @@ Flappy.init = function(config) {
     return visualization.getBoundingClientRect().width;
   };
 
+  config.trashcan = false;
+
   BlocklyApps.init(config);
 
   if (!onSharePage) {

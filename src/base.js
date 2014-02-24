@@ -204,9 +204,13 @@ BlocklyApps.init = function(config) {
   }
 
   var div = document.getElementById('blockly');
-  BlocklyApps.inject(div, {
+  var options = {
     toolbox: config.level.toolbox
-  });
+  };
+  if (config.trashcan !== undefined) {
+    options.trashcan = config.level.trashcan;
+  }
+  BlocklyApps.inject(div, options);
 
   if (config.afterInject) {
     config.afterInject();
