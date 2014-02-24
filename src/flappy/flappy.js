@@ -625,7 +625,7 @@ BlocklyApps.reset = function(first) {
     Flappy.goalY = level.goal.startY;
   }
 
-  document.getElementById('avatar').removeAttribute('transform');
+  document.getElementById('avatar').setAttribute('transform', '');
   document.getElementById('instructions').setAttribute('visibility', 'hidden');
   document.getElementById('clickrun').setAttribute('visibility', 'visible');
   document.getElementById('getready').setAttribute('visibility', 'hidden');
