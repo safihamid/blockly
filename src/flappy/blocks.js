@@ -173,9 +173,11 @@ exports.install = function(blockly, skin) {
     // Block for playing sound.
     helpUrl: '',
     init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[7][1]);
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-          .appendTitle(new blockly.FieldDropdown(this.VALUES), 'VALUE');
+          .appendTitle(dropdown, 'VALUE');
       this.setPreviousStatement(true);
       this.setNextStatement(true);
       this.setTooltip(msg.playSoundTooltip());
@@ -306,6 +308,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -337,6 +340,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -376,6 +380,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -407,6 +412,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
