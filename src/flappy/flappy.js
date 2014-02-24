@@ -300,6 +300,10 @@ var drawMap = function() {
   gameover.setAttribute('visibility', 'hidden');
   svg.appendChild(gameover);
 
+  var score = document.createElementNS(Blockly.SVG_NS, 'text');
+  score.setAttribute('id', 'score');
+  svg.appendChild(score);
+
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
   clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
@@ -909,7 +913,7 @@ Flappy.displayGround = function(tickCount) {
   for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
     var ground = document.getElementById('ground' + i);
     ground.setAttribute('x', -offset + i * Flappy.GROUND_WIDTH);
-    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT + 1);
+    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
   }
 };
 
