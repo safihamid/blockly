@@ -146,7 +146,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[3][1]);
+      dropdown.setValue(this.VALUES[3][1]); // default to normal
 
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
@@ -246,7 +246,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[3][1]);
+      dropdown.setValue(this.VALUES[3][1]);  // default to normal
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -277,7 +277,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[3][1]);
+      dropdown.setValue(this.VALUES[3][1]);  // default to normal
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -308,7 +308,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[1][1]);
+      dropdown.setValue(this.VALUES[1][1]);  // default to flappy
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -340,7 +340,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[1][1]);
+      dropdown.setValue(this.VALUES[1][1]);  // default to flappy
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -380,7 +380,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[1][1]);
+      dropdown.setValue(this.VALUES[1][1]);  // default to flappy
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -412,7 +412,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[1][1]);
+      dropdown.setValue(this.VALUES[1][1]);  // default to flappy
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
