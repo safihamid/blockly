@@ -208,7 +208,7 @@ BlocklyApps.init = function(config) {
     toolbox: config.level.toolbox
   };
   if (config.trashcan !== undefined) {
-    options.trashcan = config.level.trashcan;
+    options.trashcan = config.trashcan;
   }
   BlocklyApps.inject(div, options);
 
