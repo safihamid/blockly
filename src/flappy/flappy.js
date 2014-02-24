@@ -300,10 +300,6 @@ var drawMap = function() {
   gameover.setAttribute('visibility', 'hidden');
   svg.appendChild(gameover);
 
-  var score = document.createElementNS(Blockly.SVG_NS, 'text');
-  score.setAttribute('id', 'score');
-  svg.appendChild(score);
-
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
   clickRect.setAttribute('height', Flappy.MAZE_HEIGHT);
