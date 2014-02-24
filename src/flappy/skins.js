@@ -24,6 +24,10 @@ exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
 
+  // todo: the way these are organized ends up being a little bit ugly as
+  // lot of our assets are individual items not necessarily attached to a
+  // specific theme
+
   skin.scifi = {
     background: skin.assetUrl('background_scifi.png'),
     avatar: skin.assetUrl('avatar_scifi.png'),
@@ -54,6 +58,14 @@ exports.load = function(assetUrl, id) {
     obstacle_bottom: skin.assetUrl('obstacle_bottom_santa.png'),
     obstacle_top: skin.assetUrl('obstacle_top_santa.png'),
     ground: skin.assetUrl('ground_santa.png')
+  };
+
+  skin.night = {
+    background: skin.assetUrl('background_night.png')
+  };
+
+  skin.redbird = {
+    avatar: skin.assetUrl('avatar_redbird.png')
   };
 
   skin.laser = {

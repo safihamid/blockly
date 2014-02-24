@@ -320,6 +320,7 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setBackground.VALUES =
       [[msg.setBackgroundRandom(), 'random'],
        [msg.setBackgroundFlappy(), '"flappy"'],
+       [msg.setBackgroundNight(), '"night"'],
        [msg.setBackgroundSciFi(), '"scifi"'],
        [msg.setBackgroundUnderwater(), '"underwater"'],
        [msg.setBackgroundCave(), '"cave"'],
@@ -350,6 +351,7 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.flappy_setPlayer.VALUES =
       [[msg.setPlayerRandom(), 'random'],
        [msg.setPlayerFlappy(), '"flappy"'],
+       [msg.setPlayerRedBird(), '"redbird"'],
        [msg.setPlayerSciFi(), '"scifi"'],
        [msg.setPlayerUnderwater(), '"underwater"'],
        [msg.setPlayerSanta(), '"santa"'],
