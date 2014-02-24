@@ -41,6 +41,7 @@ Flappy.gravity = 1;
 
 var level;
 var skin;
+var onSharePage;
 
 Flappy.obstacles = [];
 
@@ -487,6 +488,7 @@ Flappy.init = function(config) {
   Flappy.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
+  onSharePage = config.share;
   loadLevel();
 
   config.html = page({
@@ -552,8 +554,10 @@ Flappy.init = function(config) {
 
   BlocklyApps.init(config);
 
-  var shareButton = document.getElementById('shareButton');
-  dom.addClickTouchEvent(shareButton, Flappy.onPuzzleComplete);
+  if (!onSharePage) {
+    var shareButton = document.getElementById('shareButton');
+    dom.addClickTouchEvent(shareButton, Flappy.onPuzzleComplete);
+  }
 };
 
 /**
@@ -660,7 +664,7 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.attempts++;
   Flappy.execute();
 
-  if (level.freePlay) {
+  if (level.freePlay && !onSharePage) {
     var shareCell = document.getElementById('share-cell');
     shareCell.className = 'share-cell-enabled';
   }
