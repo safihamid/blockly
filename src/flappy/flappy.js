@@ -541,6 +541,8 @@ Flappy.init = function(config) {
     Blockly.SNAP_RADIUS *= Flappy.scale.snapRadius;
 
     drawMap();
+
+    //BlocklyApps.loadBlocks(level.startBlocksDelayed);
   };
 
   config.getDisplayWidth = function() {
@@ -817,9 +819,16 @@ Flappy.onPuzzleComplete = function() {
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Flappy.result == ResultType.SUCCESS);
 
-  Flappy.testResults = BlocklyApps.getTestResults();
+  // If the current level is a free play, always return the free play
+  // result type
+  if (level.freePlay) {
+    Flappy.testResults = BlocklyApps.TestResults.FREE_PLAY;
+  } else {
+    Flappy.testResults = BlocklyApps.getTestResults();
+  }
 
-  if (Flappy.testResults === BlocklyApps.TestResults.ALL_PASS) {
+
+  if (Flappy.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
     BlocklyApps.playAudio('win', {volume : 0.5});
   } else {
     BlocklyApps.playAudio('failure', {volume : 0.5});

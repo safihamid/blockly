@@ -303,10 +303,6 @@ var getTrophiesElement = function(options) {
 };
 
 var getShowCodeElement = function(options) {
-  if (options.app === 'flappy') {
-    return null;
-  }
-
   if (exports.canContinueToNextLevel(options.feedbackType)) {
     var linesWritten = exports.getNumBlocksUsed();
     var showCodeDiv = document.createElement('div');
@@ -334,8 +330,14 @@ var getShowCodeElement = function(options) {
       button.style.display = 'none';
     });
 
-    showCodeDiv.appendChild(lines);
-    showCodeDiv.appendChild(showCodeLink);
+    // For now we want to hide lines of code for flappy app
+    if (options.app === 'flappy') {
+      lines.innerHTML = '<br>';
+      showCodeDiv.appendChild(lines);
+    } else {
+      showCodeDiv.appendChild(lines);
+      showCodeDiv.appendChild(showCodeLink);
+    }
 
     return showCodeDiv;
   }
