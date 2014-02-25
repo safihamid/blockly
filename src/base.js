@@ -115,7 +115,8 @@ BlocklyApps.init = function(config) {
       belowViz.appendChild(feedback.createSharingButtons({
         response: {
           level_source: window.location
-        }
+        },
+        skin: config.skin.id
       }));
       var upSale = document.createElement('div');
       upSale.innerHTML = require('./templates/learn.html')();

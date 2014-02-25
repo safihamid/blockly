@@ -218,12 +218,18 @@ exports.createSharingButtons = function(options) {
       sharingUrl: options.response.level_source
     }
   });
+  var twitterUrl = "https://twitter.com/intent/tweet?url=" +
+                   options.response.level_source;
+  if (options.skin === "flappy") {
+    twitterUrl += "&text=" + encodeURI(msg.shareFlappyTwitter()) +
+      "&button_hashtag=FlappyCode";
+  }
+
   sharingButtons.innerHTML = require('./templates/buttons.html')({
     data: {
       facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source,
-      twitterUrl: "https://twitter.com/intent/tweet?url=" +
-                  options.response.level_source
+      twitterUrl: twitterUrl
     }
   });
   var sharingInput = sharingUrl.querySelector('#sharing-input');
