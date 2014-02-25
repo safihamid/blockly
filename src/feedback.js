@@ -245,7 +245,7 @@ var createSharingDiv = function(options) {
   if (options.showingSharing &&
       exports.canContinueToNextLevel(options.feedbackType)) {
     var sharingDiv = document.createElement('div');
-    sharingDiv.setAttribute('style', 'display:inline-block');
+    sharingDiv.className = 'shareDiv';
     var sharingImage = document.createElement('div');
 
     var feedbackImage = createFeedbackImage(options);
