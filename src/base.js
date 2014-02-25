@@ -133,9 +133,13 @@ BlocklyApps.init = function(config) {
   // 1. Move the buttons, 2. Hide the slider in the share page for mobile.
   if (BlocklyApps.share && dom.isMobile()) {
     var sliderCell = document.getElementById('slider-cell');
-    sliderCell.style.display = 'none';
+    if (sliderCell) {
+      sliderCell.style.display = 'none';
+    }
     var belowVisualization = document.getElementById('belowVisualization');
-    belowVisualization.style.display = 'block';
+    if (belowVisualization) {
+      belowVisualization.style.display = 'block';
+    }
   }
 
   // Record time at initialization.
@@ -197,7 +201,9 @@ BlocklyApps.init = function(config) {
   // The share page does not show the rotateContainer.
   if (BlocklyApps.share) {
     var rotateContainer = document.getElementById('rotateContainer');
-    rotateContainer.style.display = 'none';
+    if (rotateContainer) {
+      rotateContainer.style.display = 'none';
+    }
   }
   var orientationHandler = function() {
     window.scrollTo(0, 0);  // Browsers like to mess with scroll on rotate.
