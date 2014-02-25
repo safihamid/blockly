@@ -25,7 +25,7 @@ var setPlayerBlock = '<block type="flappy_setPlayer"></block>';
 var setObstacleBlock = '<block type="flappy_setObstacle"></block>';
 var setGroundBlock = '<block type="flappy_setGround"></block>';
 
-var COL_WIDTH = 280;
+var COL_WIDTH = 210;
 var COL1 = 20;
 var COL2 = 20 + COL_WIDTH;
 
