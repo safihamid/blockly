@@ -201,6 +201,7 @@ module.exports = {
     'requiredBlocks': [
       [{'test': 'incrementPlayerScore', 'type': 'flappy_incrementPlayerScore'}]
     ],
+    'defaultFlap': 'SMALL',
     'obstacles': true,
     'ground': true,
     'score': true,
