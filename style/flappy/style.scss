@@ -4,6 +4,10 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
   width: 1024px;
 }
 
+#blocklyApp {
+  height: 768px;
+}
+
 #svgFlappy {
   border: solid 1px #DBDBDB;
   overflow: hidden;
