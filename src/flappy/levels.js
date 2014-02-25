@@ -211,7 +211,7 @@ module.exports = {
       successCondition: function () {
         var insideObstacle = false;
         Flappy.obstacles.forEach(function (obstacle) {
-          if (obstacle.containsAvatar()) {
+          if (!obstacle.hitAvatar && obstacle.containsAvatar()) {
             insideObstacle = true;
           }
         });
@@ -220,7 +220,7 @@ module.exports = {
       failureCondition: function () {
         var insideObstacle = false;
         Flappy.obstacles.forEach(function (obstacle) {
-          if (obstacle.containsAvatar()) {
+          if (!obstacle.hitAvatar && obstacle.containsAvatar()) {
             insideObstacle = true;
           }
         });
