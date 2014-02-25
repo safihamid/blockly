@@ -68,7 +68,6 @@ module.exports = {
     'obstacles': false,
     'ground': false,
     'score': false,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       startX  : 100,
@@ -96,7 +95,6 @@ module.exports = {
     'obstacles': false,
     'ground': true,
     'score': false,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       startX: 100,
@@ -129,7 +127,6 @@ module.exports = {
     'obstacles': false,
     'ground': true,
     'score': false,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       startX: 400 - 55,
@@ -173,7 +170,6 @@ module.exports = {
     'obstacles': true,
     'ground': true,
     'score': false,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       startX: 600 - (56 / 2),
@@ -208,7 +204,6 @@ module.exports = {
     'obstacles': true,
     'ground': true,
     'score': true,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       // todo - kind of ugly that we end up loopin through all obstacles twice,
@@ -252,7 +247,6 @@ module.exports = {
     'obstacles': true,
     'ground': true,
     'score': true,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -294,7 +288,6 @@ module.exports = {
     'obstacles': true,
     'ground': true,
     'score': true,
-    'infoText': true,
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -321,7 +314,6 @@ module.exports = {
     'obstacles': true,
     'ground': true,
     'score': true,
-    'infoText': true,
     'freePlay': true,
     'scale': {
       'snapRadius': 2
