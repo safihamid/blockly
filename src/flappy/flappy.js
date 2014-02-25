@@ -940,6 +940,11 @@ Flappy.displayScore = function() {
   score.textContent = Flappy.playerScore;
 };
 
+Flappy.flap = function (amount) {
+  var defaultFlap = level.defaultFlap || "NORMAL";
+  Flappy.avatarVelocity = amount || api.FlapHeight[defaultFlap];
+};
+
 Flappy.setGapHeight = function (value) {
   var minGapSize = Flappy.MAZE_HEIGHT - Flappy.MIN_OBSTACLE_HEIGHT -
     Flappy.OBSTACLE_HEIGHT;

@@ -201,6 +201,7 @@ module.exports = {
     'requiredBlocks': [
       [{'test': 'incrementPlayerScore', 'type': 'flappy_incrementPlayerScore'}]
     ],
+    'defaultFlap': 'SMALL',
     'obstacles': true,
     'ground': true,
     'score': true,
@@ -211,7 +212,7 @@ module.exports = {
       successCondition: function () {
         var insideObstacle = false;
         Flappy.obstacles.forEach(function (obstacle) {
-          if (obstacle.containsAvatar()) {
+          if (!obstacle.hitAvatar && obstacle.containsAvatar()) {
             insideObstacle = true;
           }
         });
@@ -220,7 +221,7 @@ module.exports = {
       failureCondition: function () {
         var insideObstacle = false;
         Flappy.obstacles.forEach(function (obstacle) {
-          if (obstacle.containsAvatar()) {
+          if (!obstacle.hitAvatar && obstacle.containsAvatar()) {
             insideObstacle = true;
           }
         });

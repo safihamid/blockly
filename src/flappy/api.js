@@ -68,7 +68,7 @@ exports.playSound = function(id, soundName) {
 
 exports.flap = function (id, amount) {
   BlocklyApps.highlight(id);
-  Flappy.avatarVelocity = amount || this.FlapHeight.NORMAL;
+  Flappy.flap(amount);
 };
 
 exports.endGame = function (id) {
