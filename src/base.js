@@ -130,10 +130,12 @@ BlocklyApps.init = function(config) {
     }
   }
 
-  // Hide the slider in the share page for mobile
-  if (BlocklyApps.share && dom.isMobile) {
+  // 1. Move the buttons, 2. Hide the slider in the share page for mobile.
+  if (BlocklyApps.share && dom.isMobile()) {
     var sliderCell = document.getElementById('slider-cell');
     sliderCell.style.display = 'none';
+    var belowVisualization = document.getElementById('belowVisualization');
+    belowVisualization.style.display = 'block';
   }
 
   // Record time at initialization.
@@ -192,20 +194,19 @@ BlocklyApps.init = function(config) {
     });
   }
 
-  // The share page does not trigger the rotateContainer
+  // The share page does not show the rotateContainer.
   if (BlocklyApps.share) {
     var rotateContainer = document.getElementById('rotateContainer');
     rotateContainer.style.display = 'none';
-  } else {
-    var orientationHandler = function() {
-      window.scrollTo(0, 0);  // Browsers like to mess with scroll on rotate.
-      var rotateContainer = document.getElementById('rotateContainer');
-      rotateContainer.style.width = window.innerWidth + 'px';
-      rotateContainer.style.height = window.innerHeight + 'px';
-    };
-    window.addEventListener('orientationchange', orientationHandler);
-    orientationHandler();
   }
+  var orientationHandler = function() {
+    window.scrollTo(0, 0);  // Browsers like to mess with scroll on rotate.
+    var rotateContainer = document.getElementById('rotateContainer');
+    rotateContainer.style.width = window.innerWidth + 'px';
+    rotateContainer.style.height = window.innerHeight + 'px';
+  };
+  window.addEventListener('orientationchange', orientationHandler);
+  orientationHandler();
 
   if (config.loadAudio) {
     config.loadAudio();
