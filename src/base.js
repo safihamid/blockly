@@ -55,6 +55,7 @@ BlocklyApps.LOCALE = 'en_us';
  * The minimum width of a playable whole blockly game.
  */
 BlocklyApps.MIN_WIDTH = 900;
+BlocklyApps.MIN_MOBILE_SHARE_WIDTH = 450;
 
 /**
  * If the user presses backspace, stop propagation - this prevents blockly
@@ -139,6 +140,7 @@ BlocklyApps.init = function(config) {
     var belowVisualization = document.getElementById('belowVisualization');
     if (belowVisualization) {
       belowVisualization.style.display = 'block';
+      belowVisualization.style.marginLeft = '0px';
     }
   }
 
@@ -148,10 +150,20 @@ BlocklyApps.init = function(config) {
   // Fixes viewport for small screens.
   var viewport = document.querySelector('meta[name="viewport"]');
   if (viewport) {
-    var longDimension = Math.max(screen.width, screen.height);
-    // if the longDimension is less than our MIN_WIDTH, we will adjust scale
-    var width = Math.max(BlocklyApps.MIN_WIDTH, longDimension);
-    var scale = longDimension / width;
+    var widthDimension;
+    var minWidth;
+    if (BlocklyApps.share && dom.isMobile()) {
+      // for mobile sharing, don't assume landscape mode, use screen.width
+      widthDimension = screen.width;
+      minWidth = BlocklyApps.MIN_MOBILE_SHARE_WIDTH;
+    }
+    else {
+      // assume we are in landscape mode, so width is the longer of the two
+      widthDimension = Math.max(screen.width, screen.height);
+      minWidth = BlocklyApps.MIN_WIDTH;
+    }
+    var width = Math.max(minWidth, widthDimension);
+    var scale = widthDimension / width;
     var content = ['width=' + width,
                    'initial-scale=' + scale,
                    'maximum-scale=' + scale,
