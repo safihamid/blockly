@@ -274,7 +274,7 @@ var drawMap = function() {
   getready.setAttribute('height', 50);
   getready.setAttribute('width', 183);
   getready.setAttribute('x', 108);
-  getready.setAttribute('y', 50);
+  getready.setAttribute('y', 80);
   getready.setAttribute('visibility', 'hidden');
   svg.appendChild(getready);
 
@@ -296,9 +296,18 @@ var drawMap = function() {
   gameover.setAttribute('height', 41);
   gameover.setAttribute('width', 192);
   gameover.setAttribute('x', 104);
-  gameover.setAttribute('y', 50);
+  gameover.setAttribute('y', 80);
   gameover.setAttribute('visibility', 'hidden');
   svg.appendChild(gameover);
+
+  var score = document.createElementNS(Blockly.SVG_NS, 'text');
+  score.setAttribute('id', 'score');
+  score.setAttribute('class', 'flappy-score');
+  score.setAttribute('x', Flappy.MAZE_WIDTH / 2);
+  score.setAttribute('y', 60);
+  score.appendChild(document.createTextNode('0'));
+  score.setAttribute('visibility', 'hidden');
+  svg.appendChild(score);
 
   var clickRect = document.createElementNS(Blockly.SVG_NS, 'rect');
   clickRect.setAttribute('width', Flappy.MAZE_WIDTH);
@@ -593,8 +602,6 @@ BlocklyApps.reset = function(first) {
 
   // Reset the score.
   Flappy.playerScore = 0;
-  var scoreCell = document.getElementById('score-cell');
-  scoreCell.className = 'score-cell-none';
 
   Flappy.avatarVelocity = 0;
 
@@ -621,7 +628,8 @@ BlocklyApps.reset = function(first) {
     Flappy.goalY = level.goal.startY;
   }
 
-  document.getElementById('avatar').removeAttribute('transform');
+  document.getElementById('avatar').setAttribute('transform', '');
+  document.getElementById('score').setAttribute('visibility', 'hidden');
   document.getElementById('instructions').setAttribute('visibility', 'hidden');
   document.getElementById('clickrun').setAttribute('visibility', 'visible');
   document.getElementById('getready').setAttribute('visibility', 'hidden');
@@ -654,9 +662,8 @@ BlocklyApps.runButtonClick = function() {
   }
   document.getElementById('clickrun').setAttribute('visibility', 'hidden');
   document.getElementById('instructions').setAttribute('visibility', 'visible');
-  if (infoText) {
-    document.getElementById('getready').setAttribute('visibility', 'visible');
-  }
+  document.getElementById('getready').setAttribute('visibility', 'visible');
+
   runButton.style.display = 'none';
   resetButton.style.display = 'inline';
   Blockly.mainWorkspace.traceOn(true);
@@ -669,8 +676,7 @@ BlocklyApps.runButtonClick = function() {
     shareCell.className = 'share-cell-enabled';
   }
   if (level.score) {
-    var scoreCell = document.getElementById('score-cell');
-    scoreCell.className = 'score-cell-enabled';
+    document.getElementById('score').setAttribute('visibility', 'visible');
     Flappy.displayScore();
   }
 };
@@ -909,7 +915,7 @@ Flappy.displayGround = function(tickCount) {
   for (var i = 0; i < Flappy.MAZE_WIDTH / Flappy.GROUND_WIDTH + 1; i++) {
     var ground = document.getElementById('ground' + i);
     ground.setAttribute('x', -offset + i * Flappy.GROUND_WIDTH);
-    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT + 1);
+    ground.setAttribute('y', Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
   }
 };
 
@@ -929,14 +935,9 @@ Flappy.displayObstacles = function () {
   }
 };
 
-/**
- * Display the score in the span element below the visualization.
- */
 Flappy.displayScore = function() {
-  var scoreElement = document.getElementById('flappy-score');
-  scoreElement.innerText = flappyMsg.scoreText({
-    playerScore: Flappy.playerScore
-  });
+  var score = document.getElementById('score');
+  score.textContent = Flappy.playerScore;
 };
 
 Flappy.setGapHeight = function (value) {
