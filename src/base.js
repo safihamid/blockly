@@ -106,24 +106,36 @@ BlocklyApps.init = function(config) {
     var blockly = container.querySelector('#blockly');
     container.className = 'hide-source';
     blockly.style.display = 'none';
-    var buttonRow = runButton.parentElement;
-    var openWorkspace = document.createElement('button');
-    openWorkspace.setAttribute('id', 'open-workspace');
-    openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
-    belowViz.appendChild(feedback.createSharingButtons({
-      response: {
-        level_source: window.location
-      }
-    }));
-    var upSale = document.createElement('div');
-    upSale.innerHTML = require('./templates/learn.html')();
-    belowViz.appendChild(upSale);
-    dom.addClickTouchEvent(openWorkspace, function() {
-      // Redirect user to /edit version of this page. It would be better to
-      // just turn on the workspace but there are rendering issues with that.
-      window.location.href = window.location.href + '/edit';
-    });
-    buttonRow.appendChild(openWorkspace);
+    // For share page on mobile, do not show this part.
+    if (!BlocklyApps.share || !dom.isMobile()) {
+      var buttonRow = runButton.parentElement;
+      var openWorkspace = document.createElement('button');
+      openWorkspace.setAttribute('id', 'open-workspace');
+      openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+      belowViz.appendChild(feedback.createSharingButtons({
+        response: {
+          level_source: window.location
+        }
+      }));
+      var upSale = document.createElement('div');
+      upSale.innerHTML = require('./templates/learn.html')();
+      belowViz.appendChild(upSale);
+      dom.addClickTouchEvent(openWorkspace, function() {
+        // Redirect user to /edit version of this page. It would be better
+        // to just turn on the workspace but there are rendering issues
+        // with that.
+        window.location.href = window.location.href + '/edit';
+      });
+      buttonRow.appendChild(openWorkspace);
+    }
+  }
+
+  // 1. Move the buttons, 2. Hide the slider in the share page for mobile.
+  if (BlocklyApps.share && dom.isMobile()) {
+    var sliderCell = document.getElementById('slider-cell');
+    sliderCell.style.display = 'none';
+    var belowVisualization = document.getElementById('belowVisualization');
+    belowVisualization.style.display = 'block';
   }
 
   // Record time at initialization.
@@ -182,6 +194,11 @@ BlocklyApps.init = function(config) {
     });
   }
 
+  // The share page does not show the rotateContainer.
+  if (BlocklyApps.share) {
+    var rotateContainer = document.getElementById('rotateContainer');
+    rotateContainer.style.display = 'none';
+  }
   var orientationHandler = function() {
     window.scrollTo(0, 0);  // Browsers like to mess with scroll on rotate.
     var rotateContainer = document.getElementById('rotateContainer');
