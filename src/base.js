@@ -121,14 +121,6 @@ BlocklyApps.init = function(config) {
         twitter: config.twitter
       }));
 
-      var upSale = document.createElement('div');
-      if (config.makeYourOwn) {
-        upSale.innerHTML = require('./templates/makeYourOwn.html')();
-      } else {
-        upSale.innerHTML = require('./templates/learn.html')();
-      }
-      belowViz.appendChild(upSale);
-
       dom.addClickTouchEvent(openWorkspace, function() {
         // Redirect user to /edit version of this page. It would be better
         // to just turn on the workspace but there are rendering issues
@@ -151,12 +143,17 @@ BlocklyApps.init = function(config) {
       belowVisualization.style.display = 'block';
       belowVisualization.style.marginLeft = '0px';
     }
+  }
 
+  // Show flappy upsale on desktop and mobile.  Show learn upsale only on desktop
+  if (BlocklyApps.share) {
+    var upSale = document.createElement('div');
     if (config.makeYourOwn) {
-      var upSale = document.createElement('div');
       upSale.innerHTML = require('./templates/makeYourOwn.html')();
-      belowVisualization.appendChild(upSale);
+    } else if (!dom.isMobile()) {
+      upSale.innerHTML = require('./templates/learn.html')();
     }
+    belowViz.appendChild(upSale);
   }
 
   // Record time at initialization.
