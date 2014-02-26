@@ -239,7 +239,8 @@ exports.createSharingButtons = function(options) {
     data: {
       facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source,
-      twitterUrl: twitterUrl
+      twitterUrl: twitterUrl,
+      makeYourOwn: options.makeYourOwn
     }
   });
   var sharingInput = sharingUrl.querySelector('#sharing-input');

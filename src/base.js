@@ -113,21 +113,21 @@ BlocklyApps.init = function(config) {
       var openWorkspace = document.createElement('button');
       openWorkspace.setAttribute('id', 'open-workspace');
       openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+
       belowViz.appendChild(feedback.createSharingButtons({
         response: {
           level_source: window.location
         },
         twitter: config.twitter
       }));
-      var upSale = document.createElement('div');
-      upSale.innerHTML = require('./templates/learn.html')();
-      belowViz.appendChild(upSale);
+
       dom.addClickTouchEvent(openWorkspace, function() {
         // Redirect user to /edit version of this page. It would be better
         // to just turn on the workspace but there are rendering issues
         // with that.
         window.location.href = window.location.href + '/edit';
       });
+
       buttonRow.appendChild(openWorkspace);
     }
   }
@@ -143,6 +143,17 @@ BlocklyApps.init = function(config) {
       belowVisualization.style.display = 'block';
       belowVisualization.style.marginLeft = '0px';
     }
+  }
+
+  // Show flappy upsale on desktop and mobile.  Show learn upsale only on desktop
+  if (BlocklyApps.share) {
+    var upSale = document.createElement('div');
+    if (config.makeYourOwn) {
+      upSale.innerHTML = require('./templates/makeYourOwn.html')();
+    } else if (!dom.isMobile()) {
+      upSale.innerHTML = require('./templates/learn.html')();
+    }
+    belowViz.appendChild(upSale);
   }
 
   // Record time at initialization.
