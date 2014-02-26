@@ -710,7 +710,7 @@ exports.updateBlockCount = function() {
   // If the number of block used is bigger than the ideal number of blocks,
   // set it to be yellow, otherwise, keep it as black.
   var element = document.getElementById('blockUsed');
-  if (BlocklyApps.IDEAL_BLOCK_NUM < feedback.getNumBlocksUsed()) {
+  if (BlocklyApps.IDEAL_BLOCK_NUM < feedback.getNumEnabledBlocks()) {
     element.className = "block-counter-overflow";
   } else {
     element.className = "block-counter-default";
@@ -720,12 +720,11 @@ exports.updateBlockCount = function() {
   if (element) {
     element.innerHTML = '';  // Remove existing children or text.
     element.appendChild(document.createTextNode(
-        feedback.getNumBlocksUsed() + feedback.getNumGivenBlocks()));
+        feedback.getNumEnabledBlocks()));
   }
 };
 
 var getIdealBlockNumberMsg = function() {
   return BlocklyApps.IDEAL_BLOCK_NUM === Infinity ?
-      msg.infinity() :
-      BlocklyApps.IDEAL_BLOCK_NUM + feedback.getNumGivenBlocks();
+      msg.infinity() : BlocklyApps.IDEAL_BLOCK_NUM;
 };

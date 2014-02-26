@@ -121,6 +121,27 @@ exports.getNumGivenBlocks = function() {
   return getGivenBlocks().length;
 };
 
+/**
+ * Counts the total number of blocks. Blocks are only counted if they are
+ * not disabled.
+ * @return {number} Total number of blocks.
+ */
+exports.getNumEnabledBlocks = function() {
+  var i;
+  if (BlocklyApps.editCode) {
+    var codeLines = 0;
+    // quick and dirty method to count non-blank lines that don't start with //
+    var lines = getGeneratedCodeString().split("\n");
+    for (i = 0; i < lines.length; i++) {
+      if ((lines[i].length > 1) && (lines[i][0] != '/' || lines[i][1] != '/')) {
+        codeLines++;
+      }
+    }
+    return codeLines;
+  }
+  return getEnabledBlocks().length;
+};
+
 var getFeedbackButtons = function(feedbackType, showPreviousLevelButton) {
   var buttons = document.createElement('div');
   buttons.innerHTML = require('./templates/buttons.html')({
@@ -511,6 +532,18 @@ var getGivenBlocks = function() {
 };
 
 /**
+ * Get enabled blocks in the program, namely any that are not disabled.
+ * @return {Array<Object>} The blocks.
+ */
+var getEnabledBlocks = function() {
+  var allBlocks = Blockly.mainWorkspace.getAllBlocks();
+  var blocks = allBlocks.filter(function(block) {
+    return !block.disabled;
+  });
+  return blocks;
+};
+
+/**
  * Check to see if the user's code contains the required blocks for a level.
  * This never returns more than BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG.
  * @return {!Array} array of array of strings where each array of strings is
@@ -580,16 +613,16 @@ exports.getTestResults = function() {
       return BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED;
     }
   }
-  var numBlocksUsed = exports.getNumBlocksUsed();
+  var numEnabledBlocks = exports.getNumEnabledBlocks();
   if (!BlocklyApps.levelComplete) {
     if (BlocklyApps.IDEAL_BLOCK_NUM &&
-        numBlocksUsed < BlocklyApps.IDEAL_BLOCK_NUM) {
+        numEnabledBlocks < BlocklyApps.IDEAL_BLOCK_NUM) {
       return BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
     }
     return BlocklyApps.TestResults.LEVEL_INCOMPLETE_FAIL;
   }
   if (BlocklyApps.IDEAL_BLOCK_NUM &&
-      numBlocksUsed > BlocklyApps.IDEAL_BLOCK_NUM) {
+      numEnabledBlocks > BlocklyApps.IDEAL_BLOCK_NUM) {
     return BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL;
   } else {
     return BlocklyApps.TestResults.ALL_PASS;
