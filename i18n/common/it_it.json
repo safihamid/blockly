@@ -42,6 +42,7 @@
   "tooFewBlocksMsg": "Stai usando tutti i tipi di blocchi necessari, ma prova usando più blocchi o usandoli diversamente.",
   "tooManyBlocksMsg": "Questo puzzle può essere risolto con < x id= 'START_SPAN'/><x id='END_SPAN'/> blocchi.",
   "tooMuchWork": "Mi hai fatto fare un sacco di lavoro!  Puoi provare a farmi fare meno ripetizioni?",
+  "flappySpecificFail": "Your code looks good - it will flap with each click. But you need to click many times to flap to the target.",
   "toolboxHeader": "Blocchi",
   "openWorkspace": "Come funziona",
   "totalNumLinesOfCodeWritten": "Totale complessivo: {numLines, plural, one {1 linea} other {# linee}} di codice.",
@@ -55,8 +56,9 @@
   "rotateText": "Ruota il dispositivo.",
   "orientationLock": "Disattiva il blocco dell'orientamento nelle impostazioni del dispositivo.",
   "shareDrawing": "Condividi il tuo disegno:",
+  "shareGame": "Share your game:",
   "wantToLearn": "Vuoi imparare a programmare?",
   "watchVideo": "Guarda il video",
-  "tryHOC": "Prova l'Ora del Codice",
+  "tryHOC": "Prova l'Ora di Codice",
   "signup": "Iscriviti al corso introduttivo"
 }

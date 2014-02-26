@@ -17,7 +17,7 @@
   "finalLevel": "Til hamingju! Þú hefur leyst síðustu þrautina.",
   "heightParameter": "hæð",
   "holePresent": "það er hola",
-  "ifCode": "if",
+  "ifCode": "ef",
   "ifPathAhead": "ef slóð framundan",
   "ifTooltip": "Ef það er slóð í tiltekna stefnu þá á að gera eitthvað.",
   "ifelseTooltip": "Ef það er slóð í tiltekna stefnu, þá að gera fyrri kubbastæðuna. Annars á að gera seinni kubbastæðuna.",
