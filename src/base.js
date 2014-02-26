@@ -116,7 +116,8 @@ BlocklyApps.init = function(config) {
       belowViz.appendChild(feedback.createSharingButtons({
         response: {
           level_source: window.location
-        }
+        },
+        twitter: config.twitter
       }));
       var upSale = document.createElement('div');
       upSale.innerHTML = require('./templates/learn.html')();

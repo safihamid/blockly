@@ -218,12 +218,22 @@ exports.createSharingButtons = function(options) {
       sharingUrl: options.response.level_source
     }
   });
+
+  var twitterUrl = "https://twitter.com/intent/tweet?url=" +
+                   options.response.level_source;
+
+  if (options.twitter && options.twitter.text !== undefined) {
+    twitterUrl += "&text=" + encodeURI(options.twitter.text);
+  }
+  if (options.twitter  && options.twitter.hashtag !== undefined) {
+    twitterUrl += "&button_hashtag=" + options.twitter.hashtag;
+  }
+
   sharingButtons.innerHTML = require('./templates/buttons.html')({
     data: {
       facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source,
-      twitterUrl: "https://twitter.com/intent/tweet?url=" +
-                  options.response.level_source
+      twitterUrl: twitterUrl
     }
   });
   var sharingInput = sharingUrl.querySelector('#sharing-input');
