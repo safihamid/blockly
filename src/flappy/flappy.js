@@ -71,6 +71,11 @@ Flappy.scale = {
   'stepSpeed': 33
 };
 
+var twitterOptions = {
+  text: flappyMsg.shareFlappyTwitter(),
+  hashtag: "FlappyCode"
+};
+
 var loadLevel = function() {
   // Load maps.
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
@@ -561,6 +566,8 @@ Flappy.init = function(config) {
 
   config.trashcan = false;
 
+  config.twitter = twitterOptions;
+
   BlocklyApps.init(config);
 
   if (!onSharePage) {
@@ -704,7 +711,8 @@ var displayFeedback = function() {
       feedbackType: Flappy.testResults,
       response: Flappy.response,
       level: level,
-      showingSharing: level.freePlay
+      showingSharing: level.freePlay,
+      twitter: twitterOptions
     });
   }
 };

@@ -218,11 +218,15 @@ exports.createSharingButtons = function(options) {
       sharingUrl: options.response.level_source
     }
   });
+
   var twitterUrl = "https://twitter.com/intent/tweet?url=" +
                    options.response.level_source;
-  if (options.skin === "flappy") {
-    twitterUrl += "&text=" + encodeURI(msg.shareFlappyTwitter()) +
-      "&button_hashtag=FlappyCode";
+
+  if (options.twitter && options.twitter.text !== undefined) {
+    twitterUrl += "&text=" + encodeURI(options.twitter.text);
+  }
+  if (options.twitter  && options.twitter.hashtag !== undefined) {
+    twitterUrl += "&button_hashtag=" + options.twitter.hashtag;
   }
 
   sharingButtons.innerHTML = require('./templates/buttons.html')({

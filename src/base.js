@@ -116,7 +116,7 @@ BlocklyApps.init = function(config) {
         response: {
           level_source: window.location
         },
-        skin: config.skin.id
+        twitter: config.twitter
       }));
       var upSale = document.createElement('div');
       upSale.innerHTML = require('./templates/learn.html')();
