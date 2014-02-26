@@ -113,21 +113,29 @@ BlocklyApps.init = function(config) {
       var openWorkspace = document.createElement('button');
       openWorkspace.setAttribute('id', 'open-workspace');
       openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
+
       belowViz.appendChild(feedback.createSharingButtons({
         response: {
           level_source: window.location
         },
         twitter: config.twitter
       }));
+
       var upSale = document.createElement('div');
-      upSale.innerHTML = require('./templates/learn.html')();
+      if (config.makeYourOwn) {
+        upSale.innerHTML = require('./templates/makeYourOwn.html')();
+      } else {
+        upSale.innerHTML = require('./templates/learn.html')();
+      }
       belowViz.appendChild(upSale);
+
       dom.addClickTouchEvent(openWorkspace, function() {
         // Redirect user to /edit version of this page. It would be better
         // to just turn on the workspace but there are rendering issues
         // with that.
         window.location.href = window.location.href + '/edit';
       });
+
       buttonRow.appendChild(openWorkspace);
     }
   }
@@ -142,6 +150,12 @@ BlocklyApps.init = function(config) {
     if (belowVisualization) {
       belowVisualization.style.display = 'block';
       belowVisualization.style.marginLeft = '0px';
+    }
+
+    if (config.makeYourOwn) {
+      var upSale = document.createElement('div');
+      upSale.innerHTML = require('./templates/makeYourOwn.html')();
+      belowVisualization.appendChild(upSale);
     }
   }
 

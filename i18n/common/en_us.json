@@ -23,6 +23,7 @@
   "hintTitle": "Hint:",
   "levelIncompleteError": "You are using all of the necessary types of blocks but not in the right way.",
   "listVariable": "list",
+  "makeYourOwnFlappy": "Make Your Own Flappy Game",
   "missingBlocksErrorMsg": "Try one or more of the blocks below to solve this puzzle.",
   "nextLevel": "Congratulations! You completed Puzzle {puzzleNumber}.",
   "nextLevelTrophies": "Congratulations! You completed Puzzle {puzzleNumber} and won {numTrophies, plural, one {a trophy} other {# trophies}}.",

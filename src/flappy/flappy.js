@@ -568,6 +568,9 @@ Flappy.init = function(config) {
 
   config.twitter = twitterOptions;
 
+  // for flappy show make your own button if on share page
+  config.makeYourOwn = config.share;
+
   BlocklyApps.init(config);
 
   if (!onSharePage) {
