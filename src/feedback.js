@@ -201,6 +201,12 @@ var getFeedbackMessage = function(options) {
     case BlocklyApps.TestResults.FREE_PLAY:
       message = options.instructionImageUrl ?
           msg.reinfFeedbackMsgWithImage() : msg.reinfFeedbackMsg();
+
+      // would prefer a cleaner solution that doesnt special case flappy here,
+      // but this will work for now.
+      if (options.app === "flappy") {
+        message = msg.reinfFeedbackMsgFlappy();
+      }
       break;
   }
   dom.setText(feedback, message);
