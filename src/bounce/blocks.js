@@ -245,8 +245,18 @@ exports.install = function(blockly, skin) {
   };
 
   blockly.Blocks.bounce_playSound.SOUNDS =
-      [[msg.playSoundBounce(), 'wall'],
-       [msg.playSoundCrunch(), 'wall0']];
+      [[msg.playSoundHit(), 'hit'],
+       [msg.playSoundWood(), 'wood'],
+       [msg.playSoundRetro(), 'retro'],
+       [msg.playSoundSlap(), 'slap'],
+       [msg.playSoundRubber(), 'rubber'],
+       [msg.playSoundCrunch(), 'crunch'],
+       [msg.playSoundWinPoint(), 'winpoint'],
+       [msg.playSoundWinPoint2(), 'winpoint2'],
+       [msg.playSoundLosePoint(), 'losepoint'],
+       [msg.playSoundLosePoint2(), 'losepoint2'],
+       [msg.playSoundGoal1(), 'goal1'],
+       [msg.playSoundGoal2(), 'goal2']];
   
   generator.bounce_playSound = function() {
     // Generate JavaScript for playing a sound.

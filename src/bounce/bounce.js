@@ -611,18 +611,21 @@ Bounce.init = function(config) {
   config.loadAudio = function() {
     Blockly.loadAudio_(skin.winSound, 'win');
     Blockly.loadAudio_(skin.startSound, 'start');
+    Blockly.loadAudio_(skin.ballStartSound, 'ballstart');
     Blockly.loadAudio_(skin.failureSound, 'failure');
-    Blockly.loadAudio_(skin.obstacleSound, 'obstacle');
-    // Load wall sounds.
-    Blockly.loadAudio_(skin.wallSound, 'wall');
-    if (skin.additionalSound) {
-      Blockly.loadAudio_(skin.wall0Sound, 'wall0');
-      Blockly.loadAudio_(skin.wall1Sound, 'wall1');
-      Blockly.loadAudio_(skin.wall2Sound, 'wall2');
-      Blockly.loadAudio_(skin.wall3Sound, 'wall3');
-      Blockly.loadAudio_(skin.wall4Sound, 'wall4');
-      Blockly.loadAudio_(skin.winGoalSound, 'winGoal');
-    }
+    Blockly.loadAudio_(skin.rubberSound, 'rubber');
+    Blockly.loadAudio_(skin.crunchSound, 'crunch');
+    Blockly.loadAudio_(skin.flagSound, 'flag');
+    Blockly.loadAudio_(skin.winPointSound, 'winpoint');
+    Blockly.loadAudio_(skin.winPoint2Sound, 'winpoint2');
+    Blockly.loadAudio_(skin.losePointSound, 'losepoint');
+    Blockly.loadAudio_(skin.losePoint2Sound, 'losepoint2');
+    Blockly.loadAudio_(skin.goal1Sound, 'goal1');
+    Blockly.loadAudio_(skin.goal2Sound, 'goal2');
+    Blockly.loadAudio_(skin.woodSound, 'wood');
+    Blockly.loadAudio_(skin.retroSound, 'retro');
+    Blockly.loadAudio_(skin.slapSound, 'slap');
+    Blockly.loadAudio_(skin.hitSound, 'hit');
   };
 
   config.afterInject = function() {
@@ -726,7 +729,7 @@ Bounce.moveBallOffscreen = function(i) {
  */
 Bounce.playSoundAndResetBall = function(i) {
   Bounce.resetBall(i);
-  BlocklyApps.playAudio('start', {volume: 0.5});
+  BlocklyApps.playAudio('ballstart', {volume: 0.5});
 };
 
 /**
@@ -1026,7 +1029,8 @@ Bounce.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
-  BlocklyApps.playAudio('start', {volume: 0.5});
+  BlocklyApps.playAudio(Bounce.ballStart_ ? 'ballstart' : 'start',
+                        {volume: 0.5});
 
   BlocklyApps.reset(false);
   
@@ -1175,7 +1179,7 @@ Bounce.allFinishesComplete = function() {
     }
     if (playSound) {
       BlocklyApps.playAudio(
-          (finished == Bounce.paddleFinishCount) ? 'win' : 'winGoal',
+          (finished == Bounce.paddleFinishCount) ? 'win' : 'flag',
           {volume: 0.5});
     }
     return (finished == Bounce.paddleFinishCount);
