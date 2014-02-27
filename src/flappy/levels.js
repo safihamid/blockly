@@ -216,7 +216,7 @@ module.exports = {
             insideObstacle = true;
           }
         });
-        return insideObstacle && Flappy.playerScore === 1;
+        return insideObstacle && Flappy.playerScore > 0;
       },
       failureCondition: function () {
         var insideObstacle = false;
@@ -257,7 +257,7 @@ module.exports = {
             insideObstacle = true;
           }
         });
-        return insideObstacle && Flappy.playerScore === 1;
+        return insideObstacle && Flappy.playerScore > 0;
       },
       failureCondition: function () {
         var insideObstacle = false;
