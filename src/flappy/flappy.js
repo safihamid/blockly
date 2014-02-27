@@ -571,6 +571,8 @@ Flappy.init = function(config) {
   // for flappy show make your own button if on share page
   config.makeYourOwn = config.share;
 
+  config.hideShowCode = true;
+
   BlocklyApps.init(config);
 
   if (!onSharePage) {
