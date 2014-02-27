@@ -799,7 +799,7 @@ module.exports = {
   '2_4': {
     'toolbox': toolbox(2, 4),
     'startBlocks': startBlocks(2, 4),
-    'ideal': 8,
+    'ideal': 12,
     'requiredBlocks': [
       [DIG],
       [REPEAT],
@@ -847,7 +847,7 @@ module.exports = {
   '2_5': {
     'toolbox': toolbox(2, 5),
     'startBlocks': startBlocks(2, 5),
-    'ideal': 6,
+    'ideal': 7,
     'requiredBlocks': [
       [DIG],
       [REPEAT],
@@ -893,7 +893,7 @@ module.exports = {
   '2_6': {
     'toolbox': toolbox(2, 6),
     'startBlocks': startBlocks(2, 6),
-    'ideal': 4,
+    'ideal': 10,
     'requiredBlocks': [
       [remove(8)], [fill(8)], [MOVE_FORWARD], [UNTIL_BLOCKED, REPEAT]
     ],
@@ -936,7 +936,7 @@ module.exports = {
   '2_7': {
     'toolbox': toolbox(2, 7),
     'startBlocks': startBlocks(2, 7),
-    'ideal': 8,
+    'ideal': 10,
     'requiredBlocks': [
       [TURN_LEFT], [MOVE_FORWARD], [TURN_RIGHT], [DIG]
     ],
@@ -976,7 +976,7 @@ module.exports = {
   '2_8': {
     'toolbox': toolbox(2, 8),
     'startBlocks': startBlocks(2, 8),
-    'ideal': 2,
+    'ideal': 12,
     'requiredBlocks': [
       [REPEAT], [AVOID_OBSTACLE_AND_REMOVE]
     ],
@@ -1019,7 +1019,7 @@ module.exports = {
   '2_9': {
     'toolbox': toolbox(2, 9),
     'startBlocks': startBlocks(2, 9),
-    'ideal': 3,
+    'ideal': 13,
     'requiredBlocks': [
       [REMOVE_PILES],
       [MOVE_FORWARD],
@@ -1064,7 +1064,7 @@ module.exports = {
   '2_10': {
     'toolbox': toolbox(2, 10),
     'startBlocks': startBlocks(2, 10),
-    'ideal': 6,
+    'ideal': 26,
     'requiredBlocks': [
       [REMOVE_PILES],
       [MOVE_FORWARD],
@@ -1111,7 +1111,7 @@ module.exports = {
   '2_11': {
     'toolbox': toolbox(2, 11),
     'startBlocks': startBlocks(2, 11),
-    'ideal': 15,
+    'ideal': 25,
     'scale': {
       'stepSpeed': 3
     },
@@ -1450,7 +1450,7 @@ module.exports = {
   'debug_function_2': {
     'toolbox': toolbox(3, 8),
     'startBlocks': startBlocks(3, 8),
-    'ideal': 14,
+    'ideal': 16,
     'requiredBlocks': [
       [MOVE_FORWARD], [TURN_LEFT], [REPEAT], [DIG], [FILL],
       [levelBase.call(msg.fillSquare())],
@@ -1495,7 +1495,7 @@ module.exports = {
   'debug_function_3': {
     'toolbox': toolbox(3, 9),
     'startBlocks': startBlocks(3, 9),
-    'ideal': 10,
+    'ideal': 11,
     'requiredBlocks': [
       [MOVE_FORWARD], [REPEAT_EXT], [DIG], [CONTROLS_FOR],
       [levelBase.callWithArg(msg.removePile(), msg.heightParameter())],

@@ -433,7 +433,7 @@ module.exports = {
   },
   '2_8': {
     'toolbox': toolbox(2, 8),
-    'ideal': 3,
+    'ideal': 4,
     'requiredBlocks': [
       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
       [{'test': 'for', 'type': 'controls_repeat', titles: {TIMES: '???'}}],
@@ -553,7 +553,7 @@ module.exports = {
   },
   '2_13': {
     'toolbox': toolbox(2, 13),
-    'ideal': 1,
+    'ideal': 4,
     'requiredBlocks': [
       [{'test': 'turnLeft',
         'type': 'maze_turn',
@@ -716,7 +716,7 @@ module.exports = {
   },
   '2_19': {
     'toolbox': toolbox(2, 19),
-    'ideal': 3,
+    'ideal': 6,
     'scale': {
       'stepSpeed': 2
     },
