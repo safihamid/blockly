@@ -282,7 +282,7 @@ config.mochaTest = {
   all: {
     options: {
       reporter: 'spec',
-      timeout: 3000
+      timeout: 4000
     },
     src: ['test/test.js']
   }
