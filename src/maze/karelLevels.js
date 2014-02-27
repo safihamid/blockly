@@ -716,7 +716,7 @@ module.exports = {
   '2_2': {
     'toolbox': toolbox(2, 2),
     'startBlocks': startBlocks(2, 2),
-    'ideal': 2,
+    'ideal': 5,
     'requiredBlocks': [
       [MOVE_FORWARD], [fill(5)]
     ],
@@ -756,7 +756,7 @@ module.exports = {
   '2_3': {
     'toolbox': toolbox(2, 3),
     'startBlocks': startBlocks(2, 3),
-    'ideal': 4,
+    'ideal': 7,
     'requiredBlocks': [
       [MOVE_FORWARD], [fill(5)], [UNTIL_BLOCKED, REPEAT]
     ],
