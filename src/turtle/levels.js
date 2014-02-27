@@ -341,7 +341,7 @@ module.exports = {
   // Level 9: circle.
   '1_9': {
     answer: answer(1, 9),
-    ideal: 0,
+    ideal: 5,
     toolbox: toolbox(1, 9),
     startBlocks: startBlocks(1, 9),
     freePlay: false,
@@ -524,7 +524,7 @@ module.exports = {
   // Level 1: Call 'draw a square'.
   '3_1': {
     answer: answer(3, 1),
-    ideal: 1,
+    ideal: 13,
     toolbox: toolbox(3, 1),
     startBlocks: startBlocks(3, 1),
     requiredBlocks: [
@@ -535,7 +535,7 @@ module.exports = {
   // Level 2: Create "draw a triangle".
   '3_2': {
     answer: answer(3, 2),
-    ideal: 7,
+    ideal: 13,
     toolbox: toolbox(3, 2),
     startBlocks: startBlocks(3, 2),
     requiredBlocks: [
@@ -550,7 +550,7 @@ module.exports = {
   '3_3': {
     answer: answer(3, 3),
     initialY: 350,
-    ideal: 7,
+    ideal: 19,
     toolbox: toolbox(3, 3),
     startBlocks: startBlocks(3, 3),
     requiredBlocks: [
@@ -578,7 +578,7 @@ module.exports = {
   // Level 4: House the lion.
   '3_4': {
     answer: answer(3, 4),
-    ideal: 6,
+    ideal: 18,
     toolbox: toolbox(3, 4),
     startBlocks: startBlocks(3, 4),
     requiredBlocks: [
@@ -599,7 +599,7 @@ module.exports = {
   // Level 5: Create "draw a house".
   '3_5': {
     answer: answer(3, 5),
-    ideal: 8,
+    ideal: 20,
     toolbox: toolbox(3, 5),
     startBlocks: startBlocks(3, 5),
     requiredBlocks: [
@@ -627,7 +627,7 @@ module.exports = {
   '3_6': {
     answer: answer(3, 6),
     initialY: 350,
-    ideal: 16,
+    ideal: 22,
     toolbox: toolbox(3, 6),
     startBlocks: startBlocks(3, 6),
     requiredBlocks: [
@@ -652,7 +652,7 @@ module.exports = {
   '3_7': {
     answer: answer(3, 7),
     initialY: 350,
-    ideal: 11,
+    ideal: 23,
     toolbox: toolbox(3, 7),
     startBlocks: startBlocks(3, 7),
     requiredBlocks: [
@@ -676,7 +676,7 @@ module.exports = {
     answer: answer(3, 8),
     initialX: 20,
     initialY: 350,
-    ideal: 27,
+    ideal: 39,
     toolbox: toolbox(3, 8),
     startBlocks: startBlocks(3, 8),
     freePlay: false,
@@ -705,7 +705,7 @@ module.exports = {
     answer: answer(3, 9),
     initialX: 20,
     initialY: 350,
-    ideal: 27,
+    ideal: 39,
     toolbox: toolbox(3, 9),
     startBlocks: startBlocks(3, 9),
     requiredBlocks: [
@@ -760,7 +760,7 @@ module.exports = {
   // Level 2: Two triangles.
   '4_2': {
     answer: answer(4, 2),
-    ideal: 1,
+    ideal: 11,
     toolbox: toolbox(4, 2),
     startBlocks: startBlocks(4, 2),
     requiredBlocks: [
@@ -771,7 +771,7 @@ module.exports = {
   // Level 3: Four triangles using repeat.
   '4_3': {
     answer: answer(4, 3),
-    ideal: 2,
+    ideal: 7,
     toolbox: toolbox(4, 3),
     startBlocks: startBlocks(4, 3),
     requiredBlocks: [
@@ -783,7 +783,7 @@ module.exports = {
   // Level 4: Ten triangles with missing repeat number.
   '4_4': {
     answer: answer(4, 4),
-    ideal: 1,
+    ideal: 7,
     toolbox: toolbox(4, 4),
     startBlocks: startBlocks(4, 4),
     requiredBlocks: [
@@ -794,7 +794,7 @@ module.exports = {
   // Level 5: 36 triangles with missing angle number.
   '4_5': {
     answer: answer(4, 5),
-    ideal: 1,
+    ideal: 7,
     toolbox: toolbox(4, 5),
     startBlocks: startBlocks(4, 5),
     requiredBlocks: [
@@ -824,7 +824,7 @@ module.exports = {
   '4_7': {
     answer: answer(4, 7),
     initialY: 300,
-    ideal: 2,
+    ideal: 7,
     toolbox: toolbox(4, 7),
     startBlocks: startBlocks(4, 7),
     requiredBlocks: [
@@ -839,7 +839,7 @@ module.exports = {
     answer: answer(4, 8),
     initialX: 100,
     initialY: 300,
-    ideal: 2,
+    ideal: 9,
     toolbox: toolbox(4, 8),
     startBlocks: startBlocks(4, 8),
     requiredBlocks: [
@@ -854,7 +854,7 @@ module.exports = {
     answer: answer(4, 9),
     initialX: 150,
     initialY: 350,
-    ideal: 1,
+    ideal: 9,
     toolbox: toolbox(4, 9),
     startBlocks: startBlocks(4, 9),
     requiredBlocks: [
@@ -868,7 +868,7 @@ module.exports = {
     answer: answer(4, 10),
     initialX: 75,
     initialY: 300,
-    ideal: 1,
+    ideal: 9,
     toolbox: toolbox(4, 10),
     startBlocks: startBlocks(4, 10),
     requiredBlocks: [
