@@ -14,7 +14,6 @@ var CONFIGS = {
   bounce: {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
-    additionalSound: true,
     ballYOffset: 10
   }
 
@@ -51,17 +50,31 @@ exports.load = function(assetUrl, id) {
   skin.approachingGoalAnimation =
       skin.assetUrl(config.approachingGoalAnimation);
   // Sounds
-  skin.obstacleSound =
-      [skin.assetUrl('obstacle.mp3'), skin.assetUrl('obstacle.ogg')];
-  skin.wallSound = [skin.assetUrl('wall.mp3'), skin.assetUrl('wall.ogg')];
-  skin.winGoalSound = [skin.assetUrl('win_goal.mp3'),
-                       skin.assetUrl('win_goal.ogg')];
-  skin.wall0Sound = [skin.assetUrl('wall0.mp3'), skin.assetUrl('wall0.ogg')];
-  skin.wall1Sound = [skin.assetUrl('wall1.mp3'), skin.assetUrl('wall1.ogg')];
-  skin.wall2Sound = [skin.assetUrl('wall2.mp3'), skin.assetUrl('wall2.ogg')];
-  skin.wall3Sound = [skin.assetUrl('wall3.mp3'), skin.assetUrl('wall3.ogg')];
-  skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
-  skin.additionalSound = config.additionalSound;
+  skin.rubberSound = [skin.assetUrl('wall.mp3'), skin.assetUrl('wall.ogg')];
+  skin.flagSound = [skin.assetUrl('win_goal.mp3'),
+                    skin.assetUrl('win_goal.ogg')];
+  skin.crunchSound = [skin.assetUrl('wall0.mp3'), skin.assetUrl('wall0.ogg')];
+  skin.ballStartSound = [skin.assetUrl('ball_start.mp3'),
+                         skin.assetUrl('ball_start.ogg')];
+  skin.winPointSound = [skin.assetUrl('1_we_win.mp3'),
+                        skin.assetUrl('1_we_win.ogg')];
+  skin.winPoint2Sound = [skin.assetUrl('2_we_win.mp3'),
+                         skin.assetUrl('2_we_win.ogg')];
+  skin.losePointSound = [skin.assetUrl('1_we_lose.mp3'),
+                         skin.assetUrl('1_we_lose.ogg')];
+  skin.losePoint2Sound = [skin.assetUrl('2_we_lose.mp3'),
+                          skin.assetUrl('2_we_lose.ogg')];
+  skin.goal1Sound = [skin.assetUrl('1_goal.mp3'), skin.assetUrl('1_goal.ogg')];
+  skin.goal2Sound = [skin.assetUrl('2_goal.mp3'), skin.assetUrl('2_goal.ogg')];
+  skin.woodSound = [skin.assetUrl('1_paddle_bounce.mp3'),
+                    skin.assetUrl('1_paddle_bounce.ogg')];
+  skin.retroSound = [skin.assetUrl('2_paddle_bounce.mp3'),
+                     skin.assetUrl('2_paddle_bounce.ogg')];
+  skin.slapSound = [skin.assetUrl('1_wall_bounce.mp3'),
+                    skin.assetUrl('1_wall_bounce.ogg')];
+  skin.hitSound = [skin.assetUrl('2_wall_bounce.mp3'),
+                   skin.assetUrl('2_wall_bounce.ogg')];
+  
   // Settings
   skin.graph = config.graph;
   if (config.background !== undefined) {
