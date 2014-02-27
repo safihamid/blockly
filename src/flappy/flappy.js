@@ -460,7 +460,7 @@ Flappy.onTick = function() {
     if (Flappy.avatarY >= max) {
       Flappy.avatarY = max;
       Flappy.gameState = Flappy.GameStates.OVER;
-      // Flappy.clearEventHandlersKillTickLoop();
+      Flappy.gameOverTick = Flappy.tickCount;
     }
 
     document.getElementById('avatar').setAttribute('transform',
@@ -488,6 +488,13 @@ Flappy.onMouseDown = function (e) {
     Flappy.clickPending = true;
     if (Flappy.gameState === Flappy.GameStates.WAITING) {
       Flappy.gameState = Flappy.GameStates.ACTIVE;
+    } else if (Flappy.gameState === Flappy.GameStates.OVER &&
+      Flappy.gameOverTick + 10 < Flappy.tickCount) {
+      // do a reset
+      var resetButton = document.getElementById('resetButton');
+      if (resetButton) {
+        resetButton.click();
+      }
     }
     document.getElementById('instructions').setAttribute('visibility', 'hidden');
     document.getElementById('getready').setAttribute('visibility', 'hidden');
@@ -570,6 +577,8 @@ Flappy.init = function(config) {
 
   // for flappy show make your own button if on share page
   config.makeYourOwn = config.share;
+
+  config.hideShowCode = true;
 
   BlocklyApps.init(config);
 
@@ -822,6 +831,7 @@ Flappy.execute = function() {
 
   Flappy.tickCount = 0;
   Flappy.firstActiveTick = -1;
+  Flappy.gameOverTick = 0;
   if (Flappy.intervalId) {
     window.clearInterval(Flappy.intervalId);
   }

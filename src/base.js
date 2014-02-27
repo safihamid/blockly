@@ -204,11 +204,15 @@ BlocklyApps.init = function(config) {
 
   BlocklyApps.Dialog = config.Dialog;
 
-  var showCode = document.getElementById('show-code-header');
+  var showCode = document.getElementById('show-code-header');  
   if (showCode) {
-    dom.addClickTouchEvent(showCode, function() {
-      feedback.showGeneratedCode(BlocklyApps.Dialog);
-    });
+    if (config.hideShowCode) {
+      showCode.style.display = 'none';
+    } else {
+      dom.addClickTouchEvent(showCode, function() {
+        feedback.showGeneratedCode(BlocklyApps.Dialog);
+      });
+    }
   }
 
   BlocklyApps.ICON = config.skin.staticAvatar;
