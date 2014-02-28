@@ -56,6 +56,7 @@ BlocklyApps.LOCALE = 'en_us';
  */
 BlocklyApps.MIN_WIDTH = 900;
 BlocklyApps.MIN_MOBILE_SHARE_WIDTH = 450;
+BlocklyApps.MIN_MOBILE_NO_PADDING_SHARE_WIDTH = 400;
 
 /**
  * If the user presses backspace, stop propagation - this prevents blockly
@@ -77,6 +78,7 @@ BlocklyApps.init = function(config) {
   }
 
   BlocklyApps.share = config.share;
+  BlocklyApps.noPadding = config.no_padding;
 
   // Store configuration.
   onAttempt = config.onAttempt || function(report) {
@@ -142,6 +144,17 @@ BlocklyApps.init = function(config) {
     if (belowVisualization) {
       belowVisualization.style.display = 'block';
       belowVisualization.style.marginLeft = '0px';
+      if (BlocklyApps.noPadding) {
+        // Shift run and reset buttons off the left edge if we have no padding
+        var runButton = document.getElementById('runButton');
+        if (runButton) {
+          runButton.style.marginLeft = '30px';
+        }
+        var resetButton = document.getElementById('resetButton');
+        if (resetButton) {
+          resetButton.style.marginLeft = '30px';
+        }
+      }
     }
   }
 
@@ -150,6 +163,9 @@ BlocklyApps.init = function(config) {
     var upSale = document.createElement('div');
     if (config.makeYourOwn) {
       upSale.innerHTML = require('./templates/makeYourOwn.html')();
+      if (BlocklyApps.noPadding) {
+        upSale.style.marginLeft = '30px';
+      }
     } else if (!dom.isMobile()) {
       upSale.innerHTML = require('./templates/learn.html')();
     }
@@ -167,7 +183,9 @@ BlocklyApps.init = function(config) {
     if (BlocklyApps.share && dom.isMobile()) {
       // for mobile sharing, don't assume landscape mode, use screen.width
       widthDimension = screen.width;
-      minWidth = BlocklyApps.MIN_MOBILE_SHARE_WIDTH;
+      minWidth = BlocklyApps.noPadding ?
+                    BlocklyApps.MIN_MOBILE_NO_PADDING_SHARE_WIDTH :
+                    BlocklyApps.MIN_MOBILE_SHARE_WIDTH;
     }
     else {
       // assume we are in landscape mode, so width is the longer of the two
