@@ -146,11 +146,9 @@ BlocklyApps.init = function(config) {
       belowVisualization.style.marginLeft = '0px';
       if (BlocklyApps.noPadding) {
         // Shift run and reset buttons off the left edge if we have no padding
-        var runButton = document.getElementById('runButton');
         if (runButton) {
           runButton.style.marginLeft = '30px';
         }
-        var resetButton = document.getElementById('resetButton');
         if (resetButton) {
           resetButton.style.marginLeft = '30px';
         }
