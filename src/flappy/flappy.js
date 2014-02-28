@@ -37,7 +37,6 @@ Flappy.gameState = Flappy.GameStates.WAITING;
 Flappy.clickPending = false;
 
 Flappy.avatarVelocity = 0;
-Flappy.gravity = 1;
 
 var level;
 var skin;
@@ -637,6 +636,7 @@ BlocklyApps.reset = function(first) {
   Flappy.setPlayer('flappy');
   Flappy.setGround('flappy');
   Flappy.setGapHeight(api.GapHeight.NORMAL);
+  Flappy.gravity = api.Gravity.NORMAL;
 
   // Move Avatar into position.
   Flappy.avatarX = 110;
