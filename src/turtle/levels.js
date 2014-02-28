@@ -188,7 +188,8 @@ var drawTurn = function() {
     test: function(block) {
       return block.type == 'draw_turn';
     },
-    type: 'draw_turn'
+    type: 'draw_turn',
+    values: {'VALUE': makeMathNumber('???')}
   };
 };
 
@@ -405,7 +406,7 @@ module.exports = {
     requiredBlocks: [
       [repeat(3)],
       [drawASquare(100)],
-      [turnRight(120)]
+      [drawTurn()]
     ],
     freePlay: false
   },
