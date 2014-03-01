@@ -409,7 +409,7 @@ Flappy.onTick = function() {
     Flappy.avatarY = Math.max(Flappy.avatarY, Flappy.MAZE_HEIGHT * -0.5);
 
     // Update obstacles
-    Flappy.obstacles.forEach(function (obstacle) {
+    Flappy.obstacles.forEach(function (obstacle, index) {
       var wasRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
 
       obstacle.x -= Flappy.SPEED;
@@ -428,8 +428,10 @@ Flappy.onTick = function() {
       }
 
       // If obstacle moves off left side, repurpose as a new obstacle to our right
+      var numObstacles = Flappy.obstacles.length;
+      var previousObstacleIndex = (index - 1 + numObstacles ) % numObstacles;
       if (obstacle.x + Flappy.OBSTACLE_WIDTH < 0) {
-        obstacle.reset(Flappy.obstacles.length * Flappy.OBSTACLE_SPACING);
+        obstacle.reset(Flappy.obstacles[previousObstacleIndex].x + Flappy.OBSTACLE_SPACING);
       }
     });
 
