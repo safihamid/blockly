@@ -223,6 +223,10 @@ var getFeedbackMessage = function(options) {
       message = options.appStrings.reinfFeedbackMsg;
       break;
   }
+  // Database hint overwrites the default hint.
+  if (options.response.hint) {
+    message = options.response.hint;
+  }
   dom.setText(feedback, message);
   return feedback;
 };
@@ -405,8 +409,11 @@ var FeedbackBlocks = function(options) {
   if (missingBlocks.length === 0) {
     return;
   }
-  if (options.feedbackType !== BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED &&
-      options.feedbackType !== BlocklyApps.TestResults.MISSING_BLOCK_FINISHED) {
+  if (options.response.hint ||
+      (options.feedbackType !==
+       BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED &&
+       options.feedbackType !==
+       BlocklyApps.TestResults.MISSING_BLOCK_FINISHED)) {
     return;
   }
 
