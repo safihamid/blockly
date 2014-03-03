@@ -728,8 +728,8 @@ var displayFeedback = function() {
       showingSharing: level.freePlay,
       twitter: twitterOptions,
       appStrings: {
-        reinfFeedbackMsg: msg.reinfFeedbackMsg(),
-        sharingText: msg.shareGame()
+        reinfFeedbackMsg: flappyMsg.reinfFeedbackMsg(),
+        sharingText: flappyMsg.shareGame()
       }
     });
   }
