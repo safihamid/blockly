@@ -37,7 +37,6 @@ Flappy.gameState = Flappy.GameStates.WAITING;
 Flappy.clickPending = false;
 
 Flappy.avatarVelocity = 0;
-Flappy.gravity = 1;
 
 var level;
 var skin;
@@ -410,7 +409,7 @@ Flappy.onTick = function() {
     Flappy.avatarY = Math.max(Flappy.avatarY, Flappy.MAZE_HEIGHT * -0.5);
 
     // Update obstacles
-    Flappy.obstacles.forEach(function (obstacle) {
+    Flappy.obstacles.forEach(function (obstacle, index) {
       var wasRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
 
       obstacle.x -= Flappy.SPEED;
@@ -429,8 +428,10 @@ Flappy.onTick = function() {
       }
 
       // If obstacle moves off left side, repurpose as a new obstacle to our right
+      var numObstacles = Flappy.obstacles.length;
+      var previousObstacleIndex = (index - 1 + numObstacles ) % numObstacles;
       if (obstacle.x + Flappy.OBSTACLE_WIDTH < 0) {
-        obstacle.reset(Flappy.obstacles.length * Flappy.OBSTACLE_SPACING);
+        obstacle.reset(Flappy.obstacles[previousObstacleIndex].x + Flappy.OBSTACLE_SPACING);
       }
     });
 
@@ -637,6 +638,7 @@ BlocklyApps.reset = function(first) {
   Flappy.setPlayer('flappy');
   Flappy.setGround('flappy');
   Flappy.setGapHeight(api.GapHeight.NORMAL);
+  Flappy.gravity = api.Gravity.NORMAL;
 
   // Move Avatar into position.
   Flappy.avatarX = 110;
@@ -724,7 +726,11 @@ var displayFeedback = function() {
       response: Flappy.response,
       level: level,
       showingSharing: level.freePlay,
-      twitter: twitterOptions
+      twitter: twitterOptions,
+      appStrings: {
+        reinfFeedbackMsg: msg.reinfFeedbackMsg(),
+        sharingText: msg.shareGame()
+      }
     });
   }
 };

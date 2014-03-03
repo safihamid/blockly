@@ -24,6 +24,8 @@ var setGapHeightBlock = '<block type="flappy_setGapHeight"></block>';
 var setPlayerBlock = '<block type="flappy_setPlayer"></block>';
 var setObstacleBlock = '<block type="flappy_setObstacle"></block>';
 var setGroundBlock = '<block type="flappy_setGround"></block>';
+var setGravityBlock = '<block type="flappy_setGravity"></block>';
+var setScoreBlock = '<block type="flappy_setScore"></block>';
 
 var COL_WIDTH = 210;
 var COL1 = 20;
@@ -330,7 +332,9 @@ module.exports = {
         setPlayerBlock +
         setObstacleBlock +
         setGroundBlock +
-        setGapHeightBlock
+        setGapHeightBlock +
+        setGravityBlock +
+        setScoreBlock
       ),
     'startBlocks':
       eventBlock('flappy_whenClick', COL1, ROW1) +

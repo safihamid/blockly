@@ -26,9 +26,28 @@ exports.GapHeight = {
   VERY_LARGE: 150
 };
 
+exports.Gravity = {
+  VERY_LOW: 0.5,
+  LOW: 0.75,
+  NORMAL: 1,
+  HIGH: 1.25,
+  VERY_HIGH: 1.5
+};
+
 exports.random = function (values) {
   var key = Math.floor(Math.random() * values.length); 
   return values[key];
+};
+
+exports.setScore = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.playerScore = value;
+  Flappy.displayScore();
+};
+
+exports.setGravity = function (id, value) {
+  BlocklyApps.highlight(id);
+  Flappy.gravity = value;
 };
 
 exports.setGround = function (id, value) {

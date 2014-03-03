@@ -220,14 +220,7 @@ var getFeedbackMessage = function(options) {
       break;
     // Free plays
     case BlocklyApps.TestResults.FREE_PLAY:
-      message = options.instructionImageUrl ?
-          msg.reinfFeedbackMsgWithImage() : msg.reinfFeedbackMsg();
-
-      // would prefer a cleaner solution that doesnt special case flappy here,
-      // but this will work for now.
-      if (options.app === "flappy") {
-        message = msg.reinfFeedbackMsgFlappy();
-      }
+      message = options.appStrings.reinfFeedbackMsg;
       break;
   }
   dom.setText(feedback, message);
@@ -294,10 +287,8 @@ var createSharingDiv = function(options) {
 
     if (options.response && options.response.level_source) {
       var sharingText = document.createElement('div');
-      if (options.app === "flappy") {
-        dom.setText(sharingText, msg.shareGame());
-      } else {
-        dom.setText(sharingText, msg.shareDrawing());
+      if (options.appStrings) {
+        dom.setText(sharingText, options.appStrings.sharingText);
       }
       sharingText.className = 'shareDrawingMsg';
       sharingDiv.appendChild(sharingText);

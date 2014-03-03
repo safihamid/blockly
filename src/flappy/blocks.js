@@ -437,6 +437,60 @@ exports.install = function(blockly, skin) {
     return generateSetterCode(this, 'setGround');
   };
 
+  /**
+   * setGravity
+   */
+  blockly.Blocks.flappy_setGravity = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[3][1]);  // default to normal
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setGravityTooltip());
+    }
+  };
+
+  blockly.Blocks.flappy_setGravity.VALUES =
+      [[msg.setGravityRandom(), 'random'],
+       [msg.setGravityVeryLow(), 'Flappy.Gravity.VERY_LOW'],
+       [msg.setGravityLow(), 'Flappy.Gravity.LOW'],
+       [msg.setGravityNormal(), 'Flappy.Gravity.NORMAL'],
+       [msg.setGravityHigh(), 'Flappy.Gravity.HIGH'],
+       [msg.setGravityVeryHigh(), 'Flappy.Gravity.VERY_HIGH']
+      ];
+
+  generator.flappy_setGravity = function() {
+    return generateSetterCode(this, 'setGravity');
+  };
+
+  blockly.Blocks.flappy_setScore = {
+    // Block for moving forward or backward the internal number of pixels.
+    init: function() {
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(msg.setScore()) 
+          .appendTitle(new blockly.FieldTextInput('0',
+            blockly.FieldTextInput.numberValidator), 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setScoreTooltip());
+    }
+  };
+
+  generator.flappy_setScore = function() {
+    // Generate JavaScript for moving forward or backward the internal number of
+    // pixels.
+    var value = window.parseInt(this.getTitleValue('VALUE'), 10);
+    return 'Flappy.setScore(\'block_id_' + this.id + '\', ' + value + ');\n';
+  };
+
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
 };
