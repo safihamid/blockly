@@ -726,7 +726,11 @@ var displayFeedback = function() {
       response: Flappy.response,
       level: level,
       showingSharing: level.freePlay,
-      twitter: twitterOptions
+      twitter: twitterOptions,
+      appStrings: {
+        reinfFeedbackMsg: msg.reinfFeedbackMsg(),
+        sharingText: msg.shareGame()
+      }
     });
   }
 };
