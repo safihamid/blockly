@@ -80,6 +80,7 @@ var loadLevel = function() {
   Bounce.timeoutFailureTick = level.timeoutFailureTick || Infinity;
   Bounce.softButtons_ = level.softButtons || [];
   Bounce.respawnBalls = level.respawnBalls || false;
+  Bounce.failOnBallExit = level.failOnBallExit || false;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
@@ -538,6 +539,10 @@ Bounce.onTick = function() {
           Bounce.pidList.push(window.setTimeout(
               delegate(this, Bounce.playSoundAndResetBall, i),
               3000));
+        } else if (Bounce.failOnBallExit) {
+          BlocklyApps.playAudio('failure', {volume: 0.5});
+          Bounce.result = ResultType.FAILURE;
+          Bounce.onPuzzleComplete();          
         }
       }
     
@@ -1186,8 +1191,8 @@ Bounce.allFinishesComplete = function() {
   }
   else if (Bounce.ballFinish_) {
     for (i = 0; i < Bounce.ballCount; i++) {
-      if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.2) &&
-          essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.2)) {
+      if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.5) &&
+          essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.5)) {
         // Change the finish icon to goalSuccess.
         var ballFinishIcon = document.getElementById('ballfinish');
         ballFinishIcon.setAttributeNS(
