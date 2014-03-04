@@ -301,7 +301,7 @@ BlocklyApps.init = function(config) {
 
   // Add the starting block(s).
   var startBlocks = config.level.startBlocks || '';
-  startBlocks = BlocklyApps.arrangeBlockPosition(startBlocks);
+  startBlocks = BlocklyApps.arrangeBlockPosition(startBlocks, config.blockArrangement);
   BlocklyApps.loadBlocks(startBlocks);
 
   var onResize = function() {
@@ -411,14 +411,20 @@ BlocklyApps.BLOCK_Y_COORDINATE_INTERVAL = 200;
 /**
  * Spreading out the top blocks in workspace if it is not already set.
  */
-BlocklyApps.arrangeBlockPosition = function(startBlocks) {
+BlocklyApps.arrangeBlockPosition = function(startBlocks, arrangement) {
+  var type, arrangeX, arrangeY;
   var xml = parseXmlElement(startBlocks);
   for (var x = 0, xmlChild; xml.children && x < xml.children.length; x++) {
     xmlChild = xml.children[x];
-    xmlChild.setAttribute('x', xmlChild.getAttribute('x') ||
+
+    // look to see if we have a predefined arrangement for this type
+    type = xmlChild.getAttribute('type');
+    arrangeX = arrangement && arrangement[type] ? arrangement[type].x : null;
+    arrangeY = arrangement && arrangement[type] ? arrangement[type].y : null;
+
+    xmlChild.setAttribute('x', xmlChild.getAttribute('x') || arrangeX ||
                           BlocklyApps.BLOCK_X_COORDINATE);
-    xmlChild.setAttribute('y',
-                          xmlChild.getAttribute('y') ||
+    xmlChild.setAttribute('y', xmlChild.getAttribute('y') || arrangeY ||
                           BlocklyApps.BLOCK_Y_COORDINATE +
                           BlocklyApps.BLOCK_Y_COORDINATE_INTERVAL * x);
   }

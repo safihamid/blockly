@@ -32,6 +32,10 @@ Flappy.GameStates = {
   OVER: 3
 };
 
+Flappy.WORKSPACE_BUFFER = 20;
+Flappy.WORKSPACE_COL_WIDTH = 210;
+Flappy.WORKSPACE_ROW_HEIGHT = 120;
+
 Flappy.gameState = Flappy.GameStates.WAITING;
 
 Flappy.clickPending = false;
@@ -580,6 +584,21 @@ Flappy.init = function(config) {
   config.makeYourOwn = config.share;
 
   config.hideShowCode = true;
+
+  // define how our blocks should be arranged
+  var col1 = Flappy.WORKSPACE_BUFFER;
+  var col2 = col1 + Flappy.WORKSPACE_COL_WIDTH;
+  var row1 = Flappy.WORKSPACE_BUFFER;
+  var row2 = row1 + Flappy.WORKSPACE_ROW_HEIGHT;
+  var row3 = row2 + Flappy.WORKSPACE_ROW_HEIGHT;
+
+  config.blockArrangement = {
+    'flappy_whenClick': { x: col1, y: row1},
+    'flappy_whenCollideGround': { x: col2, y: row1},
+    'flappy_whenCollideObstacle': { x: col2, y: row2},
+    'flappy_whenEnterObstacle': { x: col2, y: row3},
+    'flappy_whenRunButtonClick': { x: col1, y: row2}
+  };
 
   BlocklyApps.init(config);
 
