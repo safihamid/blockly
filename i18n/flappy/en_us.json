@@ -92,7 +92,7 @@
   "setScore": "set score",
   "setScoreTooltip": "Sets the player's score",
   "setSpeed": "set speed",
-  "setSpeedTooltip": "Sets the levels speed",
+  "setSpeedTooltip": "Sets the level's speed",
   "share": "Share",
   "shareFlappyTwitter": "Check out the Flappy game I made. I wrote it myself with @codeorg",
   "shareGame": "Share your game:",
@@ -110,7 +110,7 @@
   "whenCollideObstacleTooltip": "Execute the actions below when Flappy hits an obstacle.",
   "whenEnterObstacle": "when pass obstacle",
   "whenEnterObstacleTooltip": "Execute the actions below when Flappy enters an obstacle.",
-  "whenRunButtonClick": "when Run is clicked",
-  "whenRunButtonClickTooltip": "Execute the actions below when the run button is pressed.",
+  "whenRunButtonClick": "when game starts",
+  "whenRunButtonClickTooltip": "Execute the actions below when the game starts.",
   "yes": "Yes"
 }
