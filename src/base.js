@@ -414,8 +414,8 @@ BlocklyApps.BLOCK_Y_COORDINATE_INTERVAL = 200;
 BlocklyApps.arrangeBlockPosition = function(startBlocks, arrangement) {
   var type, arrangeX, arrangeY;
   var xml = parseXmlElement(startBlocks);
-  for (var x = 0, xmlChild; xml.children && x < xml.children.length; x++) {
-    xmlChild = xml.children[x];
+  for (var x = 0, xmlChild; xml.childNodes && x < xml.childNodes.length; x++) {
+    xmlChild = xml.childNodes[x];
 
     // look to see if we have a predefined arrangement for this type
     type = xmlChild.getAttribute('type');
