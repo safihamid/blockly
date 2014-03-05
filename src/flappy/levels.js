@@ -311,6 +311,75 @@ module.exports = {
       eventBlock('flappy_whenRunButtonClick', COL1, ROW2, setSpeedBlock)
   },
 
+  '8': {
+    'requiredBlocks': [
+      [{
+        test: function (block) {
+          return (block.type === 'flappy_setBackground' ||
+            block.type === 'flappy_setPlayer') &&
+            block.getTitleValue('VALUE') === 'random';
+        },
+        type: 'flappy_setBackground',
+        titles: {
+          'VALUE': 'random'
+        }
+      }]
+    ],
+    'obstacles': true,
+    'ground': true,
+    'score': true,
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        return (Flappy.gameState === Flappy.GameStates.OVER);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
+        setSpeedBlock + setBackgroundBlock + setPlayerBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
+      eventBlock('flappy_whenCollideGround', COL2, ROW1, endGameBlock) +
+      eventBlock('flappy_whenCollideObstacle', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterObstacle', COL2, ROW3, incrementScoreBlock) +
+      eventBlock('flappy_whenRunButtonClick', COL1, ROW2, setSpeedBlock)
+  },
+
+  '9': {
+    'requiredBlocks': [
+      [{
+        test: function (block) {
+          return block.type === 'flappy_setScore';
+        },
+        type: 'flappy_setScore'
+      }]
+    ],
+    'obstacles': true,
+    'ground': true,
+    'score': true,
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        return (Flappy.gameState === Flappy.GameStates.OVER);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
+        setSpeedBlock + setBackgroundBlock + setPlayerBlock + setScoreBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
+      eventBlock('flappy_whenCollideGround', COL2, ROW1, endGameBlock) +
+      eventBlock('flappy_whenCollideObstacle', COL2, ROW2) +
+      eventBlock('flappy_whenEnterObstacle', COL2, ROW3, incrementScoreBlock) +
+      eventBlock('flappy_whenRunButtonClick', COL1, ROW2, setSpeedBlock)
+  },
+
   '11': {
     'requiredBlocks': [
     ],
