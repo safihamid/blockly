@@ -136,7 +136,7 @@ module.exports = {
       <block type="bounce_whenDown" deletable="false" movable="false" x="180" y="120"></block>'
   },
   '5': {
-    'ideal': 2,
+    'ideal': 3,
     'timeoutFailureTick': 100,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
@@ -168,7 +168,7 @@ module.exports = {
      '<block type="bounce_whenPaddleCollided" deletable="false" movable="false" x="20" y="20"></block>'
   },
   '6': {
-    'ideal': 4,
+    'ideal': 6,
     'timeoutFailureTick': 140,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
@@ -201,7 +201,8 @@ module.exports = {
       <block type="bounce_whenWallCollided" deletable="false" movable="false" x="20" y="120"></block>'
   },
   '7': {
-    'ideal': 8,
+    'ideal': 10,
+    'timeoutFailureTick': 900,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
     ],
@@ -212,9 +213,10 @@ module.exports = {
       'leftButton',
       'rightButton'
     ],
+    'failOnBallExit' : true,
     'map': [
       [1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0,32, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 4, 1],
@@ -233,6 +235,7 @@ module.exports = {
       <block type="bounce_whenPaddleCollided" deletable="false" movable="false" x="20" y="120"></block> \
       <block type="bounce_whenWallCollided" deletable="false" movable="false" x="20" y="220"></block>'
   },
+/*
   '8': {
     'ideal': 8,
     'requiredBlocks': [
@@ -299,8 +302,9 @@ module.exports = {
       <block type="bounce_whenPaddleCollided" deletable="false" movable="false" x="20" y="120"></block> \
       <block type="bounce_whenWallCollided" deletable="false" movable="false" x="20" y="220"></block>'
   },
+*/
   '10': {
-    'ideal': 12,
+    'ideal': 16,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
     ],
