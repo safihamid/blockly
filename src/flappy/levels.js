@@ -315,7 +315,9 @@ module.exports = {
     'requiredBlocks': [
       [{
         test: function (block) {
-          return block.type === 'flappy_setBackground' && block.getTitleValue('VALUE') === 'random';
+          return (block.type === 'flappy_setBackground' ||
+            block.type === 'flappy_setPlayer') &&
+            block.getTitleValue('VALUE') === 'random';
         },
         type: 'flappy_setBackground',
         titles: {
@@ -337,7 +339,7 @@ module.exports = {
     },
     'toolbox':
       tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
-        setSpeedBlock + setBackgroundBlock),
+        setSpeedBlock + setBackgroundBlock + setPlayerBlock),
     'startBlocks':
       eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
       eventBlock('flappy_whenCollideGround', COL2, ROW1, endGameBlock) +
@@ -369,7 +371,7 @@ module.exports = {
     },
     'toolbox':
       tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
-        setSpeedBlock + setBackgroundBlock + setScoreBlock),
+        setSpeedBlock + setBackgroundBlock + setPlayerBlock + setScoreBlock),
     'startBlocks':
       eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
       eventBlock('flappy_whenCollideGround', COL2, ROW1, endGameBlock) +
