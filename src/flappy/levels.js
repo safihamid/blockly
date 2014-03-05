@@ -3,7 +3,6 @@
 // todo - i think our prepoluated code counts as LOCs
 
 var Direction = require('./tiles').Direction;
-var msg = require('../../locale/current/flappy');
 
 var tb = function(blocks) {
   return '<xml id="toolbox" style="displastartY: none;">' + blocks + '</xml>';
@@ -313,6 +312,41 @@ module.exports = {
   },
 
   '8': {
+    'requiredBlocks': [
+      [{
+        'test': function (block) {
+          return block.type === 'flappy_setBackground' && block.getTitleValue('VALUE') === 'random';
+        },
+        'type': 'flappy_setBackground',
+        titles: {
+          'VALUE': 'random'
+        }
+      }]
+    ],
+    'obstacles': true,
+    'ground': true,
+    'score': true,
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        return (Flappy.gameState === Flappy.GameStates.OVER);
+      }
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(flapHeightBlock + endGameBlock + incrementScoreBlock + playSoundBlock +
+        setSpeedBlock + setBackgroundBlock),
+    'startBlocks':
+      eventBlock('flappy_whenClick', COL1, ROW1, flapHeightBlock) +
+      eventBlock('flappy_whenCollideGround', COL2, ROW1, endGameBlock) +
+      eventBlock('flappy_whenCollideObstacle', COL2, ROW2, endGameBlock) +
+      eventBlock('flappy_whenEnterObstacle', COL2, ROW3, incrementScoreBlock) +
+      eventBlock('flappy_whenRunButtonClick', COL1, ROW2, setSpeedBlock)
+  },
+
+  '9': {
     'requiredBlocks': [
       [{
         'test': function (block) {
