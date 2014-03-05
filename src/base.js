@@ -417,16 +417,19 @@ BlocklyApps.arrangeBlockPosition = function(startBlocks, arrangement) {
   for (var x = 0, xmlChild; xml.childNodes && x < xml.childNodes.length; x++) {
     xmlChild = xml.childNodes[x];
 
-    // look to see if we have a predefined arrangement for this type
-    type = xmlChild.getAttribute('type');
-    arrangeX = arrangement && arrangement[type] ? arrangement[type].x : null;
-    arrangeY = arrangement && arrangement[type] ? arrangement[type].y : null;
+    // Only look at element nodes
+    if (xmlChild.nodeType === 1) {
+      // look to see if we have a predefined arrangement for this type
+      type = xmlChild.getAttribute('type');
+      arrangeX = arrangement && arrangement[type] ? arrangement[type].x : null;
+      arrangeY = arrangement && arrangement[type] ? arrangement[type].y : null;
 
-    xmlChild.setAttribute('x', xmlChild.getAttribute('x') || arrangeX ||
-                          BlocklyApps.BLOCK_X_COORDINATE);
-    xmlChild.setAttribute('y', xmlChild.getAttribute('y') || arrangeY ||
-                          BlocklyApps.BLOCK_Y_COORDINATE +
-                          BlocklyApps.BLOCK_Y_COORDINATE_INTERVAL * x);
+      xmlChild.setAttribute('x', xmlChild.getAttribute('x') || arrangeX ||
+                            BlocklyApps.BLOCK_X_COORDINATE);
+      xmlChild.setAttribute('y', xmlChild.getAttribute('y') || arrangeY ||
+                            BlocklyApps.BLOCK_Y_COORDINATE +
+                            BlocklyApps.BLOCK_Y_COORDINATE_INTERVAL * x);
+    }
   }
   return Blockly.Xml.domToText(xml);
 };
