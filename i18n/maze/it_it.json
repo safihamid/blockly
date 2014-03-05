@@ -22,7 +22,7 @@
   "ifTooltip": "Se c'è strada nella direzione specificata, allora fai alcune azioni.",
   "ifelseTooltip": "Se c'è strada nella direzione specificata, allora effettua il primo blocco di azioni. Altrimenti, effettua il secondo.",
   "moveForward": "vai avanti",
-  "moveForwardTooltip": "Vai avanti di uno spazio.",
+  "moveForwardTooltip": "Vai avanti di una casella.",
   "nextLevel": "Complimenti! Hai completato questo puzzle.",
   "no": "No",
   "noPathAhead": "la strada è bloccata",
