@@ -88,9 +88,11 @@ button.arrow:focus {
   display: table-cell;
   min-width: 204px;
 }
-.score-cell-none {
-  display: none;
-}
-.score-cell-enabled {
-  min-width: 102px;
+.bounce-score {
+  text-anchor: middle;
+  font-size: xx-large;
+  font-weight: bold;
+  fill: white;
+  stroke: black;
+  stroke-width: 2;
 }

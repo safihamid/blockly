@@ -192,7 +192,9 @@ module.exports = {
     'ideal': 10,
     'timeoutFailureTick': 900,
     'requiredBlocks': [
-      [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
+      [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
+      [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
+      [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
     ],
     'scale': {
       'snapRadius': 2
@@ -294,7 +296,9 @@ module.exports = {
   '10': {
     'ideal': 16,
     'requiredBlocks': [
-      [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
+      [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
+      [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
+      [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
     ],
     'scale': {
       'snapRadius': 2

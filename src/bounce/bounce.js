@@ -385,6 +385,15 @@ var drawMap = function() {
     svg.appendChild(ballFinishMarker);
   }
 
+  var score = document.createElementNS(Blockly.SVG_NS, 'text');
+  score.setAttribute('id', 'score');
+  score.setAttribute('class', 'bounce-score');
+  score.setAttribute('x', Bounce.MAZE_WIDTH / 2);
+  score.setAttribute('y', 60);
+  score.appendChild(document.createTextNode('0'));
+  score.setAttribute('visibility', 'hidden');
+  svg.appendChild(score);
+
   // Add wall hitting animation
   if (skin.hittingWallAnimation) {
     var wallAnimationIcon = document.createElementNS(Blockly.SVG_NS, 'image');
@@ -771,11 +780,7 @@ BlocklyApps.reset = function(first) {
   // Reset the score.
   Bounce.playerScore = 0;
   Bounce.opponentScore = 0;
-  if (Bounce.goalLocated_) {
-    var scoreCell = document.getElementById('score-cell');
-    scoreCell.className = 'score-cell-enabled';
-    Bounce.displayScore();
-  }
+  document.getElementById('score').setAttribute('visibility', 'hidden');
   
   // Move Ball into position.
   if (Bounce.ballStart_) {
@@ -887,6 +892,10 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Bounce.execute();
+  if (Bounce.goalLocated_) {
+    document.getElementById('score').setAttribute('visibility', 'visible');
+    Bounce.displayScore();
+  }
 };
 
 /**
@@ -1144,12 +1153,9 @@ Bounce.displayPaddle = function(x, y) {
   paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
 };
 
-/**
- * Display the score in the span element below the visualization.
- */
 Bounce.displayScore = function() {
-  var scoreElement = document.getElementById('bounce-score');
-  scoreElement.innerText = bounceMsg.scoreText({
+  var score = document.getElementById('score');
+  score.textContent = bounceMsg.scoreText({
     playerScore: Bounce.playerScore,
     opponentScore: Bounce.opponentScore
   });
