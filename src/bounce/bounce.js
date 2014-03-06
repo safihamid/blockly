@@ -540,7 +540,6 @@ Bounce.onTick = function() {
               delegate(this, Bounce.playSoundAndResetBall, i),
               3000));
         } else if (Bounce.failOnBallExit) {
-          BlocklyApps.playAudio('failure', {volume: 0.5});
           Bounce.result = ResultType.FAILURE;
           Bounce.onPuzzleComplete();          
         }
@@ -552,12 +551,7 @@ Bounce.onTick = function() {
   
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
   
-  if (Bounce.allFinishesComplete()) {
-    Bounce.result = ResultType.SUCCESS;
-    Bounce.onPuzzleComplete();
-  } else if (Bounce.timedOut()) {
-    BlocklyApps.playAudio('failure', {volume: 0.5});
-    Bounce.result = ResultType.FAILURE;
+  if (checkFinished()) {
     Bounce.onPuzzleComplete();
   }
 };
@@ -1061,6 +1055,12 @@ Bounce.onPuzzleComplete = function() {
   BlocklyApps.levelComplete = (Bounce.result == ResultType.SUCCESS);
   
   Bounce.testResults = BlocklyApps.getTestResults();
+
+  if (Bounce.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
+    BlocklyApps.playAudio('win', {volume : 0.5});
+  } else {
+    BlocklyApps.playAudio('failure', {volume : 0.5});
+  }
   
   if (level.editCode) {
     Bounce.testResults = BlocklyApps.levelComplete ?
@@ -1182,14 +1182,13 @@ Bounce.allFinishesComplete = function() {
         finished++;
       }
     }
-    if (playSound) {
-      BlocklyApps.playAudio(
-          (finished == Bounce.paddleFinishCount) ? 'win' : 'flag',
-          {volume: 0.5});
+    if (playSound && finished != Bounce.paddleFinishCount) {
+      // Play a sound unless we've hit the last flag
+      BlocklyApps.playAudio('flag', {volume: 0.5});
     }
     return (finished == Bounce.paddleFinishCount);
   }
-  else if (Bounce.ballFinish_) {
+  if (Bounce.ballFinish_) {
     for (i = 0; i < Bounce.ballCount; i++) {
       if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.5) &&
           essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.5)) {
@@ -1199,11 +1198,35 @@ Bounce.allFinishesComplete = function() {
             'http://www.w3.org/1999/xlink',
             'xlink:href',
             skin.goalSuccess);
-        
-        BlocklyApps.playAudio('win', {volume: 0.5});
         return true;
       }
     }
   }
+  return false;
+};
+
+var checkFinished = function () {
+  // if we have a succcess condition and have accomplished it, we're done and successful
+  if (level.goal && level.goal.successCondition && level.goal.successCondition()) {
+    Bounce.result = ResultType.SUCCESS;
+    return true;
+  }
+  
+  // if we have a failure condition, and it's been reached, we're done and failed
+  if (level.goal && level.goal.failureCondition && level.goal.failureCondition()) {
+    Bounce.result = ResultType.FAILURE;
+    return true;
+  }
+
+  if (Bounce.allFinishesComplete()) {
+    Bounce.result = ResultType.SUCCESS;
+    return true;
+  }
+  
+  if (Bounce.timedOut()) {
+    Bounce.result = ResultType.FAILURE;
+    return true;
+  }
+  
   return false;
 };
