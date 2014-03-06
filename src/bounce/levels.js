@@ -144,10 +144,6 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
-    'softButtons': [
-      'leftButton',
-      'rightButton'
-    ],
     'ballDirection': (1.285 * Math.PI),
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -160,9 +156,7 @@ module.exports = {
       [0, 0, 0,16, 0, 0, 0, 0]
     ],
     'toolbox':
-      tb('<block type="bounce_moveLeft"></block> \
-          <block type="bounce_moveRight"></block> \
-          <block type="bounce_bounceBall"></block> \
+      tb('<block type="bounce_bounceBall"></block> \
           <block type="bounce_playSound"></block>'),
     'startBlocks':
      '<block type="bounce_whenPaddleCollided" deletable="false" movable="false" x="20" y="20"></block>'
@@ -176,10 +170,6 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
-    'softButtons': [
-      'leftButton',
-      'rightButton'
-    ],
     'ballDirection': (1.285 * Math.PI),
     'map': [
       [1, 1,33, 1, 1, 1, 1, 1],
@@ -192,9 +182,7 @@ module.exports = {
       [1, 0, 0,16, 0, 0, 0, 1]
     ],
     'toolbox':
-      tb('<block type="bounce_moveLeft"></block> \
-          <block type="bounce_moveRight"></block> \
-          <block type="bounce_bounceBall"></block> \
+      tb('<block type="bounce_bounceBall"></block> \
           <block type="bounce_playSound"></block>'),
     'startBlocks':
      '<block type="bounce_whenPaddleCollided" deletable="false" movable="false" x="20" y="20"></block> \
@@ -315,6 +303,11 @@ module.exports = {
       'leftButton',
       'rightButton'
     ],
+    'goal': {
+      successCondition: function () {
+        return (Bounce.opponentScore >= 2);
+      }
+    },
     'respawnBalls' : true,
     'map': [
       [1, 1, 2, 2, 2, 2, 1, 1],
