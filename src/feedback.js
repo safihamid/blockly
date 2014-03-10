@@ -608,8 +608,8 @@ exports.getTestResults = function() {
   if (BlocklyApps.CHECK_FOR_EMPTY_BLOCKS && exports.hasEmptyTopLevelBlocks()) {
     return BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
   }
-  if (BlocklyApps.numRequredTopBlocks &&
-    BlocklyApps.numRequredTopBlocks != Blockly.mainWorkspace.getTopBlocks().length) {
+  if (BlocklyApps.numRequiredTopBlocks &&
+    BlocklyApps.numRequiredTopBlocks != Blockly.mainWorkspace.getTopBlocks().length) {
     return BlocklyApps.TestResults.EXTRA_TOP_BLOCKS_FAIL;
   }
   if (!hasAllRequiredBlocks()) {
