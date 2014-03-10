@@ -172,6 +172,9 @@ var getFeedbackMessage = function(options) {
       message = options.level.levelIncompleteError ||
           msg.levelIncompleteError();
       break;
+    case BlocklyApps.TestResults.EXTRA_TOP_BLOCKS_FAIL:
+      message = msg.extraTopBlocks();
+      break;
     // For completing level, user gets at least one star.
     case BlocklyApps.TestResults.OTHER_1_STAR_FAIL:
       message = options.level.other1StarError || options.message;
@@ -224,7 +227,7 @@ var getFeedbackMessage = function(options) {
       break;
   }
   // Database hint overwrites the default hint.
-  if (options.response.hint) {
+  if (options.response && options.response.hint) {
     message = options.response.hint;
   }
   dom.setText(feedback, message);
@@ -409,7 +412,7 @@ var FeedbackBlocks = function(options) {
   if (missingBlocks.length === 0) {
     return;
   }
-  if (options.response.hint ||
+  if ((options.response && options.response.hint) ||
       (options.feedbackType !==
        BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED &&
        options.feedbackType !==
@@ -604,6 +607,10 @@ var getMissingRequiredBlocks = function() {
 exports.getTestResults = function() {
   if (BlocklyApps.CHECK_FOR_EMPTY_BLOCKS && exports.hasEmptyTopLevelBlocks()) {
     return BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
+  }
+  if (BlocklyApps.numRequiredTopBlocks &&
+    BlocklyApps.numRequiredTopBlocks != Blockly.mainWorkspace.getTopBlocks().length) {
+    return BlocklyApps.TestResults.EXTRA_TOP_BLOCKS_FAIL;
   }
   if (!hasAllRequiredBlocks()) {
     if (BlocklyApps.levelComplete) {
