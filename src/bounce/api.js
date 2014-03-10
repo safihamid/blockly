@@ -2,6 +2,39 @@ var tiles = require('./tiles');
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
 
+exports.PaddleSpeed = {
+  VERY_SLOW: 0.04,
+  SLOW: 0.06,
+  NORMAL: 0.1,
+  FAST: 0.15,
+  VERY_FAST: 0.23
+};
+
+exports.BallSpeed = {
+  VERY_SLOW: 0.04,
+  SLOW: 0.06,
+  NORMAL: 0.1,
+  FAST: 0.15,
+  VERY_FAST: 0.23
+};
+
+exports.random = function (values) {
+  var key = Math.floor(Math.random() * values.length); 
+  return values[key];
+};
+
+exports.setBallSpeed = function (id, value) {
+  BlocklyApps.highlight(id);
+  for (var i = 0; i < Bounce.ballCount; i++) {
+    Bounce.ballS[i] = value;
+  }
+};
+
+exports.setPaddleSpeed = function (id, value) {
+  BlocklyApps.highlight(id);
+  Bounce.paddleSpeed = value;
+};
+
 exports.playSound = function(id, soundName) {
   BlocklyApps.highlight(id);
   BlocklyApps.playAudio(soundName, {volume: 0.5});
@@ -9,7 +42,7 @@ exports.playSound = function(id, soundName) {
 
 exports.moveLeft = function(id) {
   BlocklyApps.highlight(id);
-  Bounce.paddleX -= 0.1;
+  Bounce.paddleX -= Bounce.paddleSpeed;
   if (Bounce.paddleX < 0) {
     Bounce.paddleX = 0;
   }
@@ -17,7 +50,7 @@ exports.moveLeft = function(id) {
 
 exports.moveRight = function(id) {
   BlocklyApps.highlight(id);
-  Bounce.paddleX += 0.1;
+  Bounce.paddleX += Bounce.paddleSpeed;
   if (Bounce.paddleX > (Bounce.COLS - 1)) {
     Bounce.paddleX = Bounce.COLS - 1;
   }
@@ -25,7 +58,7 @@ exports.moveRight = function(id) {
 
 exports.moveUp = function(id) {
   BlocklyApps.highlight(id);
-  Bounce.paddleY -= 0.1;
+  Bounce.paddleY -= Bounce.paddleSpeed;
   if (Bounce.paddleY < 0) {
     Bounce.paddleY = 0;
   }
@@ -33,7 +66,7 @@ exports.moveUp = function(id) {
 
 exports.moveDown = function(id) {
   BlocklyApps.highlight(id);
-  Bounce.paddleY += 0.1;
+  Bounce.paddleY += Bounce.paddleSpeed;
   if (Bounce.paddleY > (Bounce.ROWS - 1)) {
     Bounce.paddleY = Bounce.ROWS - 1;
   }
@@ -64,8 +97,8 @@ exports.bounceBall = function(id) {
       Bounce.ballD[i] = 2 * Math.PI - Bounce.ballD[i];
     }
 
-    if (Bounce.ballY[i] < 0) {
-      Bounce.ballY[i] = 0;
+    if (Bounce.ballY[i] < tiles.Y_TOP_BOUNDARY) {
+      Bounce.ballY[i] = tiles.Y_TOP_BOUNDARY;
       Bounce.ballD[i] = Math.PI - Bounce.ballD[i];
     }
 
