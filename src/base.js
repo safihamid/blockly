@@ -303,6 +303,8 @@ BlocklyApps.init = function(config) {
   var startBlocks = config.level.startBlocks || '';
   startBlocks = BlocklyApps.arrangeBlockPosition(startBlocks, config.blockArrangement);
   BlocklyApps.loadBlocks(startBlocks);
+  BlocklyApps.numRequiredTopBlocks = config.preventExtraTopLevelBlocks ?
+    Blockly.mainWorkspace.getTopBlocks().length : null;
 
   var onResize = function() {
     BlocklyApps.onResize(config.getDisplayWidth());
@@ -650,6 +652,7 @@ BlocklyApps.TestResults = {
   TOO_FEW_BLOCKS_FAIL: 2,     // 0 stars.
   LEVEL_INCOMPLETE_FAIL: 3,   // 0 stars.
   MISSING_BLOCK_UNFINISHED: 4,// 0 star.
+  EXTRA_TOP_BLOCKS_FAIL: 5,   // 0 stars.
   MISSING_BLOCK_FINISHED: 10, // 1 star.
   OTHER_1_STAR_FAIL: 11,      // Application-specific 1-star failure.
   TOO_MANY_BLOCKS_FAIL: 20,   // 2 stars, try again or continue.

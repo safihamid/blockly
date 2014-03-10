@@ -21,5 +21,5 @@ exports.builderForm = function(onAttemptCallback) {
     });
   });
 
-  dialog.show();
+  dialog.show({ backdrop: 'static' });
 };

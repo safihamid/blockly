@@ -720,6 +720,8 @@ Bounce.init = function(config) {
     'bounce_whenBallMissesPaddle': { x: 20, y: 430},
   };
 
+  config.preventExtraTopLevelBlocks = true;
+
   BlocklyApps.init(config);
 };
 
