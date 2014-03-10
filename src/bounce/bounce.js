@@ -501,8 +501,8 @@ Bounce.onTick = function() {
 
   if (Bounce.ballStart_) {
     for (var i = 0; i < Bounce.ballCount; i++) {
-      var deltaX = Bounce.ballS[i] * Math.sin(Bounce.ballD[i]);
-      var deltaY = -Bounce.ballS[i] * Math.cos(Bounce.ballD[i]);
+      var deltaX = Bounce.ballSpeed[i] * Math.sin(Bounce.ballDir[i]);
+      var deltaY = -Bounce.ballSpeed[i] * Math.cos(Bounce.ballDir[i]);
       
       var wasXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
       var wasYOK = Bounce.ballY[i] >= tiles.Y_TOP_BOUNDARY;
@@ -681,14 +681,14 @@ Bounce.init = function(config) {
             Bounce.ballStart_ = [];
             Bounce.ballX = [];
             Bounce.ballY = [];
-            Bounce.ballD = [];
-            Bounce.ballS = [];
+            Bounce.ballDir = [];
+            Bounce.ballSpeed = [];
           }
           Bounce.ballStart_[Bounce.ballCount] = {
               x: x,
               y: y,
-              d: level.ballDirection || tiles.DEFAULT_BALL_DIRECTION,
-              s: level.ballSpeed || tiles.DEFAULT_BALL_SPEED
+              dir: level.ballDirection || tiles.DEFAULT_BALL_DIRECTION,
+              speed: level.ballSpeed || tiles.DEFAULT_BALL_SPEED
           };
           Bounce.ballCount++;
         } else if (Bounce.map[y][x] & SquareType.PADDLESTART) {
@@ -756,10 +756,10 @@ Bounce.clearEventHandlersKillTickLoop = function() {
 Bounce.moveBallOffscreen = function(i) {
   Bounce.ballX[i] = 100;
   Bounce.ballY[i] = 100;
-  Bounce.ballD[i] = 0;
+  Bounce.ballDir[i] = 0;
   if (!Bounce.respawnBalls) {
     // stop the ball from moving if we're not planning to respawn:
-    Bounce.ballS[i] = 0;
+    Bounce.ballSpeed[i] = 0;
   }
 };
 
@@ -780,10 +780,10 @@ Bounce.playSoundAndResetBall = function(i) {
 Bounce.resetBall = function(i, resetSpeed) {
   Bounce.ballX[i] = Bounce.ballStart_[i].x;
   Bounce.ballY[i] = Bounce.ballStart_[i].y;
-  Bounce.ballD[i] = Bounce.ballStart_[i].d;
+  Bounce.ballDir[i] = Bounce.ballStart_[i].dir;
   if (resetSpeed) {
-    Bounce.ballS[i] = Bounce.ballStart_[i].s;
-  };
+    Bounce.ballSpeed[i] = Bounce.ballStart_[i].speed;
+  }
   
   Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
 };

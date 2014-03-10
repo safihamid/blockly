@@ -26,7 +26,7 @@ exports.random = function (values) {
 exports.setBallSpeed = function (id, value) {
   BlocklyApps.highlight(id);
   for (var i = 0; i < Bounce.ballCount; i++) {
-    Bounce.ballS[i] = value;
+    Bounce.ballSpeed[i] = value;
   }
 };
 
@@ -91,15 +91,15 @@ exports.bounceBall = function(id) {
   for (i = 0; i < Bounce.ballCount; i++) {
     if (Bounce.ballX[i] < 0) {
       Bounce.ballX[i] = 0;
-      Bounce.ballD[i] = 2 * Math.PI - Bounce.ballD[i];
+      Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
     } else if (Bounce.ballX[i] > (Bounce.COLS - 1)) {
       Bounce.ballX[i] = Bounce.COLS - 1;
-      Bounce.ballD[i] = 2 * Math.PI - Bounce.ballD[i];
+      Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
     }
 
     if (Bounce.ballY[i] < tiles.Y_TOP_BOUNDARY) {
       Bounce.ballY[i] = tiles.Y_TOP_BOUNDARY;
-      Bounce.ballD[i] = Math.PI - Bounce.ballD[i];
+      Bounce.ballDir[i] = Math.PI - Bounce.ballDir[i];
     }
 
     var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
@@ -108,7 +108,7 @@ exports.bounceBall = function(id) {
 
     if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
       // paddle ball collision
-      if (Math.cos(Bounce.ballD[i]) < 0) {
+      if (Math.cos(Bounce.ballDir[i]) < 0) {
         // rather than just bounce the ball off a flat paddle, we offset the
         // angle after collision based on whether you hit the left or right side
         // of the paddle.  And then we cap the resulting angle to be in a
@@ -117,11 +117,11 @@ exports.bounceBall = function(id) {
             (xPaddleBall / tiles.PADDLE_BALL_COLLIDE_DISTANCE);
         // Add 5 PI instead of PI to ensure that the resulting angle is positive
         // to simplify the ternary operation in the next statement
-        Bounce.ballD[i] = ((Math.PI * 5) + paddleAngleBias - Bounce.ballD[i]) %
-                           (Math.PI * 2);
-        Bounce.ballD[i] = (Bounce.ballD[i] < Math.PI) ?
-                            Math.min((Math.PI / 2) - 0.2, Bounce.ballD[i]) :
-                            Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballD[i]);
+        Bounce.ballDir[i] =
+          ((Math.PI * 5) + paddleAngleBias - Bounce.ballDir[i]) % (Math.PI * 2);
+        Bounce.ballDir[i] = (Bounce.ballDir[i] < Math.PI) ?
+            Math.min((Math.PI / 2) - 0.2, Bounce.ballDir[i]) :
+            Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballDir[i]);
       }
     }
   }
