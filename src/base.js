@@ -303,9 +303,8 @@ BlocklyApps.init = function(config) {
   var startBlocks = config.level.startBlocks || '';
   startBlocks = BlocklyApps.arrangeBlockPosition(startBlocks, config.blockArrangement);
   BlocklyApps.loadBlocks(startBlocks);
-  if (config.preventExtraTopLevelBlocks) {
-    BlocklyApps.numRequredTopBlocks = Blockly.mainWorkspace.getTopBlocks().length;
-  }
+  BlocklyApps.numRequredTopBlocks = config.preventExtraTopLevelBlocks ?
+    Blockly.mainWorkspace.getTopBlocks().length : null;
 
   var onResize = function() {
     BlocklyApps.onResize(config.getDisplayWidth());

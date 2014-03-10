@@ -227,7 +227,7 @@ var getFeedbackMessage = function(options) {
       break;
   }
   // Database hint overwrites the default hint.
-  if (options.response.hint) {
+  if (options.response && options.response.hint) {
     message = options.response.hint;
   }
   dom.setText(feedback, message);
@@ -412,7 +412,7 @@ var FeedbackBlocks = function(options) {
   if (missingBlocks.length === 0) {
     return;
   }
-  if (options.response.hint ||
+  if ((options.response && options.response.hint) ||
       (options.feedbackType !==
        BlocklyApps.TestResults.MISSING_BLOCK_UNFINISHED &&
        options.feedbackType !==
