@@ -453,6 +453,10 @@ var delegate = function(scope, func, data)
 
 Bounce.onTick = function() {
   Bounce.tickCount++;
+
+  if (Bounce.tickCount === 1) {
+    try { Bounce.whenGameStarts(BlocklyApps, api); } catch (e) { }
+  }
   
   // Run key event handlers for any keys that are down:
   for (var key in Keycodes) {
@@ -497,26 +501,26 @@ Bounce.onTick = function() {
 
   if (Bounce.ballStart_) {
     for (var i = 0; i < Bounce.ballCount; i++) {
-      var deltaX = 0.1 * Math.sin(Bounce.ballD[i]);
-      var deltaY = -0.1 * Math.cos(Bounce.ballD[i]);
+      var deltaX = Bounce.ballSpeed[i] * Math.sin(Bounce.ballDir[i]);
+      var deltaY = -Bounce.ballSpeed[i] * Math.cos(Bounce.ballDir[i]);
       
       var wasXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
-      var wasYOK = Bounce.ballY[i] >= 0;
+      var wasYOK = Bounce.ballY[i] >= tiles.Y_TOP_BOUNDARY;
       var wasYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
 
       Bounce.ballX[i] += deltaX;
       Bounce.ballY[i] += deltaY;
       
       var nowXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
-      var nowYOK = Bounce.ballY[i] >= 0;
+      var nowYOK = Bounce.ballY[i] >= tiles.Y_TOP_BOUNDARY;
       var nowYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
       
-      if (wasXOK && !nowXOK) {
+      if (wasYOK && wasXOK && !nowXOK) {
         try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
       }
       
-      if (wasYOK && !nowYOK) {
-        if (Bounce.map[0][Math.floor(Bounce.ballX[i])] & SquareType.GOAL) {
+      if (wasXOK && wasYOK && !nowYOK) {
+        if (Bounce.map[0][Math.round(Bounce.ballX[i])] & SquareType.GOAL) {
           try { Bounce.whenBallInGoal(BlocklyApps, api); } catch (e) { }
           Bounce.pidList.push(window.setTimeout(
               delegate(this, Bounce.moveBallOffscreen, i),
@@ -677,10 +681,15 @@ Bounce.init = function(config) {
             Bounce.ballStart_ = [];
             Bounce.ballX = [];
             Bounce.ballY = [];
-            Bounce.ballD = [];
+            Bounce.ballDir = [];
+            Bounce.ballSpeed = [];
           }
-          Bounce.ballStart_[Bounce.ballCount] =
-              {x: x, y: y, d: level.ballDirection || 0};
+          Bounce.ballStart_[Bounce.ballCount] = {
+              x: x,
+              y: y,
+              dir: level.ballDirection || tiles.DEFAULT_BALL_DIRECTION,
+              speed: level.ballSpeed || tiles.DEFAULT_BALL_SPEED
+          };
           Bounce.ballCount++;
         } else if (Bounce.map[y][x] & SquareType.PADDLESTART) {
           Bounce.paddleStart_ = {x: x, y: y};
@@ -700,6 +709,17 @@ Bounce.init = function(config) {
     return visualization.getBoundingClientRect().width;
   };
 
+  // Block placement default (used as fallback in the share levels)
+  config.blockArrangement = {
+    'bounce_whenGameStarts': { x: 20, y: 20},
+    'bounce_whenLeft': { x: 20, y: 110},
+    'bounce_whenRight': { x: 180, y: 110},
+    'bounce_whenPaddleCollided': { x: 20, y: 190},
+    'bounce_whenWallCollided': { x: 20, y: 270},
+    'bounce_whenBallInGoal': { x: 20, y: 350},
+    'bounce_whenBallMissesPaddle': { x: 20, y: 430},
+  };
+
   config.preventExtraTopLevelBlocks = true;
 
   BlocklyApps.init(config);
@@ -717,10 +737,16 @@ Bounce.clearEventHandlersKillTickLoop = function() {
   Bounce.whenLeft = null;
   Bounce.whenRight = null;
   Bounce.whenUp = null;
+  Bounce.whenGameStarts = null;
   if (Bounce.intervalId) {
     window.clearInterval(Bounce.intervalId);
   }
   Bounce.intervalId = 0;
+  // Kill all tasks.
+  for (var i = 0; i < Bounce.pidList.length; i++) {
+    window.clearTimeout(Bounce.pidList[i]);
+  }
+  Bounce.pidList = [];
 };
 
 /**
@@ -730,7 +756,11 @@ Bounce.clearEventHandlersKillTickLoop = function() {
 Bounce.moveBallOffscreen = function(i) {
   Bounce.ballX[i] = 100;
   Bounce.ballY[i] = 100;
-  Bounce.ballD[i] = Math.PI / 2;
+  Bounce.ballDir[i] = 0;
+  if (!Bounce.respawnBalls) {
+    // stop the ball from moving if we're not planning to respawn:
+    Bounce.ballSpeed[i] = 0;
+  }
 };
 
 /**
@@ -745,11 +775,15 @@ Bounce.playSoundAndResetBall = function(i) {
 /**
  * Reset the ball from index i to the start position and redraw it.
  * @param {int} i Index of ball to be reset.
+ * @param {boolean} resetSpeed reset ball speed.
  */
-Bounce.resetBall = function(i) {
+Bounce.resetBall = function(i, resetSpeed) {
   Bounce.ballX[i] = Bounce.ballStart_[i].x;
   Bounce.ballY[i] = Bounce.ballStart_[i].y;
-  Bounce.ballD[i] = Bounce.ballStart_[i].d || 1.25 * Math.PI;
+  Bounce.ballDir[i] = Bounce.ballStart_[i].dir;
+  if (resetSpeed) {
+    Bounce.ballSpeed[i] = Bounce.ballStart_[i].speed;
+  }
   
   Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
 };
@@ -761,12 +795,6 @@ Bounce.resetBall = function(i) {
 BlocklyApps.reset = function(first) {
   var i;
   Bounce.clearEventHandlersKillTickLoop();
-
-  // Kill all tasks.
-  for (i = 0; i < Bounce.pidList.length; i++) {
-    window.clearTimeout(Bounce.pidList[i]);
-  }
-  Bounce.pidList = [];
 
   // Soft buttons
   var softButtonCount = 0;
@@ -787,13 +815,14 @@ BlocklyApps.reset = function(first) {
   // Move Ball into position.
   if (Bounce.ballStart_) {
     for (i = 0; i < Bounce.ballCount; i++) {
-      Bounce.resetBall(i);
+      Bounce.resetBall(i, true);
     }
   }
   
   // Move Paddle into position.
   Bounce.paddleX = Bounce.paddleStart_.x;
   Bounce.paddleY = Bounce.paddleStart_.y;
+  Bounce.paddleSpeed = tiles.DEFAULT_PADDLE_SPEED;
   
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
 
@@ -1039,6 +1068,14 @@ Bounce.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Bounce: api } );
 
+  var codeGameStarts = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
+                                    'bounce_whenGameStarts');
+  var whenGameStartsFunc = codegen.functionFromCode(
+                                     codeGameStarts, {
+                                      BlocklyApps: BlocklyApps,
+                                      Bounce: api } );
+
   BlocklyApps.playAudio(Bounce.ballStart_ ? 'ballstart' : 'start',
                         {volume: 0.5});
 
@@ -1053,6 +1090,7 @@ Bounce.execute = function() {
   Bounce.whenRight = whenRightFunc;
   Bounce.whenUp = whenUpFunc;
   Bounce.whenDown = whenDownFunc;
+  Bounce.whenGameStarts = whenGameStartsFunc;
   Bounce.tickCount = 0;
   Bounce.intervalId = window.setInterval(Bounce.onTick, Bounce.scale.stepSpeed);
 };
@@ -1173,8 +1211,12 @@ Bounce.allFinishesComplete = function() {
     var finished, playSound;
     for (i = 0, finished = 0; i < Bounce.paddleFinishCount; i++) {
       if (!Bounce.paddleFinish_[i].finished) {
-        if (essentiallyEqual(Bounce.paddleX, Bounce.paddleFinish_[i].x, 0.2) &&
-            essentiallyEqual(Bounce.paddleY, Bounce.paddleFinish_[i].y, 0.2)) {
+        if (essentiallyEqual(Bounce.paddleX,
+                             Bounce.paddleFinish_[i].x,
+                             tiles.FINISH_COLLIDE_DISTANCE) &&
+            essentiallyEqual(Bounce.paddleY,
+                             Bounce.paddleFinish_[i].y,
+                             tiles.FINISH_COLLIDE_DISTANCE)) {
           Bounce.paddleFinish_[i].finished = true;
           finished++;
           playSound = true;
@@ -1198,8 +1240,12 @@ Bounce.allFinishesComplete = function() {
   }
   if (Bounce.ballFinish_) {
     for (i = 0; i < Bounce.ballCount; i++) {
-      if (essentiallyEqual(Bounce.ballX[i], Bounce.ballFinish_.x, 0.5) &&
-          essentiallyEqual(Bounce.ballY[i], Bounce.ballFinish_.y, 0.5)) {
+      if (essentiallyEqual(Bounce.ballX[i],
+                           Bounce.ballFinish_.x,
+                           tiles.FINISH_COLLIDE_DISTANCE) &&
+          essentiallyEqual(Bounce.ballY[i],
+                           Bounce.ballFinish_.y,
+                           tiles.FINISH_COLLIDE_DISTANCE)) {
         // Change the finish icon to goalSuccess.
         var ballFinishIcon = document.getElementById('ballfinish');
         ballFinishIcon.setAttributeNS(
