@@ -700,6 +700,8 @@ Bounce.init = function(config) {
     return visualization.getBoundingClientRect().width;
   };
 
+  config.preventExtraTopLevelBlocks = true;
+
   BlocklyApps.init(config);
 };
 

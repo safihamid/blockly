@@ -585,6 +585,8 @@ Flappy.init = function(config) {
 
   config.hideShowCode = true;
 
+  config.preventExtraTopLevelBlocks = true;
+
   // define how our blocks should be arranged
   var col1 = Flappy.WORKSPACE_BUFFER;
   var col2 = col1 + Flappy.WORKSPACE_COL_WIDTH;
@@ -773,7 +775,6 @@ Flappy.onReportComplete = function(response) {
 Flappy.execute = function() {
   BlocklyApps.log = [];
   BlocklyApps.ticks = 100; //TODO: Set higher for some levels
-  var code = Blockly.Generator.workspaceToCode('JavaScript', 'flappy_whenRun');
   Flappy.result = ResultType.UNSET;
   Flappy.testResults = BlocklyApps.TestResults.NO_TESTS_RUN;
   Flappy.waitingForReport = false;
@@ -789,7 +790,7 @@ Flappy.execute = function() {
 
   if (level.editCode) {
     var codeTextbox = document.getElementById('codeTextbox');
-    code = dom.getText(codeTextbox);
+    var code = dom.getText(codeTextbox);
     // Insert aliases from level codeBlocks into code
     if (level.codeFunctions) {
       for (var i = 0; i < level.codeFunctions.length; i++) {
