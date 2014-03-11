@@ -544,7 +544,8 @@ var displayFeedback = function() {
     response: Turtle.response,
     level: level,
     feedbackImage: Turtle.ctxScratch.canvas.toDataURL("image/png"),
-    showingSharing: true,
+    // add 'impressive':true to non-freeplay levels that we deem are relatively impressive (see #66990480)
+    showingSharing: level.freePlay || level.impressive,
     appStrings: {
       reinfFeedbackMsg: msg.reinfFeedbackMsg(),
       sharingText: msg.shareDrawing()
