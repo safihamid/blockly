@@ -20,7 +20,7 @@ of Code. Information about Blockly can be found in the
 
 ## Quick Start
 
-```bash
+```
 # Get the code
 git clone https://github.com/code-dot-org/blockly.git mooc
 cd mooc
