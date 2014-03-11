@@ -848,6 +848,32 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0]
     ]
+  },
+  'custom': {
+    'toolbox': toolbox(3, 4),
+    'ideal': 7,
+    'codeFunctions': [
+      {'func': 'move', 'alias': 'Maze.moveForward();'},
+      {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
+      {'func': 'turnright', 'alias': 'Maze.turnRight();'},
+    ],
+    'requiredBlocks': [
+      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+      [{'test': 'turnLeft',
+       'type': 'maze_turn',
+       'titles': {'DIR': 'turnLeft'}}]
+    ],
+    'startDirection': Direction.EAST,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 2, 4, 3, 0, 0, 0],
+      [0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
   }
 };
 
