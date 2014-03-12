@@ -405,6 +405,90 @@ exports.install = function(blockly, skin) {
     return generateSetterCode(this, 'setPaddleSpeed');
   };
 
+  /**
+   * setBackground
+   */
+  blockly.Blocks.bounce_setBackground = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);  // default to hardcourt
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setBackgroundTooltip());
+    }
+  };
+
+  blockly.Blocks.bounce_setBackground.VALUES =
+      [[msg.setBackgroundRandom(), 'random'],
+       [msg.setBackgroundHardcourt(), '"hardcourt"'],
+       [msg.setBackgroundRetro(), '"retro"']];
+
+  generator.bounce_setBackground = function() {
+    return generateSetterCode(this, 'setBackground');
+  };
+
+  /**
+   * setBall
+   */
+  blockly.Blocks.bounce_setBall = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);  // default to hardcourt
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setBallTooltip());
+    }
+  };
+
+  blockly.Blocks.bounce_setBall.VALUES =
+      [[msg.setBallRandom(), 'random'],
+       [msg.setBallHardcourt(), '"hardcourt"'],
+       [msg.setBallRetro(), '"retro"']];
+
+  generator.bounce_setBall = function() {
+    return generateSetterCode(this, 'setBall');
+  };
+
+  /**
+   * setPaddle
+   */
+  blockly.Blocks.bounce_setPaddle = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);  // default to hardcourt
+
+      this.setHSV(312, 0.32, 0.62);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setPaddleTooltip());
+    }
+  };
+
+  blockly.Blocks.bounce_setPaddle.VALUES =
+      [[msg.setPaddleRandom(), 'random'],
+       [msg.setPaddleHardcourt(), '"hardcourt"'],
+       [msg.setPaddleRetro(), '"retro"']];
+
+  generator.bounce_setPaddle = function() {
+    return generateSetterCode(this, 'setPaddle');
+  };
+  
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
 };

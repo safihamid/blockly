@@ -341,7 +341,7 @@ module.exports = {
       <block type="bounce_whenBallMissesPaddle" deletable="false" x="20" y="340"></block>'
   },
   '11': {
-    'ideal': 19,
+    'ideal': 22,
     'requiredBlocks': [
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
@@ -380,7 +380,10 @@ module.exports = {
           <block type="bounce_incrementPlayerScore"></block> \
           <block type="bounce_incrementOpponentScore"></block> \
           <block type="bounce_setPaddleSpeed"></block> \
-          <block type="bounce_setBallSpeed"></block>'),
+          <block type="bounce_setBallSpeed"></block> \
+          <block type="bounce_setBackground"></block> \
+          <block type="bounce_setBall"></block> \
+          <block type="bounce_setPaddle"></block>'),
     'startBlocks':
      '<block type="bounce_whenGameStarts" deletable="false" x="20" y="20"></block> \
       <block type="bounce_whenLeft" deletable="false" x="20" y="110"></block> \
