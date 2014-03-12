@@ -9,6 +9,19 @@
 var msg = require('../../locale/current/bounce');
 var codegen = require('../codegen');
 
+var generateSetterCode = function (ctx, name) {
+  var value = ctx.getTitleValue('VALUE');
+  if (value === "random") {
+    var allValues = ctx.VALUES.slice(1).map(function (item) {
+      return item[1];
+    });
+    value = 'Bounce.random([' + allValues + '])';
+  }
+
+  return 'Bounce.' + name + '(\'block_id_' + ctx.id + '\', ' +
+    value + ');\n';
+};
+
 // Install extensions to Blockly's language and JavaScript generator.
 exports.install = function(blockly, skin) {
 
@@ -159,6 +172,24 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
   
+  blockly.Blocks.bounce_whenGameStarts = {
+    // Block to handle event when the game starts
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenGameStarts());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenGameStartsTooltip());
+    }
+  };
+
+  generator.bounce_whenGameStarts = function () {
+    // Generate JavaScript for handling run button click
+    return '\n';
+  };
+
   blockly.Blocks.bounce_moveLeft = {
     // Block for moving left.
     helpUrl: '',
@@ -316,6 +347,62 @@ exports.install = function(blockly, skin) {
   generator.bounce_bounceBall = function() {
     // Generate JavaScript for moving forward.
     return 'Bounce.bounceBall(\'block_id_' + this.id + '\');\n';
+  };
+
+  blockly.Blocks.bounce_setBallSpeed = {
+    // Block for setting ball speed
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[3][1]); // default to normal
+
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setBallSpeedTooltip());
+    }
+  };
+
+  blockly.Blocks.bounce_setBallSpeed.VALUES =
+      [[msg.setBallSpeedRandom(), 'random'],
+       [msg.setBallSpeedVerySlow(), 'Bounce.BallSpeed.VERY_SLOW'],
+       [msg.setBallSpeedSlow(), 'Bounce.BallSpeed.SLOW'],
+       [msg.setBallSpeedNormal(), 'Bounce.BallSpeed.NORMAL'],
+       [msg.setBallSpeedFast(), 'Bounce.BallSpeed.FAST'],
+       [msg.setBallSpeedVeryFast(), 'Bounce.BallSpeed.VERY_FAST']];
+
+  generator.bounce_setBallSpeed = function (velocity) {
+    return generateSetterCode(this, 'setBallSpeed');
+  };
+
+  blockly.Blocks.bounce_setPaddleSpeed = {
+    // Block for setting paddle speed
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[3][1]); // default to normal
+
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+          .appendTitle(dropdown, 'VALUE');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setPaddleSpeedTooltip());
+    }
+  };
+
+  blockly.Blocks.bounce_setPaddleSpeed.VALUES =
+      [[msg.setPaddleSpeedRandom(), 'random'],
+       [msg.setPaddleSpeedVerySlow(), 'Bounce.PaddleSpeed.VERY_SLOW'],
+       [msg.setPaddleSpeedSlow(), 'Bounce.PaddleSpeed.SLOW'],
+       [msg.setPaddleSpeedNormal(), 'Bounce.PaddleSpeed.NORMAL'],
+       [msg.setPaddleSpeedFast(), 'Bounce.PaddleSpeed.FAST'],
+       [msg.setPaddleSpeedVeryFast(), 'Bounce.PaddleSpeed.VERY_FAST']];
+
+  generator.bounce_setPaddleSpeed = function (velocity) {
+    return generateSetterCode(this, 'setPaddleSpeed');
   };
 
   delete blockly.Blocks.procedures_defreturn;

@@ -1,3 +1,5 @@
+*Note: blockly is a component of [the learn.code.org curriculum](https://github.com/code-dot-org/cdo-curriculum). See the [root umbrella repository](https://github.com/code-dot-org/cdo-curriculum) which includes instructions for setting up a full learn.code.org build which includes this blockly curriculum and the Rails teacher dashboard.*
+
 # Blockly 20 Hour Curriculum
 
 Blockly is a web-based, graphical programming editor. Users can drag blocks
@@ -18,7 +20,7 @@ of Code. Information about Blockly can be found in the
 
 ## Quick Start
 
-```bash
+```
 # Get the code
 git clone https://github.com/code-dot-org/blockly.git mooc
 cd mooc
