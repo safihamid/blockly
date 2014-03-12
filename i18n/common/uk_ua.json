@@ -14,6 +14,7 @@
   "dialogCancel": "Скасувати",
   "dialogOK": "Гаразд",
   "emptyBlocksErrorMsg": "Блоки \"Повторити\" та \"Якщо\" повинні містити інші блоки. Переконайтесь, що внутрішній блок належно розміщений всередині зовнішнього.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Вітання! Завершено останній етап.",
   "finalStageTrophies": "Вітання! Ви завершили останній етап і виграли {numTrophies, plural, one {a trophy} other {# trophies}}.",
   "generatedCodeInfo": "Блоки програми можна представити мовою JavaScript, яка є найпоширенішою мовою програмування у світі:",

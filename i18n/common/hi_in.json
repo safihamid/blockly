@@ -14,6 +14,7 @@
   "dialogCancel": "रद्द करें",
   "dialogOK": "ठीक है",
   "emptyBlocksErrorMsg": "\"दोहराएँ\" या \"यदि\" ब्लॉक को काम करने के लिए अपने अंदर अन्य ब्लॉक्स की ज़रूरत है । ध्यान दें कि भीतर के ब्लॉक बाहरी ब्लॉक में ठीक बैठें।",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "बधाई हो! आपने अंतिम चरण पूरा कर लिया है।",
   "finalStageTrophies": "बधाइयाँ! आप अंतिम चरण पूरा कर लिया है और जीता {numTrophies, बहुवचन, एक {एक ट्राफी} अन्य {# ट्राफियां}}।",
   "generatedCodeInfo": "The blocks for your program can also be represented in JavaScript, the world's most widely adopted programming language:",

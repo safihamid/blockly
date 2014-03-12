@@ -14,6 +14,7 @@
   "dialogCancel": "Storno",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Bloky \"Opakovat\" nebo \"Pokud\" v sobě musí mít další bloky, aby fungovaly. Ujisti se, že vnitřní bloky jsou v pořádku vložené dovnitř vnějších bloků.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Dobrá práce! Dokončil si poslední fázi.",
   "finalStageTrophies": "Dobrá práce! Dokončil si poslední fázi a vyhrál {numTrophies, plural, one {trofej} other {# trofejí}}.",
   "generatedCodeInfo": "Bloky v tvém programu mohou být reprezentovány i v javaScriptu, nejrozšířenějším programovacím jazyku světa:",

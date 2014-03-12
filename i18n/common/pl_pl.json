@@ -14,6 +14,7 @@
   "dialogCancel": "Anuluj",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Blok powtórz lub blok jeśli musi zawierać inne bloki w środku, by poprawnie działać. Upewnij się, czy wewnętrzny blok pasuje do zewnętrznego.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Gratulacje! Ukończyłeś ostatni etap.",
   "finalStageTrophies": "Gratulacje! Ukończyłeś ostatni etap i wygrałeś {numTrophies, plural, one {trofeum} other {# trofea}}.",
   "generatedCodeInfo": "Bloki Twojego programu mogą być również przedstawione w języku JavaScript, najbardziej rozpowszechnionym języku programowania:",

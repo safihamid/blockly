@@ -14,6 +14,7 @@
   "dialogCancel": "إلغاء",
   "dialogOK": "موافق",
   "emptyBlocksErrorMsg": "قطعة \" أكرر\" او \" اذا \" تحتاج ان تحتوي على قطع اخرى داخلها من اجل العمل . تأكد من القطع الداخلية بحيث يجب ان تكون تناسب القطع المحتوية في الداخل .",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "تهانينا! لقد اتممت المرحلة النهائية.",
   "finalStageTrophies": "تهانينا! لقد أكملت المرحلة النهائية وفزت بـ {numTrophies, plural, one {جائزة} other {# جوائز}}.",
   "generatedCodeInfo": "القطع في برنامجك تستطيع كذلك بأعادة تمثيلها في الـ Java Script , بحيث تعتبر اللغة البرمجية واسعة التكيف عالميا :",
@@ -22,7 +23,7 @@
   "hintTitle": "تلميح:",
   "levelIncompleteError": "أنت استخدمت كل انواع القطع الضرورية ولكن ليس في الطريق الصحيح.",
   "listVariable": "قائمة",
-  "makeYourOwnFlappy": "Make Your Own Flappy Game",
+  "makeYourOwnFlappy": "برمج لعبة فلابي الخاصة بك",
   "missingBlocksErrorMsg": "استخدم القطع الموجودة في الاسفل لحل هذا اللغز.",
   "nextLevel": "تهانينا ! أنت اكملت اللغز {puzzleNumber}.",
   "nextLevelTrophies": "تهانينا! لقد أكملت اللغز {puzzleNumber} وفزت بـ {numTrophies, plural, one {جائزة} other {# جوائز}}.",
@@ -41,7 +42,7 @@
   "tooFewBlocksMsg": "أنت استخدمت كل انواع القطع الضرورية ولكن حاول ان تستخدم المزيد من هذه الأنواع من القطع لأكمال هذا اللغز.",
   "tooManyBlocksMsg": "يمكن حل هذا اللغز مع <x id='END_SPAN'/><x id='START_SPAN'/> قطع.",
   "tooMuchWork": "جعلتني أقوم بالكثير من العمل!  هل بإمكانك أن تحاول جعل مرات التكرار أقل؟",
-  "flappySpecificFail": "Your code looks good - it will flap with each click. But you need to click many times to flap to the target.",
+  "flappySpecificFail": "برنامجك يبدو جيدا - سوف يرفرف مع كل نقرة. ولاكن تحتاج إلى عدة نقرات لالوصول إلى الهدف.",
   "toolboxHeader": "قطع",
   "openWorkspace": "كيف يعمل ذلك",
   "totalNumLinesOfCodeWritten": "مجموع كل الاوقات: {numLines, plural, one {1 خط} other {# خطوط}}  من الكود البرمجي.",
@@ -55,7 +56,7 @@
   "rotateText": "دور النص.",
   "orientationLock": "قم بتعطيل قفل التوجه في اعدادات المستخدم.",
   "wantToLearn": "هل تريد أن تتعلم البرمجة؟",
-  "watchVideo": "شاهد الفيديو",
-  "tryHOC": "جرب Hour of Code",
-  "signup": "سجل لمشاهدة مقدمة الدورة"
+  "watchVideo": "مشاهدة الفيديو",
+  "tryHOC": "جرب \"Hour of Code\"",
+  "signup": "سجل للمتابعة لبداية الدرس"
 }

@@ -14,6 +14,7 @@
   "dialogCancel": "Cancel·lar",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Els blocs \"Repetir\" o el \"Si\" necessiten tenir altres blocs dins per a treballar. Assegureu-vos que el bloc interior encaixa bé dins del bloc que conté.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Enhorabona! Has completat l'etapa final.",
   "finalStageTrophies": "Enhorabona! Has completat l'etapa final i guanyat {numTrophies, plural, un {trofeu} other {# trophies}}.",
   "generatedCodeInfo": "Els blocs del teu programa poden ser també representats en Javascript, el llenguatge de programació més extés al món:",

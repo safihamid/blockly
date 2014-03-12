@@ -14,6 +14,7 @@
   "dialogCancel": "Batal",
   "dialogOK": "Oke!",
   "emptyBlocksErrorMsg": "Blok \"Ulangi\" atau blok \"Jika\" membutuhkan blok lain di dalamnya supaya bisa bekerja. Pastikan blok yang berada didalam diletakkan secara pas.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Horee! Anda berhasil menyelesaikan tahap akhir.",
   "finalStageTrophies": "Horee! Anda berhasil menyelesaikan tahap akhir dan memenangkan {numTrophies, plural, one {piala} other {piala #}}.",
   "generatedCodeInfo": "Blok-blok yang digunakan untuk program Anda dapat juga dibuat dengan Javascript, bahasa yang paling populer dalam dunia pemrograman:",
@@ -22,7 +23,7 @@
   "hintTitle": "Tips:",
   "levelIncompleteError": "Anda telah gunakan semua jenis blok yang diperlukan  tetapi tidak dengan cara yang tepat.",
   "listVariable": "list",
-  "makeYourOwnFlappy": "Make Your Own Flappy Game",
+  "makeYourOwnFlappy": "Buatlah permainan \"Flappy\" versi Anda sendiri",
   "missingBlocksErrorMsg": "Cobalah satu atau lebih blok di bawah untuk memecahkan teka-teki ini.",
   "nextLevel": "Horee! Anda berhasil menyelesaikan teka-teki ke  {puzzleNumber}.",
   "nextLevelTrophies": "Horee! Anda berhasil menyelesaikan teka-teki ke  {puzzleNumber} dan memenangkan {numTrophies, plural, satu {a trophy} other {trophies #}}.",
@@ -41,7 +42,7 @@
   "tooFewBlocksMsg": "Anda telah gunakan semua jenis blok diperlukan, tetapi cobalah menggunakan lebih banyak blok-blok ini supaya anda dapat menyelesaikan teka-teki ini.",
   "tooManyBlocksMsg": "Teka-teki ini dapat diselesaikan dengan blok < x id = 'START_SPAN' /> < x id = 'END_SPAN'/>.",
   "tooMuchWork": "Anda membuat saya melakukan terlalu banyak pekerjaan!  Bisakan Anda coba membuat pengulangan yang lebih sedikit?",
-  "flappySpecificFail": "Kode kamu terlihat baik - itu akan mengepak setiap kliknya. tapi kamu perlu untuk klik sebanyak mungkin untuk mengepakkan obyek tersebut.",
+  "flappySpecificFail": "Kode kamu terlihat baik - Burung itu akan mengepak setiap kali diklik. Tapi kamu perlu mengklik sebanyak mungkin untuk terbang menuju target.",
   "toolboxHeader": "Blok",
   "openWorkspace": "Cara kerjanya",
   "totalNumLinesOfCodeWritten": "Total keseluruhan: {numLines, plural, one {1 baris} other {# baris}} kode.",
@@ -54,8 +55,8 @@
   "infinity": "∞",
   "rotateText": "Memutar perangkat anda.",
   "orientationLock": "Matikan orientasi kunci dalam pengaturan perangkat.",
-  "wantToLearn": "Ingin belajar kode?",
-  "watchVideo": "Lihat Video",
-  "tryHOC": "Coba Hour of Code",
-  "signup": "Daftar untuk kursus awal"
+  "wantToLearn": "Ingin belajar untuk mengkode?",
+  "watchVideo": "Tonton Videonya",
+  "tryHOC": "Cobalah \"Hour of Code\"",
+  "signup": "Daftarlah untuk mengikuti kursus introduksi"
 }

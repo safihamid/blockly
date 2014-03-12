@@ -14,6 +14,7 @@
   "dialogCancel": "Peru",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "\"Toista\" ja \"Jos\"-lohkot tarvitsevat toisen lohkon sisäänsä toimiakseen. Varmista, että sisempi lohko asettuu oikein ulompaan lohkoon.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Onneksi olkoon! Olet suorittanut viimeisen vaiheen.",
   "finalStageTrophies": "Onneksi olkoon! Olet suorittanut viimeisen vaiheen ja voittanut {numTrophies, plural, one {pokaalin} other {# pokaalia}}.",
   "generatedCodeInfo": "Ohjelmasi lohkot voi esittää myös JavaScript-koodina. JavaScript on maailman yleisimmin käytetty ohjelmointikieli:",

@@ -14,6 +14,7 @@
   "dialogCancel": "Annuleren",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "De \"herhaal\" of \"als\" blokken hebben andere blokken in hun nodig om te werken. Zorg ervoor dat de binnenste blok correct past in de bevattende blok.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Gefeliciteerd! U hebt de laatste fase voltooid.",
   "finalStageTrophies": "Gefeliciteerd! U hebt de laatste fase voltooid en won {numTrophies, plural, one {een trofee} other {# trofeeën}}.",
   "generatedCodeInfo": "De blokken voor je programma kunnen ook worden weergegeven in JavaScript, de meest gebruikte programmeertaal in de wereld:",

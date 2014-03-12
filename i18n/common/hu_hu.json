@@ -14,6 +14,7 @@
   "dialogCancel": "Mégsem",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Akkor van értelme az \"Ismétel\" vagy a \"Ha\" blokknak, ha van  bennük egy vagy több blokk. Bizonyosodj meg róla, hogy a belső blokk megfelelően illeszkedik a külső blokkhoz.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Gratulálok! Teljesítetted az utolsó szakaszt.",
   "finalStageTrophies": "Gratulálok! Teljesítetted az utolsó szakaszt és nyertél {numTrophies, plural, one {egy trófeát} other {# trófeát}}.",
   "generatedCodeInfo": "A programod blokkjai leírhatóak JavaScript -el is, a világ leggyakrabban használt programozási nyelvével:",

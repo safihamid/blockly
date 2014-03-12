@@ -14,6 +14,7 @@
   "dialogCancel": "Avbryt",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "\"Gjenta\"- eller \"Hvis\"-blokken må ha andre blokker inne i seg for å fungere. Kontroller at den indre blokken sitter riktig på plass i blokken som er utenfor.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Gratulerer! Du har fullført siste nivå.",
   "finalStageTrophies": "Gratulerer! Du har fullført siste nivå og vunnet {numTrophies, plural, one {en pokal} other {# pokaler}}.",
   "generatedCodeInfo": "Blokkene i programmet ditt kan også vises som JavaScript. Dette er verdens mest utbredte programmeringsspråk",

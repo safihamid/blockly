@@ -14,6 +14,7 @@
   "dialogCancel": "Atšaukti",
   "dialogOK": "gerai",
   "emptyBlocksErrorMsg": "\"Kartoti\" arba \"If\" blokuoti turi turėti kitų kvartalų viduje ji veikia. Įsitikinkite, kad vidinis blokas tinkamai tinka su bloke.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Sveikinu! Jūs baigėte galutiniame etape.",
   "finalStageTrophies": "Sveikinu! Jūs turite užpildyti galutiniame etape ir laimėjo {numTrophies, daugiskaitos, vienas {trofėjus} kitų {# trofėjus}}.",
   "generatedCodeInfo": "Jūsų programa blokus gali taip pat atstovauti JavaScript, pasaulyje labiausiai plačiai naudojama programavimo kalba:",

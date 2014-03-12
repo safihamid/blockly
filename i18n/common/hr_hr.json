@@ -14,6 +14,7 @@
   "dialogCancel": "Odustani",
   "dialogOK": "U redu",
   "emptyBlocksErrorMsg": "Da bi blok \"Ponovi\" ili \"Ako\" radio, u njega treba ugraditi druge blokove. Provjeri uklapa li se unutarnji blok pravilno u vanjski blok.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Čestitamo! Posljednja etapa je završena.",
   "finalStageTrophies": "Čestitamo! Završena je posljednja etapa i osvajaš {numTrophies, plural, one {trofej} other {# trofeja}}.",
   "generatedCodeInfo": "Blokovi tvog programa mogu se prikazati i u JavaScriptu, najprihvaćenijem programskom jeziku na svijetu:",

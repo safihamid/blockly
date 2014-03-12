@@ -14,6 +14,7 @@
   "dialogCancel": "Annuler",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Le bloc « Répéter » ou «Si» doit avoir des autres blocs à l'intérieur pour fonctionner. Assurez-vous que le bloc interne s'adapte correctement à l'intérieur du bloc conteneur.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Félicitations ! Vous avez terminé l'étape finale.",
   "finalStageTrophies": "Félicitations ! Vous avez terminé l'étape finale et gagné {numTrophies, plural, one {un trophée} other {# des trophées}}.",
   "generatedCodeInfo": "Les blocs pour ton programme peuvent également être représentés dans JavaScript, le programme de langage le plus largement adopté dans le monde:",

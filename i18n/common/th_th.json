@@ -14,6 +14,7 @@
   "dialogCancel": "ยกเลิก",
   "dialogOK": "ตกลง, ได้",
   "emptyBlocksErrorMsg": "\"ทำซ้ำ\" หรือ \"ถ้า\" บล็อกต้องมีบล็อกอื่น ๆ ภายในให้ทำงาน ตรวจสอบให้แน่ใจว่า บล็อกภายในอย่างเหมาะสมกันอย่างถูกต้องภายในบล็อกที่มี.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "ขอแสดงความยินดี คุณเสร็จขั้นตอนสุดท้าย.",
   "finalStageTrophies": "ขอแสดงความยินดี คุณได้เสร็จสิ้นขั้นตอนสุดท้าย และชนะ {numTrophies, plural, one {a trophy} อื่น ๆ  {# trophies}}.",
   "generatedCodeInfo": "บล็อกสำหรับโปรแกรมของคุณยังสามารถแสดงใน JavaScript, การเขียนโปรแกรมภาษาของโลกที่นำมาใช้กันอย่างแพร่หลาย:",

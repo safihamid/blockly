@@ -14,6 +14,7 @@
   "dialogCancel": "取消",
   "dialogOK": "确定",
   "emptyBlocksErrorMsg": "\"Repear\"或\"If\"模块需要其他的模块充填在里面才能工作。请确保填入的模块填写正确。",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "祝贺你 ！您已完成最终章。",
   "finalStageTrophies": "祝贺你 ！已完成最终章并赢得了 {numTrophies, plural, one {1个奖杯} other {# 奖杯}}。",
   "generatedCodeInfo": "你的程序里所用到的各种模块也可以使用 Javascript来书写展示，一种世界上最广泛被采用的程序语言:",

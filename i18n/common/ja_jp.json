@@ -14,6 +14,7 @@
   "dialogCancel": "キャンセル",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "”Repeat”または\"If\"のブロックを動作をさせるためには内側に別のブロックが必要になります。内側のブロックが構成されているブロック 内に適切にはめ込まれているか確認をしてください。\n\n\n",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "おめでとうございます ！最終ステージをクリアしました。",
   "finalStageTrophies": "おめでとうございます ！最終ステージをクリアしたので  {numTrophies, plural, one {トロフィー} other {# トロフィー}}を獲得しました。",
   "generatedCodeInfo": "あなたのプログラムのブロックは、世界で最も広く採用されているプログラミング言語である JavaScript で表すこともできます。",

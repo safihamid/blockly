@@ -14,6 +14,7 @@
   "dialogCancel": "Откажи",
   "dialogOK": "У реду",
   "emptyBlocksErrorMsg": "\"Repeat\" или  \"If\" блок мора имати још један блок у себи како би функционисао. Постарајте се да је унутрашнји блок правилно убачен у ванјски блок.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Честитамо! Завршили сте последнју етапу.",
   "finalStageTrophies": "Честитамо! Завршили сте последнју етапу и освојили  {numTrophies, plural, one {трофеј} other {# трофеја}}.",
   "generatedCodeInfo": "Блокови за ваш програм се такође могу репрезентовати у јава скрипту, светском најшире прихваћеном програмском језику:",

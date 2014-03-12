@@ -14,6 +14,7 @@
   "dialogCancel": "Avbryt",
   "dialogOK": "Ok",
   "emptyBlocksErrorMsg": "\"Upprepa\" eller \"Om\" blocken måste ha andra block inuti sig för att fungera. Se till att det inre blocket sitter rätt inuti blocket.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Grattis! Du har slutfört den sista nivån.",
   "finalStageTrophies": "Grattis! Du har slutfört den sista nivån och vann {numTrophies, plural, en {en trofé} other {# troféer}}.",
   "generatedCodeInfo": "Blocken i ditt program kan också skrivas i Javascript, världens mest använda programmeringsspråk:",

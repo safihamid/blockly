@@ -14,6 +14,7 @@
   "dialogCancel": "İmtina et",
   "dialogOK": "Oldu",
   "emptyBlocksErrorMsg": "\"Təkrar\" və ya \"Əgər\" blokları işləsin deyə içərisində başqa blokların olmağı lazımdır. Əmin olun ki, daxili blokun konteyner blokun içərisinə düz yerləşir.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Təbriklər! Siz son mərhələni başa vurdunuz.",
   "finalStageTrophies": "Təbriklər! Siz sonuncu mərhələni tamamladınız və {numTrophies, plural, one {bir kubok} other {# kubok}} qazandınız.",
   "generatedCodeInfo": "Proqramınızın blokları dünyanın ən geniş qəbul olunmuş proqramlaşdırma dili olan \"JavaScript\"də (\"cavaskript\") də yazıla bilər:",

@@ -14,6 +14,7 @@
   "dialogCancel": "Άκυρο",
   "dialogOK": "OΚ",
   "emptyBlocksErrorMsg": "Το μπλοκ του \"Repeat\" ή του \"If\" πρέπει να περιέχει άλλα μπλοκ για να δουλέψει. Σιγουρέψου ότι το εσωτερικό μπλοκ ταιριάζει μέσα στο εξωτερικό.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Συγχαρητήρια! τέλειωσες το τελικό στάδιο.",
   "finalStageTrophies": "Συγχαρητήρια! Τέλειωσες το τελευταίο στάδιο και κέρδισες {numTrophies, plural, one {τρόπαιο} other {# τράπαια}}.",
   "generatedCodeInfo": "Τα πλακίδια από το πρόγραμμά σου μπορούν επίσης να αναπαρασταθούν στην Javascript, την πιο ευρέως διαδεδομένη γλώσσα προγραμματισμού παγκοσμίως:",

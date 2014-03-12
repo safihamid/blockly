@@ -14,6 +14,7 @@
   "dialogCancel": "בטל",
   "dialogOK": "אישור",
   "emptyBlocksErrorMsg": "בלוקי ה\"חזור שוב\" או \"אם\" צריכים להיות בעלי בלוקים פנימיים כדי לעבוד. וודא כי הבלוק הפנימי מתאים בבלוק המכיל.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "כל הכבוד! השלמת את השלב הסופי.",
   "finalStageTrophies": "כל הכבוד! השלמת את השלב הסופי וזכית ב{numTrophies, plural, one {פרס} other {# פרסים}}.",
   "generatedCodeInfo": "הבלוקים לתוכנית שלך יכולים גם להיות מיוצגים בשפת JavaScript, שפת התכנות הנפוצה ביותר בעולם:",

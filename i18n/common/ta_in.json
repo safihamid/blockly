@@ -14,6 +14,7 @@
   "dialogCancel": "ரத்து செய்",
   "dialogOK": "சரி",
   "emptyBlocksErrorMsg": "The \"Repeat\" or \"If\" block needs to have other blocks inside it to work. Make sure the inner block fits properly inside the containing block.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "வாழ்த்துக்கள்! நீங்கள் இறுதிக் கட்டத்தை நிறைவு செய்துள்ளீர்கள்.",
   "finalStageTrophies": "Congratulations! You have completed the final stage and won {numTrophies, plural, one {a trophy} other {# trophies}}.",
   "generatedCodeInfo": "The blocks for your program can also be represented in JavaScript, the world's most widely adopted programming language:",

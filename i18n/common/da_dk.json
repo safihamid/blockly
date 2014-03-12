@@ -14,6 +14,7 @@
   "dialogCancel": "Annuller",
   "dialogOK": "Ok",
   "emptyBlocksErrorMsg": "\"Gentag\" eller \"Hvis\" blokkene skal have andre blokke inde i for at virke. Kontroller, at den indre blok passer ordentligt inde i blokken.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Tillykke! Du har fuldført den sidste fase.",
   "finalStageTrophies": "Tillykke! Du har afsluttet det sidste trin og vundet {numTrophies, plural, one {et trofæ} other {# trofæer}}.",
   "generatedCodeInfo": "Blokkene til dit program kan også være repræsenteret i Javascript, verdens mest udbredt programmeringssprog:",

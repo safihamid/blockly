@@ -14,6 +14,7 @@
   "dialogCancel": "Hætta við",
   "dialogOK": "Í lagi",
   "emptyBlocksErrorMsg": "Kubbarnir \"endurtaka\" og \"ef\" verða að innihalda aðra kubba til að virka. Gættu þess að innri kubburinn smellpassi í ytri kubbinn.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Til hamingju! Þú hefur klárað síðasta áfangann.",
   "finalStageTrophies": "Til hamingju! Þú hefur klárað síðasta áfangann og unnið {numBikara, plural, one {bikar} other {# bikara}}.",
   "generatedCodeInfo": "Kubbana í forritinu þínu er líka hægt að umbreyta í JavaScript, sem er útbreiddasta forritunarmál í heiminum:",

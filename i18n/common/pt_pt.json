@@ -14,6 +14,7 @@
   "dialogCancel": "Cancelar",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Os blocos \"Repetir\" ou \"Se\" precisam de incluir blocos dentro para funcionar. Garante que o bloco interno encaixa correctamente dentro do bloco que o contém.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Parabéns! Completaste a etapa final.",
   "finalStageTrophies": "Parabéns! Completaste a etapa final e ganhaste {numTrophies, plural, one {troféu} other {# troféus}}.",
   "generatedCodeInfo": "As peças de puzzle do teu programa podem ser representadas em Javascript, a linguagem de programação mais amplamente adoptada no mundo:",

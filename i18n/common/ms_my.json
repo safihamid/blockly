@@ -14,6 +14,7 @@
   "dialogCancel": "Batal",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "\"Ulangan\" atau \"Jika\" blok perlu mempunyai blok lain di dalamnya untuk berfungsi. Pastikan blok dalaman sesuai di dalam kandungan blok.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Tahniah! Anda telah melengkapkan peringkat akhir.",
   "finalStageTrophies": "Tahniah! Anda telah selesai peringkat akhir dan memenangi {numTrophies, plural, one {a trophy} other {# trophies}}.",
   "generatedCodeInfo": "The blocks for your program can also be represented in JavaScript, the world's most widely adopted programming language:",

@@ -14,6 +14,7 @@
   "dialogCancel": "취소",
   "dialogOK": "확인",
   "emptyBlocksErrorMsg": "\"반복\" 블럭이나 \"조건\" 블럭이 실행되려면, 그 안에 다른 블럭들이 있어야 합니다. 블럭 안쪽에 필요한 블럭들을 끼워 맞춰 연결하세요.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "축하합니다! 마지막 단계까지 성공적으로 해결했습니다.",
   "finalStageTrophies": "축하합니다! 마지막 단계까지 성공적으로 해결했고, {numTrophies, plural, one {a trophy} other {# trophies}} 을 얻었습니다.",
   "generatedCodeInfo": "프로그래밍한 블럭들은 그대로 자바스크립트(JavaScript) 언어로 변환될 수 있습니다:",

@@ -14,6 +14,7 @@
   "dialogCancel": "Revocare",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "Blocul \"Repeat\" sau \"Dacă\" necesită alte blocuri în interiorul său  pentru a putea funcționa. Asigură-te că blocul interior se încadrează corect în blocul care îl conține.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Felicitări! Ai terminat ultima etapă.",
   "finalStageTrophies": "Felicitări! Ai terminat etapa finală şi ai câştigat {numTrophies, plural, one {un trofeu} other {# trofee}}.",
   "generatedCodeInfo": "Blocurile pentru programul tău pot fi, de asemenea, reprezentate în JavaScript, unul dintre cele mai utilizate limbaje de programare:",

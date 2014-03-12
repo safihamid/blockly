@@ -14,6 +14,7 @@
   "dialogCancel": "Prekliči",
   "dialogOK": "Vredu",
   "emptyBlocksErrorMsg": "Znotraj 'Ponovi' ali 'če' bloka morajo biti drugi bloki, da bo delovalo. Prepričaj se, da se notranji bloki ustrezno prilegajo zunanjemu bloku.",
+  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Čestitke! Zaključil si zadnjo stopnjo.",
   "finalStageTrophies": "Čestitke! Zaključil si zaključno stopnjo in osvojil  {numTrophies, plural, one {trofeja} other {# trofeje}}.",
   "generatedCodeInfo": "Bloki tvojega programa so lahko predstavljeni tudi v JavaScriptu, najbolj uporabljanemu programerskemu jeziku na svetu:",
