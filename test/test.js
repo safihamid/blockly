@@ -59,7 +59,7 @@ function runTest (path, testData, index) {
     }
 
     // run executor in it's own node process
-    child_process.exec('node test/executor ' + path + ' ' +  index,
+    child_process.exec('node test/util/executor ' + path + ' ' +  index,
       {}, function (error, stdout, stderr) {
         assert.equal(error, null);
         assert(stderr === "", '\n' + stderr);
