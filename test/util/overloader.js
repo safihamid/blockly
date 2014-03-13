@@ -28,7 +28,7 @@ Overloader.prototype.require = function (path) {
 
   // wrap require with our mapped version
   Module.prototype.require = function (path) {
-    
+
     var mappedPath = path;
     self.mapping.forEach(function (pair) {
       mappedPath = mappedPath.replace(pair.search, pair.replace);

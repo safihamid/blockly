@@ -1,9 +1,9 @@
 require('./util/frame');
 var assert = require('chai').assert;
 
-require('messageformat'); // todo - this is a pre-require hack
-
-// todo: might there be a good way to save and restore global state?
+// todo: might there be a good way to save and restore global state? (better than below)
+var GlobalDiff = require('./util/globalDiff');
+var globalDiff = new GlobalDiff();
 
 var mapping = [
   {
@@ -28,13 +28,29 @@ var overloader = new Overloader(__dirname + "/../src/", mapping, module);
 overloader.addMapping('./constants', './flappy/constants');
 overloader.verbose = true;
 
-BlocklyApps = overloader.require('./base');
-var feedback = overloader.require('./feedback');
+/**
+ *  Require path and validate changes to global namespace
+ */
+function requireAndValidate(path, changes) {
+  changes = changes || [];
+  globalDiff.cache();
+  var result = overloader.require(path);
+  var diff = globalDiff.diff(true);
+  assert.deepEqual(diff, changes, "unexpected global changes requiring " + path + "\n");
+  return result;
+}
 
-var flappyLevels = overloader.require('./flappy/levels');
-var flappyBlocks = overloader.require('./flappy/blocks');
+global.BlocklyApps = requireAndValidate('./base');
+globalDiff.cache(); // recache since we added global BlocklyApps
+
+var feedback = requireAndValidate('./feedback');
+var flappyLevels = requireAndValidate('./flappy/levels');
+// todo: requiring the messageformat module pollutes the global namespace with the following items.
+// it's not clear to that it should/needs to
+var flappyBlocks = requireAndValidate('./flappy/blocks', ["c", "n", "v", "p", "s"]);
 
 flappyBlocks.install(Blockly);
+assert.deepEqual(globalDiff.diff(true), [], "install doesnt pollute globals");
 
 assert(Blockly);
 
@@ -71,46 +87,3 @@ console.log('finished');
 
 
 
-
-
-/*
-// todo: might there be a good way to save and restore global state?
-
-var overloader = require('./util/overloader');
-// todo - shouldnt need to do this. overloader should be smart enough to
-// realize we're not in basedir
-overloader.addMapping('./constants', './flappy/constants');
-overloader.verbose = true;
-
-BlocklyApps = overloader.require('./base');
-var feedback = overloader.require('./feedback');
-
-var flappyLevels = overloader.require('./flappy/levels');
-//var flappyBlocks = overloader.require('./flappy/blocks');
-
-//flappyBlocks.install(Blockly);
-
-assert(Blockly);
-
-BlocklyApps.REQUIRED_BLOCKS = flappyLevels['1'].requiredBlocks;
-BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
-
-var div = document.getElementById('app');
-assert(div);
-
-var options = {
-  assetUrl: function (path) {
-    return '../lib/blockly/' + path;
-  }
-};
-Blockly.inject(div, options);
-
-var startBlocks = flappyLevels['1'].startBlocks;
-
-Blockly.mainWorkspace.clear();
-// todo - do without using BlocklyApps?
-//BlocklyApps.loadBlocks(startBlocks);
-
-var missing = feedback.__testonly__.getMissingRequiredBlocks();
-console.log(missing);
-*/
