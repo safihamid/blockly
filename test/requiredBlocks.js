@@ -1,10 +1,14 @@
-require('./util/frame');
-var assert = require('chai').assert;
+var chai = require('chai');
+chai.Assertion.includeStack = true;
+var assert = chai.assert;
+// load some utils
 
 // todo: might there be a good way to save and restore global state? (better than below)
 var GlobalDiff = require('./util/globalDiff');
 var globalDiff = new GlobalDiff();
 
+var Overloader = require('./util/overloader');
+// this mapping may belong somwhere common
 var mapping = [
   {
     search: '../locale/current/common',
@@ -19,71 +23,199 @@ var mapping = [
     replace: '../build/js/templates/'
   }
 ];
-
-var Overloader = require('./util/overloader');
 var overloader = new Overloader(__dirname + "/../src/", mapping, module);
 
-// todo - shouldnt need to do this. overloader should be smart enough to
-// realize we're not in basedir
+// todo - can i make overloader smart enough to take care of this mapping itself?
 overloader.addMapping('./constants', './flappy/constants');
 overloader.verbose = true;
 
 /**
- *  Require path and validate changes to global namespace
+ * Wrapper around require, potentially also using our overloader, that also
+ * validates that any additions to our global namespace are expected.
  */
-function requireAndValidate(path, changes) {
-  changes = changes || [];
+function requireWithGlobalsCheck(path, allowedChanges, useOverloader) {
+  allowedChanges = allowedChanges || [];
+  if (useOverloader === undefined) {
+    useOverloader = true;
+  }
+
   globalDiff.cache();
-  var result = overloader.require(path);
+  var result = useOverloader ? overloader.require(path) : require(path);
   var diff = globalDiff.diff(true);
-  assert.deepEqual(diff, changes, "unexpected global changes requiring " + path + "\n");
+  diff.forEach(function (key) {
+    assert.notEqual(allowedChanges.indexOf(key), -1, "unexpected global change\n" +
+      "key: " + key + "\n" +
+      "require: " + path + "\n");
+  });
   return result;
 }
 
-global.BlocklyApps = requireAndValidate('./base');
-globalDiff.cache(); // recache since we added global BlocklyApps
+describe("requiredBlocks tests", function () {
+  var feedback;
 
-var feedback = requireAndValidate('./feedback');
-var flappyLevels = requireAndValidate('./flappy/levels');
-// todo: requiring the messageformat module pollutes the global namespace with the following items.
-// it's not clear to that it should/needs to
-var flappyBlocks = requireAndValidate('./flappy/blocks', ["c", "n", "v", "p", "s"]);
+  // create our environment
+  before(function () {
+    requireWithGlobalsCheck('./util/frame', ['document', 'window', 'DOMParser', 'Blockly'], false);
+    assert(global.Blockly, 'Frame loaded Blockly into global namespace');
 
-flappyBlocks.install(Blockly);
-assert.deepEqual(globalDiff.diff(true), [], "install doesnt pollute globals");
+    global.BlocklyApps = requireWithGlobalsCheck('./base');
+    globalDiff.cache(); // recache since we added global BlocklyApps
 
-assert(Blockly);
+    feedback = requireWithGlobalsCheck('./feedback');
 
-BlocklyApps.REQUIRED_BLOCKS = flappyLevels['1'].requiredBlocks;
-BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
+    var div = document.getElementById('app');
+    assert(div);
 
-var div = document.getElementById('app');
-assert(div);
+    var options = {
+      assetUrl: function (path) {
+        return '../lib/blockly/' + path;
+      }
+    };
+    Blockly.inject(div, options);
+  });
 
-var options = {
-  assetUrl: function (path) {
-    return '../lib/blockly/' + path;
+  beforeEach(function () {
+    Blockly.mainWorkspace.clear();
+  });
+
+  /**
+   * Loads options.startBlocks into the workspace, then calls
+   * getMissingRequiredBlocks and validates that the result matches the
+   * options.expectedResult
+   */
+  function validateBlocks(options) {
+    assert.notEqual(options.requiredBlocks, undefined);
+    assert.notEqual(options.numToFlag, undefined);
+    assert.notEqual(options.userBlockXml, undefined);
+    assert.notEqual(options.expectedResult, undefined);
+
+    BlocklyApps.REQUIRED_BLOCKS = options.requiredBlocks;
+    BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = options.numToFlag;
+
+    BlocklyApps.loadBlocks(options.userBlockXml);
+    var missing = feedback.__testonly__.getMissingRequiredBlocks();
+    assert.deepEqual(missing, options.expectedResult);
   }
-};
-Blockly.inject(div, options);
 
-function validateBlocks(start, expected) {
-  Blockly.mainWorkspace.clear();
-  BlocklyApps.loadBlocks(start);
-  var missing = feedback.__testonly__.getMissingRequiredBlocks();
-  console.log(missing);
-  // todo - expected
-}
+  // given: empty workspace, expect 1 block, numToFlag 1, 1 block missing
+  // given: empty workspace, expect 2 blocks, numToFlag 1, 1 block missing
+  // given: empty workspace, expect 2 blocks, numToFlag 2, 2 block missing
+  // given: workspace with 1 block, expect that block, numtoFlag 1, 0 missing
+  // given: workspace with 1 block, expect different block, numToFlag 1, 1 missing
+  // case where required block contains 2+ options
+  // test is string vs. test is function
+  // missing multiple blocks
 
-var startBlocks = flappyLevels['1'].startBlocks;
-var correctSolve = "<xml><block type=\"flappy_whenClick\" deletable=\"false\"><next><block type=\"flappy_flap\"></block></next></block></xml>";
+  describe("required blocks look for existence of string in code", function () {
+    var testBlocks = [
+      {
+        'test': 'window.alert',
+        'type': 'text_print'
+      },
+      {
+        'test': 'TextContent',
+        'type': 'text'
+      }
+    ];
 
-validateBlocks(startBlocks, []);
+    var testBlockXml = [
+      '<block type="text_print"></block>',
+      '<block type="text"><title name="TEXT">TextContent</title></block>'
+    ];
 
-validateBlocks(correctSolve, []);
+    before(function () {
+      assert(Blockly.Blocks.text_print, "text_print block exists"); // a core Block
+    });
+
+    it ("expect 1 block, block is missing", function () {
+      validateBlocks({
+        requiredBlocks: [testBlocks.slice(0, 1)],
+        numToFlag: 1,
+        userBlockXml: "",
+        expectedResult: testBlocks.slice(0, 1)
+      });
+    });
+
+    it ("expect 1 block, block is there", function () {
+      validateBlocks({
+        requiredBlocks: [testBlocks.slice(0, 1)],
+        numToFlag: 1,
+        userBlockXml: "<xml>" + testBlockXml[0] + '</xml>',
+        expectedResult: []
+      });
+    });
+  });
+
+  describe("required blocks use function to check for existence", function () {
+    var testBlocks = [
+      {
+        'test': function (block) {
+          return block.type === 'text_print';
+        },
+        'type': 'text_print'
+      },
+      {
+        'test': function (block) {
+          return block.type === 'text';
+        },
+        'type': 'text'
+      }
+    ];
+
+    var testBlockXml = [
+      '<block type="text_print"></block>',
+      '<block type="text"><title name="TEXT">TextContent</title></block>'
+    ];
+
+    it ("expect 1 block, block is missing", function () {
+      validateBlocks({
+        requiredBlocks: [testBlocks.slice(0, 1)],
+        numToFlag: 1,
+        userBlockXml: "",
+        expectedResult: testBlocks.slice(0, 1)
+      });
+    });
+
+    it ("expect 1 block, block is there", function () {
+      validateBlocks({
+        requiredBlocks: [testBlocks.slice(0, 1)],
+        numToFlag: 1,
+        userBlockXml: "<xml>" + testBlockXml[0] + '</xml>',
+        expectedResult: []
+      });
+    });
+  });
 
 
-console.log('finished');
+  it("missing block if no blocks are added", function () {
+    // todo - separate beforeEach?
+    var flappyLevels = requireWithGlobalsCheck('./flappy/levels');
+    var flappyBlocks = requireWithGlobalsCheck('./flappy/blocks', ["c", "n", "v", "p", "s"]);
+    flappyBlocks.install(Blockly);
+    assert.deepEqual(globalDiff.diff(true), [], "install doesnt pollute globals");
+
+    validateBlocks({
+      requiredBlocks: flappyLevels['1'].requiredBlocks,
+      numToFlag: 1,
+      userBlockXml: flappyLevels['1'].startBlocks,
+      expectedResult: flappyLevels['1'].requiredBlocks[0]
+    });
+  });
+
+  it("no missing blocks for correct solution", function () {
+    var flappyLevels = requireWithGlobalsCheck('./flappy/levels');
+    var flappyBlocks = requireWithGlobalsCheck('./flappy/blocks', ["c", "n", "v", "p", "s"]);
+    flappyBlocks.install(Blockly);
+    assert.deepEqual(globalDiff.diff(true), [], "install doesnt pollute globals");
+
+    validateBlocks({
+      requiredBlocks: flappyLevels['1'].requiredBlocks,
+      numToFlag: 1,
+      userBlockXml: "<xml><block type=\"flappy_whenClick\" deletable=\"false\"><next><block type=\"flappy_flap\"></block></next></block></xml>",
+      expectedResult: []
+    });
+  });
+});
 
 
 
