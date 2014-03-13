@@ -7,7 +7,6 @@
 'use strict';
 
 var msg = require('../../locale/current/flappy');
-var codegen = require('../codegen');
 
 var generateSetterCode = function (ctx, name) {
   var value = ctx.getTitleValue('VALUE');
