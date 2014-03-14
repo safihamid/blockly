@@ -22,6 +22,15 @@ var CONFIGS = {
 exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
+
+  skin.retro = {
+    background: skin.assetUrl('retro_background.png'),
+    tiles: skin.assetUrl('retro_tiles_wall.png'),
+    goalTiles: skin.assetUrl('retro_tiles_goal.png'),
+    paddle: skin.assetUrl('retro_paddle.png'),
+    ball: skin.assetUrl('retro_ball.png'),
+  };
+
   // Images
   skin.tiles = skin.assetUrl('tiles_wall.png');
   skin.goalTiles = skin.assetUrl('tiles_goal.png');

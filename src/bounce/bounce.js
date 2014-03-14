@@ -149,6 +149,22 @@ var GOAL_TILE_SHAPES = {
   'null0': [1, 1],  // Empty
 };
 
+// Return a value of '0' if the specified square is not a wall, '1' for
+// a wall, 'X' for out of bounds
+var wallNormalize = function(x, y) {
+  return ((Bounce.map[y] === undefined) ||
+          (Bounce.map[y][x] === undefined)) ? 'X' :
+            (Bounce.map[y][x] & SquareType.WALL) ? '1' : '0';
+};
+
+// Return a value of '0' if the specified square is not a wall, '1' for
+// a wall, 'X' for out of bounds
+var goalNormalize = function(x, y) {
+  return ((Bounce.map[y] === undefined) ||
+          (Bounce.map[y][x] === undefined)) ? 'X' :
+            (Bounce.map[y][x] & SquareType.GOAL) ? '1' : '0';
+};
+
 var drawMap = function() {
   var svg = document.getElementById('svgBounce');
   var i, x, y, k, tile;
@@ -183,6 +199,7 @@ var drawMap = function() {
     tile = document.createElementNS(Blockly.SVG_NS, 'image');
     tile.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                         skin.background);
+    tile.setAttribute('id', 'background');
     tile.setAttribute('height', Bounce.MAZE_HEIGHT);
     tile.setAttribute('width', Bounce.MAZE_WIDTH);
     tile.setAttribute('x', 0);
@@ -217,22 +234,6 @@ var drawMap = function() {
   }
 
   // Draw the tiles making up the maze map.
-
-  // Return a value of '0' if the specified square is not a wall, '1' for
-  // a wall, 'X' for out of bounds
-  var wallNormalize = function(x, y) {
-    return ((Bounce.map[y] === undefined) ||
-            (Bounce.map[y][x] === undefined)) ? 'X' :
-              (Bounce.map[y][x] & SquareType.WALL) ? '1' : '0';
-  };
-
-  // Return a value of '0' if the specified square is not a wall, '1' for
-  // a wall, 'X' for out of bounds
-  var goalNormalize = function(x, y) {
-    return ((Bounce.map[y] === undefined) ||
-            (Bounce.map[y][x] === undefined)) ? 'X' :
-              (Bounce.map[y][x] & SquareType.GOAL) ? '1' : '0';
-  };
 
   // Compute and draw the tile for each square.
   var tileId = 0;
@@ -811,6 +812,11 @@ BlocklyApps.reset = function(first) {
   Bounce.playerScore = 0;
   Bounce.opponentScore = 0;
   document.getElementById('score').setAttribute('visibility', 'hidden');
+
+  // Reset configurable variables
+  Bounce.setBackground('hardcourt');
+  Bounce.setBall('hardcourt');
+  Bounce.setPaddle('hardcourt');
   
   // Move Ball into position.
   if (Bounce.ballStart_) {
@@ -1199,6 +1205,75 @@ Bounce.displayScore = function() {
     playerScore: Bounce.playerScore,
     opponentScore: Bounce.opponentScore
   });
+};
+
+var skinTheme = function (value) {
+  if (value === 'hardcourt') {
+    return skin;
+  }
+  return skin[value];
+};
+
+Bounce.setBackground = function (value) {
+  var element = document.getElementById('background');
+  element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    skinTheme(value).background);
+
+  // Recompute all of the tiles to determine if they are walls, goals, or empty
+  // TODO: do this once during init and cache the result
+  var tileId = 0;
+  for (var y = 0; y < Bounce.ROWS; y++) {
+    for (var x = 0; x < Bounce.COLS; x++) {
+      var empty = false;
+      var image;
+      // Compute the tile index.
+      var tile = wallNormalize(x, y) +
+          wallNormalize(x, y - 1) +  // North.
+          wallNormalize(x + 1, y) +  // East.
+          wallNormalize(x, y + 1) +  // South.
+          wallNormalize(x - 1, y);   // West.
+
+      // Draw the tile.
+      if (WALL_TILE_SHAPES[tile]) {
+        image = skinTheme(value).tiles;
+      }
+      else {
+        // Compute the tile index.
+        tile = goalNormalize(x, y) +
+            goalNormalize(x, y - 1) +  // North.
+            goalNormalize(x + 1, y) +  // East.
+            goalNormalize(x, y + 1) +  // South.
+            goalNormalize(x - 1, y);   // West.
+
+        if (!GOAL_TILE_SHAPES[tile]) {
+          empty = true;
+        }
+        image = skinTheme(value).goalTiles;
+      }
+      if (!empty) {
+        var element = document.getElementById('tileElement' + tileId);
+        element.setAttributeNS(
+            'http://www.w3.org/1999/xlink', 'xlink:href', image);
+      }
+      tileId++;
+    }
+  }
+};
+
+Bounce.setBall = function (value) {
+  if (Bounce.ballStart_) {
+    for (var i = 0; i < Bounce.ballCount; i++) {
+      var element = document.getElementById('ball' + i);
+      element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+        skinTheme(value).ball);
+    }
+  }
+};
+
+Bounce.setPaddle = function (value) {
+  var element = document.getElementById('paddle');
+  element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    skinTheme(value).paddle);
 };
 
 Bounce.timedOut = function() {

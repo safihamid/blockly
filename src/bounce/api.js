@@ -30,6 +30,26 @@ exports.setBallSpeed = function (id, value) {
   }
 };
 
+exports.setBackground = function (id, value) {
+  BlocklyApps.highlight(id);
+  Bounce.setBackground(value);
+};
+
+exports.setBall = function (id, value) {
+  BlocklyApps.highlight(id);
+  Bounce.setBall(value);
+};
+
+exports.setPaddle = function (id, value) {
+  BlocklyApps.highlight(id);
+  Bounce.setPaddle(value);
+};
+
+exports.setBackground = function (id, value) {
+  BlocklyApps.highlight(id);
+  Bounce.setBackground(value);
+};
+
 exports.setPaddleSpeed = function (id, value) {
   BlocklyApps.highlight(id);
   Bounce.paddleSpeed = value;
