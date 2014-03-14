@@ -284,7 +284,17 @@ config.mochaTest = {
       reporter: 'spec',
       timeout: 4000
     },
-    src: ['test/test.js']
+    src: ['test/*.js']
+  }
+};
+
+config.strip_code = {
+  options: {
+    start_comment: 'start-test-block',
+    end_comment: 'end-test-block'
+  },
+  all: {
+    src: ['build/js/*.js']
   }
 };
 
@@ -303,6 +313,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-strip-code');
 
   grunt.loadTasks('tasks');
 
@@ -311,6 +322,7 @@ module.exports = function(grunt) {
     'messages',
     'symlink:locale',
     'copy:src',
+    'strip_code',
     'ejs',
     'browserify',
     'uglify:browserified',

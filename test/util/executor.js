@@ -5,11 +5,17 @@ var xmldom = require('xmldom');
 var canvas = require('canvas');
 var assert = require('chai').assert;
 
+var buildDir = '../../build';
 
 var VENDOR_CODE =
-  fs.readFileSync(path.join(__dirname, '../build/package/js/en_us/vendor.js'));
+  fs.readFileSync(path.join(__dirname, buildDir + '/package/js/en_us/vendor.js'));
 
 setGlobals();
+
+console.log("done");
+process.exit(0);
+
+
 runTestFromCollection(process.argv[2], process.argv[3]);
 
 function setGlobals () {
@@ -30,10 +36,10 @@ function initBlockly () {
 }
 
 function runTestFromCollection (collection, index) {
-  var testCollection = require('./' + collection);
+  var testCollection = require('../' + collection);
   var app = testCollection.app;
 
-  var levels = require('../build/js/' + app + '/' + testCollection.levelFile);
+  var levels = require(buildDir + '/js/' + app + '/' + testCollection.levelFile);
   var level = levels[testCollection.levelId];
   var testData = testCollection.tests[index];
 
@@ -63,7 +69,7 @@ function runTestFromCollection (collection, index) {
 }
 
 function runLevel (app, level, onAttempt) {
-  require('../build/js/' + app + '/main');
+  require(buildDir + '/js/' + app + '/main');
 
   setAppSpecificGlobals(app);
 
