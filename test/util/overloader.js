@@ -30,12 +30,16 @@ Overloader.prototype.require = function (path) {
   Module.prototype.require = function (path) {
 
     var mappedPath = path;
+
+    // Right now we have the potential to match multiple pairs.  May want to
+    // either limit to a single match, or allow for a caller to switch out
+    // a switch/replace pair
     self.mapping.forEach(function (pair) {
       mappedPath = mappedPath.replace(pair.search, pair.replace);
     });
     mappedPath = self.baseDir + mappedPath;
 
-    if (exports.verbose) {
+    if (self.verbose) {
       console.log("mapped " + path + " to " + mappedPath);
     }
 
