@@ -12,8 +12,7 @@ var jsdom = require('jsdom').jsdom;
 var xmldom = require('xmldom');
 
 // todo - go back to pointing at built version
-//var VENDOR_CODE = fs.readFileSync(path.join(__dirname, '../build/package/js/en_us/vendor.js'));
-var VENDOR_CODE = fs.readFileSync(__dirname + '/vendor_min.js');
+var VENDOR_CODE = fs.readFileSync(path.join(__dirname, '../../build/package/js/en_us/vendor.js'));
 
 function initBlockly () {
   /* jshint -W054 */

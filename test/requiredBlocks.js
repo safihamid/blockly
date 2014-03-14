@@ -50,7 +50,7 @@ function requireWithGlobalsCheck(path, allowedChanges, useOverloader) {
   return result;
 }
 
-describe("requiredBlocks tests", function () {
+describe("getMissingRequiredBlocks tests", function () {
   var feedback;
 
   // create our environment
@@ -94,16 +94,9 @@ describe("requiredBlocks tests", function () {
 
     BlocklyApps.loadBlocks(options.userBlockXml);
     var missing = feedback.__testonly__.getMissingRequiredBlocks();
-    assert.deepEqual(missing, options.expectedResult);
+    assert.deepEqual(missing, options.expectedResult, options.assertMesssage);
   }
 
-  // given: empty workspace, expect 1 block, numToFlag 1, 1 block missing
-  // given: empty workspace, expect 2 blocks, numToFlag 1, 1 block missing
-  // given: empty workspace, expect 2 blocks, numToFlag 2, 2 block missing
-  // given: workspace with 1 block, expect that block, numtoFlag 1, 0 missing
-  // given: workspace with 1 block, expect different block, numToFlag 1, 1 missing
-  // case where required block contains 2+ options
-  // test is string vs. test is function
   // missing multiple blocks
 
   describe("required blocks look for existence of string in code", function () {
@@ -115,32 +108,129 @@ describe("requiredBlocks tests", function () {
       {
         'test': 'TextContent',
         'type': 'text'
+      },
+      {
+        'test': '10;',
+        'type': 'math_number'
       }
     ];
 
     var testBlockXml = [
       '<block type="text_print"></block>',
-      '<block type="text"><title name="TEXT">TextContent</title></block>'
+      '<block type="text"><title name="TEXT">TextContent</title></block>',
+      '<block type="math_number"><title name="NUM">10</title></block>'
     ];
 
     before(function () {
       assert(Blockly.Blocks.text_print, "text_print block exists"); // a core Block
+      assert(Blockly.Blocks.text, "text block exists"); // a core Block
     });
 
-    it ("expect 1 block, block is missing", function () {
+    it ("expect 1 block, empty workspace", function () {
       validateBlocks({
-        requiredBlocks: [testBlocks.slice(0, 1)],
+        requiredBlocks: [
+          [testBlocks[0]]
+        ],
         numToFlag: 1,
         userBlockXml: "",
-        expectedResult: testBlocks.slice(0, 1)
+        expectedResult: [testBlocks[0]],
+      });
+    });
+
+    it ("expect 1 block, wrong block present", function () {
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[0]]
+        ],
+        numToFlag: 1,
+        userBlockXml: "<xml>" + testBlockXml[1] + '</xml>',
+        expectedResult: [testBlocks[0]]
       });
     });
 
     it ("expect 1 block, block is there", function () {
       validateBlocks({
-        requiredBlocks: [testBlocks.slice(0, 1)],
+        requiredBlocks: [
+          [testBlocks[0]]
+        ],
         numToFlag: 1,
         userBlockXml: "<xml>" + testBlockXml[0] + '</xml>',
+        expectedResult: []
+      });
+    });
+
+    it ("expect 2 blocks", function () {
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[0]],
+          [testBlocks[1]]
+        ],
+        numToFlag: 1,
+        userBlockXml: "",
+        expectedResult: [testBlocks[0]],
+        assertMessage: "numToFlag = 1, both blocks missing"
+      });
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[0]],
+          [testBlocks[1]]
+        ],
+        numToFlag: 2,
+        userBlockXml: "",
+        expectedResult: [testBlocks[0], testBlocks[1]],
+        assertMessage: "numToFlag = 2, both blocks missing"
+      });
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[0]],
+          [testBlocks[1]]
+        ],
+        numToFlag: 2,
+        userBlockXml: "<xml>" + testBlockXml[0] + '</xml>',
+        expectedResult: [testBlocks[1]],
+        assertMessage: "one block missing"
+      });
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[0]],
+          [testBlocks[1]]
+        ],
+        numToFlag: 2,
+        userBlockXml: "<xml>" + testBlockXml[0] + testBlockXml[1] + '</xml>',
+        expectedResult: [],
+        assertMessage: "no blocks missing"
+      });
+    });
+
+    // todo - maybe also do a combo of both a single a double missing
+
+    it ("required block with multiple options", function () {
+      // empty workspace
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[1], testBlocks[2]] // allow text or number
+        ],
+        numToFlag: 1,
+        userBlockXml: "",
+        expectedResult: [testBlocks[1], testBlocks[2]]
+      });
+
+      // should work with either block
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[1], testBlocks[2]] // allow text or number
+        ],
+        numToFlag: 1,
+        userBlockXml: "<xml>" + testBlockXml[1] + "</xml>",
+        expectedResult: []
+      });
+
+      validateBlocks({
+        requiredBlocks: [
+          [testBlocks[1], testBlocks[2]] // allow text or number
+        ],
+        numToFlag: 1,
+        userBlockXml: "<xml>" + testBlockXml[2] + "</xml>",
         expectedResult: []
       });
     });
@@ -168,6 +258,7 @@ describe("requiredBlocks tests", function () {
     ];
 
     it ("expect 1 block, block is missing", function () {
+      // todo - have these be more the same as above
       validateBlocks({
         requiredBlocks: [testBlocks.slice(0, 1)],
         numToFlag: 1,
@@ -186,7 +277,7 @@ describe("requiredBlocks tests", function () {
     });
   });
 
-
+/*
   it("missing block if no blocks are added", function () {
     // todo - separate beforeEach?
     var flappyLevels = requireWithGlobalsCheck('./flappy/levels');
@@ -215,6 +306,7 @@ describe("requiredBlocks tests", function () {
       expectedResult: []
     });
   });
+*/
 });
 
 
