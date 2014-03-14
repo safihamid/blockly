@@ -10,7 +10,7 @@ function Overloader(baseDir, mapping, context) {
   this.mapping = mapping;
   this.verbose = false;
   this.context = context;
-};
+}
 
 Overloader.prototype.clearMap = function () {
   this.mapping = [];

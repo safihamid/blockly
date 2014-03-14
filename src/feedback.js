@@ -706,9 +706,3 @@ var generateXMLForBlocks = function(blocks) {
   return blockXMLStrings.join('');
 };
 
-/* test-code */
-  // todo - have grunt strip this
-  exports.__testonly__ = {
-    getMissingRequiredBlocks: getMissingRequiredBlocks
-  };
-/* end-test-code */
