@@ -318,11 +318,11 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   grunt.registerTask('build', [
-    'strip_code',
     'pseudoloc',
     'messages',
     'symlink:locale',
     'copy:src',
+    'strip_code',
     'ejs',
     'browserify',
     'uglify:browserified',

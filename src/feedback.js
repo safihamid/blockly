@@ -706,3 +706,9 @@ var generateXMLForBlocks = function(blocks) {
   return blockXMLStrings.join('');
 };
 
+/* start-test-block */
+  // export private function(s) to expose to unit testing
+  exports.__testonly__ = {
+    getMissingRequiredBlocks: getMissingRequiredBlocks
+  };
+/* end-test-block */
