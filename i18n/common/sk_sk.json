@@ -14,7 +14,7 @@
   "dialogCancel": "Zrušiť",
   "dialogOK": "ok",
   "emptyBlocksErrorMsg": "\"Repeat\", alebo \"If\" bloky musia obsahovať ďalšie bloky vo vnútri aby pracovali. Uistite sa, že vnútorný blok sedí správne vo vnútri týchto blokov.",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "Máte ďalšie extra bloky, ktoré nie sú pripojené k blokom udalostí.",
   "finalStage": "Gratulujem! Dokončili ste poslednú úroveň.",
   "finalStageTrophies": "Gratulujem! Dokončili ste poslednú úroveň a vyhrali {numTrophies, plural, one {trofej} other {# trofejí}}.",
   "generatedCodeInfo": "Bloky pre Váš program môžu byť tiež vyjadrené v JavaScript-e, svetovo najviac rozšírenom programovacom jazyku:",
