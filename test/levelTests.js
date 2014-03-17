@@ -41,7 +41,13 @@ function runTestCollection (path) {
 
   describe(path, function () {
     testCollection.tests.forEach(function (testData, index) {
-      runTest(path, testData, index);
+      // todo - maybe change the name of expected to make it clear what type of
+      // test is being run, since we're using the same JSON files for these
+      // and our getMissingRequiredBlocks tests (and likely also other things
+      // in the future)
+      if (testData.expected) {
+        runTest(path, testData, index);
+      }
     });
   });
 }
