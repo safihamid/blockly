@@ -1,7 +1,3 @@
-var tiles = require('./tiles');
-var Direction = tiles.Direction;
-var SquareType = tiles.SquareType;
-
 exports.FlapHeight = {
   VERY_SMALL: -6,
   SMALL: -8,

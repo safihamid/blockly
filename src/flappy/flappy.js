@@ -19,8 +19,6 @@ var feedback = require('../feedback.js');
 var dom = require('../dom');
 var constants = require('./constants');
 
-var SquareType = tiles.SquareType;
-
 /**
  * Create a namespace for the application.
  */
