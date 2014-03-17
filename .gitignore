@@ -5,5 +5,5 @@ npm-debug.log
 
 # Generated
 build/
-dist/
 node_modules/
+blockly-mooc.tgz
