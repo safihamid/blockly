@@ -12,10 +12,6 @@ var VENDOR_CODE =
 
 setGlobals();
 
-console.log("done");
-process.exit(0);
-
-
 runTestFromCollection(process.argv[2], process.argv[3]);
 
 function setGlobals () {
