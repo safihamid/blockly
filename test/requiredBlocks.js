@@ -1,6 +1,10 @@
 var chai = require('chai');
 chai.Assertion.includeStack = true;
 var assert = chai.assert;
+var wrench = require('wrench');
+
+var SRC = '../src/';
+
 // load some utils
 
 // todo: GlobalDiff lets me track additions into the global namespace.  Might
@@ -14,7 +18,7 @@ var Overloader = require('./util/overloader');
 // this mapping may belong somwhere common
 var mapping = [
   {
-    search: /^\.\.\/locale\/current\//,
+    search: /\.\.\/locale\/current\//,
     replace: '../build/locale/en_us/'
   },
   {
@@ -22,11 +26,9 @@ var mapping = [
     replace: '../build/js/templates/'
   }
 ];
-var overloader = new Overloader(__dirname + "/../src/", mapping, module);
+var overloader = new Overloader(mapping, module);
 
-// todo - can i make overloader smart enough to take care of this mapping itself?
-overloader.addMapping('./constants', './flappy/constants');
-//overloader.verbose = true;
+// overloader.verbose = true;
 
 /**
  * Wrapper around require, potentially also using our overloader, that also
@@ -49,8 +51,30 @@ function requireWithGlobalsCheck(path, allowedChanges, useOverloader) {
   return result;
 }
 
+/**
+ * Loads options.startBlocks into the workspace, then calls
+ * getMissingRequiredBlocks and validates that the result matches the
+ * options.expectedResult
+ */
 describe("getMissingRequiredBlocks tests", function () {
   var feedback;
+  function validateBlocks(options) {
+    assert.notEqual(options.requiredBlocks, undefined);
+    assert.notEqual(options.numToFlag, undefined);
+    assert.notEqual(options.userBlockXml, undefined);
+    assert.notEqual(options.expectedResult, undefined);
+
+    // Should probably have these as inputs to getMissingRequiredBlocks instead
+    // of fields on BlocklyApps as it's the only place they're used
+    // In fact, may want to get rid of NUM_REQUIRED_BLOCKS_TO_FLAG as it's only
+    // ever set to 1, or perhaps make it customizable per level
+    BlocklyApps.REQUIRED_BLOCKS = options.requiredBlocks;
+    BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = options.numToFlag;
+
+    BlocklyApps.loadBlocks(options.userBlockXml);
+    var missing = feedback.__testonly__.getMissingRequiredBlocks();
+    assert.deepEqual(missing, options.expectedResult);
+  }
 
   // create our environment
   before(function () {
@@ -60,11 +84,11 @@ describe("getMissingRequiredBlocks tests", function () {
 
     // c, n, v, p, s get added to global namespace by messageformat module, which
     // is loaded when we require our locale msg files
-    global.BlocklyApps = requireWithGlobalsCheck('./base',
+    global.BlocklyApps = requireWithGlobalsCheck(SRC + '/base',
       ['c', 'n', 'v', 'p', 's']);
     globalDiff.cache(); // recache since we added global BlocklyApps
 
-    feedback = requireWithGlobalsCheck('./feedback');
+    feedback = requireWithGlobalsCheck(SRC + '/feedback');
 
     var div = document.getElementById('app');
     assert(div);
@@ -86,29 +110,6 @@ describe("getMissingRequiredBlocks tests", function () {
   beforeEach(function () {
     Blockly.mainWorkspace.clear();
   });
-
-  /**
-   * Loads options.startBlocks into the workspace, then calls
-   * getMissingRequiredBlocks and validates that the result matches the
-   * options.expectedResult
-   */
-  function validateBlocks(options) {
-    assert.notEqual(options.requiredBlocks, undefined);
-    assert.notEqual(options.numToFlag, undefined);
-    assert.notEqual(options.userBlockXml, undefined);
-    assert.notEqual(options.expectedResult, undefined);
-
-    // Should probably have these as inputs to getMissingRequiredBlocks instead
-    // of fields on BlocklyApps as it's the only place they're used
-    // In fact, may want to get rid of NUM_REQUIRED_BLOCKS_TO_FLAG as it's only
-    // ever set to 1, or perhaps make it customizable per level
-    BlocklyApps.REQUIRED_BLOCKS = options.requiredBlocks;
-    BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = options.numToFlag;
-
-    BlocklyApps.loadBlocks(options.userBlockXml);
-    var missing = feedback.__testonly__.getMissingRequiredBlocks();
-    assert.deepEqual(missing, options.expectedResult);
-  }
 
   // missing multiple blocks
 
@@ -284,6 +285,51 @@ describe("getMissingRequiredBlocks tests", function () {
       });
     });
   }
+
+  // todo - move this into shared dir
+  // Get all json files under directory path
+  function getTestCollections (directory) {
+    var files = wrench.readdirSyncRecursive(directory);
+    var testCollections = [];
+    files.forEach(function (file) {
+      if (/\.json$/.test(file)) {
+        testCollections.push(file);
+      }
+    });
+    return testCollections;
+  }
+
+  function validateMissingBlocksFromLevelTest(collection, levelTest) {
+    it (levelTest.description, function () {
+      assert(global.Blockly, "Blockly is in global namespace");
+      var levels = requireWithGlobalsCheck(SRC + collection.app + '/' +
+        collection.levelFile, []);
+      var blocks = requireWithGlobalsCheck(SRC + collection.app + '/blocks');
+      blocks.install(Blockly, "maze");
+
+      validateBlocks({
+        requiredBlocks: levels[collection.levelId].requiredBlocks,
+        numToFlag: 1,
+        userBlockXml: levelTest.xml,
+        expectedResult: levelTest.missingBlocks,
+      });
+    });
+  }
+
+  describe("required blocks for specific levels", function () {
+    var collections = getTestCollections('./test/solutions');
+    collections = collections.slice(0,3);
+    collections.forEach(function (path) {
+      describe(path, function () {
+        var collection = require('./solutions/' + path);
+        collection.tests.forEach(function (levelTest) {
+          if (levelTest.missingBlocks) {
+            validateMissingBlocksFromLevelTest(collection, levelTest);
+          };
+        });
+      });
+    });
+  });
 });
 
 
