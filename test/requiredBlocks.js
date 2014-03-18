@@ -3,6 +3,8 @@ chai.Assertion.includeStack = true;
 var assert = chai.assert;
 var wrench = require('wrench');
 
+var SRC = '../src/';
+
 // load some utils
 
 // todo: GlobalDiff lets me track additions into the global namespace.  Might
@@ -16,7 +18,7 @@ var Overloader = require('./util/overloader');
 // this mapping may belong somwhere common
 var mapping = [
   {
-    search: /([\.\.\/]*)locale\/current\//,
+    search: /\.\.\/locale\/current\//,
     replace: '../build/locale/en_us/'
   },
   {
@@ -24,19 +26,8 @@ var mapping = [
     replace: '../build/js/templates/'
   }
 ];
-var overloader = new Overloader(__dirname + "/../src/", mapping, module);
+var overloader = new Overloader(mapping, module);
 
-// todo - can i make overloader smart enough to take care of this mapping itself?
-// (i.e. the fact that these are referenced from children, and thus should
-// automatically search in those children instead of the basedir)
-overloader.addMapping('./constants', './flappy/constants');
-overloader.addMapping('./tiles', './maze/tiles');
-overloader.addMapping('./karelLevels', './maze/karelLevels');
-overloader.addMapping('../level_base', './level_base');
-overloader.addMapping('./toolboxes', './maze/toolboxes');
-overloader.addMapping('./karelStartBlocks', './maze/karelStartBlocks');
-overloader.addMapping('./startBlocks', './maze/startBlocks');
-overloader.addMapping('../codegen', './codegen');
 // overloader.verbose = true;
 
 /**
@@ -93,11 +84,11 @@ describe("getMissingRequiredBlocks tests", function () {
 
     // c, n, v, p, s get added to global namespace by messageformat module, which
     // is loaded when we require our locale msg files
-    global.BlocklyApps = requireWithGlobalsCheck('./base',
+    global.BlocklyApps = requireWithGlobalsCheck(SRC + '/base',
       ['c', 'n', 'v', 'p', 's']);
     globalDiff.cache(); // recache since we added global BlocklyApps
 
-    feedback = requireWithGlobalsCheck('./feedback');
+    feedback = requireWithGlobalsCheck(SRC + '/feedback');
 
     var div = document.getElementById('app');
     assert(div);
@@ -311,9 +302,9 @@ describe("getMissingRequiredBlocks tests", function () {
   function validateMissingBlocksFromLevelTest(collection, levelTest) {
     it (levelTest.description, function () {
       assert(global.Blockly, "Blockly is in global namespace");
-      var levels = requireWithGlobalsCheck('./' + collection.app + '/' +
+      var levels = requireWithGlobalsCheck(SRC + collection.app + '/' +
         collection.levelFile, []);
-      var blocks = requireWithGlobalsCheck('./' + collection.app + '/blocks');
+      var blocks = requireWithGlobalsCheck(SRC + collection.app + '/blocks');
       blocks.install(Blockly, "maze");
 
       validateBlocks({

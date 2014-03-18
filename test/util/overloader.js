@@ -5,11 +5,11 @@
 
 var Module = require('module');
 
-function Overloader(baseDir, mapping, context) {
-  this.baseDir = baseDir;
+function Overloader(mapping, context) {
   this.mapping = mapping;
   this.verbose = false;
   this.context = context;
+  this.originalRequire = Module.prototype.require;
 }
 
 Overloader.prototype.clearMap = function () {
@@ -23,9 +23,6 @@ Overloader.prototype.addMapping = function (search, replace) {
 Overloader.prototype.require = function (path) {
   var self = this;
 
-  // store actual require
-  var originalRequire = Module.prototype.require;
-
   // wrap require with our mapped version
   Module.prototype.require = function (path) {
 
@@ -37,20 +34,22 @@ Overloader.prototype.require = function (path) {
     self.mapping.forEach(function (pair) {
       mappedPath = mappedPath.replace(pair.search, pair.replace);
     });
-    mappedPath = self.baseDir + mappedPath;
+    mappedPath = mappedPath;
 
+    var context = this.exports === Overloader ? self.context : this;
     if (self.verbose) {
       console.log("mapped " + path + " to " + mappedPath);
+      console.log("context: " + context.filename);
     }
 
-    return originalRequire.call(self.context, path[0] === '.' ? mappedPath : path);
+    return self.originalRequire.call(context, path[0] === '.' ? mappedPath : path);
   };
 
   // call our mapped version
   var module = require(path);
 
   // restore unmapped versin
-  Module.prototype.require = originalRequire;
+  Module.prototype.require = self.originalRequire;
 
   // return the module we got
   return module;
