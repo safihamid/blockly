@@ -122,7 +122,7 @@ exports.launchBall = function(id) {
   // we didn't find an "out of play" ball, so create and launch a new one:
   i = Bounce.ballCount;
   Bounce.ballCount++;
-  Bounce.createBall(i);
+  Bounce.createBallElements(i);
   //console.log("LB: created new ball " + i + " calling playSoundAndResetBall");
   Bounce.playSoundAndResetBall(i);
 };

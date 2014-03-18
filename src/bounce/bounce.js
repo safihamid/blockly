@@ -172,7 +172,7 @@ var goalNormalize = function(x, y) {
 };
 
 // Create ball elements
-Bounce.createBall = function (i) {
+Bounce.createBallElements = function (i) {
   var svg = document.getElementById('svgBounce');
   // Ball's clipPath element, whose (x, y) is reset by Bounce.displayBall
   var ballClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
@@ -196,7 +196,7 @@ Bounce.createBall = function (i) {
 };
 
 // Delete ball elements
-Bounce.deleteBall = function (i) {
+Bounce.deleteBallElements = function (i) {
   var ballClipPath = document.getElementById('ballClipPath' + i);
   ballClipPath.parentNode.removeChild(ballClipPath);
   
@@ -355,7 +355,7 @@ var drawMap = function() {
 
   Bounce.ballImage = skin.ball;
   for (i = 0; i < Bounce.ballCount; i++) {
-    Bounce.createBall(i);
+    Bounce.createBallElements(i);
   }
 
   if (Bounce.paddleStart_) {
@@ -880,7 +880,7 @@ BlocklyApps.reset = function(first) {
 
   // Remove any extra balls that were created dynamically.
   for (i = Bounce.originalBallCount; i < Bounce.ballCount; i++) {
-    Bounce.deleteBall(i);
+    Bounce.deleteBallElements(i);
   }
   // Reset ballCount back to the original value
   Bounce.ballCount = Bounce.originalBallCount;
