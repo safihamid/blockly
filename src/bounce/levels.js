@@ -318,9 +318,9 @@ module.exports = {
     'map': [
       [1, 1, 2, 2, 2, 2, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 4, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0,16, 0, 0, 0, 0, 1]
@@ -347,7 +347,8 @@ module.exports = {
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}],
       [{'test': 'incrementPlayerScore', 'type': 'bounce_incrementPlayerScore'}],
-      [{'test': 'incrementOpponentScore', 'type': 'bounce_incrementOpponentScore'}]
+      [{'test': 'incrementOpponentScore', 'type': 'bounce_incrementOpponentScore'}],
+      [{'test': 'launchBall', 'type': 'bounce_launchBall'}]
     ],
     'scale': {
       'snapRadius': 2
@@ -361,13 +362,12 @@ module.exports = {
         return (Bounce.opponentScore >= 2);
       }
     },
-    'respawnBalls' : true,
     'map': [
       [1, 1, 2, 2, 2, 2, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 4, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0,16, 0, 0, 0, 0, 1]
@@ -379,6 +379,7 @@ module.exports = {
           <block type="bounce_playSound"></block> \
           <block type="bounce_incrementPlayerScore"></block> \
           <block type="bounce_incrementOpponentScore"></block> \
+          <block type="bounce_launchBall"></block> \
           <block type="bounce_setPaddleSpeed"></block> \
           <block type="bounce_setBallSpeed"></block> \
           <block type="bounce_setBackground"></block> \

@@ -25,6 +25,7 @@ exports.random = function (values) {
 
 exports.setBallSpeed = function (id, value) {
   BlocklyApps.highlight(id);
+  Bounce.currentBallSpeed = value;
   for (var i = 0; i < Bounce.ballCount; i++) {
     Bounce.ballSpeed[i] = value;
   }
@@ -104,44 +105,74 @@ exports.incrementPlayerScore = function(id) {
   Bounce.displayScore();
 };
 
+exports.launchBall = function(id) {
+  BlocklyApps.highlight(id);
+  
+  // look for an "out of play" ball to re-launch:
+  for (var i = 0; i < Bounce.ballCount; i++) {
+    if (Bounce.isBallOutOfBounds(i) &&
+        (0 === (Bounce.ballFlags[i] & Bounce.BallFlags.LAUNCHING))) {
+      // found an out-of-bounds ball that is not already launching...
+      //console.log("LB: relaunching ball " + i);
+      Bounce.launchBall(i);
+      return;
+    }
+  }
+  
+  // we didn't find an "out of play" ball, so create and launch a new one:
+  i = Bounce.ballCount;
+  Bounce.ballCount++;
+  Bounce.createBall(i);
+  //console.log("LB: created new ball " + i + " calling playSoundAndResetBall");
+  Bounce.playSoundAndResetBall(i);
+};
+
 exports.bounceBall = function(id) {
   BlocklyApps.highlight(id);
 
   var i;
   for (i = 0; i < Bounce.ballCount; i++) {
-    if (Bounce.ballX[i] < 0) {
-      Bounce.ballX[i] = 0;
-      Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
-    } else if (Bounce.ballX[i] > (Bounce.COLS - 1)) {
-      Bounce.ballX[i] = Bounce.COLS - 1;
-      Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
-    }
+    if (0 === (Bounce.ballFlags[i] &
+               (Bounce.BallFlags.MISSED_PADDLE | Bounce.BallFlags.IN_GOAL))) {
+      if (Bounce.ballX[i] < 0) {
+        Bounce.ballX[i] = 0;
+        Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
+        //console.log("Bounced off left, ball " + i);
+      } else if (Bounce.ballX[i] > (Bounce.COLS - 1)) {
+        Bounce.ballX[i] = Bounce.COLS - 1;
+        Bounce.ballDir[i] = 2 * Math.PI - Bounce.ballDir[i];
+        //console.log("Bounced off right, ball " + i);
+      }
 
-    if (Bounce.ballY[i] < tiles.Y_TOP_BOUNDARY) {
-      Bounce.ballY[i] = tiles.Y_TOP_BOUNDARY;
-      Bounce.ballDir[i] = Math.PI - Bounce.ballDir[i];
-    }
+      if (Bounce.ballY[i] < tiles.Y_TOP_BOUNDARY) {
+        Bounce.ballY[i] = tiles.Y_TOP_BOUNDARY;
+        Bounce.ballDir[i] = Math.PI - Bounce.ballDir[i];
+        //console.log("Bounced off top, ball " + i);
+      }
 
-    var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
-    var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
-    var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
+      var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
+      var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
+      var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
 
-    if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
-      // paddle ball collision
-      if (Math.cos(Bounce.ballDir[i]) < 0) {
-        // rather than just bounce the ball off a flat paddle, we offset the
-        // angle after collision based on whether you hit the left or right side
-        // of the paddle.  And then we cap the resulting angle to be in a
-        // certain range of radians so the resulting angle isn't too flat
-        var paddleAngleBias = (3 * Math.PI / 8) *
-            (xPaddleBall / tiles.PADDLE_BALL_COLLIDE_DISTANCE);
-        // Add 5 PI instead of PI to ensure that the resulting angle is positive
-        // to simplify the ternary operation in the next statement
-        Bounce.ballDir[i] =
-          ((Math.PI * 5) + paddleAngleBias - Bounce.ballDir[i]) % (Math.PI * 2);
-        Bounce.ballDir[i] = (Bounce.ballDir[i] < Math.PI) ?
-            Math.min((Math.PI / 2) - 0.2, Bounce.ballDir[i]) :
-            Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballDir[i]);
+      if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
+        // paddle ball collision
+        if (Math.cos(Bounce.ballDir[i]) < 0) {
+          // rather than just bounce the ball off a flat paddle, we offset the
+          // angle after collision based on whether you hit the left or right
+          // side of the paddle.  And then we cap the resulting angle to be in a
+          // certain range of radians so the resulting angle isn't too flat
+          var paddleAngleBias = (3 * Math.PI / 8) *
+              (xPaddleBall / tiles.PADDLE_BALL_COLLIDE_DISTANCE);
+          // Add 5 PI instead of PI to ensure that the resulting angle is
+          // positive to simplify the ternary operation in the next statement
+          Bounce.ballDir[i] =
+              ((Math.PI * 5) + paddleAngleBias - Bounce.ballDir[i]) %
+               (Math.PI * 2);
+          Bounce.ballDir[i] = (Bounce.ballDir[i] < Math.PI) ?
+              Math.min((Math.PI / 2) - 0.2, Bounce.ballDir[i]) :
+              Math.max((3 * Math.PI / 2) + 0.2, Bounce.ballDir[i]);
+          //console.log("Bounced off paddle, ball " + i);
+        }
       }
     }
   }
