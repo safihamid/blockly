@@ -20,6 +20,8 @@
   "incrementPlayerScoreTooltip" : "Add one to the current player score.",
   "isWall": "is this a wall",
   "isWallTooltip": "Returns true if there is a wall here",
+  "launchBall": "launch ball",
+  "launchBallTooltip": "Launch a ball into play.",
   "moveDown": "move down",
   "moveDownTooltip": "Move the paddle down.",
   "moveForward": "move forward",

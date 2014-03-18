@@ -332,7 +332,7 @@ exports.install = function(blockly, skin) {
   };
   
   blockly.Blocks.bounce_bounceBall = {
-    // Block for bouncing the ball.
+    // Block for bouncing a ball.
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
@@ -345,8 +345,26 @@ exports.install = function(blockly, skin) {
   };
   
   generator.bounce_bounceBall = function() {
-    // Generate JavaScript for moving forward.
+    // Generate JavaScript for bouncing a ball.
     return 'Bounce.bounceBall(\'block_id_' + this.id + '\');\n';
+  };
+
+  blockly.Blocks.bounce_launchBall = {
+    // Block for launching a ball.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.launchBall());
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.launchBallTooltip());
+    }
+  };
+  
+  generator.bounce_launchBall = function() {
+    // Generate JavaScript for launching a ball.
+    return 'Bounce.launchBall(\'block_id_' + this.id + '\');\n';
   };
 
   blockly.Blocks.bounce_setBallSpeed = {

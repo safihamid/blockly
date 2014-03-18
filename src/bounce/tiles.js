@@ -17,6 +17,7 @@ exports.FINISH_COLLIDE_DISTANCE = 0.5;
 exports.DEFAULT_BALL_SPEED = 0.1;
 exports.DEFAULT_BALL_DIRECTION = 1.25 * Math.PI;
 exports.DEFAULT_PADDLE_SPEED = 0.1;
+exports.DEFAULT_BALL_START_Y = 2;
 exports.Y_TOP_BOUNDARY = -0.2;
 
 /**
