@@ -325,7 +325,7 @@ describe("getMissingRequiredBlocks tests", function () {
         collection.tests.forEach(function (levelTest) {
           if (levelTest.missingBlocks) {
             validateMissingBlocksFromLevelTest(collection, levelTest);
-          };
+          }
         });
       });
     });
