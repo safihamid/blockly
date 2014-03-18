@@ -990,7 +990,6 @@ Flappy.setGapHeight = function (value) {
   var minGapSize = Flappy.MAZE_HEIGHT - Flappy.MIN_OBSTACLE_HEIGHT -
     Flappy.OBSTACLE_HEIGHT;
   if (value < minGapSize) {
-    console.log('overriding gap height with: ' + minGapSize);
     value = minGapSize;
   }
   Flappy.GAP_SIZE = value;
