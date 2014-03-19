@@ -5,6 +5,11 @@ var wrench = require('wrench');
 
 var SRC = '../src/';
 
+// todo - somewhere (possibly somewhere in here) we should test for feedback
+// results as well, particular for cases where there are no missing blocks
+// but we still dont have the right result
+// also the case where you have two options
+
 // load some utils
 
 // todo: GlobalDiff lets me track additions into the global namespace.  Might
@@ -73,6 +78,7 @@ describe("getMissingRequiredBlocks tests", function () {
 
     BlocklyApps.loadBlocks(options.userBlockXml);
     var missing = feedback.__testonly__.getMissingRequiredBlocks();
+    debugger;
     assert.deepEqual(missing, options.expectedResult);
   }
 

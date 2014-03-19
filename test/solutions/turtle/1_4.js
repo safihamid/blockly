@@ -1,3 +1,8 @@
+var rblocks = function () {
+  // stick this inside a function so that it's only loaded when needed
+  return require('../../../src/turtle/requiredBlocks.js');
+};
+
 module.exports = {
   app: "turtle",
   levelFile: "levels",
@@ -9,6 +14,7 @@ module.exports = {
         result: true,
         testResult: 100
       },
+      missingBlocks: [],
       xml: '<xml><block type="controls_repeat"><title name="TIMES">3</title><statement name="DO"><block type="draw_colour" inline="true"><value name="COLOUR"><block type="colour_random"></block></value><next><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title><next><block type="draw_turn_by_constant_restricted"><title name="DIR">turnRight</title><title name="VALUE">120</title></block></next></block></next></block></statement></block></xml>'
     },
     {
@@ -17,6 +23,7 @@ module.exports = {
         result: true,
         testResult: 100
       },
+      missingBlocks: [],
       xml: '<xml><block type="controls_repeat"><title name="TIMES">3</title><statement name="DO"><block type="draw_colour" inline="true"><value name="COLOUR"><block type="colour_random"></block></value><next><block type="draw_turn_by_constant_restricted"><title name="DIR">turnLeft</title><title name="VALUE">120</title><next><block type="draw_move_by_constant"><title name="DIR">moveBackward</title><title name="VALUE">100</title></block></next></block></next></block></statement></block></xml>'
     },
     {
@@ -25,6 +32,7 @@ module.exports = {
         result: true,
         testResult: 10
       },
+      missingBlocks: [rblocks().repeat(3)],
       xml: '<xml><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title><next><block type="draw_turn_by_constant_restricted"><title name="DIR">turnRight</title><title name="VALUE">120</title><next><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title><next><block type="draw_turn_by_constant_restricted"><title name="DIR">turnRight</title><title name="VALUE">120</title><next><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title></block></next></block></next></block></next></block></next></block></xml>'
     }
 

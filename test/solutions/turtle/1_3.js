@@ -1,3 +1,8 @@
+var rblocks = function () {
+  // stick this inside a function so that it's only loaded when needed
+  return require('../../../src/turtle/requiredBlocks.js');
+};
+
 module.exports = {
   app: "turtle",
   levelFile: "levels",
@@ -9,6 +14,7 @@ module.exports = {
         result: true,
         testResult: 100
       },
+      missingBlocks: [],
       xml: '<xml><block type="controls_repeat"><title name="TIMES">4</title><statement name="DO"><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title><next><block type="draw_turn_by_constant_restricted"><title name="DIR">turnRight</title><title name="VALUE">90</title></block></next></block></statement></block></xml>'
     },
     {
@@ -17,6 +23,7 @@ module.exports = {
         result: false,
         testResult: 4
       },
+      missingBlocks: [rblocks().turnRightRestricted(90)],
       xml: '<xml><block type="controls_repeat"><title name="TIMES">4</title><statement name="DO"><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title></block></statement></block></xml>'
     }
   ]

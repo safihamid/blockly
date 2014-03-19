@@ -17,7 +17,6 @@ var startBlocks = function(page, level) {
   });
 };
 
-
 /*
  * Configuration for all levels.
  */

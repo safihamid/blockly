@@ -1,4 +1,4 @@
-var req = function () {
+var rblocks = function () {
   // stick this inside a function so that it's only loaded when needed
   return require('../../../src/turtle/requiredBlocks.js');
 };
@@ -23,7 +23,13 @@ module.exports = {
         result: false,
         testResult: 4
       },
+      missingBlocks: [rblocks().turnRightRestricted(90)],
       xml: '<xml><block type="draw_move_by_constant"><title name="DIR">moveForward</title><title name="VALUE">100</title></block></xml>'
+    },
+    {
+      description: "Empty workspace.",
+      missingBlocks: [rblocks().MOVE_FORWARD_INLINE],
+      xml: ''
     }
   ]
 };
