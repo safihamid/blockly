@@ -63,6 +63,43 @@ function requireWithGlobalsCheck(path, allowedChanges, useOverloader) {
  */
 describe("getMissingRequiredBlocks tests", function () {
   var feedback;
+
+  /**
+   * getMissingRequiredBlocks will return us an array of requiredBlocks.  We
+   * can't validate these using a simple assert.deepEqual because some blocks
+   * contain a members generated functions.  These functions are the same in
+   * terms of contents, but do not share the same space in memory, and thus
+   * will report as not equal when we want them to report as equal.  This method
+   * exists to validate equality in a way that treats those functions as equal.
+   */
+  function validateMissingRequiredBlocks(result, expectedResult) {
+    if (result.length !== expectedResult.length) {
+      // if we get here, we'll always fail, but this has the benefit of showing
+      // us the diff in the failure
+      assert.deepEqual(result, expectedResult);
+    }
+
+    for (var i = 0; i < result.length; i++) {
+      var block = result[i];
+      var expectedBlock = expectedResult[i];
+      assert.deepEqual(Object.keys(block), Object.keys(expectedBlock),
+        "Blocks have same keys");
+      Object.keys(block).forEach(function (key) {
+        assert.equal(typeof(block[key]), typeof(expectedBlock[key]),
+          "members are of same type");
+        debugger;
+        if (typeof(block[key]) === "function") {
+          // compare contents of functions rather than whether they are the same
+          // object in memory
+          assert.equal(block[key].toString(), expectedBlock[key].toString());
+        } else {
+          assert.deepEqual(block[key], expectedBlock[key],
+            "values for '" + key + "' are equal");
+        }
+      });
+    }
+  }
+
   function validateBlocks(options) {
     assert.notEqual(options.requiredBlocks, undefined);
     assert.notEqual(options.numToFlag, undefined);
@@ -78,8 +115,7 @@ describe("getMissingRequiredBlocks tests", function () {
 
     BlocklyApps.loadBlocks(options.userBlockXml);
     var missing = feedback.__testonly__.getMissingRequiredBlocks();
-    debugger;
-    assert.deepEqual(missing, options.expectedResult);
+    validateMissingRequiredBlocks(missing, options.expectedResult);
   }
 
   // create our environment

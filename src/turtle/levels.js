@@ -155,6 +155,7 @@ module.exports = {
     ideal: 5,
     toolbox: toolbox(1, 9),
     startBlocks: startBlocks(1, 9),
+    requiredBlocks: [],
     freePlay: false,
     sliderSpeed: 0.9,
     permittedErrors: 10,
@@ -165,6 +166,7 @@ module.exports = {
     answer: answer(1, 10),
     toolbox: toolbox(1, 10),
     startBlocks: startBlocks(1, 10),
+    requiredBlocks: [],
     freePlay: true
   },
   // Formerly Page 2.

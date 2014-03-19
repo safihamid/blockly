@@ -9,6 +9,7 @@ module.exports = {
         result: true,
         testResult: 100
       },
+      missingBlocks: [],
       xml: '<xml><block type="maze_forever" x="38" y="44"><statement name="DO"><block type="maze_moveForward" /></statement></block></xml>'
     }
   ]

@@ -1,3 +1,8 @@
+var reqBlocks = function () {
+  // stick this inside a function so that it's only loaded when needed
+  return require('../../../src/maze/requiredBlocks.js');
+};
+
 module.exports = {
   app: "maze",
   levelFile: "levels",
@@ -9,7 +14,7 @@ module.exports = {
         result: true,
         testResult: 100
       },
-      "missingBlocks": [],
+      missingBlocks: [],
       xml: '<xml><block type="maze_moveForward" x="70" y="70"><next><block type="maze_turn"><title name="DIR">turnLeft</title><next><block type="maze_moveForward"><next><block type="maze_turn"><title name="DIR">turnRight</title><next><block type="maze_moveForward" /></next></block></next></block></next></block></next></block></xml>'
     },
     {
@@ -18,10 +23,7 @@ module.exports = {
         result: false,
         testResult: 4
       },
-      "missingBlocks": [{
-        "test": "moveForward",
-        "type": "maze_moveForward"
-      }],
+      missingBlocks: [reqBlocks().MOVE_FORWARD],
       xml: ""
     },
     {
@@ -30,13 +32,7 @@ module.exports = {
         result: false,
         testResult: 4
       },
-      "missingBlocks": [{
-        "test": "turnLeft",
-        "type": "maze_turn",
-        "titles": {
-          "DIR": "turnLeft"
-        }
-      }],
+      missingBlocks: [reqBlocks().TURN_LEFT],
       xml: '<xml><block type="maze_moveForward" x="70" y="70"></block></xml>'
     }
   ]
