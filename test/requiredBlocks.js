@@ -292,7 +292,7 @@ describe("getMissingRequiredBlocks tests", function () {
     var files = wrench.readdirSyncRecursive(directory);
     var testCollections = [];
     files.forEach(function (file) {
-      if (/\.json$/.test(file)) {
+      if (/\.js$/.test(file)) {
         testCollections.push(file);
       }
     });
@@ -318,7 +318,6 @@ describe("getMissingRequiredBlocks tests", function () {
 
   describe("required blocks for specific levels", function () {
     var collections = getTestCollections('./test/solutions');
-    collections = collections.slice(0,3);
     collections.forEach(function (path) {
       describe(path, function () {
         var collection = require('./solutions/' + path);

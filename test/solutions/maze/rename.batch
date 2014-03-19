@@ -1,0 +1,7 @@
+for file in *.json; do
+  newfile=$(echo $file | sed 's/.json/.js/g') 
+  echo -e "module.exports = $(cat $file)" > $newfile
+  sed -i '' 's/\\"/"/g' $newfile
+  sed -i '' "s/\"<xml/'<xml/g" $newfile
+  sed -i '' "s/xml>\"/xml>'/g" $newfile
+done

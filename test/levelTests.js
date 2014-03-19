@@ -15,7 +15,7 @@ var wrench = require('wrench');
 
 var child_process = require('child_process');
 
-getTestCollections('./test').forEach(function (path) {
+getTestCollections('./test/solutions').forEach(function (path) {
   runTestCollection(path);
 });
 
@@ -24,7 +24,7 @@ function getTestCollections (directory) {
   var files = wrench.readdirSyncRecursive(directory);
   var testCollections = [];
   files.forEach(function (file) {
-    if (/\.json$/.test(file)) {
+    if (/\.js$/.test(file)) {
       testCollections.push(file);
     }
   });
@@ -33,7 +33,7 @@ function getTestCollections (directory) {
 
 // Loads a test collection at path an runs all the tests specified in it.
 function runTestCollection (path) {
-  var testCollection = require('./' + path);
+  var testCollection = require('./solutions/' + path);
   var app = testCollection.app;
 
   var levels = require('../build/js/' + app + '/' + testCollection.levelFile);

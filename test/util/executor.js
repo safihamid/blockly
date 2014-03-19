@@ -32,7 +32,7 @@ function initBlockly () {
 }
 
 function runTestFromCollection (collection, index) {
-  var testCollection = require('../' + collection);
+  var testCollection = require('../solutions/' + collection);
   var app = testCollection.app;
 
   var levels = require(buildDir + '/js/' + app + '/' + testCollection.levelFile);
