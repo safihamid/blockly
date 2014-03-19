@@ -73,30 +73,33 @@ describe("getMissingRequiredBlocks tests", function () {
    * exists to validate equality in a way that treats those functions as equal.
    */
   function validateMissingRequiredBlocks(result, expectedResult) {
+    var block, expectedBlock;
+
     if (result.length !== expectedResult.length) {
       // if we get here, we'll always fail, but this has the benefit of showing
       // us the diff in the failure
       assert.deepEqual(result, expectedResult);
     }
 
+    function validateKey (key) {
+      assert.equal(typeof(block[key]), typeof(expectedBlock[key]),
+        "members are of same type");
+      if (typeof(block[key]) === "function") {
+        // compare contents of functions rather than whether they are the same
+        // object in memory
+        assert.equal(block[key].toString(), expectedBlock[key].toString());
+      } else {
+        assert.deepEqual(block[key], expectedBlock[key],
+          "values for '" + key + "' are equal");
+      }
+    }
+
     for (var i = 0; i < result.length; i++) {
-      var block = result[i];
-      var expectedBlock = expectedResult[i];
+      block = result[i];
+      expectedBlock = expectedResult[i];
       assert.deepEqual(Object.keys(block), Object.keys(expectedBlock),
         "Blocks have same keys");
-      Object.keys(block).forEach(function (key) {
-        assert.equal(typeof(block[key]), typeof(expectedBlock[key]),
-          "members are of same type");
-        debugger;
-        if (typeof(block[key]) === "function") {
-          // compare contents of functions rather than whether they are the same
-          // object in memory
-          assert.equal(block[key].toString(), expectedBlock[key].toString());
-        } else {
-          assert.deepEqual(block[key], expectedBlock[key],
-            "values for '" + key + "' are equal");
-        }
-      });
+      Object.keys(block).forEach(validateKey);
     }
   }
 
