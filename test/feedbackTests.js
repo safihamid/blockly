@@ -117,14 +117,22 @@ describe("getMissingRequiredBlocks tests", function () {
     BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = options.numToFlag;
 
     BlocklyApps.loadBlocks(options.userBlockXml);
+
+    // make sure we loaded correctly. text wont match exactly, but make sure if
+    // we had xml, we loaded something
+    var loaded = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+    assert(!options.userBlockXml || loaded, "either we didnt have input xml \
+      or we did, and we loaded something");
+
     var missing = feedback.__testonly__.getMissingRequiredBlocks();
     validateMissingRequiredBlocks(missing, options.expectedResult);
   }
 
+
   // create our environment
   before(function () {
     requireWithGlobalsCheck('./util/frame',
-      ['document', 'window', 'DOMParser', 'Blockly'], false);
+      ['document', 'window', 'DOMParser', 'XMLSerializer', 'Blockly'], false);
     assert(global.Blockly, 'Frame loaded Blockly into global namespace');
 
     // c, n, v, p, s get added to global namespace by messageformat module, which
