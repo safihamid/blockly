@@ -5,6 +5,13 @@ var wrench = require('wrench');
 
 var SRC = '../src/';
 
+// todo - should probably have this in utils somewhere
+function clearRequireCache() {
+  Object.keys(require.cache).forEach(function(key) {
+    delete require.cache[key];
+  });
+}
+
 // todo - somewhere (possibly somewhere in here) we should test for feedback
 // results as well, particular for cases where there are no missing blocks
 // but we still dont have the right result
@@ -81,13 +88,18 @@ describe("getMissingRequiredBlocks tests", function () {
       assert.deepEqual(result, expectedResult);
     }
 
+    // Convert a function to a string and remove whitespace
+    function functionText(f) {
+      return f.toString().replace(/\s/gm,"");
+    }
+
     function validateKey (key) {
       assert.equal(typeof(block[key]), typeof(expectedBlock[key]),
         "members are of same type");
       if (typeof(block[key]) === "function") {
         // compare contents of functions rather than whether they are the same
         // object in memory
-        assert.equal(block[key].toString(), expectedBlock[key].toString());
+        assert.equal(functionText(block[key]), functionText(expectedBlock[key]));
       } else {
         assert.deepEqual(block[key], expectedBlock[key],
           "values for '" + key + "' are equal");
@@ -121,7 +133,7 @@ describe("getMissingRequiredBlocks tests", function () {
     // make sure we loaded correctly. text wont match exactly, but make sure if
     // we had xml, we loaded something
     var loaded = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-    assert(!options.userBlockXml || loaded, "either we didnt have input xml \
+    assert(!options.userBlockXml || loaded, "either we didnt have  input xml \
       or we did, and we loaded something");
 
     var missing = feedback.__testonly__.getMissingRequiredBlocks();
@@ -130,7 +142,9 @@ describe("getMissingRequiredBlocks tests", function () {
 
 
   // create our environment
-  before(function () {
+  beforeEach(function () {
+    clearRequireCache();
+
     requireWithGlobalsCheck('./util/frame',
       ['document', 'window', 'DOMParser', 'XMLSerializer', 'Blockly'], false);
     assert(global.Blockly, 'Frame loaded Blockly into global namespace');
@@ -158,9 +172,7 @@ describe("getMissingRequiredBlocks tests", function () {
     assert(Blockly.Blocks.text_print, "text_print block exists");
     assert(Blockly.Blocks.text, "text block exists");
     assert(Blockly.Blocks.math_number, "math_number block exists");
-  });
 
-  beforeEach(function () {
     Blockly.mainWorkspace.clear();
   });
 
