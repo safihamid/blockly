@@ -89,9 +89,9 @@ var loadLevel = function() {
   }
 
   // Measure maze dimensions and set sizes.
-  Flappy.AVATAR_HEIGHT = 52;
-  Flappy.AVATAR_WIDTH = 49;
-  Flappy.AVATAR_Y_OFFSET = 0;
+  Flappy.AVATAR_HEIGHT = skin.pegmanHeight;
+  Flappy.AVATAR_WIDTH = skin.pegmanWidth;
+  Flappy.AVATAR_Y_OFFSET = skin.pegmanYOffset;
   // Height and width of the goal and obstacles.
   Flappy.MARKER_HEIGHT = 43;
   Flappy.MARKER_WIDTH = 50;
