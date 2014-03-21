@@ -141,7 +141,7 @@ describe("getMissingRequiredBlocks tests", function () {
       ['document', 'window', 'DOMParser', 'XMLSerializer', 'Blockly'], false);
     assert(global.Blockly, 'Frame loaded Blockly into global namespace');
 
-     // uncache filei to force reload
+     // uncache file to force reload
     require.uncache(SRC + '/base');
     // c, n, v, p, s get added to global namespace by messageformat module, which
     // is loaded when we require our locale msg files
