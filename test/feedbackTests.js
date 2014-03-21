@@ -2,15 +2,9 @@ var chai = require('chai');
 chai.Assertion.includeStack = true;
 var assert = chai.assert;
 var wrench = require('wrench');
+require('./util/requireUncache').wrap(require);
 
 var SRC = '../src/';
-
-// todo - should probably have this in utils somewhere
-function clearRequireCache() {
-  Object.keys(require.cache).forEach(function(key) {
-    delete require.cache[key];
-  });
-}
 
 // todo - somewhere (possibly somewhere in here) we should test for feedback
 // results as well, particular for cases where there are no missing blocks
@@ -143,12 +137,12 @@ describe("getMissingRequiredBlocks tests", function () {
 
   // create our environment
   beforeEach(function () {
-    clearRequireCache();
-
     requireWithGlobalsCheck('./util/frame',
       ['document', 'window', 'DOMParser', 'XMLSerializer', 'Blockly'], false);
     assert(global.Blockly, 'Frame loaded Blockly into global namespace');
 
+     // uncache file to force reload
+    require.uncache(SRC + '/base');
     // c, n, v, p, s get added to global namespace by messageformat module, which
     // is loaded when we require our locale msg files
     global.BlocklyApps = requireWithGlobalsCheck(SRC + '/base',
