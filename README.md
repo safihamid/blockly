@@ -22,8 +22,8 @@ of Code. Information about Blockly can be found in the
 
 ```
 # Get the code
-git clone https://github.com/code-dot-org/blockly.git mooc
-cd mooc
+git clone https://github.com/code-dot-org/blockly.git blockly
+cd blockly
 
 # Machine setup (OSX with Homebrew)
 brew install node
