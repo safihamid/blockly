@@ -1,5 +1,3 @@
-*Note: blockly is a component of [the learn.code.org curriculum](https://github.com/code-dot-org/cdo-curriculum). See the [root umbrella repository](https://github.com/code-dot-org/cdo-curriculum) which includes instructions for setting up a full learn.code.org build which includes this blockly curriculum and the Rails teacher dashboard.*
-
 # Blockly 20 Hour Curriculum
 
 Blockly is a web-based, graphical programming editor. Users can drag blocks
@@ -79,9 +77,13 @@ to code.org/learn
 
 ## Contributing
 
+We'd love to have you join our group of contributors!
+
+For notes on our pull process, where to find tasks to work on, etc.—see the Dashboard [contribution guide](https://github.com/code-dot-org/dashboard#contributing).
+
 ### Style Guide
 
-- In general follow google's javascript style [guide](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
+- In general follow Google's javascript style [guide](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 - 80 character line length.
 - 2 space indent.
 - 4 space indent on long line breaks.
