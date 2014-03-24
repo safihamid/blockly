@@ -36,6 +36,10 @@ var ROW1 = constants.WORKSPACE_BUFFER;
 var ROW2 = ROW1 + ROW_HEIGHT;
 var ROW3 = ROW2 + ROW_HEIGHT;
 
+var AVATAR_HEIGHT = constants.AVATAR_HEIGHT;
+var AVATAR_WIDTH = constants.AVATAR_WIDTH;
+var AVATAR_Y_OFFSET = constants.AVATAR_Y_OFFSET;
+
 var eventBlock = function (type, x, y, child) {
   return '<block type="' + type + '" deletable="false"' +
     ' x="' + x + '"' +
@@ -107,7 +111,7 @@ module.exports = {
         return (Flappy.avatarY  === 322 && Flappy.avatarX === 110);
       },
       failureCondition: function () {
-        var avatarBottom = Flappy.avatarY + Flappy.AVATAR_HEIGHT;
+        var avatarBottom = Flappy.avatarY + AVATAR_HEIGHT;
         var ground = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT;
         return (avatarBottom >= ground && Flappy.gameState === Flappy.GameStates.ACTIVE);
       }
@@ -136,8 +140,8 @@ module.exports = {
       moving: true,
       successCondition: function () {
         var avatarCenter = {
-          x: (Flappy.avatarX + Flappy.AVATAR_WIDTH) / 2,
-          y: (Flappy.avatarY + Flappy.AVATAR_HEIGHT) / 2
+          x: (Flappy.avatarX + AVATAR_WIDTH) / 2,
+          y: (Flappy.avatarY + AVATAR_HEIGHT) / 2
         };
         var goalCenter = {
           x: (Flappy.goalX + Flappy.GOAL_SIZE) / 2,
