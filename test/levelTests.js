@@ -1,9 +1,9 @@
 /**
  * The level test driver.
- * Tests collections are specified in .json files in this directory.
+ * Tests collections are specified in .js files in the solutions directory.
  * To extract the xml for a test from a workspace, run the following code in
  * your console:
- * JSON.stringify(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)));
+ * Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
  */
 
 // todo - should we also have tests around which blocks to show as part of the
