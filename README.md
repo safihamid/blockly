@@ -31,7 +31,7 @@ npm install -g grunt-cli
 
 # Build
 npm install
-grunt
+MOOC_DEV=1 grunt build
 
 # Run with live-reload server
 grunt dev
