@@ -149,15 +149,6 @@ var drawMap = function() {
   var svg = document.getElementById('svgFlappy');
   var i, x, y, k, tile;
 
-  // Draw the outer square.
-  var square = document.createElementNS(Blockly.SVG_NS, 'rect');
-  square.setAttribute('width', Flappy.MAZE_WIDTH);
-  square.setAttribute('height', Flappy.MAZE_HEIGHT);
-  square.setAttribute('fill', '#F1EEE7');
-  square.setAttribute('stroke-width', 1);
-  square.setAttribute('stroke', '#CCB');
-  svg.appendChild(square);
-
   // Adjust outer element size.
   svg.setAttribute('width', Flappy.MAZE_WIDTH);
   svg.setAttribute('height', Flappy.MAZE_HEIGHT);
