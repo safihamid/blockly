@@ -1,7 +1,6 @@
 $root: '/blockly/media/bounce/'; //TODO: Parameterize for asset pipeline
 
 #svgBounce {
-  border: solid 1px #DBDBDB;
   overflow: hidden;
 }
 
@@ -75,18 +74,22 @@ button.arrow:focus {
 }
 .soft-buttons-1 {
   display: table-cell;
+  vertical-align: top;
   min-width: 51px;
 }
 .soft-buttons-2 {
   display: table-cell;
+  vertical-align: top;
   min-width: 102px;
 }
 .soft-buttons-3 {
   display: table-cell;
+  vertical-align: top;
   min-width: 153px;
 }
 .soft-buttons-4 {
   display: table-cell;
+  vertical-align: top;
   min-width: 204px;
 }
 
@@ -96,6 +99,7 @@ button.share {
   color: #fff;
   margin-left: 0px;
   margin-right: 5px;
+  padding-top: 11px;
 }
 button.share:focus {
   outline-style: none;
