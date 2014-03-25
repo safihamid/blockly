@@ -1,5 +1,6 @@
 var Direction = require('./tiles').Direction;
 var karelLevels = require('./karelLevels');
+var reqBlocks = require('./requiredBlocks');
 
 //TODO: Fix hacky level-number-dependent toolbox.
 var toolbox = function(page, level) {
@@ -17,245 +18,10 @@ var startBlocks = function(page, level) {
   });
 };
 
-
 /*
  * Configuration for all levels.
  */
 module.exports = {
-
-  // Formerly page 1
-
-  '1_1': {
-    'toolbox': toolbox(1, 1),
-    'ideal': 2,
-    'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'scale': {
-      'snapRadius': 2,
-      'stepSpeed': 12
-    },
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 2, 1, 3, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ],
-    'singleTopBlock': true
-  },
-  '1_2': {
-    'toolbox': toolbox(1, 2),
-    'ideal': 5,
-    'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight', 'type': 'maze_turn', 'titles': {'DIR': 'turnRight'}}]
-    ],
-    'scale': {
-      'stepSpeed': 10
-    },
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 1, 3, 0, 0, 0],
-      [0, 0, 2, 1, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ],
-    'singleTopBlock': true
-  },
-  '1_3': {
-    'toolbox': toolbox(1, 3),
-    'ideal': 2,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'scale': {
-      'stepSpeed': 8
-    },
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 2, 1, 1, 1, 1, 3, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_4': {
-    'toolbox': toolbox(1, 4),
-    'ideal': 5,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight', 'type': 'maze_turn', 'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'scale': {
-      'stepSpeed': 6
-    },
-    'startDirection': Direction.EAST,
-    /**
-     *  Note, the path continues past the start and the goal in both directions.
-     *  This is intentional so kids see the maze is about getting from the start
-     *  to the finish and not necessarily about moving over every part of the maze,
-     *  'mowing the lawn' as Neil calls it.
-     */
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 1, 1],
-      [0, 0, 0, 0, 0, 1, 3, 0],
-      [0, 0, 0, 0, 1, 1, 0, 0],
-      [0, 0, 0, 1, 1, 0, 0, 0],
-      [0, 0, 1, 1, 0, 0, 0, 0],
-      [0, 2, 1, 0, 0, 0, 0, 0],
-      [1, 1, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_5': {
-    'toolbox': toolbox(1, 5),
-    'ideal': 4,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathLeft', 'type': 'maze_if', 'titles': {'DIR': 'isPathLeft'}}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'scale': {
-      'stepSpeed': 6
-    },
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 3, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 0, 0, 2, 1, 1, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_6': {
-    'toolbox': toolbox(1, 6),
-    'ideal': 4,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathLeft', 'type': 'maze_if', 'titles': {'DIR': 'isPathLeft'}}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 1, 1, 0, 0],
-      [0, 1, 0, 0, 0, 1, 0, 0],
-      [0, 1, 1, 3, 0, 1, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 2, 1, 1, 1, 1, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_7': {
-    'toolbox': toolbox(1, 7),
-    'ideal': 4,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathRight', 'type': 'maze_if', 'titles': {'DIR': 'isPathRight'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 2, 1, 1, 1, 1, 0, 0],
-      [0, 0, 0, 0, 0, 1, 0, 0],
-      [0, 1, 1, 3, 0, 1, 0, 0],
-      [0, 1, 0, 0, 0, 1, 0, 0],
-      [0, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_8': {
-    'toolbox': toolbox(1, 8),
-    'ideal': 6,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathRight', 'type': 'maze_if', 'titles': {'DIR': 'isPathRight'}}],
-      [{'test': 'isPathLeft', 'type': 'maze_if', 'titles': {'DIR': 'isPathLeft'}}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight', 'type': 'maze_turn', 'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 1, 0, 0, 0],
-      [0, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 1, 1, 0, 1, 0, 0],
-      [0, 0, 0, 1, 0, 1, 0, 0],
-      [0, 2, 1, 1, 0, 3, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_9': {
-    'toolbox': toolbox(1, 9),
-    'ideal': 6,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathForward', 'type': 'maze_ifElse',
-                                'titles': {'DIR': 'isPathForward'}}],
-      [{'test': 'turnLeft', 'type': 'maze_turn', 'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0, 1, 0, 0, 0, 0, 0],
-      [3, 1, 1, 1, 1, 1, 1, 0],
-      [0, 1, 0, 1, 0, 1, 1, 0],
-      [1, 1, 1, 1, 1, 0, 1, 0],
-      [0, 1, 0, 1, 0, 2, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
-  '1_10': {
-    'toolbox': toolbox(1, 10),
-    'ideal': 5,
-    'requiredBlocks': [
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'isPathForward', 'type': 'maze_ifElse',
-                                'titles': {'DIR': 'isPathForward'}}],
-      [{'test': 'turnRight', 'type': 'maze_turn', 'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}]
-    ],
-    'startDirection': Direction.EAST,
-    'map': [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 2, 1, 1, 1, 1, 1, 0],
-      [0, 0, 1, 1, 0, 1, 1, 0],
-      [0, 0, 0, 0, 0, 0, 1, 0],
-      [0, 0, 1, 1, 0, 1, 1, 0],
-      [0, 1, 3, 1, 1, 1, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-  },
 
   // Formerly Page 2
 
@@ -263,7 +29,7 @@ module.exports = {
     'toolbox': toolbox(2, 1),
     'ideal': 3,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+      [reqBlocks.MOVE_FORWARD],
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -282,7 +48,7 @@ module.exports = {
     'toolbox': toolbox(2, 2),
     'ideal': 2,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+      [reqBlocks.MOVE_FORWARD],
     ],
     'startDirection': Direction.SOUTH,
     'map': [
@@ -301,10 +67,8 @@ module.exports = {
     'toolbox': toolbox(2, 3),
     'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -323,13 +87,9 @@ module.exports = {
     'toolbox': toolbox(2, 3),
     'ideal': 5,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -348,13 +108,9 @@ module.exports = {
     'toolbox': toolbox(2, 4),
     'ideal': 8,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-       'type': 'maze_turn',
-       'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -372,8 +128,8 @@ module.exports = {
     'toolbox': toolbox(2, 5),
     'ideal': 2,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'for', 'type': 'controls_repeat', titles: {TIMES: '???'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.FOR_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -391,11 +147,9 @@ module.exports = {
     'toolbox': toolbox(2, 6),
     'ideal': 3,
     'requiredBlocks': [
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'for', 'type': 'controls_repeat', titles: {TIMES: '???'}}]
+      [reqBlocks.TURN_RIGHT],
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.FOR_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -413,11 +167,9 @@ module.exports = {
     'toolbox': toolbox(2, 7),
     'ideal': 5,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'for', 'type': 'controls_repeat', titles: {TIMES: '???'}}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.FOR_LOOP],
+      [reqBlocks.TURN_LEFT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -435,11 +187,9 @@ module.exports = {
     'toolbox': toolbox(2, 8),
     'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'for', 'type': 'controls_repeat', titles: {TIMES: '???'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.FOR_LOOP],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -458,8 +208,8 @@ module.exports = {
     'toolbox': toolbox(2, 9),
     'ideal': 2,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -477,11 +227,9 @@ module.exports = {
     'toolbox': toolbox(2, 10),
     'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -502,14 +250,10 @@ module.exports = {
       'stepSpeed': 3
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.WHILE_LOOP],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -530,14 +274,10 @@ module.exports = {
       'stepSpeed': 3
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'while', 'type': 'maze_forever'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.WHILE_LOOP],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -555,9 +295,7 @@ module.exports = {
     'toolbox': toolbox(2, 13),
     'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}]
+      [reqBlocks.TURN_LEFT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -579,14 +317,10 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'isPathRight',
-        'type': 'maze_if',
-        'titles': {'DIR': 'isPathRight'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_RIGHT],
+      [reqBlocks.IS_PATH_RIGHT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -609,14 +343,10 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'isPathLeft',
-        'type': 'maze_if',
-        'titles': {'DIR': 'isPathLeft'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.IS_PATH_LEFT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.NORTH,
     'map': [
@@ -637,14 +367,10 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'isPathRight',
-        'type': 'maze_if',
-        'titles': {'DIR': 'isPathRight'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_RIGHT],
+      [reqBlocks.IS_PATH_RIGHT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.SOUTH,
     'map': [
@@ -665,14 +391,10 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'isPathForward',
-        'type': 'maze_ifElse',
-        'titles': {'DIR': 'isPathForward'}}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.IS_PATH_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -693,14 +415,10 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'isPathForward',
-        'type': 'maze_ifElse',
-        'titles': {'DIR': 'isPathForward'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}],
-      [{'test': 'while', 'type': 'maze_forever'}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.IS_PATH_FORWARD],
+      [reqBlocks.TURN_RIGHT],
+      [reqBlocks.WHILE_LOOP]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -721,13 +439,9 @@ module.exports = {
       'stepSpeed': 2
     },
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.NORTH,
     'map': [
@@ -754,7 +468,7 @@ module.exports = {
       {'func': 'turnright', 'alias': 'Maze.turnRight();'},
     ],
     'requiredBlocks': [
-       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+       [reqBlocks.MOVE_FORWARD],
      ],
     'startDirection': Direction.EAST,
     'map': [
@@ -778,7 +492,7 @@ module.exports = {
       {'func': 'turnright', 'alias': 'Maze.turnRight();'},
     ],
     'requiredBlocks': [
-       [{'test': 'moveForward', 'type': 'maze_moveForward'}],
+       [reqBlocks.MOVE_FORWARD],
      ],
     'startDirection': Direction.SOUTH,
     'map': [
@@ -802,13 +516,9 @@ module.exports = {
       {'func': 'turnright', 'alias': 'Maze.turnRight();'},
     ],
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnLeft'}}],
-      [{'test': 'turnRight',
-        'type': 'maze_turn',
-        'titles': {'DIR': 'turnRight'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT],
+      [reqBlocks.TURN_RIGHT]
     ],
     'startDirection': Direction.EAST,
     'map': [
@@ -832,10 +542,8 @@ module.exports = {
       {'func': 'turnright', 'alias': 'Maze.turnRight();'},
     ],
     'requiredBlocks': [
-      [{'test': 'moveForward', 'type': 'maze_moveForward'}],
-      [{'test': 'turnLeft',
-       'type': 'maze_turn',
-       'titles': {'DIR': 'turnLeft'}}]
+      [reqBlocks.MOVE_FORWARD],
+      [reqBlocks.TURN_LEFT]
     ],
     'startDirection': Direction.EAST,
     'map': [

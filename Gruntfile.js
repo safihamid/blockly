@@ -18,8 +18,6 @@ var DEV = (process.env.MOOC_DEV === '1');
 var LOCALES = (LOCALIZE ? [
   'af_za',
   'ar_sa',
-  'as_in',
-  'az_az',
   'bg_bg',
   'bn_bd',
   'ca_es',
@@ -30,7 +28,6 @@ var LOCALES = (LOCALIZE ? [
   'el_gr',
   'en_us',
   'en_ploc',
-  'eo_uy',
   'es_es',
   'eu_es',
   'fa_ir',
@@ -48,8 +45,6 @@ var LOCALES = (LOCALIZE ? [
   'ko_kr',
   'lt_lt',
   'ms_my',
-  'my_mm',
-  'ne_np',
   'nl_nl',
   'no_no',
   'pl_pl',
@@ -57,7 +52,6 @@ var LOCALES = (LOCALIZE ? [
   'pt_pt',
   'ro_ro',
   'ru_ru',
-  'si_lk',
   'sk_sk',
   'sl_si',
   'sq_al',
@@ -282,7 +276,7 @@ config.mochaTest = {
   all: {
     options: {
       reporter: 'spec',
-      timeout: 4000
+      timeout: 10000
     },
     src: ['test/*.js']
   }

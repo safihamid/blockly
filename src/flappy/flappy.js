@@ -73,6 +73,10 @@ var twitterOptions = {
   hashtag: "FlappyCode"
 };
 
+var AVATAR_HEIGHT = constants.AVATAR_HEIGHT;
+var AVATAR_WIDTH = constants.AVATAR_WIDTH;
+var AVATAR_Y_OFFSET = constants.AVATAR_Y_OFFSET;
+
 var loadLevel = function() {
   // Load maps.
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
@@ -88,10 +92,6 @@ var loadLevel = function() {
     Flappy.scale[key] = level.scale[key];
   }
 
-  // Measure maze dimensions and set sizes.
-  Flappy.AVATAR_HEIGHT = skin.pegmanHeight;
-  Flappy.AVATAR_WIDTH = skin.pegmanWidth;
-  Flappy.AVATAR_Y_OFFSET = skin.pegmanYOffset;
   // Height and width of the goal and obstacles.
   Flappy.MARKER_HEIGHT = 43;
   Flappy.MARKER_WIDTH = 50;
@@ -124,8 +124,8 @@ var loadLevel = function() {
   };
 
   var containsAvatar = function () {
-    var flappyRight = Flappy.avatarX + Flappy.AVATAR_WIDTH;
-    var flappyBottom = Flappy.avatarY + Flappy.AVATAR_HEIGHT;
+    var flappyRight = Flappy.avatarX + AVATAR_WIDTH;
+    var flappyBottom = Flappy.avatarY + AVATAR_HEIGHT;
     var obstacleRight = this.x + Flappy.OBSTACLE_WIDTH;
     var obstacleBottom = this.gapStart + Flappy.GAP_SIZE;
     return (flappyRight > this.x &&
@@ -144,11 +144,6 @@ var loadLevel = function() {
     });
   }
 };
-
-/**
- * PIDs of async tasks currently executing.
- */
-Flappy.pidList = [];
 
 var drawMap = function() {
   var svg = document.getElementById('svgFlappy');
@@ -251,8 +246,8 @@ var drawMap = function() {
   avatarIcon.setAttribute('id', 'avatar');
   avatarIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                           skin.avatar);
-  avatarIcon.setAttribute('height', Flappy.AVATAR_HEIGHT);
-  avatarIcon.setAttribute('width', Flappy.AVATAR_WIDTH);
+  avatarIcon.setAttribute('height', AVATAR_HEIGHT);
+  avatarIcon.setAttribute('width', AVATAR_WIDTH);
   if (level.ground) {
     avatarIcon.setAttribute('clip-path', 'url(#avatArclipPath)');
   }
@@ -353,10 +348,10 @@ var delegate = function(scope, func, data)
  * @param obstacle Object : The obstacle object we're checking
  */
 var checkForObstacleCollision = function (obstacle) {
-  var insideObstacleColumn = Flappy.avatarX + Flappy.AVATAR_WIDTH >= obstacle.x &&
+  var insideObstacleColumn = Flappy.avatarX + AVATAR_WIDTH >= obstacle.x &&
     Flappy.avatarX <= obstacle.x + Flappy.OBSTACLE_WIDTH;
   if (insideObstacleColumn && (Flappy.avatarY <= obstacle.gapStart ||
-    Flappy.avatarY + Flappy.AVATAR_HEIGHT >= obstacle.gapStart + Flappy.GAP_SIZE)) {
+    Flappy.avatarY + AVATAR_HEIGHT >= obstacle.gapStart + Flappy.GAP_SIZE)) {
     return true;
   }
   return false;
@@ -389,7 +384,7 @@ Flappy.onTick = function() {
     Flappy.clickPending = false;
   }
 
-  avatarWasAboveGround = (Flappy.avatarY + Flappy.AVATAR_HEIGHT) <
+  avatarWasAboveGround = (Flappy.avatarY + AVATAR_HEIGHT) <
     (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
 
   // Action doesn't start until user's first click
@@ -400,7 +395,7 @@ Flappy.onTick = function() {
 
     // never let the avatar go too far off the top or bottom
     var bottomLimit = level.ground ?
-      (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.AVATAR_HEIGHT + 1) :
+      (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - AVATAR_HEIGHT + 1) :
       (Flappy.MAZE_HEIGHT * 1.5);
 
     Flappy.avatarY = Math.min(Flappy.avatarY, bottomLimit);
@@ -408,14 +403,14 @@ Flappy.onTick = function() {
 
     // Update obstacles
     Flappy.obstacles.forEach(function (obstacle, index) {
-      var wasRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
+      var wasRightOfAvatar = obstacle.x > (Flappy.avatarX + AVATAR_WIDTH);
 
       obstacle.x -= Flappy.SPEED;
 
-      var isRightOfAvatar = obstacle.x > (Flappy.avatarX + Flappy.AVATAR_WIDTH);
+      var isRightOfAvatar = obstacle.x > (Flappy.avatarX + AVATAR_WIDTH);
       if (wasRightOfAvatar && !isRightOfAvatar) {
         if (Flappy.avatarY > obstacle.gapStart &&
-          (Flappy.avatarY + Flappy.AVATAR_HEIGHT < obstacle.gapStart + Flappy.GAP_SIZE)) {
+          (Flappy.avatarY + AVATAR_HEIGHT < obstacle.gapStart + Flappy.GAP_SIZE)) {
           try { Flappy.whenEnterObstacle(BlocklyApps, api); } catch (e) { }
         }
       }
@@ -434,7 +429,7 @@ Flappy.onTick = function() {
     });
 
     // check for ground collision
-    avatarIsAboveGround = (Flappy.avatarY + Flappy.AVATAR_HEIGHT) <
+    avatarIsAboveGround = (Flappy.avatarY + AVATAR_HEIGHT) <
       (Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT);
     if (avatarWasAboveGround && !avatarIsAboveGround) {
       try { Flappy.whenCollideGround(BlocklyApps, api); } catch (e) { }
@@ -455,7 +450,7 @@ Flappy.onTick = function() {
 
     // we use avatar width instead of height bc he is rotating
     // the extra 4 is so that he buries his beak (similar to mobile game)
-    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - Flappy.AVATAR_WIDTH + 4;
+    var max = Flappy.MAZE_HEIGHT - Flappy.GROUND_HEIGHT - AVATAR_WIDTH + 4;
     if (Flappy.avatarY >= max) {
       Flappy.avatarY = max;
       Flappy.gameState = Flappy.GameStates.OVER;
@@ -463,7 +458,7 @@ Flappy.onTick = function() {
     }
 
     document.getElementById('avatar').setAttribute('transform',
-      'translate(' + Flappy.AVATAR_WIDTH + ', 0) ' +
+      'translate(' + AVATAR_WIDTH + ', 0) ' +
       'rotate(90, ' + Flappy.avatarX + ', ' + Flappy.avatarY + ')');
     if (infoText) {
       document.getElementById('gameover').setAttribute('visibility', 'visibile');
@@ -540,15 +535,8 @@ Flappy.init = function(config) {
     Blockly.loadAudio_(skin.crashSound, 'crash');
     Blockly.loadAudio_(skin.laserSound, 'laser');
     Blockly.loadAudio_(skin.splashSound, 'splash');
-    // Load wall sounds.
     Blockly.loadAudio_(skin.wallSound, 'wall');
-    if (skin.additionalSound) {
-      Blockly.loadAudio_(skin.wall0Sound, 'wall0');
-      Blockly.loadAudio_(skin.wall1Sound, 'wall1');
-      Blockly.loadAudio_(skin.wall2Sound, 'wall2');
-      Blockly.loadAudio_(skin.wall3Sound, 'wall3');
-      Blockly.loadAudio_(skin.wall4Sound, 'wall4');
-    }
+    Blockly.loadAudio_(skin.wall0Sound, 'wall0');
   };
 
   config.afterInject = function() {
@@ -632,12 +620,6 @@ BlocklyApps.reset = function(first) {
   Flappy.clearEventHandlersKillTickLoop();
 
   Flappy.gameState = Flappy.GameStates.WAITING;
-
-  // Kill all tasks.
-  for (i = 0; i < Flappy.pidList.length; i++) {
-    window.clearTimeout(Flappy.pidList[i]);
-  }
-  Flappy.pidList = [];
 
   // Reset the score.
   Flappy.playerScore = 0;

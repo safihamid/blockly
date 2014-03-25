@@ -64,7 +64,11 @@ module.exports = function(grunt) {
         Object.keys(source).forEach(function(key) {
           code += 'exports.' + key + ' = ';
           try {
-            code += mf.precompile(mf.parse(translated[key]));
+            if (translated[key]) {
+              code += mf.precompile(mf.parse(translated[key]));
+            } else {
+              code += mf.precompile(mf.parse(source[key]));
+            }
           } catch (e) {
             // Fallback to English on failure.
             grunt.log.warn('Failed to compile ' + src + ':' + key + '\n' + e);
