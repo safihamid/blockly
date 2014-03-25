@@ -394,4 +394,48 @@ module.exports = {
       <block type="bounce_whenBallInGoal" deletable="false" x="20" y="350"></block> \
       <block type="bounce_whenBallMissesPaddle" deletable="false" x="20" y="430"></block>'
   },
+  '12': {
+    'ideal': 22,
+    'requiredBlocks': [
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'softButtons': [
+      'leftButton',
+      'rightButton'
+    ],
+    'freePlay': true,
+    'map': [
+      [1, 1, 2, 2, 2, 2, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0,16, 0, 0, 0, 0, 1]
+    ],
+    'toolbox':
+      tb('<block type="bounce_moveLeft"></block> \
+          <block type="bounce_moveRight"></block> \
+          <block type="bounce_bounceBall"></block> \
+          <block type="bounce_playSound"></block> \
+          <block type="bounce_incrementPlayerScore"></block> \
+          <block type="bounce_incrementOpponentScore"></block> \
+          <block type="bounce_launchBall"></block> \
+          <block type="bounce_setPaddleSpeed"></block> \
+          <block type="bounce_setBallSpeed"></block> \
+          <block type="bounce_setBackground"></block> \
+          <block type="bounce_setBall"></block> \
+          <block type="bounce_setPaddle"></block>'),
+    'startBlocks':
+     '<block type="bounce_whenGameStarts" deletable="false" x="20" y="20"></block> \
+      <block type="bounce_whenLeft" deletable="false" x="20" y="110"></block> \
+      <block type="bounce_whenRight" deletable="false" x="180" y="110"></block> \
+      <block type="bounce_whenPaddleCollided" deletable="false" x="20" y="190"></block> \
+      <block type="bounce_whenWallCollided" deletable="false" x="20" y="270"></block> \
+      <block type="bounce_whenBallInGoal" deletable="false" x="20" y="350"></block> \
+      <block type="bounce_whenBallMissesPaddle" deletable="false" x="20" y="430"></block>'
+  },
 };

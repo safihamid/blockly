@@ -56,6 +56,7 @@ var Keycodes = {
 
 var level;
 var skin;
+var onSharePage;
 
 /**
  * Milliseconds between each animation frame.
@@ -78,6 +79,11 @@ BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
 Bounce.scale = {
   'snapRadius': 1,
   'stepSpeed': 33
+};
+
+var twitterOptions = {
+  text: bounceMsg.shareBounceTwitter(),
+  hashtag: "PongCode"
 };
 
 var loadLevel = function() {
@@ -207,15 +213,6 @@ Bounce.deleteBallElements = function (i) {
 var drawMap = function() {
   var svg = document.getElementById('svgBounce');
   var i, x, y, k, tile;
-
-  // Draw the outer square.
-  var square = document.createElementNS(Blockly.SVG_NS, 'rect');
-  square.setAttribute('width', Bounce.MAZE_WIDTH);
-  square.setAttribute('height', Bounce.MAZE_HEIGHT);
-  square.setAttribute('fill', '#F1EEE7');
-  square.setAttribute('stroke-width', 1);
-  square.setAttribute('stroke', '#CCB');
-  svg.appendChild(square);
 
   // Adjust outer element size.
   svg.setAttribute('width', Bounce.MAZE_WIDTH);
@@ -649,6 +646,7 @@ Bounce.init = function(config) {
   Bounce.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
+  onSharePage = config.share;
   loadLevel();
   
   window.addEventListener("keydown", Bounce.onKey, false);
@@ -765,9 +763,23 @@ Bounce.init = function(config) {
     'bounce_whenBallMissesPaddle': { x: 20, y: 430},
   };
 
+  config.twitter = twitterOptions;
+
+  // for this app, show make your own button if on share page
+  config.makeYourOwn = config.share;
+
+  config.makeString = bounceMsg.makeYourOwn();
+  config.makeUrl = "http://code.org/pong";
+  config.makeImage = BlocklyApps.assetUrl('media/promo.png');
+  
   config.preventExtraTopLevelBlocks = true;
 
   BlocklyApps.init(config);
+
+  if (!onSharePage) {
+    var shareButton = document.getElementById('shareButton');
+    dom.addClickTouchEvent(shareButton, Bounce.onPuzzleComplete);
+  }
 };
 
 /**
@@ -993,6 +1005,11 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Bounce.execute();
+  
+  if (level.freePlay && !onSharePage) {
+    var shareCell = document.getElementById('share-cell');
+    shareCell.className = 'share-cell-enabled';
+  }
   if (Bounce.goalLocated_) {
     document.getElementById('score').setAttribute('visibility', 'visible');
     Bounce.displayScore();
@@ -1021,7 +1038,13 @@ var displayFeedback = function() {
       skin: skin.id,
       feedbackType: Bounce.testResults,
       response: Bounce.response,
-      level: level
+      level: level,
+      showingSharing: level.freePlay,
+      twitter: twitterOptions,
+      appStrings: {
+        reinfFeedbackMsg: bounceMsg.reinfFeedbackMsg(),
+        sharingText: bounceMsg.shareGame()
+      }
     });
   }
 };
@@ -1166,6 +1189,10 @@ Bounce.execute = function() {
 };
 
 Bounce.onPuzzleComplete = function() {
+  if (level.freePlay) {
+    Bounce.result = ResultType.SUCCESS;
+  }
+
   // Stop everything on screen
   Bounce.clearEventHandlersKillTickLoop();
 
@@ -1173,7 +1200,13 @@ Bounce.onPuzzleComplete = function() {
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Bounce.result == ResultType.SUCCESS);
   
-  Bounce.testResults = BlocklyApps.getTestResults();
+  // If the current level is a free play, always return the free play
+  // result type
+  if (level.freePlay) {
+    Bounce.testResults = BlocklyApps.TestResults.FREE_PLAY;
+  } else {
+    Bounce.testResults = BlocklyApps.getTestResults();
+  }
 
   if (Bounce.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
     BlocklyApps.playAudio('win', {volume : 0.5});

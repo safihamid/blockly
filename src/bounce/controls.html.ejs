@@ -1,3 +1,11 @@
+<% var msg = require('../../locale/current/bounce') %>
+
+<td id="share-cell" class="share-cell-none">
+  <button id="shareButton" class="share">
+    <img src="<%= assetUrl('media/1x1.gif') %>">
+    <%= msg.share() %>
+  </button>
+</td>
 <td id="soft-buttons" class="soft-buttons-none">
   <button id="leftButton" class="arrow">
     <img src="<%= assetUrl('media/1x1.gif') %>" class="left-btn icon21">

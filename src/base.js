@@ -160,7 +160,13 @@ BlocklyApps.init = function(config) {
   if (BlocklyApps.share) {
     var upSale = document.createElement('div');
     if (config.makeYourOwn) {
-      upSale.innerHTML = require('./templates/makeYourOwn.html')();
+      upSale.innerHTML = require('./templates/makeYourOwn.html')({
+        data: {
+          makeUrl: config.makeUrl,
+          makeString: config.makeString,
+          makeImage: config.makeImage
+        }
+      });
       if (BlocklyApps.noPadding) {
         upSale.style.marginLeft = '30px';
       }

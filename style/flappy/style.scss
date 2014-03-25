@@ -5,7 +5,6 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
 }
 
 #svgFlappy {
-  border: solid 1px #DBDBDB;
   overflow: hidden;
 }
 
@@ -65,6 +64,7 @@ button.share {
   color: #fff;
   margin-left: 0px;
   margin-right: 5px;
+  padding-top: 11px;
 }
 button.share:focus {
   outline-style: none;
