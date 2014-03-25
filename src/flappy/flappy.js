@@ -576,6 +576,10 @@ Flappy.init = function(config) {
 
   // for flappy show make your own button if on share page
   config.makeYourOwn = config.share;
+  
+  config.makeString = commonMsg.makeYourOwnFlappy();
+  config.makeUrl = "http://code.org/flappy";
+  config.makeImage = BlocklyApps.assetUrl('media/flappy_promo.png');
 
   config.hideShowCode = true;
 
