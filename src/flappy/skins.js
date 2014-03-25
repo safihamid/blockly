@@ -1,8 +1,6 @@
 /**
  * Load Skin for Flappy.
  */
-// tiles: A 250x200 set of 20 map images.
-// goal: A 20x34 goal image.
 // background: Number of 400x400 background images. Randomly select one if
 // specified, otherwise, use background.png.
 // graph: Colour of optional grid lines, or false.
@@ -12,10 +10,6 @@ var skinsBase = require('../skins');
 var CONFIGS = {
 
   flappy: {
-    transparentTileEnding: true,
-    nonDisappearingPegmanHittingObstacle: true,
-    additionalSound: true,
-    background: 4
   }
 
 };
@@ -124,16 +118,6 @@ exports.load = function(assetUrl, id) {
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.obstacle = skin.assetUrl('obstacle.png');
   skin.obstacleAnimation = skin.assetUrl('obstacle.gif');
-  if (config.transparentTileEnding) {
-    skin.transparentTileEnding = true;
-  } else {
-    skin.transparentTileEnding = false;
-  }
-  if (config.nonDisappearingPegmanHittingObstacle) {
-    skin.nonDisappearingPegmanHittingObstacle = true;
-  } else {
-    skin.nonDisappearingPegmanHittingObstacle = false;
-  }
   skin.obstacleScale = config.obstacleScale || 1.0;
   skin.largerObstacleAnimationTiles =
       skin.assetUrl(config.largerObstacleAnimationTiles);
@@ -148,10 +132,6 @@ exports.load = function(assetUrl, id) {
   skin.winGoalSound = [skin.assetUrl('win_goal.mp3'),
                        skin.assetUrl('win_goal.ogg')];
   skin.wall0Sound = [skin.assetUrl('wall0.mp3'), skin.assetUrl('wall0.ogg')];
-  skin.wall1Sound = [skin.assetUrl('wall1.mp3'), skin.assetUrl('wall1.ogg')];
-  skin.wall2Sound = [skin.assetUrl('wall2.mp3'), skin.assetUrl('wall2.ogg')];
-  skin.wall3Sound = [skin.assetUrl('wall3.mp3'), skin.assetUrl('wall3.ogg')];
-  skin.wall4Sound = [skin.assetUrl('wall4.mp3'), skin.assetUrl('wall4.ogg')];
 
   skin.dieSound = [skin.assetUrl('sfx_die.mp3'), skin.assetUrl('sfx_die.ogg')];
   skin.hitSound = [skin.assetUrl('sfx_hit.mp3'), skin.assetUrl('sfx_hit.ogg')];
@@ -165,12 +145,9 @@ exports.load = function(assetUrl, id) {
   skin.laserSound = [skin.assetUrl('laser.mp3'), skin.assetUrl('laser.ogg')];
   skin.splashSound = [skin.assetUrl('splash.mp3'), skin.assetUrl('splash.ogg')];
 
-  skin.additionalSound = config.additionalSound;
   // Settings
   skin.graph = config.graph;
   skin.background = skin.assetUrl('background.png');
-  skin.pegmanHeight = config.pegmanHeight || 24;
-  skin.pegmanWidth = config.pegmanWidth || 34;
-  skin.pegmanYOffset = config.pegmanYOffset || 0;
+
   return skin;
 };
