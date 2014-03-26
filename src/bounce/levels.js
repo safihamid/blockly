@@ -12,7 +12,6 @@ var tb = function(blocks) {
 module.exports = {
 
   '1': {
-    'ideal': 2,
     'requiredBlocks': [
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}]
     ],
@@ -69,7 +68,6 @@ module.exports = {
       <block type="bounce_whenRight" deletable="false" x="180" y="20"></block>'
   },
   '3': {
-    'ideal': 2,
     'requiredBlocks': [
       [{'test': 'moveUp', 'type': 'bounce_moveUp'}]
     ],
@@ -98,7 +96,6 @@ module.exports = {
      '<block type="bounce_whenUp" deletable="false" x="20" y="20"></block>'
   },
   '4': {
-    'ideal': 8,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
@@ -136,7 +133,6 @@ module.exports = {
       <block type="bounce_whenDown" deletable="false" x="180" y="120"></block>'
   },
   '5': {
-    'ideal': 3,
     'timeoutFailureTick': 100,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
@@ -162,7 +158,6 @@ module.exports = {
      '<block type="bounce_whenPaddleCollided" deletable="false" x="20" y="20"></block>'
   },
   '6': {
-    'ideal': 6,
     'timeoutFailureTick': 140,
     'requiredBlocks': [
       [{'test': 'bounceBall', 'type': 'bounce_bounceBall'}]
@@ -189,7 +184,6 @@ module.exports = {
       <block type="bounce_whenWallCollided" deletable="false" x="20" y="120"></block>'
   },
   '7': {
-    'ideal': 10,
     'timeoutFailureTick': 900,
     'requiredBlocks': [
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
@@ -227,7 +221,6 @@ module.exports = {
   },
 /*
   '8': {
-    'ideal': 8,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
     ],
@@ -260,7 +253,6 @@ module.exports = {
       <block type="bounce_whenWallCollided" deletable="false" x="20" y="220"></block>'
   },
   '9': {
-    'ideal': 8,
     'requiredBlocks': [
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}]
     ],
@@ -294,7 +286,6 @@ module.exports = {
   },
 */
   '10': {
-    'ideal': 16,
     'requiredBlocks': [
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
@@ -341,7 +332,6 @@ module.exports = {
       <block type="bounce_whenBallMissesPaddle" deletable="false" x="20" y="340"></block>'
   },
   '11': {
-    'ideal': 22,
     'requiredBlocks': [
       [{'test': 'moveLeft', 'type': 'bounce_moveLeft'}],
       [{'test': 'moveRight', 'type': 'bounce_moveRight'}],
@@ -395,7 +385,6 @@ module.exports = {
       <block type="bounce_whenBallMissesPaddle" deletable="false" x="20" y="430"></block>'
   },
   '12': {
-    'ideal': 22,
     'requiredBlocks': [
     ],
     'scale': {
