@@ -79,6 +79,8 @@ BlocklyApps.init = function(config) {
 
   BlocklyApps.share = config.share;
   BlocklyApps.noPadding = config.no_padding;
+  
+  BlocklyApps.hideShowCode = config.hideShowCode;
 
   // Store configuration.
   onAttempt = config.onAttempt || function(report) {
@@ -228,9 +230,7 @@ BlocklyApps.init = function(config) {
 
   var showCode = document.getElementById('show-code-header');  
   if (showCode) {
-    if (config.hideShowCode) {
-      showCode.style.display = 'none';
-    } else {
+    if (!config.hideShowCode) {
       dom.addClickTouchEvent(showCode, function() {
         feedback.showGeneratedCode(BlocklyApps.Dialog);
       });
@@ -527,9 +527,15 @@ BlocklyApps.resizeHeaders = function() {
   var toolboxHeader = document.getElementById('toolbox-header');
   var showCodeHeader = document.getElementById('show-code-header');
 
-  var showCodeWidth = parseInt(window.getComputedStyle(showCodeHeader).width,
-                               10);
-
+  var showCodeWidth;
+  if (BlocklyApps.hideShowCode) {
+    showCodeWidth = 0;
+    showCodeHeader.style.display = "none";
+  }
+  else {
+    showCodeWidth = parseInt(window.getComputedStyle(showCodeHeader).width, 10);
+  }
+  
   toolboxHeader.style.width = (categoriesWidth + toolboxWidth) + 'px';
   workspaceHeader.style.width = (workspaceWidth -
                                  toolboxWidth -
