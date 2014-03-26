@@ -772,7 +772,7 @@ Bounce.init = function(config) {
   config.makeUrl = "http://code.org/bounce";
   config.makeImage = BlocklyApps.assetUrl('media/promo.png');
 
-  config.hideShowCode = true;
+  config.enableShowCode = false;
 
   config.preventExtraTopLevelBlocks = true;
 

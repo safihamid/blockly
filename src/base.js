@@ -80,7 +80,8 @@ BlocklyApps.init = function(config) {
   BlocklyApps.share = config.share;
   BlocklyApps.noPadding = config.no_padding;
   
-  BlocklyApps.hideShowCode = config.hideShowCode;
+  // enableShowCode defaults to true if not defined
+  BlocklyApps.enableShowCode = (config.enableShowCode === false) ? false : true;
 
   // Store configuration.
   onAttempt = config.onAttempt || function(report) {
@@ -230,7 +231,7 @@ BlocklyApps.init = function(config) {
 
   var showCode = document.getElementById('show-code-header');  
   if (showCode) {
-    if (!config.hideShowCode) {
+    if (BlocklyApps.enableShowCode) {
       dom.addClickTouchEvent(showCode, function() {
         feedback.showGeneratedCode(BlocklyApps.Dialog);
       });
@@ -528,12 +529,12 @@ BlocklyApps.resizeHeaders = function() {
   var showCodeHeader = document.getElementById('show-code-header');
 
   var showCodeWidth;
-  if (BlocklyApps.hideShowCode) {
-    showCodeWidth = 0;
-    showCodeHeader.style.display = "none";
+  if (BlocklyApps.enableShowCode) {
+    showCodeWidth = parseInt(window.getComputedStyle(showCodeHeader).width, 10);
   }
   else {
-    showCodeWidth = parseInt(window.getComputedStyle(showCodeHeader).width, 10);
+    showCodeWidth = 0;
+    showCodeHeader.style.display = "none";
   }
   
   toolboxHeader.style.width = (categoriesWidth + toolboxWidth) + 'px';

@@ -370,13 +370,12 @@ var getShowCodeElement = function(options) {
       button.style.display = 'none';
     });
 
-    // For now we want to hide lines of code for flappy app
-    if (options.app === 'flappy') {
-      lines.innerHTML = '<br>';
-      showCodeDiv.appendChild(lines);
-    } else {
+    if (BlocklyApps.enableShowCode) {
       showCodeDiv.appendChild(lines);
       showCodeDiv.appendChild(showCodeLink);
+    } else {
+      lines.innerHTML = '<br>';
+      showCodeDiv.appendChild(lines);
     }
 
     return showCodeDiv;
