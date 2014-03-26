@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative '../util'
+require_relative '../lib/util'
 
 system_ex 'sudo npm install -g grunt-cli'
 system_ex 'sudo npm install'
