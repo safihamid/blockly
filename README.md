@@ -18,6 +18,20 @@ of Code. Information about Blockly can be found in the
 
 ## Quick Start
 
+### Prerequisite: Cairo
+
+One of the node modules, node-canvas, depends on Cairo being installed.
+
+Instructions for MacOSX using [brew](http://brew.sh/) (instructions for other platforms [can be found here](https://github.com/LearnBoost/node-canvas/wiki)):
+
+```
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"
+brew update
+brew install cairo
+```
+
+### Installing and Running Blockly
+
 ```
 # Get the code
 git clone https://github.com/code-dot-org/blockly.git blockly
@@ -37,15 +51,6 @@ open http://localhost:8000
 
 # Run tests (after a build, or while dev is running)
 grunt test
-```
-
-One of the node modules, node-canvas, depends on Cairo being installed.
-Instructions for installing Cairo can be found at https://github.com/LearnBoost/node-canvas/wiki.
-Instructions for MacOSX:
-```
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"
-brew update
-brew install cairo
 ```
 
 ## Project Specification
