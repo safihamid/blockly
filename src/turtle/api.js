@@ -8,6 +8,22 @@ exports.moveBackward = function(distance, id) {
   BlocklyApps.log.push(['FD', -distance, id]);
 };
 
+exports.moveUp = function(distance, id) {
+  BlocklyApps.log.push(['MV', distance, 0, id]);
+};
+
+exports.moveDown = function(distance, id) {
+  BlocklyApps.log.push(['MV', distance, 180, id]);
+};
+
+exports.moveLeft = function(distance, id) {
+  BlocklyApps.log.push(['MV', distance, 270, id]);
+};
+
+exports.moveRight = function(distance, id) {
+  BlocklyApps.log.push(['MV', distance, 90, id]);
+};
+
 exports.jumpForward = function(distance, id) {
   BlocklyApps.log.push(['JF', distance, id]);
 };

@@ -439,6 +439,79 @@ exports.install = function(blockly, skin) {
     }
   };
 
+  blockly.Blocks.simple_move = {};
+  
+  blockly.Blocks.simple_move.DIRECTIONS =
+  {
+    left: {
+      text: 'left',
+      moveFunction: 'moveLeft',
+      image: skin.assetUrl('left.png')
+    },
+    right: {
+      text: 'right',
+      moveFunction: 'moveRight',
+      image: skin.assetUrl('right.png')
+    },
+    up: {
+      text: 'up',
+      moveFunction: 'moveUp',
+      image: skin.assetUrl('up.png')
+    },
+    down: {
+      text: 'down',
+      moveFunction: 'moveDown',
+      image: skin.assetUrl('down.png')
+    }
+  };
+
+  blockly.Blocks.simple_move.generate_simple_move = function(direction) {
+    return {
+      helpUrl: '',
+        init: function() {
+          this.setHSV(184, 1.00, 0.74);
+          this.appendDummyInput().appendTitle(blockly.Blocks.simple_move.DIRECTIONS[direction]['text'])
+            .appendTitle(new blockly.FieldImage(blockly.Blocks.simple_move.DIRECTIONS[direction]['image'], 84, 84));
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+          this.setTooltip(msg.jumpTooltip());
+        }
+    };
+  };
+  
+  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generate_simple_move('up');
+  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_simple_move('down');
+  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_simple_move('left');
+  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_simple_move('right');
+  
+  generator.generate_simple_move = function(direction) {
+    return function() {
+      return 'Turtle.' + blockly.Blocks.simple_move.DIRECTIONS[direction]['moveFunction'] + '(50,' + '\'block_id_' + this.id + '\');\n';
+    }
+  };
+
+  generator.simple_move_up = generator.generate_simple_move('up');
+  generator.simple_move_left = generator.generate_simple_move('left');
+  generator.simple_move_right = generator.generate_simple_move('right');
+  generator.simple_move_down = generator.generate_simple_move('down'); 
+  
+  blockly.Blocks.simple_jump = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput().appendTitle('JUMP')
+        .appendTitle(new blockly.FieldImage('https://d30y9cdsu7xlg0.cloudfront.net/png/11518-84.png?Expires=1395852637&Signature=kBjJL6anfgIyQxp3Vb80m5kJEOECidaJSY1T7rhDs17qbQJaRfJNp5NTa1N~5YL75p8mYliYEonsQQtOBFsJczGLKUO~2-UqLrqA-9g9aRNMOUBSbz~hDVxOQ3D4Nxee1MqRj4I6ljr5oJoSroI1hcnMl8p2psFCyS5oyFCd6H8_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q', 84, 84));
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.jumpTooltip());
+    }
+  };
+
+  generator.simple_jump = function() {
+    return 'Turtle.jumpForward(50,' + '\'block_id_' + this.id + '\');\n';
+  };
+
+
   blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];
@@ -546,6 +619,26 @@ exports.install = function(blockly, skin) {
         generator.ORDER_NONE) || '\'#000000\'';
     return 'Turtle.penColour(' + colour + ', \'block_id_' +
         this.id + '\');\n';
+  };
+  
+  blockly.Blocks.up_big = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.STATE), 'VISIBILITY');
+      this.setTooltip(msg.turtleVisibilityTooltip());
+    }
+  };
+
+  generator.up_big = function() {
+    // Generate JavaScript for setting the colour.
+    var colour = generator.valueToCode(this, 'COLOUR',
+      generator.ORDER_NONE) || '\'#000000\'';
+    return 'Turtle.penColour(' + colour + ', \'block_id_' +
+      this.id + '\');\n';
   };
 
   blockly.Blocks.turtle_visibility = {

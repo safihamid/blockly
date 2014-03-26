@@ -371,6 +371,71 @@ Turtle.animate = function() {
   Turtle.pid = window.setTimeout(Turtle.animate, stepSpeed);
 };
 
+Turtle.startPathIfPenDown_ = function () {
+  if (!Turtle.penDownValue) {
+    return;
+  }
+  
+  Turtle.ctxScratch.beginPath();
+  Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
+};
+Turtle.moveForward_ = function (distance) {
+  Turtle.x += distance * Math.sin(2 * Math.PI * Turtle.heading / 360);
+  Turtle.y -= distance * Math.cos(2 * Math.PI * Turtle.heading / 360);
+};
+Turtle.moveByRelativePosition_ = function (x, y) {
+  Turtle.x += x;
+  Turtle.y += y;
+}
+Turtle.drawPathToTurtle_ = function (x, y, isDot) {
+  Turtle.ctxScratch.lineTo(x, y);
+  Turtle.ctxScratch.stroke();
+};
+Turtle.markCurrentColourUsed_ = function () {
+  var colour = Turtle.ctxScratch.strokeStyle.toLowerCase();
+  if (Turtle.coloursUsed.indexOf(colour) == -1) {
+    Turtle.coloursUsed.push(colour);
+  }
+};
+Turtle.drawDotAtTurtle_ = function (x, y) {
+  // WebKit (unlike Gecko) draws nothing for a zero-length line, so draw a very short line.
+  var dotLineLength = 0.1;
+  Turtle.ctxScratch.lineTo(x, y + dotLineLength);
+  Turtle.ctxScratch.stroke();
+};
+
+Turtle.drawToTurtleIfPenDown_ = function (distance) {
+  if (!Turtle.penDownValue) {
+    return;
+  }
+
+  var isDot = (distance == 0);
+  if (isDot) {
+    Turtle.drawDotAtTurtle_(Turtle.x, Turtle.y);
+  } else {
+    Turtle.drawPathToTurtle_(Turtle.x, Turtle.y);
+  }
+  Turtle.markCurrentColourUsed_();
+};
+Turtle.turnByDegrees_ = function (degreesRight) {
+  Turtle.setHeading_(Turtle.heading + degreesRight)
+};
+Turtle.setHeading_ = function (heading) {
+  heading = Turtle.constrainDegrees_(heading);
+  Turtle.heading = heading;
+};
+Turtle.constrainDegrees_ = function (degrees) {
+  degrees %= 360;
+  if (degrees < 0) {
+    degrees += 360;
+  }
+  return degrees;
+};
+Turtle.moveForwardAndDraw_ = function (distance) {
+  Turtle.startPathIfPenDown_();
+  Turtle.moveForward_(distance);
+  Turtle.drawToTurtleIfPenDown_(distance);
+};
 /**
  * Execute one step.
  * @param {string} command Logo-style command (e.g. 'FD' or 'RT').
@@ -379,39 +444,22 @@ Turtle.animate = function() {
 Turtle.step = function(command, values) {
   switch (command) {
     case 'FD':  // Forward
-      if (Turtle.penDownValue) {
-        Turtle.ctxScratch.beginPath();
-        Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
-      }
-      /* falls through */
+      var distance = values[0];
+      Turtle.moveForwardAndDraw_(distance);
+      break;
     case 'JF':  // Jump forward
       var distance = values[0];
-      var bump;
-      if (distance) {
-        Turtle.x += distance * Math.sin(2 * Math.PI * Turtle.heading / 360);
-        Turtle.y -= distance * Math.cos(2 * Math.PI * Turtle.heading / 360);
-        bump = 0;
-      } else {
-        // WebKit (unlike Gecko) draws nothing for a zero-length line.
-        bump = 0.1;
-      }
-      if (command == 'FD' && Turtle.penDownValue) {
-        Turtle.ctxScratch.lineTo(Turtle.x, Turtle.y + bump);
-        Turtle.ctxScratch.stroke();
-        if (distance) {
-          var colour = Turtle.ctxScratch.strokeStyle.toLowerCase();
-          if (Turtle.coloursUsed.indexOf(colour) == -1) {
-            Turtle.coloursUsed.push(colour);
-          }
-        }
-      }
+      Turtle.moveForward_(distance);
+      break;
+    case 'MV':  // Move      
+      var distance = values[0];
+      var heading = values[1]; 
+      
+      Turtle.setHeading_(heading);
+      Turtle.moveForwardAndDraw_(distance);
       break;
     case 'RT':  // Right Turn
-      Turtle.heading += values[0];
-      Turtle.heading %= 360;
-      if (Turtle.heading < 0) {
-        Turtle.heading += 360;
-      }
+      Turtle.turnByDegrees_(values[0]);
       break;
     case 'DP':  // Draw Print
       Turtle.ctxScratch.save();
