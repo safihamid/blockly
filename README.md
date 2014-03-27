@@ -24,11 +24,10 @@ One of the node modules, node-canvas, depends on Cairo being installed.
 
 Instructions for MacOSX using [brew](http://brew.sh/) (instructions for other platforms [can be found here](https://github.com/LearnBoost/node-canvas/wiki)):
 
-```
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"
-brew update
-brew install cairo
-```
+1. Install [XQuartz from here](http://xquartz.macosforge.org/landing/)
+2. `export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"`
+3. `brew update`
+4. `brew install cairo`
 
 ### Installing and Running Blockly
 
