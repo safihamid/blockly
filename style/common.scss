@@ -418,11 +418,11 @@ $modal-image-margin-gap: 10px;
     border: solid;
     border-radius: 10px;
     border-color: red;
-    padding: 15px;
 
     p {
-      margin: 0px;
+      margin: 15px;
       color: red;
+      padding-right: 20%;
     }
 
     .congrats {
@@ -434,11 +434,9 @@ $modal-image-margin-gap: 10px;
       font-weight: bold;
     }
 
-    .feedback-image {
+    .hint-image {
       float: right;
-      border: none;
       width: 20%;
-      margin: 0px;
     }
   }
 }
