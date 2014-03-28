@@ -398,7 +398,7 @@ $modal-image-margin-gap: 10px;
   }
 
   .instruction-with-image {
-    padding-left: 42%
+    padding-left: 42%;
   }
 
   .feedback-image {
@@ -407,12 +407,52 @@ $modal-image-margin-gap: 10px;
     margin: 15px;
     float: left;
     border: lightgrey;
-    border-style: solid
+    border-style: solid;
   }
 
   .feedback-links {
     margin-top: 15px;
   }
+
+  .feedback-callout {
+    border: solid;
+    border-radius: 10px;
+    border-color: red;
+    padding: 15px;
+
+    p {
+      margin: 0px;
+      color: red;
+    }
+
+    .congrats {
+      font-size: 24px;
+      line-height: 27px;
+    }
+
+    .hint-header {
+      font-weight: bold;
+    }
+
+    .feedback-image {
+      float: right;
+      border: none;
+      width: 20%;
+      margin: 0px;
+    }
+  }
+}
+
+.yellow-background {
+  background-color: #ffc459;
+}
+
+.light-yellow-background {
+  background-color: #fff7df;
+}
+
+.white-background {
+  background-color: white;
 }
 
 .dialog-title {
