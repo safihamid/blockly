@@ -52,6 +52,19 @@ open http://localhost:8000
 grunt test
 ```
 
+### Localization
+
+Since localizing in to many languages dramatically slows down the build, the
+default target locales are `en_us` and `en_ploc` (pseudolocalized). To build
+all available locales, specify `MOOC_LOCALIZE=1` in your environment:
+
+```bash
+MOOC_LOCALIZE=1 grunt rebuild
+```
+
+See [cdo-i18n](https://github.com/code-dot-org/cdo-i18n) for more information
+about the localization of Code.org projects.
+
 ## Project Specification
 
 Both of these tutorials are found on code.org/learn or csedweek.org/learn. At
@@ -92,20 +105,6 @@ For notes on our pull process, where to find tasks to work on, etc.—see the Da
 - 2 space indent.
 - 4 space indent on long line breaks.
 - `grunt jshint` should report 0 warnings or errors.
-
-### Localization
-
-Since localizing in to many languages dramatically slows down the build, the
-default target locales are `en_us` and `en_ploc` (pseudolocalized). To build
-all available locales, specify `MOOC_LOCALIZE=1` in your environment:
-
-```bash
-MOOC_LOCALIZE=1 grunt rebuild
-```
-
-See [cdo-i18n](https://github.com/code-dot-org/cdo-i18n) for more information
-about the localization of Code.org projects.
-
 
 ## Releases
 
