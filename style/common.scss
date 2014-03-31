@@ -369,6 +369,14 @@ input[type="radio"] {
     font-size: 14px;
     line-height: inherit;
     color: $charcoal;
+
+    a {
+      font-weight: bold;
+      color: $purple;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .generatedCode {
     font-size: 14px;
