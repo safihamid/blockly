@@ -501,7 +501,12 @@ FeedbackBlocks.prototype.show = function() {
 };
 
 var getGeneratedCodeElement = function() {
-  var infoMessage = BlocklyApps.editCode ?  "" : msg.generatedCodeInfo();
+  var codeInfoMsgParams = {
+    berkeleyLink: "<a href='http://bjc.berkeley.edu/' target='_blank'>Berkeley</a>",
+    harvardLink: "<a href='https://cs50.harvard.edu/' target='_blank'>Harvard</a>"
+  };
+
+  var infoMessage = BlocklyApps.editCode ?  "" : msg.generatedCodeInfo(codeInfoMsgParams);
   var code = getGeneratedCodeString();
 
   var codeDiv = document.createElement('div');
