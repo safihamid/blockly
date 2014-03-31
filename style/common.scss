@@ -362,6 +362,36 @@ input[type="radio"] {
     .blocklyIconMark, .blocklyTooltipText, .goog-menuitem-content {
   @include font;
 }
+.goog-menu {
+  border: 0;
+  box-shadow: 4px 4px 6px #bbb;
+  border-width: 2px;
+  border-color: rgba(158, 107, 148, 0.5)
+}
+
+.goog-menuitem {
+  height: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.goog-menuitem-highlight,
+.goog-menuitem-hover {
+  border-width: 0;
+  background-color: #57e;
+}
+
+.goog-menuitem-highlight .goog-menuitem-content {
+ color: #fff;
+}
+
+.goog-option-selected .goog-menuitem-checkbox:before {
+  content: "✓";
+}
+
+.goog-menuitem-checkbox {
+  background: ""
+}
 
 .generated-code-container {
   margin-top: 10px;
