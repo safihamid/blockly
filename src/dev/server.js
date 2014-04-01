@@ -37,6 +37,10 @@ var renderApp = function(app, req, res) {
   });
 };
 
+app.get('/blockly/*', function(req, res) {
+  res.redirect(req.url.slice(8));
+});
+
 app.get('/maze', function(req, res) {
   renderApp('maze', req, res);
 });
@@ -51,6 +55,10 @@ app.get('/bounce', function(req, res) {
 
 app.get('/flappy', function(req, res) {
   renderApp('flappy', req, res);
+});
+
+app.get('/studio', function(req, res) {
+  renderApp('studio', req, res);
 });
 
 module.exports = app;
