@@ -14,7 +14,7 @@ exports.Direction = {
 
 exports.PADDLE_BALL_COLLIDE_DISTANCE = 0.7;
 exports.FINISH_COLLIDE_DISTANCE = 0.5;
-exports.DEFAULT_PADDLE_SPEED = 0.1;
+exports.DEFAULT_SPRITE_SPEED = 0.1;
 exports.Y_TOP_BOUNDARY = -0.2;
 
 /**
@@ -27,5 +27,5 @@ exports.SquareType = {
   WALL: 1,
   GOAL: 2,
   PADDLEFINISH: 8,
-  PADDLESTART: 16,
+  SPRITESTART: 16,
 };

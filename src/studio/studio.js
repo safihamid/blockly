@@ -110,7 +110,7 @@ var loadLevel = function() {
   Studio.SQUARE_SIZE = 50;
   Studio.PEGMAN_HEIGHT = skin.pegmanHeight;
   Studio.PEGMAN_WIDTH = skin.pegmanWidth;
-  Studio.PADDLE_Y_OFFSET = skin.paddleYOffset;
+  Studio.SPRITE_Y_OFFSET = skin.spriteYOffset;
   // Height and width of the goal and obstacles.
   Studio.MARKER_HEIGHT = 43;
   Studio.MARKER_WIDTH = 50;
@@ -314,26 +314,28 @@ var drawMap = function() {
     }
   }
 
-  if (Studio.paddleStart_) {
-    // Paddle's clipPath element, whose (x, y) is reset by Studio.displayPaddle
-    var paddleClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-    paddleClip.setAttribute('id', 'paddleClipPath');
-    var paddleClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
-    paddleClipRect.setAttribute('id', 'paddleClipRect');
-    paddleClipRect.setAttribute('width', Studio.PEGMAN_WIDTH);
-    paddleClipRect.setAttribute('height', Studio.PEGMAN_HEIGHT);
-    paddleClip.appendChild(paddleClipRect);
-    svg.appendChild(paddleClip);
-    
-    // Add paddle.
-    var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    paddleIcon.setAttribute('id', 'paddle');
-    paddleIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.paddle);
-    paddleIcon.setAttribute('height', Studio.PEGMAN_HEIGHT);
-    paddleIcon.setAttribute('width', Studio.PEGMAN_WIDTH);
-    paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
-    svg.appendChild(paddleIcon);
+  if (Studio.spriteStart_) {
+    for (i = 0; i < Studio.spriteCount; i++) {
+      // Sprite clipPath element, whose (x, y) is reset by Studio.displaySprite
+      var spriteClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
+      spriteClip.setAttribute('id', 'spriteClipPath' + i);
+      var spriteClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
+      spriteClipRect.setAttribute('id', 'spriteClipRect' + i);
+      spriteClipRect.setAttribute('width', Studio.PEGMAN_WIDTH);
+      spriteClipRect.setAttribute('height', Studio.PEGMAN_HEIGHT);
+      spriteClip.appendChild(spriteClipRect);
+      svg.appendChild(spriteClip);
+      
+      // Add sprite.
+      var spriteIcon = document.createElementNS(Blockly.SVG_NS, 'image');
+      spriteIcon.setAttribute('id', 'sprite' + i);
+      spriteIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                                skin.sprite);
+      spriteIcon.setAttribute('height', Studio.PEGMAN_HEIGHT);
+      spriteIcon.setAttribute('width', Studio.PEGMAN_WIDTH);
+      spriteIcon.setAttribute('clip-path', 'url(#spriteClipPath' + i + ')');
+      svg.appendChild(spriteIcon);
+    }
   }
   
   if (Studio.paddleFinish_) {
@@ -441,7 +443,9 @@ Studio.onTick = function() {
     }
   }
 
-  Studio.displayPaddle(Studio.paddleX, Studio.paddleY);
+  for (var i = 0; i < Studio.spriteCount; i++) {
+    Studio.displaySprite(i);
+  }
   
   if (checkFinished()) {
     Studio.onPuzzleComplete();
@@ -544,6 +548,8 @@ Studio.init = function(config) {
     Blockly.SNAP_RADIUS *= Studio.scale.snapRadius;
     
     Studio.paddleFinishCount = 0;
+    Studio.spriteCount = 0;
+    Studio.sprite = [];
     
     // Locate the start and finish squares.
     for (var y = 0; y < Studio.ROWS; y++) {
@@ -554,8 +560,13 @@ Studio.init = function(config) {
           }
           Studio.paddleFinish_[Studio.paddleFinishCount] = {x: x, y: y};
           Studio.paddleFinishCount++;
-        } else if (Studio.map[y][x] & SquareType.PADDLESTART) {
-          Studio.paddleStart_ = {x: x, y: y};
+        } else if (Studio.map[y][x] & SquareType.SPRITESTART) {
+          if (0 === Studio.spriteCount) {
+            Studio.spriteStart_ = [];
+          }
+          Studio.sprite[Studio.spriteCount] = [];
+          Studio.spriteStart_[Studio.spriteCount] = {x: x, y: y};
+          Studio.spriteCount++;
         } else if (Studio.map[y][x] & SquareType.GOAL) {
           Studio.goalLocated_ = true;
         }
@@ -648,14 +659,16 @@ BlocklyApps.reset = function(first) {
 
   // Reset configurable variables
   Studio.setBackground('hardcourt');
-  Studio.setPaddle('hardcourt');
 
-  // Move Paddle into position.
-  Studio.paddleX = Studio.paddleStart_.x;
-  Studio.paddleY = Studio.paddleStart_.y;
-  Studio.paddleSpeed = tiles.DEFAULT_PADDLE_SPEED;
-  
-  Studio.displayPaddle(Studio.paddleX, Studio.paddleY);
+  // Move sprites into position.
+  for (i = 0; i < Studio.spriteCount; i++) {
+    Studio.sprite[i].x = Studio.spriteStart_[i].x;
+    Studio.sprite[i].y = Studio.spriteStart_[i].y;
+    Studio.sprite[i].speed = tiles.DEFAULT_SPRITE_SPEED;
+
+    Studio.setSprite(i, 'hardcourt');
+    Studio.displaySprite(i);
+  }
 
   var svg = document.getElementById('svgStudio');
 
@@ -960,21 +973,17 @@ Studio.setTileTransparent = function() {
   }
 };
 
-/**
- * Display Paddle at the specified location
- * @param {number} x Horizontal grid (or fraction thereof).
- * @param {number} y Vertical grid (or fraction thereof).
- */
-Studio.displayPaddle = function(x, y) {
-  var paddleIcon = document.getElementById('paddle');
-  paddleIcon.setAttribute('x',
-                          x * Studio.SQUARE_SIZE);
-  paddleIcon.setAttribute('y',
-                          y * Studio.SQUARE_SIZE + Studio.PADDLE_Y_OFFSET);
+Studio.displaySprite = function(i) {
+  var xCoord = Studio.sprite[i].x * Studio.SQUARE_SIZE;
+  var yCoord = Studio.sprite[i].y * Studio.SQUARE_SIZE + Studio.SPRITE_Y_OFFSET;
+
+  var spriteIcon = document.getElementById('sprite' + i);
+  spriteIcon.setAttribute('x', xCoord);
+  spriteIcon.setAttribute('y', yCoord);
   
-  var paddleClipRect = document.getElementById('paddleClipRect');
-  paddleClipRect.setAttribute('x', x * Studio.SQUARE_SIZE);
-  paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
+  var spriteClipRect = document.getElementById('spriteClipRect' + i);
+  spriteClipRect.setAttribute('x', xCoord);
+  spriteClipRect.setAttribute('y', yCoord);
 };
 
 Studio.displayScore = function() {
@@ -1038,10 +1047,10 @@ Studio.setBackground = function (value) {
   }
 };
 
-Studio.setPaddle = function (value) {
-  var element = document.getElementById('paddle');
+Studio.setSprite = function (index, value) {
+  var element = document.getElementById('sprite' + index);
   element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-    skinTheme(value).paddle);
+    skinTheme(value).sprite);
 };
 
 Studio.timedOut = function() {
@@ -1054,10 +1063,10 @@ Studio.allFinishesComplete = function() {
     var finished, playSound;
     for (i = 0, finished = 0; i < Studio.paddleFinishCount; i++) {
       if (!Studio.paddleFinish_[i].finished) {
-        if (essentiallyEqual(Studio.paddleX,
+        if (essentiallyEqual(Studio.sprite[0].x,
                              Studio.paddleFinish_[i].x,
                              tiles.FINISH_COLLIDE_DISTANCE) &&
-            essentiallyEqual(Studio.paddleY,
+            essentiallyEqual(Studio.sprite[0].y,
                              Studio.paddleFinish_[i].y,
                              tiles.FINISH_COLLIDE_DISTANCE)) {
           Studio.paddleFinish_[i].finished = true;

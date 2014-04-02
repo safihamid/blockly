@@ -13,7 +13,7 @@ module.exports = {
 
   '1': {
     'requiredBlocks': [
-      [{'test': 'moveLeft', 'type': 'studio_moveLeft'}]
+      [{'test': 'move', 'type': 'studio_move'}]
     ],
     'scale': {
       'snapRadius': 2
@@ -32,16 +32,14 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
     'toolbox':
-      tb('<block type="studio_moveLeft"></block> \
-          <block type="studio_moveRight"></block>'),
+      tb('<block type="studio_move"></block>'),
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block>'
   },
   '2': {
     'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'moveRight', 'type': 'studio_moveRight'}],
-      [{'test': 'moveLeft', 'type': 'studio_moveLeft'}]
+      [{'test': 'move', 'type': 'studio_move'}],
     ],
     'scale': {
       'snapRadius': 2
@@ -61,8 +59,7 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
     'toolbox':
-      tb('<block type="studio_moveLeft"></block> \
-          <block type="studio_moveRight"></block>'),
+      tb('<block type="studio_move"></block>'),
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenRight" deletable="false" x="180" y="20"></block>'
@@ -88,19 +85,13 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
     'toolbox':
-      tb('<block type="studio_moveLeft"></block> \
-          <block type="studio_moveRight"></block> \
-          <block type="studio_moveUp"></block> \
-          <block type="studio_moveDown"></block>'),
+      tb('<block type="studio_move"></block>'),
     'startBlocks':
      '<block type="studio_whenUp" deletable="false" x="20" y="20"></block>'
   },
   '4': {
     'requiredBlocks': [
-      [{'test': 'moveRight', 'type': 'studio_moveRight'}],
-      [{'test': 'moveLeft', 'type': 'studio_moveLeft'}],
-      [{'test': 'moveUp', 'type': 'studio_moveUp'}],
-      [{'test': 'moveDown', 'type': 'studio_moveDown'}]
+      [{'test': 'move', 'type': 'studio_move'}],
     ],
     'scale': {
       'snapRadius': 2
@@ -122,14 +113,50 @@ module.exports = {
       [0, 0, 0, 0, 0, 8, 0, 0]
     ],
     'toolbox':
-      tb('<block type="studio_moveLeft"></block> \
-          <block type="studio_moveRight"></block> \
-          <block type="studio_moveUp"></block> \
-          <block type="studio_moveDown"></block>'),
+      tb('<block type="studio_move"></block>'),
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenRight" deletable="false" x="180" y="20"></block> \
       <block type="studio_whenUp" deletable="false" x="20" y="120"></block> \
       <block type="studio_whenDown" deletable="false" x="180" y="120"></block>'
+  },
+  '99': {
+    'requiredBlocks': [
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'softButtons': [
+      'leftButton',
+      'rightButton',
+      'downButton',
+      'upButton'
+    ],
+    'freePlay': true,
+    'map': [
+      [1, 1, 2, 2, 2, 2, 1, 1],
+      [1, 0,16, 0, 0,16, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0,16, 0, 0,16, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0,16, 0, 0,16, 0, 1]
+    ],
+    'toolbox':
+      tb('<block type="studio_move"></block> \
+          <block type="studio_playSound"></block> \
+          <block type="studio_incrementScore"></block> \
+          <block type="studio_setSpriteSpeed"></block> \
+          <block type="studio_setBackground"></block> \
+          <block type="studio_setSprite"></block>'),
+    'startBlocks':
+     '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
+      <block type="studio_whenLeft" deletable="false" x="20" y="120"></block> \
+      <block type="studio_whenRight" deletable="false" x="180" y="120"></block> \
+      <block type="studio_whenUp" deletable="false" x="20" y="220"></block> \
+      <block type="studio_whenDown" deletable="false" x="180" y="220"></block> \
+      <block type="studio_whenPaddleCollided" deletable="false" x="20" y="320"></block> \
+      <block type="studio_whenWallCollided" deletable="false" x="180" y="320"></block>'
   },
 };

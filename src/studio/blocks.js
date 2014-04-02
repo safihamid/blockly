@@ -9,17 +9,24 @@
 var msg = require('../../locale/current/studio');
 var codegen = require('../codegen');
 
-var generateSetterCode = function (ctx, name) {
-  var value = ctx.getTitleValue('VALUE');
+var generateSetterCode = function (opts) {
+  var value = opts.ctx.getTitleValue('VALUE');
   if (value === "random") {
-    var allValues = ctx.VALUES.slice(1).map(function (item) {
+    var allValues = opts.ctx.VALUES.slice(1).map(function (item) {
       return item[1];
     });
     value = 'Studio.random([' + allValues + '])';
   }
 
-  return 'Studio.' + name + '(\'block_id_' + ctx.id + '\', ' +
-    value + ');\n';
+  if (opts.index) {
+    return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
+      opts.ctx[opts.index + 'S'][opts.ctx.getTitleValue(opts.index)][1] +
+      ', ' + value + ');\n';
+  }
+  else {
+    return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
+      value + ');\n';
+  }
 };
 
 // Install extensions to Blockly's language and JavaScript generator.
@@ -154,76 +161,40 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
 
-  blockly.Blocks.studio_moveLeft = {
+  blockly.Blocks.studio_move = {
     // Block for moving left.
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.moveLeft());
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.moveLeftTooltip());
-    }
-  };
-  
-  generator.studio_moveLeft = function() {
-    // Generate JavaScript for moving left.
-    return 'Studio.moveLeft(\'block_id_' + this.id + '\');\n';
-  };
-  
-  blockly.Blocks.studio_moveRight = {
-    // Block for moving right.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(184, 1.00, 0.74);
+        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
       this.appendDummyInput()
-        .appendTitle(msg.moveRight());
+        .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
       this.setPreviousStatement(true);
+      this.setInputsInline(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.moveRightTooltip());
+      this.setTooltip(msg.moveTooltip());
     }
   };
+
+  blockly.Blocks.studio_move.SPRITE =
+      [[msg.moveSprite1(), '0'],
+       [msg.moveSprite2(), '1'],
+       [msg.moveSprite3(), '2'],
+       [msg.moveSprite4(), '3'],
+       [msg.moveSprite5(), '4'],
+       [msg.moveSprite6(), '5']];
   
-  generator.studio_moveRight = function() {
-    // Generate JavaScript for moving right.
-    return 'Studio.moveRight(\'block_id_' + this.id + '\');\n';
-  };
-  
-  blockly.Blocks.studio_moveUp = {
-    // Block for moving up.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(msg.moveUp());
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.moveUpTooltip());
-    }
-  };
-  
-  generator.studio_moveUp = function() {
-    // Generate JavaScript for moving up.
-    return 'Studio.moveUp(\'block_id_' + this.id + '\');\n';
-  };
-  
-  blockly.Blocks.studio_moveDown = {
-    // Block for moving down.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(msg.moveDown());
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.moveDownTooltip());
-    }
-  };
-  
-  generator.studio_moveDown = function() {
-    // Generate JavaScript for moving down.
-    return 'Studio.moveDown(\'block_id_' + this.id + '\');\n';
+  blockly.Blocks.studio_move.DIR =
+      [[msg.up(), 'moveUp'],
+       [msg.down(), 'moveDown'],
+       [msg.left(), 'moveLeft'],
+       [msg.right(), 'moveRight']];
+
+  generator.studio_move = function() {
+    // Generate JavaScript for moving.
+    return 'Studio.' + this.getTitleValue('DIR') +
+      '(\'block_id_' + this.id + '\', ' + this.getTitleValue('SPRITE') + ');\n';
   };
 
   blockly.Blocks.studio_playSound = {
@@ -259,44 +230,31 @@ exports.install = function(blockly, skin) {
                this.getTitleValue('SOUND') + '\');\n';
   };
   
-  blockly.Blocks.studio_incrementPlayerScore = {
-    // Block for incrementing the player's score.
+  blockly.Blocks.studio_incrementScore = {
+    // Block for incrementing the score.
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(msg.incrementPlayerScore());
+        .appendTitle(new blockly.FieldDropdown(this.PLAYERS), 'PLAYER');
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.incrementPlayerScoreTooltip());
+      this.setTooltip(msg.incrementScoreTooltip());
     }
   };
   
-  generator.studio_incrementPlayerScore = function() {
-    // Generate JavaScript for incrementing the player's score.
-    return 'Studio.incrementPlayerScore(\'block_id_' + this.id + '\');\n';
+  blockly.Blocks.studio_incrementScore.PLAYERS =
+      [[msg.incrementPlayerScore(), 'player'],
+       [msg.incrementOpponentScore(), 'opponent']];
+  
+  generator.studio_incrementScore = function() {
+    // Generate JavaScript for incrementing the score.
+    return 'Studio.incrementScore(\'block_id_' + this.id + '\', \'' +
+                this.getTitleValue('PLAYER') + '\');\n';
   };
   
-  blockly.Blocks.studio_incrementOpponentScore = {
-    // Block for incrementing the opponent's score.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(msg.incrementOpponentScore());
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.incrementOpponentScoreTooltip());
-    }
-  };
-  
-  generator.studio_incrementOpponentScore = function() {
-    // Generate JavaScript for incrementing the opponent's score.
-    return 'Studio.incrementOpponentScore(\'block_id_' + this.id + '\');\n';
-  };
-
-  blockly.Blocks.studio_setPaddleSpeed = {
-    // Block for setting paddle speed
+  blockly.Blocks.studio_setSpriteSpeed = {
+    // Block for setting sprite speed
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
@@ -304,23 +262,37 @@ exports.install = function(blockly, skin) {
 
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-          .appendTitle(dropdown, 'VALUE');
+        .appendTitle(new blockly.FieldDropdown(this.SPRITES), 'SPRITE');
+      this.appendDummyInput()
+        .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.setPaddleSpeedTooltip());
+      this.setTooltip(msg.setSpriteSpeedTooltip());
     }
   };
 
-  blockly.Blocks.studio_setPaddleSpeed.VALUES =
-      [[msg.setPaddleSpeedRandom(), 'random'],
-       [msg.setPaddleSpeedVerySlow(), 'Studio.PaddleSpeed.VERY_SLOW'],
-       [msg.setPaddleSpeedSlow(), 'Studio.PaddleSpeed.SLOW'],
-       [msg.setPaddleSpeedNormal(), 'Studio.PaddleSpeed.NORMAL'],
-       [msg.setPaddleSpeedFast(), 'Studio.PaddleSpeed.FAST'],
-       [msg.setPaddleSpeedVeryFast(), 'Studio.PaddleSpeed.VERY_FAST']];
+  blockly.Blocks.studio_setSpriteSpeed.VALUES =
+      [[msg.setSpriteSpeedRandom(), 'random'],
+       [msg.setSpriteSpeedVerySlow(), 'Studio.SpriteSpeed.VERY_SLOW'],
+       [msg.setSpriteSpeedSlow(), 'Studio.SpriteSpeed.SLOW'],
+       [msg.setSpriteSpeedNormal(), 'Studio.SpriteSpeed.NORMAL'],
+       [msg.setSpriteSpeedFast(), 'Studio.SpriteSpeed.FAST'],
+       [msg.setSpriteSpeedVeryFast(), 'Studio.SpriteSpeed.VERY_FAST']];
 
-  generator.studio_setPaddleSpeed = function (velocity) {
-    return generateSetterCode(this, 'setPaddleSpeed');
+  blockly.Blocks.studio_setSpriteSpeed.SPRITES =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
+
+  generator.studio_setSpriteSpeed = function () {
+    return generateSetterCode({
+      ctx: this,
+      index: 'SPRITE',
+      name: 'setSpriteSpeed'});
   };
 
   /**
@@ -348,13 +320,13 @@ exports.install = function(blockly, skin) {
        [msg.setBackgroundRetro(), '"retro"']];
 
   generator.studio_setBackground = function() {
-    return generateSetterCode(this, 'setBackground');
+    return generateSetterCode({ctx: this, name: 'setBackground'});
   };
 
   /**
-   * setPaddle
+   * setSprite
    */
-  blockly.Blocks.studio_setPaddle = {
+  blockly.Blocks.studio_setSprite = {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
@@ -362,21 +334,31 @@ exports.install = function(blockly, skin) {
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
-          .appendTitle(dropdown, 'VALUE');
+        .appendTitle(new blockly.FieldDropdown(this.SPRITES), 'SPRITE');
+      this.appendDummyInput()
+        .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip(msg.setPaddleTooltip());
+      this.setTooltip(msg.setSpriteTooltip());
     }
   };
 
-  blockly.Blocks.studio_setPaddle.VALUES =
-      [[msg.setPaddleRandom(), 'random'],
-       [msg.setPaddleHardcourt(), '"hardcourt"'],
-       [msg.setPaddleRetro(), '"retro"']];
+  blockly.Blocks.studio_setSprite.SPRITES =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
 
-  generator.studio_setPaddle = function() {
-    return generateSetterCode(this, 'setPaddle');
+  blockly.Blocks.studio_setSprite.VALUES =
+      [[msg.setSpriteRandom(), 'random'],
+       [msg.setSpriteHardcourt(), '"hardcourt"'],
+       [msg.setSpriteRetro(), '"retro"']];
+
+  generator.studio_setSprite = function(i) {
+    return generateSetterCode({ctx: this, index: 'SPRITE', name: 'setSprite'});
   };
   
   delete blockly.Blocks.procedures_defreturn;
