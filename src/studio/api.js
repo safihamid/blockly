@@ -2,7 +2,7 @@ var tiles = require('./tiles');
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
 
-exports.PaddleSpeed = {
+exports.SpriteSpeed = {
   VERY_SLOW: 0.04,
   SLOW: 0.06,
   NORMAL: 0.1,
@@ -20,9 +20,9 @@ exports.setBackground = function (id, value) {
   Studio.setBackground(value);
 };
 
-exports.setPaddle = function (id, value) {
+exports.setSprite = function (id, spriteIndex, value) {
   BlocklyApps.highlight(id);
-  Studio.setPaddle(value);
+  Studio.setSprite(spriteIndex, value);
 };
 
 exports.setBackground = function (id, value) {
@@ -30,9 +30,9 @@ exports.setBackground = function (id, value) {
   Studio.setBackground(value);
 };
 
-exports.setPaddleSpeed = function (id, value) {
+exports.setSpriteSpeed = function (id, spriteIndex, value) {
   BlocklyApps.highlight(id);
-  Studio.paddleSpeed = value;
+  Studio.sprite[spriteIndex].speed = value;
 };
 
 exports.playSound = function(id, soundName) {
@@ -40,46 +40,44 @@ exports.playSound = function(id, soundName) {
   BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
-exports.moveLeft = function(id) {
+exports.moveLeft = function(id, spriteIndex) {
   BlocklyApps.highlight(id);
-  Studio.paddleX -= Studio.paddleSpeed;
-  if (Studio.paddleX < 0) {
-    Studio.paddleX = 0;
+  Studio.sprite[spriteIndex].x -= Studio.sprite[spriteIndex].speed;
+  if (Studio.sprite[spriteIndex].x < 0) {
+    Studio.sprite[spriteIndex].x = 0;
   }
 };
 
-exports.moveRight = function(id) {
+exports.moveRight = function(id, spriteIndex) {
   BlocklyApps.highlight(id);
-  Studio.paddleX += Studio.paddleSpeed;
-  if (Studio.paddleX > (Studio.COLS - 1)) {
-    Studio.paddleX = Studio.COLS - 1;
+  Studio.sprite[spriteIndex].x += Studio.sprite[spriteIndex].speed;
+  if (Studio.sprite[spriteIndex].x > (Studio.COLS - 1)) {
+    Studio.sprite[spriteIndex].x = Studio.COLS - 1;
   }
 };
 
-exports.moveUp = function(id) {
+exports.moveUp = function(id, spriteIndex) {
   BlocklyApps.highlight(id);
-  Studio.paddleY -= Studio.paddleSpeed;
-  if (Studio.paddleY < 0) {
-    Studio.paddleY = 0;
+  Studio.sprite[spriteIndex].y -= Studio.sprite[spriteIndex].speed;
+  if (Studio.sprite[spriteIndex].y < 0) {
+    Studio.sprite[spriteIndex].y = 0;
   }
 };
 
-exports.moveDown = function(id) {
+exports.moveDown = function(id, spriteIndex) {
   BlocklyApps.highlight(id);
-  Studio.paddleY += Studio.paddleSpeed;
-  if (Studio.paddleY > (Studio.ROWS - 1)) {
-    Studio.paddleY = Studio.ROWS - 1;
+  Studio.sprite[spriteIndex].y += Studio.sprite[spriteIndex].speed;
+  if (Studio.sprite[spriteIndex].y > (Studio.ROWS - 1)) {
+    Studio.sprite[spriteIndex].y = Studio.ROWS - 1;
   }
 };
 
-exports.incrementOpponentScore = function(id) {
+exports.incrementScore = function(id, player) {
   BlocklyApps.highlight(id);
-  Studio.opponentScore++;
-  Studio.displayScore();
-};
-
-exports.incrementPlayerScore = function(id) {
-  BlocklyApps.highlight(id);
-  Studio.playerScore++;
+  if (player == "opponent") {
+    Studio.opponentScore++;
+  } else {
+    Studio.playerScore++;
+  }
   Studio.displayScore();
 };

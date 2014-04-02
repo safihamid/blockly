@@ -22,7 +22,7 @@ exports.load = function(assetUrl, id) {
     background: skin.assetUrl('retro_background.png'),
     tiles: skin.assetUrl('retro_tiles_wall.png'),
     goalTiles: skin.assetUrl('retro_tiles_goal.png'),
-    paddle: skin.assetUrl('retro_paddle.png'),
+    sprite: skin.assetUrl('retro_paddle.png'),
   };
 
   // Images
@@ -30,7 +30,7 @@ exports.load = function(assetUrl, id) {
   skin.goalTiles = skin.assetUrl('tiles_goal.png');
   skin.goal = skin.assetUrl('goal.png');
   skin.goalSuccess = skin.assetUrl('goal_success.png');
-  skin.paddle = skin.assetUrl('paddle.png');
+  skin.sprite = skin.assetUrl('paddle.png');
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.hittingWallAnimation =
       skin.assetUrl(config.hittingWallAnimation);
@@ -70,6 +70,6 @@ exports.load = function(assetUrl, id) {
   }
   skin.pegmanHeight = config.pegmanHeight || 52;
   skin.pegmanWidth = config.pegmanWidth || 49;
-  skin.paddleYOffset = config.paddleYOffset || 0;
+  skin.spriteYOffset = config.spriteYOffset || 0;
   return skin;
 };

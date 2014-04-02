@@ -82,7 +82,7 @@
   "setPaddleRandom": "set random paddle",
   "setPaddleHardcourt": "set hardcourt paddle",
   "setPaddleRetro": "set retro paddle",
-  "setPaddleTooltip": "Sets the ball paddle",
+  "setPaddleTooltip": "Sets the paddle image",
   "setPaddleSpeedRandom": "set random paddle speed",
   "setPaddleSpeedVerySlow": "set very slow paddle speed",
   "setPaddleSpeedSlow": "set slow paddle speed",
