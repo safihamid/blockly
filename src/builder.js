@@ -20,8 +20,8 @@ exports.builderForm = function(onAttemptCallback) {
     onAttemptCallback({
       "instructions": instructions,
       "name": name,
-      "x": query['x'],
-      "y": query['y']
+      "x": query.x,
+      "y": query.y
     });
   });
 
