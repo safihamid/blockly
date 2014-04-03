@@ -459,7 +459,7 @@ Studio.onTick = function() {
           essentiallyEqual(Studio.sprite[i].y,
                            Studio.sprite[j].y,
                            tiles.SPRITE_COLLIDE_DISTANCE)) {
-        if (0 == (Studio.sprite[i].collisionMask & Math.pow(2, j))) {
+        if (0 === (Studio.sprite[i].collisionMask & Math.pow(2, j))) {
           Studio.sprite[i].collisionMask |= Math.pow(2, j);
           try {
             Studio.whenSpriteCollided[i][j](BlocklyApps, api);
@@ -921,12 +921,14 @@ Studio.execute = function() {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
+  var x;
+  var block;
   var blocks = Blockly.mainWorkspace.getTopBlocks(true);
 
   var whenSpriteClickedFunc = [];
   for (i = 0; i < Studio.spriteCount; i++) {
-    for (var x = 0; blocks[x]; x++) {
-      var block = blocks[x];
+    for (x = 0; blocks[x]; x++) {
+      block = blocks[x];
       if (block.type == 'studio_whenSpriteClicked' &&
           i == parseInt(block.getTitleValue('SPRITE'), 10)) {
         code = Blockly.Generator.blocksToCode('JavaScript', [ block ]);
@@ -945,8 +947,8 @@ Studio.execute = function() {
       if (i == j) {
         continue;
       }
-      for (var x = 0; blocks[x]; x++) {
-        var block = blocks[x];
+      for (x = 0; blocks[x]; x++) {
+        block = blocks[x];
         if (block.type == 'studio_whenSpriteCollided' &&
             i == parseInt(block.getTitleValue('SPRITE1'), 10) &&
             j == parseInt(block.getTitleValue('SPRITE2'), 10)) {
