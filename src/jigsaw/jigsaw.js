@@ -52,6 +52,34 @@ var infoText;
 
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
+Blockly.BlockSvg.NOTCH_WIDTH = 50;
+
+var notchHeight = 8;
+var notchWidthA = 6;
+var notchWidthB = 10;
+
+Blockly.BlockSvg.NOTCH_PATH_WIDTH = notchWidthA * 2 + notchWidthB;
+
+Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l ' +
+  notchWidthA + ',' + notchHeight + ' ' +
+  notchWidthB + ',0 ' +
+  notchWidthA + ',-' + notchHeight;
+Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l ' +
+  '-' + notchWidthA + ',' + notchHeight + ' ' +
+  '-' + notchWidthB + ',0 ' +
+  '-' + notchWidthA + ',-' + notchHeight;
+// Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
+// Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
+
+var notchHighlightHeight = notchHeight; //4;
+var notchHighlightWidthA = notchWidthA + 0.5; //6.5;
+var notchHighlightWidthB = notchWidthB - 1; //2;
+
+Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l ' +
+  notchHighlightWidthA + ',' + notchHighlightHeight + ' ' +
+  notchHighlightWidthB + ',0 ' +
+  notchHighlightWidthA + ',-' + notchHighlightHeight;
+// Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
 
 var randomObstacleHeight = function () {
   var min = Jigsaw.MIN_OBSTACLE_HEIGHT;
@@ -145,6 +173,31 @@ var loadLevel = function() {
   }
 };
 
+// todo - clearly belongs elsewhere
+Jigsaw.addPattern = function (id, imagePath, width, height, offsetX, offsetY) {
+  var pattern = Blockly.createSvgElement('pattern', {
+    id: id,
+    patternUnits: 'userSpaceOnUse',
+    width: width,
+    height: height
+  }, document.getElementById('blocklySvgDefs'));
+  var patternImage = Blockly.createSvgElement('image', {
+    x: -offsetX,
+    y: -offsetY,
+    width: width,
+    height: height
+  }, pattern);
+  patternImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    imagePath);
+};
+
+// todo - clearly belongs elsewhere
+Jigsaw.applyPatternToBlock = function (block, pattern) {
+  block.setFillPattern(pattern);
+  block.svg_.updateFillPattern_();
+};
+
+
 var drawMap = function() {
   var svg = document.getElementById('svgJigsaw');
   var i, x, y, k, tile;
@@ -177,6 +230,19 @@ var drawMap = function() {
     tile.setAttribute('y', 0);
     svg.appendChild(tile);
   }
+
+  Jigsaw.addPattern('backgroundImage1',
+    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
+    214, 207, 0, 0);
+  Jigsaw.addPattern('backgroundImage2',
+    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
+    214, 207, 0, 25);
+  Jigsaw.addPattern('backgroundImage3',
+    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
+    214, 207, 0, 50);
+  Jigsaw.addPattern('backgroundImage4',
+    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
+    214, 207, 153, 50);
 
   // Add obstacles
   Jigsaw.obstacles.forEach (function (obstacle, index) {

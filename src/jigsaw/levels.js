@@ -91,7 +91,10 @@ module.exports = {
     'toolbox':
       tb(flapBlock + playSoundBlock),
     'startBlocks':
-      eventBlock('Jigsaw_whenClick', COL1, ROW1)
+      eventBlock('Jigsaw_whenClick', COL1, ROW1) +
+      eventBlock('jigsaw_test', COL2, ROW2) +
+      eventBlock('jigsaw_test2', COL1, ROW2 + 50) +
+      eventBlock('jigsaw_test3', COL2, ROW2 + 50)
   }
 
 

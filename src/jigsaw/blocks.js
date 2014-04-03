@@ -27,6 +27,61 @@ exports.install = function(blockly, skin) {
   var generator = blockly.Generator.get('JavaScript');
   blockly.JavaScript = generator;
 
+
+  blockly.Blocks.jigsaw_test = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle("                               ");
+      this.appendDummyInput();
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setFillPattern('backgroundImage1');
+    }
+  };
+
+  blockly.Blocks.jigsaw_test2 = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendValueInput();
+      this.appendDummyInput()
+        .appendTitle("                               ");
+      this.appendDummyInput()
+      this.appendDummyInput();
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setFillPattern('backgroundImage3');
+    }
+  };
+
+  blockly.Blocks.jigsaw_test3 = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.setOutput(true);
+      this.appendValueInput();
+      this.appendDummyInput()
+        .appendTitle("                               ");
+      this.appendDummyInput()
+      this.appendDummyInput();
+      // this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setFillPattern('backgroundImage4');
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
   blockly.Blocks.Jigsaw_whenClick = {
     // Block to handle event where mouse is clicked
     helpUrl: '',
