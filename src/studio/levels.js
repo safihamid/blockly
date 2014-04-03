@@ -144,7 +144,9 @@ module.exports = {
       [1, 0,16, 0, 0,16, 0, 1]
     ],
     'toolbox':
-      tb('<block type="studio_move"></block> \
+      tb('<block type="studio_whenSpriteClicked"></block> \
+          <block type="studio_whenSpriteCollided"></block> \
+          <block type="studio_move"></block> \
           <block type="studio_playSound"></block> \
           <block type="studio_incrementScore"></block> \
           <block type="studio_setSpriteSpeed"></block> \

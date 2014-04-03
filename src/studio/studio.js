@@ -335,6 +335,11 @@ var drawMap = function() {
       spriteIcon.setAttribute('width', Studio.PEGMAN_WIDTH);
       spriteIcon.setAttribute('clip-path', 'url(#spriteClipPath' + i + ')');
       svg.appendChild(spriteIcon);
+      
+      dom.addMouseDownTouchEvent(spriteIcon,
+                                 delegate(this,
+                                          Studio.onSpriteClicked,
+                                          i));
     }
   }
   
@@ -444,6 +449,26 @@ Studio.onTick = function() {
   }
 
   for (var i = 0; i < Studio.spriteCount; i++) {
+    for (var j = 0; j < Studio.spriteCount; j++) {
+      if (i == j) {
+        continue;
+      }
+      if (essentiallyEqual(Studio.sprite[i].x,
+                           Studio.sprite[j].x,
+                           tiles.SPRITE_COLLIDE_DISTANCE) &&
+          essentiallyEqual(Studio.sprite[i].y,
+                           Studio.sprite[j].y,
+                           tiles.SPRITE_COLLIDE_DISTANCE)) {
+        if (0 == (Studio.sprite[i].collisionMask & Math.pow(2, j))) {
+          Studio.sprite[i].collisionMask |= Math.pow(2, j);
+          try {
+            Studio.whenSpriteCollided[i][j](BlocklyApps, api);
+          } catch (e) { }
+        }
+       } else {
+          Studio.sprite[i].collisionMask &= ~(Math.pow(2, j));
+        }
+     }
     Studio.displaySprite(i);
   }
   
@@ -467,6 +492,14 @@ Studio.onArrowButtonDown = function(e, idBtn) {
   // Store the most recent event type per-button
   Studio.btnState[idBtn] = ButtonState.DOWN;
   e.preventDefault();  // Stop normal events so we see mouseup later.
+};
+
+Studio.onSpriteClicked = function(e, sprite) {
+  // If we are "running", call the event handler if registered.
+  if (Studio.intervalId) {
+    try { Studio.whenSpriteClicked[sprite](BlocklyApps, api); } catch (e) { }
+  }
+  e.preventDefault();  // Stop normal events.
 };
 
 Studio.onArrowButtonUp = function(e, idBtn) {
@@ -622,6 +655,8 @@ Studio.clearEventHandlersKillTickLoop = function() {
   Studio.whenRight = null;
   Studio.whenUp = null;
   Studio.whenGameStarts = null;
+  Studio.whenSpriteClicked = [];
+  Studio.whenSpriteCollided = [];
   if (Studio.intervalId) {
     window.clearInterval(Studio.intervalId);
   }
@@ -665,6 +700,7 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].x = Studio.spriteStart_[i].x;
     Studio.sprite[i].y = Studio.spriteStart_[i].y;
     Studio.sprite[i].speed = tiles.DEFAULT_SPRITE_SPEED;
+    Studio.sprite[i].collisionMask = 0;
 
     Studio.setSprite(i, 'hardcourt');
     Studio.displaySprite(i);
@@ -799,11 +835,12 @@ Studio.onReportComplete = function(response) {
 Studio.execute = function() {
   BlocklyApps.log = [];
   BlocklyApps.ticks = 100; //TODO: Set higher for some levels
-  var code = Blockly.Generator.workspaceToCode('JavaScript', 'studio_whenRun');
+  var code;
   Studio.result = ResultType.UNSET;
   Studio.testResults = BlocklyApps.TestResults.NO_TESTS_RUN;
   Studio.waitingForReport = false;
   Studio.response = null;
+  var i;
 
   // Check for empty top level blocks to warn user about bugs,
   // especially ones that lead to infinite loops.
@@ -818,7 +855,7 @@ Studio.execute = function() {
     code = dom.getText(codeTextbox);
     // Insert aliases from level codeBlocks into code
     if (level.codeFunctions) {
-      for (var i = 0; i < level.codeFunctions.length; i++) {
+      for (i = 0; i < level.codeFunctions.length; i++) {
         var codeFunction = level.codeFunctions[i];
         if (codeFunction.alias) {
           code = codeFunction.func +
@@ -828,62 +865,101 @@ Studio.execute = function() {
     }
   }
   
-  var codeWallCollided = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenWallCollided');
   var whenWallCollidedFunc = codegen.functionFromCode(
-                                     codeWallCollided, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codePaddleCollided = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenPaddleCollided');
   var whenPaddleCollidedFunc = codegen.functionFromCode(
-                                     codePaddleCollided, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codeLeft = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenLeft');
   var whenLeftFunc = codegen.functionFromCode(
-                                     codeLeft, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codeRight = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenRight');
   var whenRightFunc = codegen.functionFromCode(
-                                     codeRight, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codeUp = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenUp');
   var whenUpFunc = codegen.functionFromCode(
-                                     codeUp, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codeDown = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenDown');
   var whenDownFunc = codegen.functionFromCode(
-                                     codeDown, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
-  var codeGameStarts = Blockly.Generator.workspaceToCode(
+  code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'studio_whenGameStarts');
   var whenGameStartsFunc = codegen.functionFromCode(
-                                     codeGameStarts, {
+                                     code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
 
+  var blocks = Blockly.mainWorkspace.getTopBlocks(true);
+
+  var whenSpriteClickedFunc = [];
+  for (i = 0; i < Studio.spriteCount; i++) {
+    for (var x = 0; blocks[x]; x++) {
+      var block = blocks[x];
+      if (block.type == 'studio_whenSpriteClicked' &&
+          i == parseInt(block.getTitleValue('SPRITE'), 10)) {
+        code = Blockly.Generator.blocksToCode('JavaScript', [ block ]);
+        whenSpriteClickedFunc[i] = codegen.functionFromCode(
+                                           code, {
+                                            BlocklyApps: BlocklyApps,
+                                            Studio: api } );
+      }
+    }
+  }
+
+  var whenSpriteCollidedFunc = [];
+  for (i = 0; i < Studio.spriteCount; i++) {
+    whenSpriteCollidedFunc[i] = [];
+    for (var j = 0; j < Studio.spriteCount; j++) {
+      if (i == j) {
+        continue;
+      }
+      for (var x = 0; blocks[x]; x++) {
+        var block = blocks[x];
+        if (block.type == 'studio_whenSpriteCollided' &&
+            i == parseInt(block.getTitleValue('SPRITE1'), 10) &&
+            j == parseInt(block.getTitleValue('SPRITE2'), 10)) {
+          code = Blockly.Generator.blocksToCode('JavaScript', [ block ]);
+          whenSpriteCollidedFunc[i][j] = codegen.functionFromCode(
+                                             code, {
+                                              BlocklyApps: BlocklyApps,
+                                              Studio: api } );
+        }
+      }
+    }
+  }
+  
   BlocklyApps.playAudio('start', {volume: 0.5});
 
   BlocklyApps.reset(false);
@@ -896,6 +972,8 @@ Studio.execute = function() {
   Studio.whenUp = whenUpFunc;
   Studio.whenDown = whenDownFunc;
   Studio.whenGameStarts = whenGameStartsFunc;
+  Studio.whenSpriteClicked = whenSpriteClickedFunc;
+  Studio.whenSpriteCollided = whenSpriteCollidedFunc;
   Studio.tickCount = 0;
   Studio.intervalId = window.setInterval(Studio.onTick, Studio.scale.stepSpeed);
 };
