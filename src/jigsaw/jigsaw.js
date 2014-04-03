@@ -69,7 +69,7 @@ Jigsaw.scale = {
 };
 
 var twitterOptions = {
-  text: JigsawMsg.shareJigsawTwitter(),
+  text: JigsawMsg.shareFlappyTwitter(),
   hashtag: "JigsawCode"
 };
 
@@ -556,7 +556,7 @@ Jigsaw.init = function(config) {
   // for Jigsaw show make your own button if on share page
   config.makeYourOwn = config.share;
 
-  config.makeString = commonMsg.makeYourOwnJigsaw();
+  config.makeString = commonMsg.makeYourOwnFlappy();
   config.makeUrl = "http://code.org/Jigsaw";
   config.makeImage = BlocklyApps.assetUrl('media/Jigsaw_promo.png');
 

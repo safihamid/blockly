@@ -61,4 +61,8 @@ app.get('/studio', function(req, res) {
   renderApp('studio', req, res);
 });
 
+app.get('/jigsaw', function(req, res) {
+  renderApp('jigsaw', req, res);
+});
+
 module.exports = app;

@@ -7,7 +7,7 @@ var blocks = require('./blocks');
 var levels = require('./levels');
 var skins = require('./skins');
 
-window.JigsawMain = function(options) {
+window.jigsawMain = function(options) {
   options.skinsModule = skins;
   options.blocksModule = blocks;
   appMain(window.Jigsaw, levels, options);

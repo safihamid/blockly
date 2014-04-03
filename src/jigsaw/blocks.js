@@ -321,7 +321,7 @@ exports.install = function(blockly, skin) {
 
   blockly.Blocks.Jigsaw_setBackground.VALUES =
       [[msg.setBackgroundRandom(), 'random'],
-       [msg.setBackgroundJigsaw(), '"Jigsaw"'],
+       [msg.setBackgroundFlappy(), '"Jigsaw"'],
        [msg.setBackgroundNight(), '"night"'],
        [msg.setBackgroundSciFi(), '"scifi"'],
        [msg.setBackgroundUnderwater(), '"underwater"'],
@@ -353,7 +353,7 @@ exports.install = function(blockly, skin) {
 
   blockly.Blocks.Jigsaw_setPlayer.VALUES =
       [[msg.setPlayerRandom(), 'random'],
-       [msg.setPlayerJigsaw(), '"Jigsaw"'],
+       [msg.setPlayerFlappy(), '"Jigsaw"'],
        [msg.setPlayerRedBird(), '"redbird"'],
        [msg.setPlayerSciFi(), '"scifi"'],
        [msg.setPlayerUnderwater(), '"underwater"'],
@@ -393,7 +393,7 @@ exports.install = function(blockly, skin) {
 
   blockly.Blocks.Jigsaw_setObstacle.VALUES =
       [[msg.setObstacleRandom(), 'random'],
-       [msg.setObstacleJigsaw(), '"Jigsaw"'],
+       [msg.setObstacleFlappy(), '"Jigsaw"'],
        [msg.setObstacleSciFi(), '"scifi"'],
        [msg.setObstacleUnderwater(), '"underwater"'],
        [msg.setObstacleCave(), '"cave"'],
@@ -425,7 +425,7 @@ exports.install = function(blockly, skin) {
 
   blockly.Blocks.Jigsaw_setGround.VALUES =
       [[msg.setGroundRandom(), 'random'],
-       [msg.setGroundJigsaw(), '"Jigsaw"'],
+       [msg.setGroundFlappy(), '"Jigsaw"'],
        [msg.setGroundSciFi(), '"scifi"'],
        [msg.setGroundUnderwater(), '"underwater"'],
        [msg.setGroundCave(), '"cave"'],
@@ -473,7 +473,7 @@ exports.install = function(blockly, skin) {
     init: function() {
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
-          .appendTitle(msg.setScore()) 
+          .appendTitle(msg.setScore())
           .appendTitle(new blockly.FieldTextInput('0',
             blockly.FieldTextInput.numberValidator), 'VALUE');
       this.setInputsInline(true);
