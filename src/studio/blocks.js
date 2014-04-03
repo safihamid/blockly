@@ -161,6 +161,73 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
 
+  blockly.Blocks.studio_whenSpriteClicked = {
+    // Block to handle event when sprite is clicked.
+    helpUrl: '',
+    init: function() {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+      this.setPreviousStatement(false);
+      this.setInputsInline(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenSpriteClickedTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_whenSpriteClicked.SPRITE =
+      [[msg.whenSpriteClicked1(), '0'],
+       [msg.whenSpriteClicked2(), '1'],
+       [msg.whenSpriteClicked3(), '2'],
+       [msg.whenSpriteClicked4(), '3'],
+       [msg.whenSpriteClicked5(), '4'],
+       [msg.whenSpriteClicked6(), '5']];
+  
+  generator.studio_whenSpriteClicked = function() {
+    // Generate JavaScript for handle when a sprite is clicked event.
+    return '\n';
+  };
+
+  blockly.Blocks.studio_whenSpriteCollided = {
+    // Block to handle event when sprite collides with another sprite.
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.SPRITE2);
+      dropdown.setValue(this.SPRITE2[1][1]); // default to 2
+
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.SPRITE1), 'SPRITE1');
+      this.appendDummyInput()
+        .appendTitle(dropdown, 'SPRITE2');
+      this.setPreviousStatement(false);
+      this.setInputsInline(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenSpriteCollidedTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_whenSpriteCollided.SPRITE1 =
+      [[msg.whenSpriteCollided1(), '0'],
+       [msg.whenSpriteCollided2(), '1'],
+       [msg.whenSpriteCollided3(), '2'],
+       [msg.whenSpriteCollided4(), '3'],
+       [msg.whenSpriteCollided5(), '4'],
+       [msg.whenSpriteCollided6(), '5']];
+  
+  blockly.Blocks.studio_whenSpriteCollided.SPRITE2 =
+      [[msg.whenSpriteCollidedWith1(), '0'],
+       [msg.whenSpriteCollidedWith2(), '1'],
+       [msg.whenSpriteCollidedWith3(), '2'],
+       [msg.whenSpriteCollidedWith4(), '3'],
+       [msg.whenSpriteCollidedWith5(), '4'],
+       [msg.whenSpriteCollidedWith6(), '5']];
+  
+  generator.studio_whenSpriteCollided = function() {
+    // Generate JavaScript for handle when a sprite collision event.
+    return '\n';
+  };
+
   blockly.Blocks.studio_move = {
     // Block for moving left.
     helpUrl: '',
@@ -168,6 +235,8 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+      this.appendDummyInput()
+        .appendTitle(msg.moveSeparator());
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
       this.setPreviousStatement(true);
