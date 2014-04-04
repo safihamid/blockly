@@ -88,8 +88,6 @@ module.exports = {
     'scale': {
       'snapRadius': 2
     },
-    'toolbox':
-      tb(flapBlock + playSoundBlock),
     'startBlocks':
       eventBlock('Jigsaw_whenClick', COL1, ROW1) +
       eventBlock('jigsaw_test', COL2, ROW2) +

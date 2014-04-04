@@ -238,6 +238,7 @@ Jigsaw.init = function(config) {
   };
 
   config.trashcan = false;
+  config.scrollbars = false;
 
   // for Jigsaw show make your own button if on share page
   config.makeYourOwn = config.share;
