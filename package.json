@@ -33,6 +33,7 @@
     "grunt-strip-code": "~0.1.2",
     "grunt-lib-contrib": "~0.6.1",
     "uglify-js": "~2.4.13",
-    "rfile": "~1.0.0"
+    "rfile": "~1.0.0",
+    "grunt-notify": "^0.2.20"
   }
 }
