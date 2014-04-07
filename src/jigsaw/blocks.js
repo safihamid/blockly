@@ -113,16 +113,6 @@ var blockWidth = function (type) {
 
 // Install extensions to Blockly's language and JavaScript generator.
 exports.install = function(blockly, skin) {
-  // var img = 'http://img.photobucket.com/albums/v341/m3ch3ll/bb%20walls/Hd_Multi_Colored_Lines.png';
-  // var imgWidth = 480;
-  // var imgHeight = 360;
-  // var img = 'http://learn.code.org/blockly/media/skins/birds/static_avatar.png';
-  // var imgWidth = 214;
-  // var imgHeight = 207;
-  var img = skin.image1;
-  var imgWidth = 300;
-  var imgHeight = 300;
-
   // don't add patterns until ready
   var readyStateCheckInterval = setInterval(function() {
     if (document.readyState === "complete") {
@@ -131,8 +121,16 @@ exports.install = function(blockly, skin) {
     }
   }, 10);
 
-  var generator = blockly.Generator.get('JavaScript');
-  blockly.JavaScript = generator;
+  level1(blockly, skin);
+
+  delete blockly.Blocks.procedures_defreturn;
+  delete blockly.Blocks.procedures_ifreturn;
+};
+
+function level1(blockly, skin) {
+  var img = skin.image1;
+  var imgWidth = 300;
+  var imgHeight = 300;
 
   var title = "                                                                     ";
 
@@ -187,15 +185,4 @@ exports.install = function(blockly, skin) {
         imgWidth, imgHeight, 0, jigsaw1And2Height));
     }
   };
-
-
-
-
-
-
-
-
-
-  delete blockly.Blocks.procedures_defreturn;
-  delete blockly.Blocks.procedures_ifreturn;
-};
+}
