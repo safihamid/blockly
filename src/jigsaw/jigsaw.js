@@ -82,33 +82,6 @@ var loadLevel = function() {
   Jigsaw.MAZE_HEIGHT = 400;
 };
 
-// todo - clearly belongs elsewhere
-// if i dont want the image to repeat, set the height/width on the pattern to be
-// higher
-Jigsaw.addPattern = function (id, imagePath, width, height, offsetX, offsetY) {
-  var pattern = Blockly.createSvgElement('pattern', {
-    id: id,
-    patternUnits: 'userSpaceOnUse',
-    width: "100%",
-    height: "100%",
-    x: -offsetX,
-    y: -offsetY
-  }, document.getElementById('blocklySvgDefs'));
-  var patternImage = Blockly.createSvgElement('image', {
-    width: width,
-    height: height
-  }, pattern);
-  patternImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-    imagePath);
-};
-
-// todo - clearly belongs elsewhere
-Jigsaw.applyPatternToBlock = function (block, pattern) {
-  block.setFillPattern(pattern);
-  block.svg_.updateFillPattern_();
-};
-
-
 var drawMap = function() {
   var svg = document.getElementById('svgJigsaw');
   var i, x, y, k, tile;
@@ -141,20 +114,6 @@ var drawMap = function() {
     tile.setAttribute('y', 0);
     svg.appendChild(tile);
   }
-
-  var img = 'http://img.photobucket.com/albums/v341/m3ch3ll/bb%20walls/Hd_Multi_Colored_Lines.png';
-  var imgWidth = 480;
-  var imgHeight = 360;
-  // var img = 'http://learn.code.org/blockly/media/skins/birds/static_avatar.png';
-  // var imgWidth = 214;
-  // var imgHeight = 207;
-
-  Jigsaw.addPattern('backgroundImage1', img, imgWidth, imgHeight, 0, 0);
-  Jigsaw.addPattern('backgroundImage2', img, imgWidth, imgHeight, 0, 57);
-  Jigsaw.addPattern('backgroundImage3', img, imgWidth, imgHeight, 161, 57);
-  Jigsaw.addPattern('backgroundImage4', img, imgWidth, imgHeight, 0, 157);
-  // Jigsaw.addPattern('flappyBackground', img, 400, 400, 0, 0);
-
 };
 
 /**

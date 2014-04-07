@@ -27,7 +27,7 @@ var setGroundBlock = '<block type="Jigsaw_setGround"></block>';
 var setGravityBlock = '<block type="Jigsaw_setGravity"></block>';
 var setScoreBlock = '<block type="Jigsaw_setScore"></block>';
 
-var COL_WIDTH = constants.WORKSPACE_COL_WIDTH;
+var COL_WIDTH = constants.WORKSPACE_COL_WIDTH + 30;
 var COL1 = constants.WORKSPACE_BUFFER;
 var COL2 = COL1 + COL_WIDTH;
 
@@ -144,7 +144,7 @@ module.exports = {
       'snapRadius': 2
     },
     'startBlocks':
-      eventBlock('jigsaw_one', COL2, ROW2) +
+      eventBlock('jigsaw_one', COL2, ROW1) +
       eventBlock('jigsaw_two', COL1, ROW2 + 50) +
       eventBlock('jigsaw_three', COL2, ROW2 + 50) +
       eventBlock('jigsaw_four', COL1, ROW1 + 50)
