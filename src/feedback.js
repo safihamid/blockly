@@ -95,7 +95,7 @@ exports.displayFeedback = function(options) {
 
   // set up the Save To Gallery button if necessary
   var saveToGalleryButton = feedback.querySelector('#save-to-gallery-button');
-  if (saveToGalleryButton && options.response.save_to_gallery_url) {
+  if (saveToGalleryButton && options.response && options.response.save_to_gallery_url) {
     dom.addClickTouchEvent(saveToGalleryButton, function() {
       $.ajax({
         type: 'PUT',
