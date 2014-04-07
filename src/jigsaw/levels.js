@@ -48,6 +48,55 @@ var eventBlock = function (type, x, y, child) {
     '</block>';
 };
 
+/**
+ * Deep equality check for two lists.  Returns true if and only if lists have
+ * the same items, in the same order.
+ */
+var listsEquivalent = function (list1, list2) {
+  if (list1.length !== list2.length) {
+    return false;
+  }
+
+  for (var i = 0; i < list1.length; i++) {
+    if (list1[i] !== list2[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
+/**
+ * Validates whether puzzle has been successfully put together.
+ *
+ * @param {string} root The type of the top level piece
+ * @Param {Object} children Maps each block type to expected children types.
+ */
+var validatePuzzle = function (root, children) {
+  var roots = Blockly.mainWorkspace.getTopBlocks();
+  if (roots.length !== 1 && roots[0].type !== root) {
+    return false;
+  }
+
+  var all = Blockly.mainWorkspace.getAllBlocks();
+  var childKeys = Object.keys(children);
+  if (all.length !== childKeys.length) {
+    throw new Error('Unexpected number of blocks in workspace');
+  }
+  for (var i = 0; i < all.length; i++) {
+    var block = all[i];
+    var childTypes = block.getChildren().map(function (block) {
+      return block.type;
+    });
+    var expectedTypes = children[childKeys[i]];
+    if (!listsEquivalent(childTypes, expectedTypes)) {
+      return false;
+    }
+  };
+  return true;
+
+};
+
 /*
  * Configuration for all levels.
  */
@@ -69,7 +118,6 @@ var eventBlock = function (type, x, y, child) {
 module.exports = {
   '1': {
     'requiredBlocks': [
-      [{'test': 'flap', 'type': 'Jigsaw_flap'}]
     ],
     'obstacles': false,
     'ground': false,
@@ -79,7 +127,14 @@ module.exports = {
       startX  : 100,
       startY: 0,
       successCondition: function () {
-        return (Jigsaw.avatarY  <= 40);
+        var root = "jigsaw_one";
+        var children = {
+          "jigsaw_one": ["jigsaw_two"],
+          "jigsaw_two": ["jigsaw_three", "jigsaw_four"],
+          "jigsaw_three": [],
+          "jigsaw_four": []
+        };
+        return validatePuzzle(root, children);
       },
       failureCondition: function () {
         return Jigsaw.avatarY > Jigsaw.MAZE_HEIGHT;
@@ -89,10 +144,10 @@ module.exports = {
       'snapRadius': 2
     },
     'startBlocks':
-      eventBlock('Jigsaw_whenClick', COL1, ROW1) +
-      eventBlock('jigsaw_test', COL2, ROW2) +
-      eventBlock('jigsaw_test2', COL1, ROW2 + 50) +
-      eventBlock('jigsaw_test3', COL2, ROW2 + 50)
+      eventBlock('jigsaw_one', COL2, ROW2) +
+      eventBlock('jigsaw_two', COL1, ROW2 + 50) +
+      eventBlock('jigsaw_three', COL2, ROW2 + 50) +
+      eventBlock('jigsaw_four', COL1, ROW1 + 50)
   }
 
 

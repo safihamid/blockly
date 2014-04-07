@@ -68,7 +68,6 @@ Jigsaw.scale = {
   'stepSpeed': 33
 };
 
-
 var loadLevel = function() {
   // Load maps.
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
@@ -143,21 +142,18 @@ var drawMap = function() {
     svg.appendChild(tile);
   }
 
-  Jigsaw.addPattern('backgroundImage1',
-    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
-    214, 207, 0, 0);
-  Jigsaw.addPattern('backgroundImage2',
-    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
-    214, 207, 0, 25);
-  Jigsaw.addPattern('backgroundImage3',
-    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
-    214, 207, 0, 50);
-  Jigsaw.addPattern('backgroundImage4',
-    'http://learn.code.org/blockly/media/skins/birds/static_avatar.png',
-    214, 207, 153, 50);
-  Jigsaw.addPattern('flappyBackground',
-    'http://img.photobucket.com/albums/v341/m3ch3ll/bb%20walls/Hd_Multi_Colored_Lines.png',
-    400, 400, 0, 0);
+  var img = 'http://img.photobucket.com/albums/v341/m3ch3ll/bb%20walls/Hd_Multi_Colored_Lines.png';
+  var imgWidth = 480;
+  var imgHeight = 360;
+  // var img = 'http://learn.code.org/blockly/media/skins/birds/static_avatar.png';
+  // var imgWidth = 214;
+  // var imgHeight = 207;
+
+  Jigsaw.addPattern('backgroundImage1', img, imgWidth, imgHeight, 0, 0);
+  Jigsaw.addPattern('backgroundImage2', img, imgWidth, imgHeight, 0, 57);
+  Jigsaw.addPattern('backgroundImage3', img, imgWidth, imgHeight, 161, 57);
+  Jigsaw.addPattern('backgroundImage4', img, imgWidth, imgHeight, 0, 157);
+  // Jigsaw.addPattern('flappyBackground', img, 400, 400, 0, 0);
 
 };
 
@@ -252,6 +248,12 @@ Jigsaw.init = function(config) {
   config.preventExtraTopLevelBlocks = true;
 
   BlocklyApps.init(config);
+
+  Blockly.addChangeListener(function(evt) {
+    // todo (brent): i think this is the right place to check for win condition
+    var success = level.goal.successCondition();
+    console.log("success = " + success);
+  });
 };
 
 /**
