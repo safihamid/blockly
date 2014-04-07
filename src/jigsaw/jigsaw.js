@@ -25,7 +25,6 @@ var Jigsaw = module.exports;
 
 var level;
 var skin;
-var onSharePage;
 
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
@@ -103,16 +102,18 @@ var drawMap = function() {
   var hintBubble = document.getElementById('bubble');
   hintBubble.style.width = Jigsaw.MAZE_WIDTH + 'px';
 
-  if (skin.background) {
-    tile = document.createElementNS(Blockly.SVG_NS, 'image');
-    tile.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                        skin.background);
-    tile.setAttribute('id', 'background');
-    tile.setAttribute('height', Jigsaw.MAZE_HEIGHT);
-    tile.setAttribute('width', Jigsaw.MAZE_WIDTH);
-    tile.setAttribute('x', 0);
-    tile.setAttribute('y', 0);
-    svg.appendChild(tile);
+  // todo (brent) : per level
+  if (skin.image1) {
+    var background = Blockly.createSvgElement('image', {
+      id: 'arena',
+      height: Jigsaw.MAZE_HEIGHT,
+      width: Jigsaw.MAZE_WIDTH,
+      x: 0,
+      y: 0,
+      class: 'transparent'
+    }, svg);
+    background.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+      skin.image1);
   }
 };
 
@@ -137,7 +138,6 @@ Jigsaw.init = function(config) {
   // Jigsaw.clearEventHandlersKillTickLoop();
   skin = config.skin;
   level = config.level;
-  onSharePage = config.share;
   loadLevel();
 
   config.html = page({
@@ -156,21 +156,6 @@ Jigsaw.init = function(config) {
     Blockly.loadAudio_(skin.winSound, 'win');
     Blockly.loadAudio_(skin.startSound, 'start');
     Blockly.loadAudio_(skin.failureSound, 'failure');
-    Blockly.loadAudio_(skin.obstacleSound, 'obstacle');
-
-    Blockly.loadAudio_(skin.dieSound, 'sfx_die');
-    Blockly.loadAudio_(skin.hitSound, 'sfx_hit');
-    Blockly.loadAudio_(skin.pointSound, 'sfx_point');
-    Blockly.loadAudio_(skin.swooshingSound, 'sfx_swooshing');
-    Blockly.loadAudio_(skin.wingSound, 'sfx_wing');
-    Blockly.loadAudio_(skin.winGoalSound, 'winGoal');
-    Blockly.loadAudio_(skin.jetSound, 'jet');
-    Blockly.loadAudio_(skin.jingleSound, 'jingle');
-    Blockly.loadAudio_(skin.crashSound, 'crash');
-    Blockly.loadAudio_(skin.laserSound, 'laser');
-    Blockly.loadAudio_(skin.splashSound, 'splash');
-    Blockly.loadAudio_(skin.wallSound, 'wall');
-    Blockly.loadAudio_(skin.wall0Sound, 'wall0');
   };
 
   config.afterInject = function() {
@@ -195,9 +180,6 @@ Jigsaw.init = function(config) {
   config.trashcan = false;
   config.scrollbars = false;
 
-  // for Jigsaw show make your own button if on share page
-  config.makeYourOwn = config.share;
-
   config.makeString = commonMsg.makeYourOwnFlappy();
   config.makeUrl = "http://code.org/Jigsaw";
   config.makeImage = BlocklyApps.assetUrl('media/Jigsaw_promo.png');
@@ -211,7 +193,11 @@ Jigsaw.init = function(config) {
   Blockly.addChangeListener(function(evt) {
     // todo (brent): i think this is the right place to check for win condition
     var success = level.goal.successCondition();
-    console.log("success = " + success);
+    if (success) {
+      var arena = document.getElementById('arena');
+      var attribute = arena.getAttribute('class');
+      arena.setAttribute('class', attribute.replace('transparent', ''));
+    }
   });
 };
 
@@ -242,15 +228,6 @@ BlocklyApps.runButtonClick = function() {
   // BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Jigsaw.execute();
-
-  if (level.freePlay && !onSharePage) {
-    var shareCell = document.getElementById('share-cell');
-    shareCell.className = 'share-cell-enabled';
-  }
-  if (level.score) {
-    document.getElementById('score').setAttribute('visibility', 'visible');
-    Jigsaw.displayScore();
-  }
 };
 
 /**
@@ -275,12 +252,7 @@ var displayFeedback = function() {
       skin: skin.id,
       feedbackType: Jigsaw.testResults,
       response: Jigsaw.response,
-      level: level,
-      showingSharing: level.freePlay,
-      appStrings: {
-        reinfFeedbackMsg: JigsawMsg.reinfFeedbackMsg(),
-        sharingText: JigsawMsg.shareGame()
-      }
+      level: level
     });
   }
 };

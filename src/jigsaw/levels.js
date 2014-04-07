@@ -130,8 +130,7 @@ module.exports = {
         var root = "jigsaw_one";
         var children = {
           "jigsaw_one": ["jigsaw_two"],
-          "jigsaw_two": ["jigsaw_three", "jigsaw_four"],
-          "jigsaw_three": [],
+          "jigsaw_two": ["jigsaw_four"],
           "jigsaw_four": []
         };
         return validatePuzzle(root, children);
@@ -146,7 +145,6 @@ module.exports = {
     'startBlocks':
       eventBlock('jigsaw_one', COL2, ROW1) +
       eventBlock('jigsaw_two', COL1, ROW2 + 50) +
-      eventBlock('jigsaw_three', COL2, ROW2 + 50) +
       eventBlock('jigsaw_four', COL1, ROW1 + 50)
   }
 

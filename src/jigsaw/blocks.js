@@ -119,9 +119,9 @@ exports.install = function(blockly, skin) {
   // var img = 'http://learn.code.org/blockly/media/skins/birds/static_avatar.png';
   // var imgWidth = 214;
   // var imgHeight = 207;
-  var img = "http://colorvisiontesting.com/plate%20with%205.jpg";
-  var imgWidth = 315;
-  var imgHeight = 309;
+  var img = skin.image1;
+  var imgWidth = 300;
+  var imgHeight = 300;
 
   // don't add patterns until ready
   var readyStateCheckInterval = setInterval(function() {
@@ -134,13 +134,16 @@ exports.install = function(blockly, skin) {
   var generator = blockly.Generator.get('JavaScript');
   blockly.JavaScript = generator;
 
+  var title = "                                                                     ";
 
   blockly.Blocks.jigsaw_one = {
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle("                                                    ");
+        .appendTitle(title);
+      this.appendDummyInput();
+      this.appendDummyInput();
       this.appendDummyInput();
       this.setPreviousStatement(false);
       this.setNextStatement(true);
@@ -153,32 +156,15 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
-      this.appendValueInput();
       this.appendDummyInput()
-        .appendTitle("                                      ");
-      this.appendDummyInput()
+        .appendTitle(title);
+      this.appendDummyInput();
+      this.appendDummyInput();
       this.appendDummyInput();
       this.setPreviousStatement(true);
-      this.setNextStatement(true);
+       this.setNextStatement(true);
       this.setFillPattern(addPattern('backgroundImage2', img,
         imgWidth, imgHeight, 0, blockHeight('jigsaw_one')));
-    }
-  };
-
-  blockly.Blocks.jigsaw_three = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(140, 1.00, 0.74);
-      this.setOutput(true);
-      this.appendValueInput();
-      this.appendDummyInput()
-        .appendTitle("                               ");
-      this.appendDummyInput()
-      this.appendDummyInput();
-      // this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setFillPattern(addPattern('backgroundImage3', img, imgWidth,
-        imgHeight, blockWidth('jigsaw_two'), blockHeight('jigsaw_one')));
     }
   };
 
@@ -191,7 +177,9 @@ exports.install = function(blockly, skin) {
     init: function () {
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle("                                                 ");
+        .appendTitle(title);
+      this.appendDummyInput();
+      this.appendDummyInput();
       this.appendDummyInput();
       this.setPreviousStatement(true);
       this.setNextStatement(false);
