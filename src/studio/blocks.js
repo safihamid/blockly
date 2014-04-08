@@ -394,8 +394,42 @@ exports.install = function(blockly, skin) {
        [msg.setSpriteHardcourt(), '"hardcourt"'],
        [msg.setSpriteRetro(), '"retro"']];
 
-  generator.studio_setSprite = function(i) {
+  generator.studio_setSprite = function() {
     return generateSetterCode({ctx: this, index: 'SPRITE', name: 'setSprite'});
+  };
+
+  blockly.Blocks.studio_saySprite = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.SPRITES), 'SPRITE');
+      this.appendDummyInput()
+        .appendTitle(new Blockly.FieldImage(
+                Blockly.assetUrl('media/quote0.png'), 12, 12))
+        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendTitle(new Blockly.FieldImage(
+                Blockly.assetUrl('media/quote1.png'), 12, 12));
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.saySpriteTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_saySprite.SPRITES =
+      [[msg.saySprite1(), '0'],
+       [msg.saySprite2(), '1'],
+       [msg.saySprite3(), '2'],
+       [msg.saySprite4(), '3'],
+       [msg.saySprite5(), '4'],
+       [msg.saySprite6(), '5']];
+
+  generator.studio_saySprite = function() {
+    // Generate JavaScript for saying.
+    return 'Studio.saySprite(\'block_id_' + this.id + '\', ' +
+               this.getTitleValue('SPRITE') + ', ' + '\'' +
+               this.getTitleValue('TEXT') + '\');\n';
   };
   
   delete blockly.Blocks.procedures_defreturn;
