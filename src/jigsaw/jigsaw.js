@@ -186,9 +186,12 @@ Jigsaw.init = function(config) {
 
   config.enableShowCode = false;
 
-  config.preventExtraTopLevelBlocks = true;
+  // config.preventExtraTopLevelBlocks = true;
 
   BlocklyApps.init(config);
+
+  // todo (brent): have this be level based
+  document.getElementById('runButton').style.display = 'none';
 
   Blockly.addChangeListener(function(evt) {
     // todo (brent): i think this is the right place to check for win condition
@@ -197,6 +200,8 @@ Jigsaw.init = function(config) {
       var arena = document.getElementById('arena');
       var attribute = arena.getAttribute('class');
       arena.setAttribute('class', attribute.replace('transparent', ''));
+      Jigsaw.result = ResultType.SUCCESS;
+      Jigsaw.onPuzzleComplete();
     }
   });
 };
@@ -306,12 +311,6 @@ Jigsaw.execute = function() {
 };
 
 Jigsaw.onPuzzleComplete = function() {
-  if (level.freePlay) {
-    Jigsaw.result = ResultType.SUCCESS;
-  }
-
-  // Stop everything on screen
-  // Jigsaw.clearEventHandlersKillTickLoop();
 
   // If we know they succeeded, mark levelComplete true
   // Note that we have not yet animated the succesful run
@@ -325,26 +324,10 @@ Jigsaw.onPuzzleComplete = function() {
     Jigsaw.testResults = BlocklyApps.getTestResults();
   }
 
-  // Special case for Jigsaw level 1 where you have the right blocks, but you
-  // don't flap to the goal.  Note: this currently depends on us getting
-  // TOO_FEW_BLOCKS_FAIL, when really we should probably be getting
-  // LEVEL_INCOMPLETE_FAIL here. (see pivotal item 66362504)
-  if (level.id === "1" &&
-    Jigsaw.testResults === BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL) {
-    Jigsaw.testResults = BlocklyApps.TestResults.Jigsaw_SPECIFIC_FAIL;
-  }
-
-
   if (Jigsaw.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
     BlocklyApps.playAudio('win', {volume : 0.5});
   } else {
     BlocklyApps.playAudio('failure', {volume : 0.5});
-  }
-
-  if (level.editCode) {
-    Jigsaw.testResults = BlocklyApps.levelComplete ?
-      BlocklyApps.TestResults.ALL_PASS :
-      BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
 
   if (level.failForOther1Star && !BlocklyApps.levelComplete) {
