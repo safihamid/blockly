@@ -107,42 +107,6 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
   
-  blockly.Blocks.studio_whenWallCollided = {
-    // Block to handle event when a wall/ball collision occurs.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(140, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(msg.whenWallCollided());
-      this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setTooltip(msg.whenWallCollidedTooltip());
-    }
-  };
-  
-  generator.studio_whenWallCollided = function() {
-    // Generate JavaScript for handling when a wall/ball collision occurs.
-    return '\n';
-  };
-  
-  blockly.Blocks.studio_whenPaddleCollided = {
-    // Block to handle event when a paddle/ball collision occurs.
-    helpUrl: '',
-    init: function() {
-      this.setHSV(140, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(msg.whenPaddleCollided());
-      this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setTooltip(msg.whenPaddleCollidedTooltip());
-    }
-  };
-  
-  generator.studio_whenPaddleCollided = function() {
-    // Generate JavaScript for handling when a paddle/ball collision occurs.
-    return '\n';
-  };
-  
   blockly.Blocks.studio_whenGameStarts = {
     // Block to handle event when the game starts
     helpUrl: '',
@@ -371,7 +335,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[1][1]);  // default to hardcourt
+      dropdown.setValue(this.VALUES[1][1]);  // default to cave
 
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
@@ -385,6 +349,10 @@ exports.install = function(blockly, skin) {
 
   blockly.Blocks.studio_setBackground.VALUES =
       [[msg.setBackgroundRandom(), 'random'],
+       [msg.setBackgroundCave(), '"cave"'],
+       [msg.setBackgroundSanta(), '"santa"'],
+       [msg.setBackgroundScifi(), '"scifi"'],
+       [msg.setBackgroundUnderwater(), '"underwater"'],
        [msg.setBackgroundHardcourt(), '"hardcourt"'],
        [msg.setBackgroundRetro(), '"retro"']];
 

@@ -133,15 +133,16 @@ module.exports = {
       'upButton'
     ],
     'freePlay': true,
+    'showScore': true,
     'map': [
-      [1, 1, 2, 2, 2, 2, 1, 1],
-      [1, 0,16, 0, 0,16, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0,16, 0, 0,16, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0,16, 0, 0,16, 0, 1]
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0,16, 0, 0]
     ],
     'toolbox':
       tb('<block type="studio_whenSpriteClicked"></block> \
@@ -155,10 +156,8 @@ module.exports = {
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenLeft" deletable="false" x="20" y="120"></block> \
-      <block type="studio_whenRight" deletable="false" x="180" y="120"></block> \
-      <block type="studio_whenUp" deletable="false" x="20" y="220"></block> \
-      <block type="studio_whenDown" deletable="false" x="180" y="220"></block> \
-      <block type="studio_whenPaddleCollided" deletable="false" x="20" y="320"></block> \
-      <block type="studio_whenWallCollided" deletable="false" x="180" y="320"></block>'
+      <block type="studio_whenRight" deletable="false" x="20" y="200"></block> \
+      <block type="studio_whenUp" deletable="false" x="20" y="280"></block> \
+      <block type="studio_whenDown" deletable="false" x="20" y="360"></block>'
   },
 };
