@@ -182,6 +182,13 @@ var drawMap = function() {
                                  delegate(this,
                                           Studio.onSpriteClicked,
                                           i));
+
+      var spriteSpeechBubble = document.createElementNS(Blockly.SVG_NS, 'text');
+      spriteSpeechBubble.setAttribute('id', 'speechBubble' + i);
+      spriteSpeechBubble.setAttribute('class', 'studio-speech-bubble');
+      spriteSpeechBubble.appendChild(document.createTextNode(''));
+      spriteSpeechBubble.setAttribute('visibility', 'hidden');
+      svg.appendChild(spriteSpeechBubble);
     }
   }
   
@@ -204,7 +211,7 @@ var drawMap = function() {
   score.setAttribute('class', 'studio-score');
   score.setAttribute('x', Studio.MAZE_WIDTH / 2);
   score.setAttribute('y', 60);
-  score.appendChild(document.createTextNode('0'));
+  score.appendChild(document.createTextNode(''));
   score.setAttribute('visibility', 'hidden');
   svg.appendChild(score);
 
@@ -499,6 +506,9 @@ Studio.clearEventHandlersKillTickLoop = function() {
     window.clearTimeout(Studio.pidList[i]);
   }
   Studio.pidList = [];
+  for (i = 0; i < Studio.spriteCount; i++) {
+    window.clearTimeout(Studio.sprite[i].bubbleTimeout);
+  }
 };
 
 /**
@@ -537,6 +547,8 @@ BlocklyApps.reset = function(first) {
 
     Studio.setSprite(i, 'hardcourt');
     Studio.displaySprite(i);
+    document.getElementById('speechBubble' + i)
+      .setAttribute('visibility', 'hidden');
   }
 
   var svg = document.getElementById('svgStudio');
@@ -862,6 +874,10 @@ Studio.displaySprite = function(i) {
   var spriteClipRect = document.getElementById('spriteClipRect' + i);
   spriteClipRect.setAttribute('x', xCoord);
   spriteClipRect.setAttribute('y', yCoord);
+
+  var speechBubble = document.getElementById('speechBubble' + i);
+  speechBubble.setAttribute('x', xCoord);
+  speechBubble.setAttribute('y', yCoord);
 };
 
 Studio.displayScore = function() {
@@ -889,6 +905,21 @@ Studio.setSprite = function (index, value) {
   var element = document.getElementById('sprite' + index);
   element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
     skinTheme(value).sprite);
+};
+
+Studio.hideSpeechBubble = function (index) {
+  var speechBubble = document.getElementById('speechBubble' + index);
+  speechBubble.setAttribute('visibility', 'hidden');
+};
+
+Studio.saySprite = function (index, text) {
+  var speechBubble = document.getElementById('speechBubble' + index);
+  speechBubble.textContent = text;
+  speechBubble.setAttribute('visibility', 'visible');
+  window.clearTimeout(Studio.sprite[index].bubbleTimeout);
+  Studio.sprite[index].bubbleTimeout = window.setTimeout(
+      delegate(this, Studio.hideSpeechBubble, index),
+      3000);
 };
 
 Studio.timedOut = function() {

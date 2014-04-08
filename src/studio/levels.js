@@ -150,6 +150,7 @@ module.exports = {
           <block type="studio_move"></block> \
           <block type="studio_playSound"></block> \
           <block type="studio_incrementScore"></block> \
+          <block type="studio_saySprite"></block> \
           <block type="studio_setSpriteSpeed"></block> \
           <block type="studio_setBackground"></block> \
           <block type="studio_setSprite"></block>'),
