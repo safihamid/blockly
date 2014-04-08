@@ -103,7 +103,7 @@ var drawMap = function() {
   hintBubble.style.width = Jigsaw.MAZE_WIDTH + 'px';
 
   // todo (brent) : per level
-  if (skin.image1) {
+  if (level.image && skin[level.image]) {
     var background = Blockly.createSvgElement('image', {
       id: 'arena',
       height: Jigsaw.MAZE_HEIGHT,
@@ -113,7 +113,7 @@ var drawMap = function() {
       class: 'transparent'
     }, svg);
     background.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      skin.image1);
+      skin[level.image]);
   }
 };
 

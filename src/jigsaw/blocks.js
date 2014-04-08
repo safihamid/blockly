@@ -122,19 +122,61 @@ exports.install = function(blockly, skin) {
   }, 10);
 
   level1(blockly, skin);
+  level2(blockly, skin);
 
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
 };
 
 function level1(blockly, skin) {
-  var img = skin.image1;
+  var img = skin.smiley;
+  var imgWidth = 200;
+  var imgHeight = 200;
+
+  var title = "                                            ";
+
+  blockly.Blocks.jigsaw_1A = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(0, 1.00, 0.98);
+      this.appendDummyInput()
+        .appendTitle(title);
+      this.appendDummyInput();
+      this.appendDummyInput();
+      this.appendDummyInput();
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setFillPattern(
+        addPattern('pat1A', img, imgWidth, imgHeight, 0, 0));
+    }
+  };
+
+  blockly.Blocks.jigsaw_1B = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(0, 1.00, 0.98);
+      this.appendDummyInput()
+        .appendTitle(title);
+      this.appendDummyInput();
+      this.appendDummyInput();
+      this.appendDummyInput();
+      this.setPreviousStatement(true);
+      this.setNextStatement(false);
+      this.setFillPattern(addPattern('pat1B', img,
+        imgWidth, imgHeight, 0, blockHeight('jigsaw_1A')));
+    }
+  };
+
+}
+
+function level2(blockly, skin) {
+  var img = skin.smiley;
   var imgWidth = 300;
   var imgHeight = 300;
 
   var title = "                                                                     ";
 
-  blockly.Blocks.jigsaw_one = {
+  blockly.Blocks.jigsaw_2A = {
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
@@ -150,7 +192,7 @@ function level1(blockly, skin) {
     }
   };
 
-  blockly.Blocks.jigsaw_two = {
+  blockly.Blocks.jigsaw_2B = {
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);
@@ -162,15 +204,15 @@ function level1(blockly, skin) {
       this.setPreviousStatement(true);
        this.setNextStatement(true);
       this.setFillPattern(addPattern('backgroundImage2', img,
-        imgWidth, imgHeight, 0, blockHeight('jigsaw_one')));
+        imgWidth, imgHeight, 0, blockHeight('jigsaw_2A')));
     }
   };
 
   var jigsaw1And2Height = function () {
-    return blockHeight('jigsaw_one') + blockHeight('jigsaw_two');
+    return blockHeight('jigsaw_2A') + blockHeight('jigsaw_2B');
   };
 
-  blockly.Blocks.jigsaw_four = {
+  blockly.Blocks.jigsaw_2C = {
     helpUrl: '',
     init: function () {
       this.setHSV(140, 1.00, 0.74);

@@ -27,6 +27,8 @@ var setGroundBlock = '<block type="Jigsaw_setGround"></block>';
 var setGravityBlock = '<block type="Jigsaw_setGravity"></block>';
 var setScoreBlock = '<block type="Jigsaw_setScore"></block>';
 
+// todo (brent) : can i get rid of constants?
+
 var COL_WIDTH = constants.WORKSPACE_COL_WIDTH + 30;
 var COL1 = constants.WORKSPACE_BUFFER;
 var COL2 = COL1 + COL_WIDTH;
@@ -117,35 +119,51 @@ var validatePuzzle = function (root, children) {
 
 module.exports = {
   '1': {
+    'image': 'smiley',
     'requiredBlocks': [
     ],
-    'obstacles': false,
-    'ground': false,
-    'score': false,
     'freePlay': false,
     'goal': {
-      startX  : 100,
-      startY: 0,
       successCondition: function () {
-        var root = "jigsaw_one";
+        var root = "jigsaw_1A";
         var children = {
-          "jigsaw_one": ["jigsaw_two"],
-          "jigsaw_two": ["jigsaw_four"],
-          "jigsaw_four": []
+          "jigsaw_1A": ["jigsaw_1B"],
+          "jigsaw_2B": []
         };
         return validatePuzzle(root, children);
       },
-      failureCondition: function () {
-        return Jigsaw.avatarY > Jigsaw.MAZE_HEIGHT;
-      }
     },
     'scale': {
       'snapRadius': 2
     },
     'startBlocks':
-      eventBlock('jigsaw_one', COL2, ROW1) +
-      eventBlock('jigsaw_two', COL1, ROW2 + 50) +
-      eventBlock('jigsaw_four', COL1, ROW1 + 50)
+      eventBlock('jigsaw_1A', 20, 20) +
+      eventBlock('jigsaw_1B', 245, 65)
+  },
+
+  '2': {
+    'image': 'smiley',
+    'requiredBlocks': [
+    ],
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        var root = "jigsaw_2A";
+        var children = {
+          "jigsaw_2A": ["jigsaw_2B"],
+          "jigsaw_2B": ["jigsaw_2C"],
+          "jigsaw_2C": []
+        };
+        return validatePuzzle(root, children);
+      },
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'startBlocks':
+      eventBlock('jigsaw_2A', COL2, ROW1) +
+      eventBlock('jigsaw_2B', COL1, ROW2 + 50) +
+      eventBlock('jigsaw_2C', COL1, ROW1 + 50)
   }
 
 

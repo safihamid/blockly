@@ -18,7 +18,7 @@ exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
 
-  skin.image1 = skin.assetUrl('smiley.png');
+  skin.smiley= skin.assetUrl('smiley.png');
 
   // Settings
   skin.graph = config.graph;
