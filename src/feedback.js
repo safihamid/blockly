@@ -93,20 +93,6 @@ exports.displayFeedback = function(options) {
     });
   }
 
-  // set up the Save To Gallery button if necessary
-  var saveToGalleryButton = feedback.querySelector('#save-to-gallery-button');
-  if (saveToGalleryButton && options.response && options.response.save_to_gallery_url) {
-    dom.addClickTouchEvent(saveToGalleryButton, function() {
-      $.ajax({
-        type: 'PUT',
-        dataType: 'json',
-        url: options.response.save_to_gallery_url,
-        data: { activity: { saved_to_gallery: true } },
-        success: function() { $('#save-to-gallery-button').prop('disabled', true).text("Saved!"); }
-      });
-    });
-  }
-
   feedbackDialog.show({
     backdrop: (options.app === 'flappy' ? 'static' : true)
   });
@@ -327,8 +313,7 @@ exports.createSharingButtons = function(options) {
       facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source,
       twitterUrl: twitterUrl,
-      makeYourOwn: options.makeYourOwn,
-      saveToGalleryUrl: options.saveToGalleryUrl
+      makeYourOwn: options.makeYourOwn
     }
   });
   var sharingInput = sharingUrl.querySelector('#sharing-input');
