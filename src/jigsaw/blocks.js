@@ -87,22 +87,6 @@ var blockOfType = function (type) {
 };
 
 /**
- * Get the height of the main portion of the block, ignoring the heighted added
- * by the bottom notch, if it exists
- *
- * @param {string} type The type of the block to search for
- */
-var blockHeight = function (type) {
-  var block = blockOfType(type);
-  var height = block.getHeightWidth().height;
-  if (block.nextConnection) {
-    var notchHeight = Blockly.BlockSvg.NOTCH_PATH_LEFT.split(' ')[1].split(',')[1];
-    height -= notchHeight;
-  }
-  return height
-};
-
-/**
  * Get the width of the block of the given type
  *
  * @param {string} type The type of the block to search for
@@ -128,6 +112,7 @@ exports.install = function(blockly, skin) {
 
   level1(blockly, skin);
   level2(blockly, skin);
+  level3(blockly, skin);
 
   // Go through all added blocks, and add empty generators for those that
   // weren't already given generators
@@ -150,8 +135,10 @@ function level1(blockly, skin) {
   var imgWidth = 200;
   var imgHeight = 200;
 
+  var blockHeight = imgHeight / 2;
+
   var titleWidth = imgWidth - 20;
-  var titleHeight = imgHeight / 2 - 10;
+  var titleHeight = blockHeight - 10;
 
   blockly.Blocks.jigsaw_1A = {
     helpUrl: '',
@@ -175,7 +162,7 @@ function level1(blockly, skin) {
       this.setPreviousStatement(true);
       this.setNextStatement(false);
       this.setFillPattern(addPattern('pat1B', img,
-        imgWidth, imgHeight, 0, blockHeight('jigsaw_1A')));
+        imgWidth, imgHeight, 0, blockHeight));
     }
   };
 }
@@ -185,8 +172,10 @@ function level2(blockly, skin) {
   var imgWidth = 300;
   var imgHeight = 300;
 
+  var blockHeight = imgHeight / 3;
+
   var titleWidth = imgWidth - 20;
-  var titleHeight = imgHeight / 3 - 10;
+  var titleHeight = blockHeight - 10;
 
   blockly.Blocks.jigsaw_2A = {
     helpUrl: '',
@@ -197,7 +186,7 @@ function level2(blockly, skin) {
       this.setPreviousStatement(false);
       this.setNextStatement(true);
       this.setFillPattern(
-        addPattern('backgroundImage1', img, imgWidth, imgHeight, 0, 0));
+        addPattern('pat2A', img, imgWidth, imgHeight, 0, 0));
     }
   };
 
@@ -209,13 +198,9 @@ function level2(blockly, skin) {
         .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
       this.setPreviousStatement(true);
        this.setNextStatement(true);
-      this.setFillPattern(addPattern('backgroundImage2', img,
-        imgWidth, imgHeight, 0, blockHeight('jigsaw_2A')));
+      this.setFillPattern(addPattern('pat2B', img,
+        imgWidth, imgHeight, 0, blockHeight));
     }
-  };
-
-  var jigsaw1And2Height = function () {
-    return blockHeight('jigsaw_2A') + blockHeight('jigsaw_2B');
   };
 
   blockly.Blocks.jigsaw_2C = {
@@ -226,8 +211,47 @@ function level2(blockly, skin) {
         .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
       this.setPreviousStatement(true);
       this.setNextStatement(false);
-      this.setFillPattern(addPattern('backgroundImage4', img,
-        imgWidth, imgHeight, 0, jigsaw1And2Height));
+      this.setFillPattern(addPattern('pat2C', img,
+        imgWidth, imgHeight, 0, blockHeight * 2));
+    }
+  };
+}
+
+
+function level3(blockly, skin) {
+  var img = skin.smiley;
+  var imgWidth = 200;
+  var imgHeight = 200;
+
+  var blockHeight = imgHeight / 2;
+
+  var titleWidth = imgWidth - 20;
+  var titleHeight = blockHeight - 10;
+
+
+  blockly.Blocks.jigsaw_3A = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(0, 1.00, 0.98);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setFillPattern(
+        addPattern('pat3A', img, imgWidth, imgHeight, 0, 0));
+    }
+  };
+
+  blockly.Blocks.jigsaw_3B = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV(0, 1.00, 0.98);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
+      this.setPreviousStatement(true);
+      this.setNextStatement(false);
+      this.setFillPattern(addPattern('pat3B', img,
+        imgWidth, imgHeight, 0, blockHeight)); // blockHeight('jigsaw_3A')
     }
   };
 }

@@ -1,48 +1,10 @@
 /*jshint multistr: true */
 
-// todo - i think our prepoluated code counts as LOCs
-
-var constants = require('./constants');
-
 var tb = function(blocks) {
   return '<xml id="toolbox" style="displastartY: none;">' + blocks + '</xml>';
 };
 
-var category = function (name, blocks) {
-  return '<category id="' + name + '" name="' + name + '">' + blocks + '</category>';
-};
-
-var flapBlock = '<block type="Jigsaw_flap"></block>';
-var flapHeightBlock = '<block type="Jigsaw_flap_height"></block>';
-var endGameBlock = '<block type="Jigsaw_endGame"></block>';
-var playSoundBlock =  '<block type="Jigsaw_playSound"></block>';
-var incrementScoreBlock = '<block type="Jigsaw_incrementPlayerScore"></block>';
-
-var setSpeedBlock = '<block type="Jigsaw_setSpeed"></block>';
-var setBackgroundBlock = '<block type="Jigsaw_setBackground"></block>';
-var setGapHeightBlock = '<block type="Jigsaw_setGapHeight"></block>';
-var setPlayerBlock = '<block type="Jigsaw_setPlayer"></block>';
-var setObstacleBlock = '<block type="Jigsaw_setObstacle"></block>';
-var setGroundBlock = '<block type="Jigsaw_setGround"></block>';
-var setGravityBlock = '<block type="Jigsaw_setGravity"></block>';
-var setScoreBlock = '<block type="Jigsaw_setScore"></block>';
-
-// todo (brent) : can i get rid of constants?
-
-var COL_WIDTH = constants.WORKSPACE_COL_WIDTH + 30;
-var COL1 = constants.WORKSPACE_BUFFER;
-var COL2 = COL1 + COL_WIDTH;
-
-var ROW_HEIGHT = constants.WORKSPACE_ROW_HEIGHT;
-var ROW1 = constants.WORKSPACE_BUFFER;
-var ROW2 = ROW1 + ROW_HEIGHT;
-var ROW3 = ROW2 + ROW_HEIGHT;
-
-var AVATAR_HEIGHT = constants.AVATAR_HEIGHT;
-var AVATAR_WIDTH = constants.AVATAR_WIDTH;
-var AVATAR_Y_OFFSET = constants.AVATAR_Y_OFFSET;
-
-var eventBlock = function (type, x, y, child) {
+var jigsawBlock = function (type, x, y, child) {
   return '<block type="' + type + '" deletable="false"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
@@ -76,7 +38,7 @@ var listsEquivalent = function (list1, list2) {
  */
 var validatePuzzle = function (root, children) {
   var roots = Blockly.mainWorkspace.getTopBlocks();
-  if (roots.length !== 1 && roots[0].type !== root) {
+  if (roots.length !== 1 || roots[0].type !== root) {
     return false;
   }
 
@@ -87,6 +49,9 @@ var validatePuzzle = function (root, children) {
   }
   for (var i = 0; i < all.length; i++) {
     var block = all[i];
+    if (!children[block.type]) {
+      throw new Error('Unexpected block ' + block.type);
+    }
     var childTypes = block.getChildren().map(function (block) {
       return block.type;
     });
@@ -128,7 +93,7 @@ module.exports = {
         var root = "jigsaw_1A";
         var children = {
           "jigsaw_1A": ["jigsaw_1B"],
-          "jigsaw_2B": []
+          "jigsaw_1B": []
         };
         return validatePuzzle(root, children);
       },
@@ -137,8 +102,8 @@ module.exports = {
       'snapRadius': 2
     },
     'startBlocks':
-      eventBlock('jigsaw_1A', 20, 20) +
-      eventBlock('jigsaw_1B', 245, 65)
+      jigsawBlock('jigsaw_1A', 20, 20) +
+      jigsawBlock('jigsaw_1B', 245, 65)
   },
 
   '2': {
@@ -161,9 +126,36 @@ module.exports = {
       'snapRadius': 2
     },
     'startBlocks':
-      eventBlock('jigsaw_2A', COL2, ROW1) +
-      eventBlock('jigsaw_2B', COL1, ROW2 + 50) +
-      eventBlock('jigsaw_2C', COL1, ROW1 + 50)
+      jigsawBlock('jigsaw_2A', 260, 20) +
+      jigsawBlock('jigsaw_2B', 120, 190) +
+      jigsawBlock('jigsaw_2C', 20, 70)
+  },
+
+  '3': {
+    'image': 'smiley',
+    'requiredBlocks': [
+    ],
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        var root = "jigsaw_3A";
+        var children = {
+          "jigsaw_3A": ["jigsaw_3B"],
+          "jigsaw_3B": []
+        };
+        return validatePuzzle(root, children);
+      },
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(
+        jigsawBlock('jigsaw_3B', 245, 65) +
+        jigsawBlock('jigsaw_3A', 20, 20)
+      ),
+    'startBlocks': ''
+
   }
 
 
