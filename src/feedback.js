@@ -98,10 +98,10 @@ exports.displayFeedback = function(options) {
   if (saveToGalleryButton && options.response && options.response.save_to_gallery_url) {
     dom.addClickTouchEvent(saveToGalleryButton, function() {
       $.ajax({
-        type: 'PUT',
+        type: 'POST',
         dataType: 'json',
         url: options.response.save_to_gallery_url,
-        data: { activity: { saved_to_gallery: true } },
+        data: {},
         success: function() { $('#save-to-gallery-button').prop('disabled', true).text("Saved!"); }
       });
     });
