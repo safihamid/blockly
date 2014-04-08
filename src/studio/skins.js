@@ -1,11 +1,9 @@
 /**
  * Load Skin for Studio.
  */
-// tiles: A 250x200 set of 20 map images.
 // goal: A 20x34 goal image.
 // background: Number of 400x400 background images. Randomly select one if
 // specified, otherwise, use background.png.
-// graph: Colour of optional grid lines, or false.
 
 var skinsBase = require('../skins');
 
@@ -20,14 +18,22 @@ exports.load = function(assetUrl, id) {
 
   skin.retro = {
     background: skin.assetUrl('retro_background.png'),
-    tiles: skin.assetUrl('retro_tiles_wall.png'),
-    goalTiles: skin.assetUrl('retro_tiles_goal.png'),
     sprite: skin.assetUrl('retro_paddle.png'),
+  };
+  skin.cave = {
+    background: skin.assetUrl('background_cave.png'),
+  };
+  skin.santa = {
+    background: skin.assetUrl('background_santa.png'),
+  };
+  skin.scifi = {
+    background: skin.assetUrl('background_scifi.png'),
+  };
+  skin.underwater = {
+    background: skin.assetUrl('background_underwater.png'),
   };
 
   // Images
-  skin.tiles = skin.assetUrl('tiles_wall.png');
-  skin.goalTiles = skin.assetUrl('tiles_goal.png');
   skin.goal = skin.assetUrl('goal.png');
   skin.goalSuccess = skin.assetUrl('goal_success.png');
   skin.sprite = skin.assetUrl('paddle.png');
@@ -61,7 +67,6 @@ exports.load = function(assetUrl, id) {
                    skin.assetUrl('2_wall_bounce.ogg')];
   
   // Settings
-  skin.graph = config.graph;
   if (config.background !== undefined) {
     var index = Math.floor(Math.random() * config.background);
     skin.background = skin.assetUrl('background' + index + '.png');
