@@ -97,13 +97,8 @@ exports.displayFeedback = function(options) {
   var saveToGalleryButton = feedback.querySelector('#save-to-gallery-button');
   if (saveToGalleryButton && options.response && options.response.save_to_gallery_url) {
     dom.addClickTouchEvent(saveToGalleryButton, function() {
-      $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        url: options.response.save_to_gallery_url,
-        data: {},
-        success: function() { $('#save-to-gallery-button').prop('disabled', true).text("Saved!"); }
-      });
+      $.post(options.response.save_to_gallery_url,
+             function() { $('#save-to-gallery-button').prop('disabled', true).text("Saved!"); });
     });
   }
 
