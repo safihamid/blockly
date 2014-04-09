@@ -75,44 +75,30 @@ var loadLevel = function() {
     Jigsaw.scale[key] = level.scale[key];
   }
 
-  Jigsaw.MAZE_WIDTH = 400;
-  Jigsaw.MAZE_HEIGHT = 400;
+  Jigsaw.MAZE_WIDTH = 0;
+  Jigsaw.MAZE_HEIGHT = 0;
 };
 
 var drawMap = function() {
-  var svg = document.getElementById('svgJigsaw');
   var i, x, y, k, tile;
 
   // Adjust outer element size.
-  svg.setAttribute('width', Jigsaw.MAZE_WIDTH);
-  svg.setAttribute('height', Jigsaw.MAZE_HEIGHT);
-
   // Adjust visualization and belowVisualization width.
   var visualization = document.getElementById('visualization');
   visualization.style.width = Jigsaw.MAZE_WIDTH + 'px';
+  // visualization.style.display = 'none';
   var belowVisualization = document.getElementById('belowVisualization');
   belowVisualization.style.width = Jigsaw.MAZE_WIDTH + 'px';
+  belowVisualization.style.display = 'none';
 
   // Adjust button table width.
   var buttonTable = document.getElementById('gameButtons');
   buttonTable.style.width = Jigsaw.MAZE_WIDTH + 'px';
+  // buttonTable.style.display = 'none';
 
   var hintBubble = document.getElementById('bubble');
   hintBubble.style.width = Jigsaw.MAZE_WIDTH + 'px';
-
-  // todo (brent) : per level
-  if (level.image && skin[level.image]) {
-    var arena = Blockly.createSvgElement('image', {
-      id: 'arena',
-      height: Jigsaw.MAZE_HEIGHT,
-      width: Jigsaw.MAZE_WIDTH,
-      x: 0,
-      y: 0,
-      class: 'transparent'
-    }, svg);
-    arena.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      skin[level.image]);
-  }
+  // hintBubble.style.display = 'none';
 };
 
 /**
@@ -142,7 +128,6 @@ Jigsaw.init = function(config) {
     assetUrl: BlocklyApps.assetUrl,
     data: {
       localeDirection: BlocklyApps.localeDirection(),
-      visualization: require('./visualization.html')(),
       controls: require('./controls.html')({assetUrl: BlocklyApps.assetUrl}),
       blockUsed: undefined,
       idealBlockNumber: undefined,
@@ -195,9 +180,6 @@ Jigsaw.init = function(config) {
 BlocklyApps.runButtonClick = function() {
   var success = level.goal.successCondition();
   if (success) {
-    var arena = document.getElementById('arena');
-    var attribute = arena.getAttribute('class');
-    arena.setAttribute('class', attribute.replace('transparent', ''));
     Jigsaw.result = ResultType.SUCCESS;
 
     Jigsaw.onPuzzleComplete();

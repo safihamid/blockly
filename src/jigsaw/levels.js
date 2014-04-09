@@ -94,9 +94,7 @@ var validateSimplePuzzle = function (options) {
 
 module.exports = {
   '1': {
-    'image': 'smiley',
-    'requiredBlocks': [
-    ],
+    'requiredBlocks': [],
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -112,9 +110,7 @@ module.exports = {
   },
 
   '2': {
-    'image': 'smiley',
-    'requiredBlocks': [
-    ],
+    'requiredBlocks': [],
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -131,9 +127,7 @@ module.exports = {
   },
 
   '3': {
-    'image': 'smiley',
-    'requiredBlocks': [
-    ],
+    'requiredBlocks': [],
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -145,6 +139,7 @@ module.exports = {
     },
     'toolbox':
       tb(
+        jigsawBlock('jigsaw_3C') +
         jigsawBlock('jigsaw_3B') +
         jigsawBlock('jigsaw_3A')
       ),
@@ -154,8 +149,7 @@ module.exports = {
 
   '4': {
     'image': 'smiley',
-    'requiredBlocks': [
-    ],
+    'requiredBlocks': [],
     'freePlay': false,
     'goal': {
       successCondition: function () {
@@ -176,6 +170,4 @@ module.exports = {
     'startBlocks': ''
 
   }
-
-
 };

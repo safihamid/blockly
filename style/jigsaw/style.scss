@@ -4,8 +4,8 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
   width: 1024px;
 }
 
-#svgJigsaw {
-  overflow: hidden;
+#blocklyApp {
+  height: 600px;
 }
 
 /* 'Look' icon */
@@ -56,8 +56,4 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
 
 .hide {
   display: none;
-}
-
-.transparent {
-  opacity:0.2;
 }

@@ -124,17 +124,17 @@ exports.install = function(blockly, skin) {
    });
 
   generateBlocksForLevel(blockly, skin, {
-     image: skin.smiley,
+     image: skin.artist,
      width: 200,
      height: 200,
-     numBlocks: 2,
+     numBlocks: 3,
      level: 3
    });
 
   generateBlocksForLevel(blockly, skin, {
      image: skin.smiley,
-     width: 250,
-     height: 250,
+     width: 400,
+     height: 400,
      numBlocks: 5,
      level: 4
    });
