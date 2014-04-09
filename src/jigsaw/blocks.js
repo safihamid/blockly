@@ -1,5 +1,5 @@
 /**
- * Blockly App: Bounce
+ * Blockly App: Jigsaw
  *
  * Copyright 2013 Code.org
  *

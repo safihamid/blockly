@@ -8,8 +8,6 @@
 'use strict';
 
 var BlocklyApps = require('../base');
-var commonMsg = require('../../locale/current/common');
-var JigsawMsg = require('../../locale/current/Jigsaw');
 var skins = require('../skins');
 var page = require('../templates/page.html');
 var feedback = require('../feedback.js');
@@ -86,19 +84,9 @@ var drawMap = function() {
   // Adjust visualization and belowVisualization width.
   var visualization = document.getElementById('visualization');
   visualization.style.width = Jigsaw.MAZE_WIDTH + 'px';
-  // visualization.style.display = 'none';
   var belowVisualization = document.getElementById('belowVisualization');
   belowVisualization.style.width = Jigsaw.MAZE_WIDTH + 'px';
   belowVisualization.style.display = 'none';
-
-  // Adjust button table width.
-  var buttonTable = document.getElementById('gameButtons');
-  buttonTable.style.width = Jigsaw.MAZE_WIDTH + 'px';
-  // buttonTable.style.display = 'none';
-
-  var hintBubble = document.getElementById('bubble');
-  hintBubble.style.width = Jigsaw.MAZE_WIDTH + 'px';
-  // hintBubble.style.display = 'none';
 };
 
 /**
@@ -162,10 +150,6 @@ Jigsaw.init = function(config) {
 
   config.trashcan = false;
   config.scrollbars = false;
-
-  config.makeString = commonMsg.makeYourOwnFlappy();
-  config.makeUrl = "http://code.org/Jigsaw";
-  config.makeImage = BlocklyApps.assetUrl('media/Jigsaw_promo.png');
 
   config.enableShowCode = false;
 
