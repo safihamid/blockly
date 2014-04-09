@@ -131,7 +131,7 @@ module.exports = {
     'freePlay': false,
     'goal': {
       successCondition: function () {
-        return validateSimplePuzzle({level: 3, numBlocks: 2});
+        return validateSimplePuzzle({level: 3, numBlocks: 3});
       },
     },
     'scale': {
