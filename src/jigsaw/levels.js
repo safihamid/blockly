@@ -5,8 +5,8 @@ var createToolbox = function(blocks) {
 };
 
 var jigsawBlock = function (type, x, y, child) {
-  var x = x || 0;
-  var y = y || 0;
+  x = x || 0;
+  y = y || 0;
   return '<block type="' + type + '" deletable="false"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
@@ -45,7 +45,7 @@ var validateSimplePuzzle = function (options) {
     if (children.length > 1) {
       return false;
     }
-    var block = children[0];
+    block = children[0];
     depth++;
   }
 

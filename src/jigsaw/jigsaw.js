@@ -12,7 +12,6 @@ var skins = require('../skins');
 var page = require('../templates/page.html');
 var feedback = require('../feedback.js');
 var dom = require('../dom');
-var constants = require('./constants');
 
 /**
  * Create a namespace for the application.
@@ -151,7 +150,7 @@ BlocklyApps.runButtonClick = function() {
 
     Jigsaw.onPuzzleComplete();
   }
-}
+};
 
 /**
  * Outcomes of running the user program.

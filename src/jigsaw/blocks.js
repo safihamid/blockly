@@ -168,23 +168,25 @@ function generateBlocksForLevel(blockly, skin, options) {
 
   var letters = '-ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+  function generateBlock(blockNum) {
+    var blockName = 'jigsaw_' + level + letters[blockNum];
+    var patternName = 'pat_' + level + letters[blockNum];
+    blockly.Blocks[blockName] = {
+      helpUrl: '',
+      init: function () {
+        this.setHSV(0, 1.00, 0.98);
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
+        this.setPreviousStatement(blockNum !== 1);
+        this.setNextStatement(blockNum !== numBlocks);
+        this.setFillPattern(
+          addPattern(patternName, image, width, height, 0,
+            blockHeight * (blockNum - 1)));
+      }
+    };
+  }
+
   for (var i = 1; i <= numBlocks; i++) {
-    (function (blockNum) {
-      var blockName = 'jigsaw_' + level + letters[blockNum];
-      var patternName = 'pat_' + level + letters[blockNum];
-      blockly.Blocks[blockName] = {
-        helpUrl: '',
-        init: function () {
-          this.setHSV(0, 1.00, 0.98);
-          this.appendDummyInput()
-            .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-          this.setPreviousStatement(blockNum !== 1);
-          this.setNextStatement(blockNum !== numBlocks);
-          this.setFillPattern(
-            addPattern(patternName, image, width, height, 0,
-              blockHeight * (blockNum - 1)));
-        }
-      };
-    })(i);
+    generateBlock(i);
   }
 }
