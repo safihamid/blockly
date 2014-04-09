@@ -118,10 +118,13 @@ button:active {
 button:hover {
   box-shadow: 2px 2px 5px #888;
 }
-button.disabled, button[disabled=disabled] {
+button.disabled, button[disabled=disabled], button:disabled {
   border: 1px solid #C7C7C7;
   background-color: #C7C7C7;
   box-shadow: none;
+  &:hover {
+    box-shadow: none;
+  }
 }
 button.disabled:hover>img {
   opacity: 0.6;
@@ -495,12 +498,14 @@ $modal-image-margin-gap: 10px;
 
 #ok-button {
   background-color: $orange;
+  border: 1px solid $orange;
   color: white;
   min-width: 100px;
 }
 
 #again-button {
   background-color: $green;
+  border: 1px solid $green;
   color: white;
   margin-left: 0px;
   margin-right: 10px;
@@ -508,9 +513,20 @@ $modal-image-margin-gap: 10px;
 
 #continue-button {
   background-color: $orange;
+  border: 1px solid $orange;
   color: white;
   margin-left: 0px;
   margin-right: 10px;
+}
+
+#save-to-gallery-button {
+  background-color: $purple;
+  border: 1px solid $purple;
+  color: white;
+  &:disabled {
+    color: $purple;
+    background-color: lightgrey;
+  }
 }
 
 .modal-image {

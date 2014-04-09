@@ -93,6 +93,15 @@ exports.displayFeedback = function(options) {
     });
   }
 
+  // set up the Save To Gallery button if necessary
+  var saveToGalleryButton = feedback.querySelector('#save-to-gallery-button');
+  if (saveToGalleryButton && options.response && options.response.save_to_gallery_url) {
+    dom.addClickTouchEvent(saveToGalleryButton, function() {
+      $.post(options.response.save_to_gallery_url,
+             function() { $('#save-to-gallery-button').prop('disabled', true).text("Saved!"); });
+    });
+  }
+
   feedbackDialog.show({
     backdrop: (options.app === 'flappy' ? 'static' : true)
   });
@@ -313,7 +322,8 @@ exports.createSharingButtons = function(options) {
       facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source,
       twitterUrl: twitterUrl,
-      makeYourOwn: options.makeYourOwn
+      makeYourOwn: options.makeYourOwn,
+      saveToGalleryUrl: options.saveToGalleryUrl
     }
   });
   var sharingInput = sharingUrl.querySelector('#sharing-input');
