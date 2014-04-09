@@ -1,6 +1,6 @@
 /*jshint multistr: true */
 
-var tb = function(blocks) {
+var createToolbox = function(blocks) {
   return '<xml id="toolbox" style="displastartY: none;">' + blocks + '</xml>';
 };
 
@@ -12,23 +12,6 @@ var jigsawBlock = function (type, x, y, child) {
     ' y="' + y + '">' +
     (child ? '<next>' + child + '</next>' : '') +
     '</block>';
-};
-
-/**
- * Deep equality check for two lists.  Returns true if and only if lists have
- * the same items, in the same order.
- */
-var listsEquivalent = function (list1, list2) {
-  if (list1.length !== list2.length) {
-    return false;
-  }
-
-  for (var i = 0; i < list1.length; i++) {
-    if (list1[i] !== list2[i]) {
-      return false;
-    }
-  }
-  return true;
 };
 
 /**
@@ -124,7 +107,7 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb(
+      createToolbox(
         jigsawBlock('jigsaw_3C') +
         jigsawBlock('jigsaw_3B') +
         jigsawBlock('jigsaw_3A')
@@ -146,7 +129,7 @@ module.exports = {
       'snapRadius': 2
     },
     'toolbox':
-      tb(
+      createToolbox(
         jigsawBlock('jigsaw_4B') +
         jigsawBlock('jigsaw_4A') +
         jigsawBlock('jigsaw_4D') +

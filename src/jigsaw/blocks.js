@@ -7,12 +7,13 @@
 'use strict';
 
 var msg = require('../../locale/current/Jigsaw');
+var dom = require('../dom');
 
 var patterns = [];
 
 /**
  * Add an svg pattern for the given image. If document is not yet fully loaded,
- * it will add to pattern to a list for later.
+ * it will add the pattern to a list for later.
  *
  * @param {string} id Pattern name
  * @param {string} imagePath Url of the image
@@ -24,7 +25,7 @@ var patterns = [];
 var addPattern = function (id, imagePath, width, height, offsetX, offsetY) {
   var x, y, pattern, patternImage;
 
-  if (document.readyState != "complete") {
+  if (document.readyState !== "complete") {
     // queue it up
     patterns.push({
       id: id,
@@ -98,12 +99,11 @@ var blockWidth = function (type) {
 // Install extensions to Blockly's language and JavaScript generator.
 exports.install = function(blockly, skin) {
   // don't add patterns until ready
-  var readyStateCheckInterval = setInterval(function() {
+  dom.addReadyListener(function() {
     if (document.readyState === "complete") {
       addQueuedPatterns();
-      clearInterval(readyStateCheckInterval);
     }
-  }, 10);
+  });
 
   var existingBlocks = Object.keys(blockly.Blocks);
 

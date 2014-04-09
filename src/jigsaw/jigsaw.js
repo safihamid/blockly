@@ -22,7 +22,6 @@ var Jigsaw = module.exports;
 var level;
 var skin;
 
-//TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 //The number of blocks to show as feedback.
 BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
@@ -90,20 +89,6 @@ var drawMap = function() {
 };
 
 /**
- * @param scope Object :  The scope in which to execute the delegated function.
- * @param func Function : The function to execute
- * @param data Object or Array : The data to pass to the function. If the function is also passed arguments, the data is appended to the arguments list. If the data is an Array, each item is appended as a new argument.
- */
-var delegate = function(scope, func, data)
-{
-  return function()
-  {
-    var args = Array.prototype.slice.apply(arguments).concat(data);
-    func.apply(scope, args);
-  };
-};
-
-/**
  * Initialize Blockly and the Jigsaw app.  Called on page load.
  */
 Jigsaw.init = function(config) {
@@ -117,8 +102,6 @@ Jigsaw.init = function(config) {
     data: {
       localeDirection: BlocklyApps.localeDirection(),
       controls: require('./controls.html')({assetUrl: BlocklyApps.assetUrl}),
-      blockUsed: undefined,
-      idealBlockNumber: undefined,
       blockCounterClass: 'block-counter-default'
     }
   });
@@ -188,7 +171,7 @@ var ResultType = {
 var displayFeedback = function() {
   if (!Jigsaw.waitingForReport) {
     BlocklyApps.displayFeedback({
-      app: 'Jigsaw', //XXX
+      app: 'Jigsaw',
       skin: skin.id,
       feedbackType: Jigsaw.testResults,
       response: Jigsaw.response,
@@ -223,13 +206,7 @@ Jigsaw.onPuzzleComplete = function() {
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Jigsaw.result == ResultType.SUCCESS);
 
-  // If the current level is a free play, always return the free play
-  // result type
-  if (level.freePlay) {
-    Jigsaw.testResults = BlocklyApps.TestResults.FREE_PLAY;
-  } else {
-    Jigsaw.testResults = BlocklyApps.getTestResults();
-  }
+  Jigsaw.testResults = BlocklyApps.getTestResults();
 
   if (Jigsaw.testResults >= BlocklyApps.TestResults.FREE_PLAY) {
     BlocklyApps.playAudio('win', {volume : 0.5});
@@ -248,11 +225,11 @@ Jigsaw.onPuzzleComplete = function() {
 
   // Report result to server.
   BlocklyApps.report({
-                     app: 'Jigsaw',
-                     level: level.id,
-                     result: Jigsaw.result === ResultType.SUCCESS,
-                     testResult: Jigsaw.testResults,
-                     program: encodeURIComponent(textBlocks),
-                     onComplete: Jigsaw.onReportComplete
-                     });
+     app: 'Jigsaw',
+     level: level.id,
+     result: Jigsaw.result === ResultType.SUCCESS,
+     testResult: Jigsaw.testResults,
+     program: encodeURIComponent(textBlocks),
+     onComplete: Jigsaw.onReportComplete
+  });
 };
