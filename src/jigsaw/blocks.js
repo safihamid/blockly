@@ -6,7 +6,7 @@
  */
 'use strict';
 
-var msg = require('../../locale/current/Jigsaw');
+var msg = require('../../locale/current/jigsaw');
 var dom = require('../dom');
 
 var patterns = [];
