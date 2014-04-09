@@ -1,9 +1,6 @@
 /**
  * Load Skin for Jigsaw.
  */
-// background: Number of 400x400 background images. Randomly select one if
-// specified, otherwise, use background.png.
-// graph: Colour of optional grid lines, or false.
 
 var skinsBase = require('../skins');
 

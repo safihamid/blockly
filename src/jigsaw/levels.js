@@ -78,20 +78,6 @@ var validateSimplePuzzle = function (options) {
  * Configuration for all levels.
  */
 
- /**
-  * Explanation of options:
-  * goal.startX/startY
-  * - start location of flag image
-  * goal.moving
-  * - whether the goal stays in one spot or moves at level's speed
-  * goal.successCondition
-  * - condition(s), which if true at any point, indicate user has successfully
-  *   completed the puzzle
-  * goal.failureCondition
-  * - condition(s), which if true at any point, indicates the puzzle is
-      complete (indicating failure if success condition not met)
-  */
-
 module.exports = {
   '1': {
     'requiredBlocks': [],
