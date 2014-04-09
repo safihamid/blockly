@@ -310,6 +310,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-strip-code');
+  grunt.loadNpmTasks('grunt-notify');
 
   grunt.loadTasks('tasks');
 

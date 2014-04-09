@@ -25,6 +25,11 @@ exports.setSprite = function (id, spriteIndex, value) {
   Studio.setSprite(spriteIndex, value);
 };
 
+exports.saySprite = function (id, spriteIndex, text) {
+  BlocklyApps.highlight(id);
+  Studio.saySprite(spriteIndex, text);
+};
+
 exports.setBackground = function (id, value) {
   BlocklyApps.highlight(id);
   Studio.setBackground(value);
