@@ -1,5 +1,5 @@
 var appMain = require('../appMain');
-window.Jigsaw = require('./Jigsaw');
+window.Jigsaw = require('./jigsaw');
 if (typeof global !== 'undefined') {
   global.Jigsaw = window.Jigsaw;
 }
