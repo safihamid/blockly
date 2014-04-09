@@ -11,8 +11,6 @@ var BlocklyApps = require('../base');
 var commonMsg = require('../../locale/current/common');
 var JigsawMsg = require('../../locale/current/Jigsaw');
 var skins = require('../skins');
-var codegen = require('../codegen');
-var api = require('./api');
 var page = require('../templates/page.html');
 var feedback = require('../feedback.js');
 var dom = require('../dom');
@@ -104,7 +102,7 @@ var drawMap = function() {
 
   // todo (brent) : per level
   if (level.image && skin[level.image]) {
-    var background = Blockly.createSvgElement('image', {
+    var arena = Blockly.createSvgElement('image', {
       id: 'arena',
       height: Jigsaw.MAZE_HEIGHT,
       width: Jigsaw.MAZE_WIDTH,
@@ -112,7 +110,7 @@ var drawMap = function() {
       y: 0,
       class: 'transparent'
     }, svg);
-    background.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    arena.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       skin[level.image]);
   }
 };
@@ -186,54 +184,25 @@ Jigsaw.init = function(config) {
 
   config.enableShowCode = false;
 
-  // config.preventExtraTopLevelBlocks = true;
-
   BlocklyApps.init(config);
 
-  // todo (brent): have this be level based
   document.getElementById('runButton').style.display = 'none';
-
   Blockly.addChangeListener(function(evt) {
-    // todo (brent): i think this is the right place to check for win condition
-    var success = level.goal.successCondition();
-    if (success) {
-      var arena = document.getElementById('arena');
-      var attribute = arena.getAttribute('class');
-      arena.setAttribute('class', attribute.replace('transparent', ''));
-      Jigsaw.result = ResultType.SUCCESS;
-      Jigsaw.onPuzzleComplete();
-    }
+    BlocklyApps.runButtonClick();
   });
 };
 
-/**
- * Click the run button.  Start the program.
- */
-// XXX This is the only method used by the templates!
 BlocklyApps.runButtonClick = function() {
-  // Only allow a single top block on some levels.
-  if (level.singleTopBlock &&
-      Blockly.mainWorkspace.getTopBlocks().length > 1) {
-    window.alert(commonMsg.oneTopBlock());
-    return;
-  }
-  var runButton = document.getElementById('runButton');
-  var resetButton = document.getElementById('resetButton');
-  // Ensure that Reset button is at least as wide as Run button.
-  if (!resetButton.style.minWidth) {
-    resetButton.style.minWidth = runButton.offsetWidth + 'px';
-  }
-  document.getElementById('clickrun').setAttribute('visibility', 'hidden');
-  document.getElementById('instructions').setAttribute('visibility', 'visible');
-  document.getElementById('getready').setAttribute('visibility', 'visible');
+  var success = level.goal.successCondition();
+  if (success) {
+    var arena = document.getElementById('arena');
+    var attribute = arena.getAttribute('class');
+    arena.setAttribute('class', attribute.replace('transparent', ''));
+    Jigsaw.result = ResultType.SUCCESS;
 
-  runButton.style.display = 'none';
-  resetButton.style.display = 'inline';
-  Blockly.mainWorkspace.traceOn(true);
-  // BlocklyApps.reset(false);
-  BlocklyApps.attempts++;
-  Jigsaw.execute();
-};
+    Jigsaw.onPuzzleComplete();
+  }
+}
 
 /**
  * Outcomes of running the user program.
@@ -279,35 +248,7 @@ Jigsaw.onReportComplete = function(response) {
  * Execute the user's code.  Heaven help us...
  */
 Jigsaw.execute = function() {
-  BlocklyApps.log = [];
-  BlocklyApps.ticks = 100; //TODO: Set higher for some levels
-  Jigsaw.result = ResultType.UNSET;
-  Jigsaw.testResults = BlocklyApps.TestResults.NO_TESTS_RUN;
-  Jigsaw.waitingForReport = false;
-  Jigsaw.response = null;
-
-  // Check for empty top level blocks to warn user about bugs,
-  // especially ones that lead to infinite loops.
-  if (feedback.hasEmptyTopLevelBlocks()) {
-    Jigsaw.testResults = BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
-    displayFeedback();
-    return;
-  }
-
-  if (level.editCode) {
-    var codeTextbox = document.getElementById('codeTextbox');
-    var code = dom.getText(codeTextbox);
-    // Insert aliases from level codeBlocks into code
-    if (level.codeFunctions) {
-      for (var i = 0; i < level.codeFunctions.length; i++) {
-        var codeFunction = level.codeFunctions[i];
-        if (codeFunction.alias) {
-          code = codeFunction.func +
-              " = function() { " + codeFunction.alias + " };" + code;
-        }
-      }
-    }
-  }
+  // execute is a no-op for jigsaw
 };
 
 Jigsaw.onPuzzleComplete = function() {

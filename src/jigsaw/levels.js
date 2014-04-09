@@ -5,6 +5,8 @@ var tb = function(blocks) {
 };
 
 var jigsawBlock = function (type, x, y, child) {
+  var x = x || 0;
+  var y = y || 0;
   return '<block type="' + type + '" deletable="false"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
@@ -29,39 +31,47 @@ var listsEquivalent = function (list1, list2) {
   return true;
 };
 
-
 /**
  * Validates whether puzzle has been successfully put together.
  *
- * @param {string} root The type of the top level piece
- * @Param {Object} children Maps each block type to expected children types.
+ * @param {number} options.level Level number
+ * @Param {number} options.numBlocks How many blocks there are in the level
  */
-var validatePuzzle = function (root, children) {
+var validateSimplePuzzle = function (options) {
+  var level = options.level;
+  var numBlocks = options.numBlocks;
+
+  var letters = '-ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var types = [];
+  for (var i = 1; i <= numBlocks; i++) {
+    types.push('jigsaw_' + level + letters[i]);
+  }
+
   var roots = Blockly.mainWorkspace.getTopBlocks();
-  if (roots.length !== 1 || roots[0].type !== root) {
+  if (roots.length !== 1) {
     return false;
   }
 
-  var all = Blockly.mainWorkspace.getAllBlocks();
-  var childKeys = Object.keys(children);
-  if (all.length !== childKeys.length) {
-    throw new Error('Unexpected number of blocks in workspace');
-  }
-  for (var i = 0; i < all.length; i++) {
-    var block = all[i];
-    if (!children[block.type]) {
-      throw new Error('Unexpected block ' + block.type);
-    }
-    var childTypes = block.getChildren().map(function (block) {
-      return block.type;
-    });
-    var expectedTypes = children[childKeys[i]];
-    if (!listsEquivalent(childTypes, expectedTypes)) {
+  var depth = 1;
+  var block = roots[0];
+  while (depth <= numBlocks) {
+    if (!block || block.type !== types[depth - 1]) {
       return false;
     }
-  };
-  return true;
+    var children = block.getChildren();
+    if (children.length > 1) {
+      return false;
+    }
+    var block = children[0];
+    depth++;
+  }
 
+  // last block shouldnt have children
+  if (block !== undefined) {
+    return false;
+  }
+
+  return true;
 };
 
 /*
@@ -90,12 +100,7 @@ module.exports = {
     'freePlay': false,
     'goal': {
       successCondition: function () {
-        var root = "jigsaw_1A";
-        var children = {
-          "jigsaw_1A": ["jigsaw_1B"],
-          "jigsaw_1B": []
-        };
-        return validatePuzzle(root, children);
+        return validateSimplePuzzle({level: 1, numBlocks: 2});
       },
     },
     'scale': {
@@ -113,13 +118,7 @@ module.exports = {
     'freePlay': false,
     'goal': {
       successCondition: function () {
-        var root = "jigsaw_2A";
-        var children = {
-          "jigsaw_2A": ["jigsaw_2B"],
-          "jigsaw_2B": ["jigsaw_2C"],
-          "jigsaw_2C": []
-        };
-        return validatePuzzle(root, children);
+        return validateSimplePuzzle({level: 2, numBlocks: 3});
       },
     },
     'scale': {
@@ -138,12 +137,7 @@ module.exports = {
     'freePlay': false,
     'goal': {
       successCondition: function () {
-        var root = "jigsaw_3A";
-        var children = {
-          "jigsaw_3A": ["jigsaw_3B"],
-          "jigsaw_3B": []
-        };
-        return validatePuzzle(root, children);
+        return validateSimplePuzzle({level: 3, numBlocks: 2});
       },
     },
     'scale': {
@@ -151,8 +145,33 @@ module.exports = {
     },
     'toolbox':
       tb(
-        jigsawBlock('jigsaw_3B', 245, 65) +
-        jigsawBlock('jigsaw_3A', 20, 20)
+        jigsawBlock('jigsaw_3B') +
+        jigsawBlock('jigsaw_3A')
+      ),
+    'startBlocks': ''
+
+  },
+
+  '4': {
+    'image': 'smiley',
+    'requiredBlocks': [
+    ],
+    'freePlay': false,
+    'goal': {
+      successCondition: function () {
+        return validateSimplePuzzle({level: 4, numBlocks: 5});
+      },
+    },
+    'scale': {
+      'snapRadius': 2
+    },
+    'toolbox':
+      tb(
+        jigsawBlock('jigsaw_4B') +
+        jigsawBlock('jigsaw_4A') +
+        jigsawBlock('jigsaw_4D') +
+        jigsawBlock('jigsaw_4C') +
+        jigsawBlock('jigsaw_4E')
       ),
     'startBlocks': ''
 

@@ -105,17 +105,44 @@ exports.install = function(blockly, skin) {
     }
   }, 10);
 
-  var generator = blockly.Generator.get('JavaScript');
-  blockly.JavaScript = generator;
-
   var existingBlocks = Object.keys(blockly.Blocks);
 
-  level1(blockly, skin);
-  level2(blockly, skin);
-  level3(blockly, skin);
+  generateBlocksForLevel(blockly, skin, {
+     image: skin.smiley,
+     width: 200,
+     height: 200,
+     numBlocks: 2,
+     level: 1
+   });
+
+  generateBlocksForLevel(blockly, skin, {
+     image: skin.smiley,
+     width: 300,
+     height: 300,
+     numBlocks: 3,
+     level: 2
+   });
+
+  generateBlocksForLevel(blockly, skin, {
+     image: skin.smiley,
+     width: 200,
+     height: 200,
+     numBlocks: 2,
+     level: 3
+   });
+
+  generateBlocksForLevel(blockly, skin, {
+     image: skin.smiley,
+     width: 250,
+     height: 250,
+     numBlocks: 5,
+     level: 4
+   });
 
   // Go through all added blocks, and add empty generators for those that
   // weren't already given generators
+  var generator = blockly.Generator.get('JavaScript');
+  blockly.JavaScript = generator;
   Object.keys(blockly.Blocks).forEach(function (block) {
     if (existingBlocks.indexOf(block) === -1 && !generator[block]) {
       generator[block] = function () {
@@ -128,130 +155,36 @@ exports.install = function(blockly, skin) {
   delete blockly.Blocks.procedures_ifreturn;
 };
 
+function generateBlocksForLevel(blockly, skin, options) {
+  var image = options.image;
+  var width = options.width;
+  var height = options.height;
+  var numBlocks = options.numBlocks;
+  var level = options.level;
 
-
-function level1(blockly, skin) {
-  var img = skin.smiley;
-  var imgWidth = 200;
-  var imgHeight = 200;
-
-  var blockHeight = imgHeight / 2;
-
-  var titleWidth = imgWidth - 20;
+  var blockHeight = height / numBlocks;
+  var titleWidth = width - 20;
   var titleHeight = blockHeight - 10;
 
-  blockly.Blocks.jigsaw_1A = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(0, 1.00, 0.98);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setFillPattern(
-        addPattern('pat1A', img, imgWidth, imgHeight, 0, 0));
-    }
-  };
+  var letters = '-ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-  blockly.Blocks.jigsaw_1B = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(0, 1.00, 0.98);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(true);
-      this.setNextStatement(false);
-      this.setFillPattern(addPattern('pat1B', img,
-        imgWidth, imgHeight, 0, blockHeight));
-    }
-  };
-}
-
-function level2(blockly, skin) {
-  var img = skin.smiley;
-  var imgWidth = 300;
-  var imgHeight = 300;
-
-  var blockHeight = imgHeight / 3;
-
-  var titleWidth = imgWidth - 20;
-  var titleHeight = blockHeight - 10;
-
-  blockly.Blocks.jigsaw_2A = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(140, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setFillPattern(
-        addPattern('pat2A', img, imgWidth, imgHeight, 0, 0));
-    }
-  };
-
-  blockly.Blocks.jigsaw_2B = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(140, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(true);
-       this.setNextStatement(true);
-      this.setFillPattern(addPattern('pat2B', img,
-        imgWidth, imgHeight, 0, blockHeight));
-    }
-  };
-
-  blockly.Blocks.jigsaw_2C = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(140, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(true);
-      this.setNextStatement(false);
-      this.setFillPattern(addPattern('pat2C', img,
-        imgWidth, imgHeight, 0, blockHeight * 2));
-    }
-  };
-}
-
-
-function level3(blockly, skin) {
-  var img = skin.smiley;
-  var imgWidth = 200;
-  var imgHeight = 200;
-
-  var blockHeight = imgHeight / 2;
-
-  var titleWidth = imgWidth - 20;
-  var titleHeight = blockHeight - 10;
-
-
-  blockly.Blocks.jigsaw_3A = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(0, 1.00, 0.98);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setFillPattern(
-        addPattern('pat3A', img, imgWidth, imgHeight, 0, 0));
-    }
-  };
-
-  blockly.Blocks.jigsaw_3B = {
-    helpUrl: '',
-    init: function () {
-      this.setHSV(0, 1.00, 0.98);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
-      this.setPreviousStatement(true);
-      this.setNextStatement(false);
-      this.setFillPattern(addPattern('pat3B', img,
-        imgWidth, imgHeight, 0, blockHeight)); // blockHeight('jigsaw_3A')
-    }
-  };
+  for (var i = 1; i <= numBlocks; i++) {
+    (function (blockNum) {
+      var blockName = 'jigsaw_' + level + letters[blockNum];
+      var patternName = 'pat_' + level + letters[blockNum];
+      blockly.Blocks[blockName] = {
+        helpUrl: '',
+        init: function () {
+          this.setHSV(0, 1.00, 0.98);
+          this.appendDummyInput()
+            .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
+          this.setPreviousStatement(blockNum !== 1);
+          this.setNextStatement(blockNum !== numBlocks);
+          this.setFillPattern(
+            addPattern(patternName, image, width, height, 0,
+              blockHeight * (blockNum - 1)));
+        }
+      };
+    })(i);
+  }
 }
