@@ -90,6 +90,8 @@
   "up": "up",
   "whenDown": "when down arrow",
   "whenDownTooltip": "Execute the actions below when the down arrow key is pressed.",
+  "whenGameIsRunning": "when story is running",
+  "whenGameIsRunningTooltip": "Execute the actions below repeatedly while the story is running.",
   "whenGameStarts": "when story starts",
   "whenGameStartsTooltip": "Execute the actions below when the story starts.",
   "whenLeft": "when left arrow",

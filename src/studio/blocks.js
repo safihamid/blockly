@@ -134,6 +134,24 @@ exports.install = function(blockly, skin) {
     return '\n';
   };
 
+  blockly.Blocks.studio_whenGameIsRunning = {
+    // Block to handle the repeating tick event while the game is running.
+    helpUrl: '',
+    init: function () {
+      this.setHSV(140, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(msg.whenGameIsRunning());
+      this.setPreviousStatement(false);
+      this.setNextStatement(true);
+      this.setTooltip(msg.whenGameIsRunningTooltip());
+    }
+  };
+
+  generator.studio_whenGameIsRunning = function () {
+    // Generate JavaScript for handling the repeating tick event
+    return '\n';
+  };
+
   blockly.Blocks.studio_whenSpriteClicked = {
     // Block to handle event when sprite is clicked.
     helpUrl: '',
