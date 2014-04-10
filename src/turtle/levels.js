@@ -2,6 +2,7 @@ var levelBase = require('../level_base');
 var Colours = require('./core').Colours;
 var answer = require('./answers').answer;
 var msg = require('../../locale/current/turtle');
+var blockUtils = require('../block_utils');
 
 //TODO: Fix hacky level-number-dependent toolbox.
 var toolbox = function(page, level) {
@@ -39,6 +40,19 @@ var drawTurn = req.drawTurn;
 var SET_COLOUR_PICKER = req.SET_COLOUR_PICKER;
 var SET_COLOUR_RANDOM = req.SET_COLOUR_RANDOM;
 var defineWithArg = req.defineWithArg;
+
+var blocks = {
+  SIMPLE_MOVE_UP: blockUtils.blockOfType('simple_move_up'),
+  SIMPLE_MOVE_DOWN: blockUtils.blockOfType('simple_move_down'),
+  SIMPLE_MOVE_LEFT: blockUtils.blockOfType('simple_move_left'),
+  SIMPLE_MOVE_RIGHT: blockUtils.blockOfType('simple_move_right'),
+  simple_move_blocks: function() {
+    return this.SIMPLE_MOVE_UP +
+      this.SIMPLE_MOVE_DOWN +
+      this.SIMPLE_MOVE_LEFT +
+      this.SIMPLE_MOVE_RIGHT;
+  }
+};
 
 /**
  * Information about level-specific requirements.
@@ -774,6 +788,15 @@ module.exports = {
     freePlay: false,
     initialY: 300,
     toolbox: toolbox(5, 6),
+    startBlocks: '',
+    startDirection: 0,
+    sliderSpeed: 1.0
+  },
+  'k1_demo': {
+    answer: [],
+    freePlay: false,
+    initialY: 300,
+    toolbox: blockUtils.createToolbox(blocks.simple_move_blocks()),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
