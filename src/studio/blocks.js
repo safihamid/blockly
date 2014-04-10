@@ -459,7 +459,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[2][1]);  // default to hardcourt
+      dropdown.setValue(this.VALUES[2][1]);  // default to green
 
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
@@ -487,8 +487,10 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.studio_setSprite.VALUES =
       [[msg.setSpriteHidden(), '"hidden"'],
        [msg.setSpriteRandom(), 'random'],
-       [msg.setSpriteHardcourt(), '"hardcourt"'],
-       [msg.setSpriteRetro(), '"retro"']];
+       [msg.setSpriteGreen(), '"green"'],
+       [msg.setSpritePurple(), '"purple"'],
+       [msg.setSpritePink(), '"pink"'],
+       [msg.setSpriteOrange(), '"orange"']];
 
   generator.studio_setSprite = function() {
     return generateSetterCode(
