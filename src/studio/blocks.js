@@ -8,6 +8,9 @@
 
 var msg = require('../../locale/current/studio');
 var codegen = require('../codegen');
+var tiles = require('./tiles');
+
+var Direction = tiles.Direction;
 
 var generateSetterCode = function (opts) {
   var value = opts.ctx.getTitleValue('VALUE');
@@ -136,8 +139,10 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       this.setHSV(140, 1.00, 0.74);
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
       this.setPreviousStatement(false);
       this.setInputsInline(true);
       this.setNextStatement(true);
@@ -145,18 +150,13 @@ exports.install = function(blockly, skin) {
     },
   };
 
-  blockly.Blocks.studio_whenSpriteClicked.SPRITE = function () {
-    var array = [[msg.whenSpriteClicked1(), '0'],
-                 [msg.whenSpriteClicked2(), '1'],
-                 [msg.whenSpriteClicked3(), '2'],
-                 [msg.whenSpriteClicked4(), '3'],
-                 [msg.whenSpriteClicked5(), '4'],
-                 [msg.whenSpriteClicked6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_whenSpriteClicked.SPRITE =
+    [[msg.whenSpriteClicked1(), '0'],
+     [msg.whenSpriteClicked2(), '1'],
+     [msg.whenSpriteClicked3(), '2'],
+     [msg.whenSpriteClicked4(), '3'],
+     [msg.whenSpriteClicked5(), '4'],
+     [msg.whenSpriteClicked6(), '5']];
   
   generator.studio_whenSpriteClicked = function() {
     // Generate JavaScript for handle when a sprite is clicked event.
@@ -167,14 +167,18 @@ exports.install = function(blockly, skin) {
     // Block to handle event when sprite collides with another sprite.
     helpUrl: '',
     init: function() {
-      var dropdown = new blockly.FieldDropdown(this.SPRITE2);
-      dropdown.setValue('1'); // default to 2
+      var dropdownArray1 =
+          this.SPRITE1.slice(0, blockly.Blocks.studio_spriteCount);
+      var dropdownArray2 =
+          this.SPRITE2.slice(0, blockly.Blocks.studio_spriteCount);
+      var dropdown2 = new blockly.FieldDropdown(dropdownArray2);
+      dropdown2.setValue(dropdownArray2[1][1]); // default to 2
 
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE1), 'SPRITE1');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray1), 'SPRITE1');
       this.appendDummyInput()
-        .appendTitle(dropdown, 'SPRITE2');
+        .appendTitle(dropdown2, 'SPRITE2');
       this.setPreviousStatement(false);
       this.setInputsInline(true);
       this.setNextStatement(true);
@@ -182,31 +186,21 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.studio_whenSpriteCollided.SPRITE1 = function () {
-    var array = [[msg.whenSpriteCollided1(), '0'],
-                 [msg.whenSpriteCollided2(), '1'],
-                 [msg.whenSpriteCollided3(), '2'],
-                 [msg.whenSpriteCollided4(), '3'],
-                 [msg.whenSpriteCollided5(), '4'],
-                 [msg.whenSpriteCollided6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_whenSpriteCollided.SPRITE1 =
+      [[msg.whenSpriteCollided1(), '0'],
+       [msg.whenSpriteCollided2(), '1'],
+       [msg.whenSpriteCollided3(), '2'],
+       [msg.whenSpriteCollided4(), '3'],
+       [msg.whenSpriteCollided5(), '4'],
+       [msg.whenSpriteCollided6(), '5']];
 
-  blockly.Blocks.studio_whenSpriteCollided.SPRITE2 = function () {
-    var array = [[msg.whenSpriteCollidedWith1(), '0'],
-                 [msg.whenSpriteCollidedWith2(), '1'],
-                 [msg.whenSpriteCollidedWith3(), '2'],
-                 [msg.whenSpriteCollidedWith4(), '3'],
-                 [msg.whenSpriteCollidedWith5(), '4'],
-                 [msg.whenSpriteCollidedWith6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_whenSpriteCollided.SPRITE2 =
+      [[msg.whenSpriteCollidedWith1(), '0'],
+       [msg.whenSpriteCollidedWith2(), '1'],
+       [msg.whenSpriteCollidedWith3(), '2'],
+       [msg.whenSpriteCollidedWith4(), '3'],
+       [msg.whenSpriteCollidedWith5(), '4'],
+       [msg.whenSpriteCollidedWith6(), '5']];
   
   generator.studio_whenSpriteCollided = function() {
     // Generate JavaScript for handle when a sprite collision event.
@@ -214,12 +208,14 @@ exports.install = function(blockly, skin) {
   };
 
   blockly.Blocks.studio_move = {
-    // Block for moving left.
+    // Block for moving one frame a time.
     helpUrl: '',
     init: function() {
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
       this.appendDummyInput()
         .appendTitle(msg.moveSeparator());
       this.appendDummyInput()
@@ -231,29 +227,78 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.studio_move.SPRITE = function () {
-    var array = [[msg.moveSprite1(), '0'],
-                 [msg.moveSprite2(), '1'],
-                 [msg.moveSprite3(), '2'],
-                 [msg.moveSprite4(), '3'],
-                 [msg.moveSprite5(), '4'],
-                 [msg.moveSprite6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_move.SPRITE =
+      [[msg.moveSprite1(), '0'],
+       [msg.moveSprite2(), '1'],
+       [msg.moveSprite3(), '2'],
+       [msg.moveSprite4(), '3'],
+       [msg.moveSprite5(), '4'],
+       [msg.moveSprite6(), '5']];
   
   blockly.Blocks.studio_move.DIR =
-      [[msg.up(), 'moveUp'],
-       [msg.down(), 'moveDown'],
-       [msg.left(), 'moveLeft'],
-       [msg.right(), 'moveRight']];
+      [[msg.up(), Direction.NORTH.toString()],
+       [msg.down(), Direction.SOUTH.toString()],
+       [msg.left(), Direction.WEST.toString()],
+       [msg.right(), Direction.EAST.toString()]];
 
   generator.studio_move = function() {
     // Generate JavaScript for moving.
-    return 'Studio.' + this.getTitleValue('DIR') +
-      '(\'block_id_' + this.id + '\', ' + this.getTitleValue('SPRITE') + ');\n';
+    return 'Studio.move(\'block_id_' + this.id + '\', ' +
+        this.getTitleValue('SPRITE') + ', ' +
+        this.getTitleValue('DIR') + ');\n';
+  };
+
+  blockly.Blocks.studio_moveDistance = {
+    // Block for moving/gliding a specific distance.
+    helpUrl: '',
+    init: function() {
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      this.appendDummyInput()
+        .appendTitle(msg.moveSeparator());
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
+      this.appendDummyInput()
+        .appendTitle(msg.moveSeparator());
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.DISTANCE), 'DISTANCE');
+      this.setPreviousStatement(true);
+      this.setInputsInline(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.moveDistanceTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_moveDistance.SPRITE =
+    [[msg.moveSprite1(), '0'],
+     [msg.moveSprite2(), '1'],
+     [msg.moveSprite3(), '2'],
+     [msg.moveSprite4(), '3'],
+     [msg.moveSprite5(), '4'],
+     [msg.moveSprite6(), '5']];
+
+  blockly.Blocks.studio_moveDistance.DIR =
+      [[msg.up(), Direction.NORTH.toString()],
+       [msg.down(), Direction.SOUTH.toString()],
+       [msg.left(), Direction.WEST.toString()],
+       [msg.right(), Direction.EAST.toString()]];
+
+  blockly.Blocks.studio_moveDistance.DISTANCE =
+      [[msg.moveDistance25(), '25'],
+       [msg.moveDistance50(), '50'],
+       [msg.moveDistance100(), '100'],
+       [msg.moveDistance200(), '200'],
+       [msg.moveDistance400(), '400']];
+
+  generator.studio_moveDistance = function() {
+    // Generate JavaScript for moving.
+    return 'Studio.moveDistance(\'block_id_' + this.id + '\', ' +
+        this.getTitleValue('SPRITE') + ', ' +
+        this.getTitleValue('DIR') + ', ' +
+        this.getTitleValue('DISTANCE') + ');\n';
   };
 
   blockly.Blocks.studio_playSound = {
@@ -319,9 +364,12 @@ exports.install = function(blockly, skin) {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
       dropdown.setValue(this.VALUES[3][1]); // default to normal
 
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
       this.appendDummyInput()
         .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
@@ -339,18 +387,13 @@ exports.install = function(blockly, skin) {
        [msg.setSpriteSpeedFast(), 'Studio.SpriteSpeed.FAST'],
        [msg.setSpriteSpeedVeryFast(), 'Studio.SpriteSpeed.VERY_FAST']];
 
-  blockly.Blocks.studio_setSpriteSpeed.SPRITE = function () {
-    var array = [[msg.setSprite1(), '0'],
-                 [msg.setSprite2(), '1'],
-                 [msg.setSprite3(), '2'],
-                 [msg.setSprite4(), '3'],
-                 [msg.setSprite5(), '4'],
-                 [msg.setSprite6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_setSpriteSpeed.SPRITE =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
 
   generator.studio_setSpriteSpeed = function () {
     return generateSetterCode({
@@ -400,9 +443,12 @@ exports.install = function(blockly, skin) {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
       dropdown.setValue(this.VALUES[2][1]);  // default to hardcourt
 
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
       this.appendDummyInput()
         .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
@@ -412,18 +458,13 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.studio_setSprite.SPRITE = function () {
-    var array = [[msg.setSprite1(), '0'],
-                 [msg.setSprite2(), '1'],
-                 [msg.setSprite3(), '2'],
-                 [msg.setSprite4(), '3'],
-                 [msg.setSprite5(), '4'],
-                 [msg.setSprite6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_setSprite.SPRITE =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
 
   blockly.Blocks.studio_setSprite.VALUES =
       [[msg.setSpriteHidden(), '"hidden"'],
@@ -439,9 +480,11 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.studio_saySprite = {
     helpUrl: '',
     init: function() {
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(this.SPRITE), 'SPRITE');
+        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
       this.appendDummyInput()
         .appendTitle(new Blockly.FieldImage(
                 Blockly.assetUrl('media/quote0.png'), 12, 12))
@@ -455,18 +498,13 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.studio_saySprite.SPRITE = function () {
-    var array = [[msg.saySprite1(), '0'],
-                 [msg.saySprite2(), '1'],
-                 [msg.saySprite3(), '2'],
-                 [msg.saySprite4(), '3'],
-                 [msg.saySprite5(), '4'],
-                 [msg.saySprite6(), '5']];
-    // Access private menuGenerator_ and trimOptions_ to guarantee trimming.
-    this.menuGenerator_ = array.slice(0, blockly.Blocks.studio_spriteCount);
-    this.trimOptions_();
-    return this.menuGenerator_;
-  };
+  blockly.Blocks.studio_saySprite.SPRITE =
+      [[msg.saySprite1(), '0'],
+       [msg.saySprite2(), '1'],
+       [msg.saySprite3(), '2'],
+       [msg.saySprite4(), '3'],
+       [msg.saySprite5(), '4'],
+       [msg.saySprite6(), '5']];
 
   generator.studio_saySprite = function() {
     // Generate JavaScript for saying.

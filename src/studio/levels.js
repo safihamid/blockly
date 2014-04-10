@@ -148,6 +148,7 @@ module.exports = {
       tb('<block type="studio_whenSpriteClicked"></block> \
           <block type="studio_whenSpriteCollided"></block> \
           <block type="studio_move"></block> \
+          <block type="studio_moveDistance"></block> \
           <block type="studio_playSound"></block> \
           <block type="studio_incrementScore"></block> \
           <block type="studio_saySprite"></block> \

@@ -240,6 +240,51 @@ var delegate = function(scope, func, data)
   };
 };
 
+//
+// Perform Queued Moves in the X and Y axes (called from inside onTick)
+//
+var performQueuedMoves = function(i)
+{
+  // Make queued moves in the X axis (fixed to .01 values):
+  if (Studio.sprite[i].queuedX && Studio.sprite[i].queuedX !== 0.00) {
+    var nextX = Studio.sprite[i].x;
+    if (Studio.sprite[i].queuedX < 0) {
+      nextX -= Math.min(Math.abs(Studio.sprite[i].queuedX),
+                        Studio.sprite[i].speed);
+    } else {
+      nextX += Math.min(Studio.sprite[i].queuedX, Studio.sprite[i].speed);
+    }
+    // Clamp nextX to boundaries as newX:
+    var newX = Math.min(Studio.COLS - 1, Math.max(0, nextX));
+    if (nextX != newX) {
+      Studio.sprite[i].queuedX = 0;
+    } else {
+      var newQX = Studio.sprite[i].queuedX - (nextX - Studio.sprite[i].x);
+      Studio.sprite[i].queuedX = newQX.toFixed(2);
+    }
+    Studio.sprite[i].x = newX;
+  }
+  // Make queued moves in the Y axis (fixed to .01 values):
+  if (Studio.sprite[i].queuedY && Studio.sprite[i].queuedY !== 0.00) {
+    var nextY = Studio.sprite[i].y;
+    if (Studio.sprite[i].queuedY < 0) {
+      nextY -= Math.min(Math.abs(Studio.sprite[i].queuedY),
+                        Studio.sprite[i].speed);
+    } else {
+      nextY += Math.min(Studio.sprite[i].queuedY, Studio.sprite[i].speed);
+    }
+    // Clamp nextY to boundaries as newY:
+    var newY = Math.min(Studio.ROWS - 1, Math.max(0, nextY));
+    if (nextY != newY) {
+      Studio.sprite[i].queuedY = 0;
+    } else {
+      var newQY = Studio.sprite[i].queuedY - (nextY - Studio.sprite[i].y);
+      Studio.sprite[i].queuedY = newQY.toFixed(2);
+    }
+    Studio.sprite[i].y = newY;
+  }
+};
+
 Studio.onTick = function() {
   Studio.tickCount++;
 
@@ -287,8 +332,12 @@ Studio.onTick = function() {
       }
     }
   }
-
+  
+  // Do per-sprite tasks:
   for (var i = 0; i < Studio.spriteCount; i++) {
+    performQueuedMoves(i);
+
+    // Check for collisions:
     for (var j = 0; j < Studio.spriteCount; j++) {
       if (i == j) {
         continue;
@@ -305,10 +354,11 @@ Studio.onTick = function() {
             Studio.whenSpriteCollided[i][j](BlocklyApps, api);
           } catch (e) { }
         }
-       } else {
+      } else {
           Studio.sprite[i].collisionMask &= ~(Math.pow(2, j));
-        }
-     }
+      }
+    }
+    // Display sprite:
     Studio.displaySprite(i);
   }
   
@@ -542,6 +592,8 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].y = Studio.spriteStart_[i].y;
     Studio.sprite[i].speed = tiles.DEFAULT_SPRITE_SPEED;
     Studio.sprite[i].collisionMask = 0;
+    Studio.sprite[i].queuedX = 0;
+    Studio.sprite[i].queuedY = 0;
 
     Studio.setSprite(i, 'hardcourt');
     Studio.displaySprite(i);
@@ -901,6 +953,52 @@ Studio.saySprite = function (index, text) {
   Studio.sprite[index].bubbleTimeout = window.setTimeout(
       delegate(this, Studio.hideSpeechBubble, index),
       3000);
+};
+
+Studio.moveSingle = function (spriteIndex, dir) {
+  switch (dir) {
+    case Direction.NORTH:
+      Studio.sprite[spriteIndex].y -= Studio.sprite[spriteIndex].speed;
+      if (Studio.sprite[spriteIndex].y < 0) {
+        Studio.sprite[spriteIndex].y = 0;
+      }
+      break;
+    case Direction.EAST:
+      Studio.sprite[spriteIndex].x += Studio.sprite[spriteIndex].speed;
+      if (Studio.sprite[spriteIndex].x > (Studio.COLS - 1)) {
+        Studio.sprite[spriteIndex].x = Studio.COLS - 1;
+      }
+      break;
+    case Direction.SOUTH:
+      Studio.sprite[spriteIndex].y += Studio.sprite[spriteIndex].speed;
+      if (Studio.sprite[spriteIndex].y > (Studio.ROWS - 1)) {
+        Studio.sprite[spriteIndex].y = Studio.ROWS - 1;
+      }
+      break;
+    case Direction.WEST:
+      Studio.sprite[spriteIndex].x -= Studio.sprite[spriteIndex].speed;
+      if (Studio.sprite[spriteIndex].x < 0) {
+        Studio.sprite[spriteIndex].x = 0;
+      }
+      break;
+  }
+};
+
+Studio.moveDistance = function (index, dir, distance) {
+  switch (dir) {
+    case Direction.NORTH:
+      Studio.sprite[index].queuedY = -distance / Studio.SQUARE_SIZE;
+      break;
+    case Direction.EAST:
+      Studio.sprite[index].queuedX = distance / Studio.SQUARE_SIZE;
+      break;
+    case Direction.SOUTH:
+      Studio.sprite[index].queuedY = distance / Studio.SQUARE_SIZE;
+      break;
+    case Direction.WEST:
+      Studio.sprite[index].queuedX = -distance / Studio.SQUARE_SIZE;
+      break;
+  }
 };
 
 Studio.timedOut = function() {
