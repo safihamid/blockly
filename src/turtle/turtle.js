@@ -249,10 +249,10 @@ BlocklyApps.reset = function(ignore) {
   Turtle.visible = true;
 
   // For special cases, use a different initial location.
-  if (level.initialX) {
+  if (level.initialX !== undefined) {
     Turtle.x = level.initialX;
   }
-  if (level.initialY) {
+  if (level.initialY !== undefined) {
     Turtle.y = level.initialY;
   }
   // Clear the display.
