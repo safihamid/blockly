@@ -444,34 +444,40 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.simple_move.DIRECTIONS =
   {
     left: {
-      text: 'left',
       moveFunction: 'moveLeft',
-      image: skin.assetUrl('left.png')
+      image: skin.leftArrow,
+      image_width: 84,
+      image_height: 84
     },
     right: {
-      text: 'right',
       moveFunction: 'moveRight',
-      image: skin.assetUrl('right.png')
+      image: skin.rightArrow,
+      image_width: 84,
+      image_height: 84
     },
     up: {
-      text: 'up',
       moveFunction: 'moveUp',
-      image: skin.assetUrl('up.png')
+      image: skin.upArrow,
+      image_width: 84,
+      image_height: 84
     },
     down: {
-      text: 'down',
       moveFunction: 'moveDown',
-      image: skin.assetUrl('down.png')
+      image: skin.downArrow,
+      image_width: 84,
+      image_height: 84
     }
   };
 
   blockly.Blocks.simple_move.generate_simple_move = function(direction) {
+    var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
+
     return {
       helpUrl: '',
         init: function() {
           this.setHSV(184, 1.00, 0.74);
-          this.appendDummyInput().appendTitle(blockly.Blocks.simple_move.DIRECTIONS[direction]['text'])
-            .appendTitle(new blockly.FieldImage(blockly.Blocks.simple_move.DIRECTIONS[direction]['image'], 84, 84));
+          this.appendDummyInput()
+            .appendTitle(new blockly.FieldImage(direction_config.image, direction_config.image_width, direction_config.image_height));
           this.setPreviousStatement(true);
           this.setNextStatement(true);
           this.setTooltip(msg.jumpTooltip());
@@ -483,11 +489,11 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_simple_move('down');
   blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_simple_move('left');
   blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_simple_move('right');
-  
+
   generator.generate_simple_move = function(direction) {
     return function() {
-      return 'Turtle.' + blockly.Blocks.simple_move.DIRECTIONS[direction]['moveFunction'] + '(50,' + '\'block_id_' + this.id + '\');\n';
-    }
+      return 'Turtle.' + blockly.Blocks.simple_move.DIRECTIONS[direction].moveFunction + '(50,' + '\'block_id_' + this.id + '\');\n';
+    };
   };
 
   generator.simple_move_up = generator.generate_simple_move('up');

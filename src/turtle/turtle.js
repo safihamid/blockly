@@ -386,7 +386,7 @@ Turtle.moveForward_ = function (distance) {
 Turtle.moveByRelativePosition_ = function (x, y) {
   Turtle.x += x;
   Turtle.y += y;
-}
+};
 Turtle.drawPathToTurtle_ = function (x, y, isDot) {
   Turtle.ctxScratch.lineTo(x, y);
   Turtle.ctxScratch.stroke();
@@ -409,7 +409,7 @@ Turtle.drawToTurtleIfPenDown_ = function (distance) {
     return;
   }
 
-  var isDot = (distance == 0);
+  var isDot = (distance === 0);
   if (isDot) {
     Turtle.drawDotAtTurtle_(Turtle.x, Turtle.y);
   } else {
@@ -418,7 +418,7 @@ Turtle.drawToTurtleIfPenDown_ = function (distance) {
   Turtle.markCurrentColourUsed_();
 };
 Turtle.turnByDegrees_ = function (degreesRight) {
-  Turtle.setHeading_(Turtle.heading + degreesRight)
+  Turtle.setHeading_(Turtle.heading + degreesRight);
 };
 Turtle.setHeading_ = function (heading) {
   heading = Turtle.constrainDegrees_(heading);
@@ -444,12 +444,10 @@ Turtle.moveForwardAndDraw_ = function (distance) {
 Turtle.step = function(command, values) {
   switch (command) {
     case 'FD':  // Forward
-      var distance = values[0];
-      Turtle.moveForwardAndDraw_(distance);
+      Turtle.moveForwardAndDraw_(values[0]);
       break;
     case 'JF':  // Jump forward
-      var distance = values[0];
-      Turtle.moveForward_(distance);
+      Turtle.moveForward_(values[0]);
       break;
     case 'MV':  // Move      
       var distance = values[0];
