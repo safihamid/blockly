@@ -444,7 +444,7 @@ Turtle.moveByRelativePosition_ = function (x, y) {
   Turtle.y += y;
 };
 
-Turtle.drawPathToTurtle_ = function (x, y, isDot) {
+Turtle.drawPathToTurtle_ = function (x, y) {
   Turtle.ctxScratch.lineTo(x, y);
   Turtle.ctxScratch.stroke();
 };
