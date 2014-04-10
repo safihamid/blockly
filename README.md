@@ -56,6 +56,7 @@ MOOC_DEV=1 grunt build
 ```
 
 * `MOOC_DEV=1` builds a 'debug' version with more readable javascript
+* `grunt rebuild` does a `clean` before a `build`
 
 #### Run with live-reload server
 
@@ -73,7 +74,7 @@ grunt build # run a build before testing
 grunt test
 ```
 
-* Blockly tests target the `build/js/app_name` folder, so any build (minified or non-minified) will update the build folder
+* Blockly tests target the `build/js/app_name` folder
 
 ### Localization
 
