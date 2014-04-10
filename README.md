@@ -40,10 +40,16 @@ cd blockly
 brew install node
 npm install -g grunt-cli
 
-# Build
+# Perform first full build
 npm install
 MOOC_DEV=1 grunt build
 ```
+
+### Seeing your development version of Blockly in Dashboard
+
+1. From the [Dashboard](https://github.com/code-dot-org/dashboard) project, follow [these instructions](https://github.com/code-dot-org/dashboard/blob/finished/README.md#symlink) to set up a symlink to your development copy of blockly.
+  * Check your symlink if you find your changes are not showing up within dashboard. You may accidentally replace your symlink with the pre-built vendor version (e.g., if you're switching branches or stashing changes).
+2. When you run later builds, your results should show up in Dashboard.
 
 ### Building during development
 
@@ -58,12 +64,14 @@ MOOC_DEV=1 grunt build
 * `MOOC_DEV=1` builds a 'debug' version with more readable javascript
 * `grunt rebuild` does a `clean` before a `build`
 
-#### Run with live-reload server
+#### Running with live-reload server
 
 ```
 grunt dev
 open http://localhost:8000
 ```
+
+This will serve a few sample blockly apps at [http://localhost:8000](http://localhost:8000).
 
 Note: this does not update asset files. For that, use a full `grunt build`.
 
