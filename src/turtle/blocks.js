@@ -439,42 +439,39 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.simple_move = {};
-  
-  blockly.Blocks.simple_move.DIRECTIONS =
-  {
-    left: {
-      moveFunction: 'moveLeft',
-      image: skin.leftArrow,
-      image_width: 84,
-      image_height: 84
+  blockly.Blocks.simple_move = {
+    DIRECTIONS: {
+      left: {
+        moveFunction: 'moveLeft',
+        image: skin.leftArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      right: {
+        moveFunction: 'moveRight',
+        image: skin.rightArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      up: {
+        moveFunction: 'moveUp',
+        image: skin.upArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      down: {
+        moveFunction: 'moveDown',
+        image: skin.downArrow,
+        image_width: 84,
+        image_height: 84
+      }
     },
-    right: {
-      moveFunction: 'moveRight',
-      image: skin.rightArrow,
-      image_width: 84,
-      image_height: 84
-    },
-    up: {
-      moveFunction: 'moveUp',
-      image: skin.upArrow,
-      image_width: 84,
-      image_height: 84
-    },
-    down: {
-      moveFunction: 'moveDown',
-      image: skin.downArrow,
-      image_width: 84,
-      image_height: 84
-    }
-  };
+    generate_block: function(direction) {
+      var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
 
-  blockly.Blocks.simple_move.generate_simple_move = function(direction) {
-    var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
-
-    return {
-      helpUrl: '',
-        init: function() {
+      return {
+        helpUrl: '',
+        init: function () {
           this.setHSV(184, 1.00, 0.74);
           this.appendDummyInput()
             .appendTitle(new blockly.FieldImage(direction_config.image, direction_config.image_width, direction_config.image_height));
@@ -482,13 +479,14 @@ exports.install = function(blockly, skin) {
           this.setNextStatement(true);
           this.setTooltip(msg.jumpTooltip());
         }
-    };
+      };
+    }
   };
   
-  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generate_simple_move('up');
-  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_simple_move('down');
-  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_simple_move('left');
-  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_simple_move('right');
+  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generate_block('up');
+  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_block('down');
+  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_block('left');
+  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_block('right');
 
   generator.generate_simple_move = function(direction) {
     return function() {
@@ -506,7 +504,7 @@ exports.install = function(blockly, skin) {
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput().appendTitle('JUMP')
-        .appendTitle(new blockly.FieldImage('https://d30y9cdsu7xlg0.cloudfront.net/png/11518-84.png?Expires=1395852637&Signature=kBjJL6anfgIyQxp3Vb80m5kJEOECidaJSY1T7rhDs17qbQJaRfJNp5NTa1N~5YL75p8mYliYEonsQQtOBFsJczGLKUO~2-UqLrqA-9g9aRNMOUBSbz~hDVxOQ3D4Nxee1MqRj4I6ljr5oJoSroI1hcnMl8p2psFCyS5oyFCd6H8_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q', 84, 84));
+        .appendTitle(new blockly.FieldImage(skin.downArrow, 84, 84));
       this.setPreviousStatement(true);
       this.setNextStatement(true);
       this.setTooltip(msg.jumpTooltip());
