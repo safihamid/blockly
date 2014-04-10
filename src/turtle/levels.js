@@ -796,7 +796,7 @@ module.exports = {
     answer: [],
     freePlay: false,
     initialY: 300,
-    toolbox: blockUtils.tb(blocks.simple_move_blocks()),
+    toolbox: blockUtils.createToolbox(blocks.simple_move_blocks()),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0

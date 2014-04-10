@@ -1,4 +1,4 @@
-exports.tb = function(blocks) {
+exports.createToolbox = function(blocks) {
   return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
 };
 
