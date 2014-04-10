@@ -41,9 +41,6 @@ var SET_COLOUR_PICKER = req.SET_COLOUR_PICKER;
 var SET_COLOUR_RANDOM = req.SET_COLOUR_RANDOM;
 var defineWithArg = req.defineWithArg;
 
-var flapBlock = '<block type="flappy_flap"></block>';
-var flapHeightBlock = '<block type="flappy_flap_height"></block>';
-
 var blocks = {
   SIMPLE_MOVE_UP: blockUtils.blockOfType('simple_move_up'),
   SIMPLE_MOVE_DOWN: blockUtils.blockOfType('simple_move_down'),
