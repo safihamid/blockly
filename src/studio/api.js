@@ -1,6 +1,3 @@
-var tiles = require('./tiles');
-var Direction = tiles.Direction;
-var SquareType = tiles.SquareType;
 
 exports.SpriteSpeed = {
   VERY_SLOW: 0.04,
@@ -45,36 +42,14 @@ exports.playSound = function(id, soundName) {
   BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
-exports.moveLeft = function(id, spriteIndex) {
+exports.move = function(id, spriteIndex, dir) {
   BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].x -= Studio.sprite[spriteIndex].speed;
-  if (Studio.sprite[spriteIndex].x < 0) {
-    Studio.sprite[spriteIndex].x = 0;
-  }
+  Studio.moveSingle(spriteIndex, dir);
 };
 
-exports.moveRight = function(id, spriteIndex) {
+exports.moveDistance = function(id, spriteIndex, dir, distance) {
   BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].x += Studio.sprite[spriteIndex].speed;
-  if (Studio.sprite[spriteIndex].x > (Studio.COLS - 1)) {
-    Studio.sprite[spriteIndex].x = Studio.COLS - 1;
-  }
-};
-
-exports.moveUp = function(id, spriteIndex) {
-  BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].y -= Studio.sprite[spriteIndex].speed;
-  if (Studio.sprite[spriteIndex].y < 0) {
-    Studio.sprite[spriteIndex].y = 0;
-  }
-};
-
-exports.moveDown = function(id, spriteIndex) {
-  BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].y += Studio.sprite[spriteIndex].speed;
-  if (Studio.sprite[spriteIndex].y > (Studio.ROWS - 1)) {
-    Studio.sprite[spriteIndex].y = Studio.ROWS - 1;
-  }
+  Studio.moveDistance(spriteIndex, dir, distance);
 };
 
 exports.incrementScore = function(id, player) {
