@@ -371,11 +371,65 @@ Turtle.animate = function() {
   Turtle.pid = window.setTimeout(Turtle.animate, stepSpeed);
 };
 
+/**
+ * Execute one step.
+ * @param {string} command Logo-style command (e.g. 'FD' or 'RT').
+ * @param {!Array} values List of arguments for the command.
+ */
+Turtle.step = function(command, values) {
+  switch (command) {
+    case 'FD':  // Forward
+      Turtle.moveForwardAndDraw_(values[0]);
+      break;
+    case 'JF':  // Jump forward
+      Turtle.moveForward_(values[0]);
+      break;
+    case 'MV':  // Move
+      var distance = values[0];
+      var heading = values[1];
+      Turtle.setHeading_(heading);
+      Turtle.moveForwardAndDraw_(distance);
+      break;
+    case 'RT':  // Right Turn
+      Turtle.turnByDegrees_(values[0]);
+      break;
+    case 'DP':  // Draw Print
+      Turtle.ctxScratch.save();
+      Turtle.ctxScratch.translate(Turtle.x, Turtle.y);
+      Turtle.ctxScratch.rotate(2 * Math.PI * (Turtle.heading - 90) / 360);
+      Turtle.ctxScratch.fillText(values[0], 0, 0);
+      Turtle.ctxScratch.restore();
+      break;
+    case 'DF':  // Draw Font
+      Turtle.ctxScratch.font = values[2] + ' ' + values[1] + 'pt ' + values[0];
+      break;
+    case 'PU':  // Pen Up
+      Turtle.penDownValue = false;
+      break;
+    case 'PD':  // Pen Down
+      Turtle.penDownValue = true;
+      break;
+    case 'PW':  // Pen Width
+      Turtle.ctxScratch.lineWidth = values[0];
+      break;
+    case 'PC':  // Pen Colour
+      Turtle.ctxScratch.strokeStyle = values[0];
+      Turtle.ctxScratch.fillStyle = values[0];
+      break;
+    case 'HT':  // Hide Turtle
+      Turtle.visible = false;
+      break;
+    case 'ST':  // Show Turtle
+      Turtle.visible = true;
+      break;
+  }
+};
+
 Turtle.startPathIfPenDown_ = function () {
   if (!Turtle.penDownValue) {
     return;
   }
-  
+
   Turtle.ctxScratch.beginPath();
   Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
 };
@@ -444,61 +498,6 @@ Turtle.moveForwardAndDraw_ = function (distance) {
   Turtle.startPathIfPenDown_();
   Turtle.moveForward_(distance);
   Turtle.drawToTurtleIfPenDown_(distance);
-};
-
-/**
- * Execute one step.
- * @param {string} command Logo-style command (e.g. 'FD' or 'RT').
- * @param {!Array} values List of arguments for the command.
- */
-Turtle.step = function(command, values) {
-  switch (command) {
-    case 'FD':  // Forward
-      Turtle.moveForwardAndDraw_(values[0]);
-      break;
-    case 'JF':  // Jump forward
-      Turtle.moveForward_(values[0]);
-      break;
-    case 'MV':  // Move      
-      var distance = values[0];
-      var heading = values[1]; 
-      
-      Turtle.setHeading_(heading);
-      Turtle.moveForwardAndDraw_(distance);
-      break;
-    case 'RT':  // Right Turn
-      Turtle.turnByDegrees_(values[0]);
-      break;
-    case 'DP':  // Draw Print
-      Turtle.ctxScratch.save();
-      Turtle.ctxScratch.translate(Turtle.x, Turtle.y);
-      Turtle.ctxScratch.rotate(2 * Math.PI * (Turtle.heading - 90) / 360);
-      Turtle.ctxScratch.fillText(values[0], 0, 0);
-      Turtle.ctxScratch.restore();
-      break;
-    case 'DF':  // Draw Font
-      Turtle.ctxScratch.font = values[2] + ' ' + values[1] + 'pt ' + values[0];
-      break;
-    case 'PU':  // Pen Up
-      Turtle.penDownValue = false;
-      break;
-    case 'PD':  // Pen Down
-      Turtle.penDownValue = true;
-      break;
-    case 'PW':  // Pen Width
-      Turtle.ctxScratch.lineWidth = values[0];
-      break;
-    case 'PC':  // Pen Colour
-      Turtle.ctxScratch.strokeStyle = values[0];
-      Turtle.ctxScratch.fillStyle = values[0];
-      break;
-    case 'HT':  // Hide Turtle
-      Turtle.visible = false;
-      break;
-    case 'ST':  // Show Turtle
-      Turtle.visible = true;
-      break;
-  }
 };
 
 /**
