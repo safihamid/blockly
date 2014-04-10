@@ -3,10 +3,7 @@
 // todo - i think our prepoluated code counts as LOCs
 
 var constants = require('./constants');
-
-var tb = function(blocks) {
-  return '<xml id="toolbox" style="displastartY: none;">' + blocks + '</xml>';
-};
+var tb = require('../block_utils').createToolbox;
 
 var category = function (name, blocks) {
   return '<category id="' + name + '" name="' + name + '">' + blocks + '</category>';
