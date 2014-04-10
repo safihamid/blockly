@@ -62,15 +62,13 @@ all available locales, specify `MOOC_LOCALIZE=1` in your environment:
 MOOC_LOCALIZE=1 grunt rebuild
 ```
 
-See [cdo-i18n](https://github.com/code-dot-org/cdo-i18n) for more information
-about the localization of Code.org projects.
+Note: if you're running the `grunt dev` live-reload server and get the error `too many open files` after a localization build, try increasing the OS open file limit by running `ulimit -n 1024` (and adding it to your `.bashrc`).
 
 ## Project Specification
 
 Both of these tutorials are found on code.org/learn or csedweek.org/learn. At
 the end of 1-hour, you’re sent to a Drupal thank you page that leads you back
 to code.org/learn
-
 
 ### 1 hour tutorial
 

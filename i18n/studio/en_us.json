@@ -62,6 +62,7 @@
   "setBackgroundTooltip": "Sets the background image",
   "setSpriteRandom": "to a random image",
   "setSpriteHardcourt": "to a hardcourt image",
+  "setSpriteHidden": "to a hidden image",
   "setSpriteRetro": "to a retro image",
   "setSpriteTooltip": "Sets the character image",
   "setSpriteSpeedRandom": "to a random speed",

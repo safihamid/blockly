@@ -8,7 +8,8 @@ var APPS = [
   'turtle',
   'bounce',
   'flappy',
-  'studio'
+  'studio',
+  'jigsaw'
 ];
 
 // Parse options from environment.

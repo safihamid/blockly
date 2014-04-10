@@ -1,5 +1,5 @@
 /**
- * Blockly App: Bounce
+ * Blockly App: Flappy
  *
  * Copyright 2013 Code.org
  *
@@ -473,7 +473,7 @@ exports.install = function(blockly, skin) {
     init: function() {
       this.setHSV(312, 0.32, 0.62);
       this.appendDummyInput()
-          .appendTitle(msg.setScore()) 
+          .appendTitle(msg.setScore())
           .appendTitle(new blockly.FieldTextInput('0',
             blockly.FieldTextInput.numberValidator), 'VALUE');
       this.setInputsInline(true);

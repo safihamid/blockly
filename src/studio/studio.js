@@ -14,6 +14,7 @@ var skins = require('../skins');
 var tiles = require('./tiles');
 var codegen = require('../codegen');
 var api = require('./api');
+var blocks = require('./blocks');
 var page = require('../templates/page.html');
 var feedback = require('../feedback.js');
 var dom = require('../dom');
@@ -65,12 +66,6 @@ var stepSpeed;
 
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
-
-var getTile = function(map, x, y) {
-  if (map && map[y]) {
-    return map[y][x];
-  }
-};
 
 //The number of blocks to show as feedback.
 BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
@@ -125,7 +120,7 @@ Studio.pidList = [];
 
 var drawMap = function() {
   var svg = document.getElementById('svgStudio');
-  var i, x, y, k, tile;
+  var i, x, y, k;
 
   // Adjust outer element size.
   svg.setAttribute('width', Studio.MAZE_WIDTH);
@@ -145,7 +140,7 @@ var drawMap = function() {
   hintBubble.style.width = Studio.MAZE_WIDTH + 'px';
 
   if (skin.background) {
-    tile = document.createElementNS(Blockly.SVG_NS, 'image');
+    var tile = document.createElementNS(Blockly.SVG_NS, 'image');
     tile.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                         skin.background);
     tile.setAttribute('id', 'background');
@@ -425,30 +420,6 @@ Studio.init = function(config) {
 
     Blockly.SNAP_RADIUS *= Studio.scale.snapRadius;
     
-    Studio.paddleFinishCount = 0;
-    Studio.spriteCount = 0;
-    Studio.sprite = [];
-    
-    // Locate the start and finish squares.
-    for (var y = 0; y < Studio.ROWS; y++) {
-      for (var x = 0; x < Studio.COLS; x++) {
-        if (Studio.map[y][x] & SquareType.PADDLEFINISH) {
-          if (0 === Studio.paddleFinishCount) {
-            Studio.paddleFinish_ = [];
-          }
-          Studio.paddleFinish_[Studio.paddleFinishCount] = {x: x, y: y};
-          Studio.paddleFinishCount++;
-        } else if (Studio.map[y][x] & SquareType.SPRITESTART) {
-          if (0 === Studio.spriteCount) {
-            Studio.spriteStart_ = [];
-          }
-          Studio.sprite[Studio.spriteCount] = [];
-          Studio.spriteStart_[Studio.spriteCount] = {x: x, y: y};
-          Studio.spriteCount++;
-        }
-      }
-    }
-    
     drawMap();
   };
 
@@ -478,6 +449,33 @@ Studio.init = function(config) {
 
   config.preventExtraTopLevelBlocks = true;
 
+  Studio.paddleFinishCount = 0;
+  Studio.spriteCount = 0;
+  Studio.sprite = [];
+  
+  // Locate the start and finish squares.
+  for (var y = 0; y < Studio.ROWS; y++) {
+    for (var x = 0; x < Studio.COLS; x++) {
+      if (Studio.map[y][x] & SquareType.PADDLEFINISH) {
+        if (0 === Studio.paddleFinishCount) {
+          Studio.paddleFinish_ = [];
+        }
+        Studio.paddleFinish_[Studio.paddleFinishCount] = {x: x, y: y};
+        Studio.paddleFinishCount++;
+      } else if (Studio.map[y][x] & SquareType.SPRITESTART) {
+        if (0 === Studio.spriteCount) {
+          Studio.spriteStart_ = [];
+        }
+        Studio.sprite[Studio.spriteCount] = [];
+        Studio.spriteStart_[Studio.spriteCount] = {x: x, y: y};
+        Studio.spriteCount++;
+      }
+    }
+  }
+  
+  // Update the sprite count in the blocks:
+  blocks.setSpriteCount(Blockly, Studio.spriteCount);
+    
   BlocklyApps.init(config);
 
   if (!onSharePage) {
@@ -842,27 +840,6 @@ Studio.onPuzzleComplete = function() {
                      });
 };
 
-/**
- * Set the tiles to be transparent gradually.
- */
-Studio.setTileTransparent = function() {
-  var tileId = 0;
-  for (var y = 0; y < Studio.ROWS; y++) {
-    for (var x = 0; x < Studio.COLS; x++) {
-      // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + tileId);
-      var tileAnimation = document.getElementById('tileAnimation' + tileId);
-      if (tileElement) {
-        tileElement.setAttribute('opacity', 0);
-      }
-      if (tileAnimation) {
-        tileAnimation.beginElement();
-      }
-      tileId++;
-    }
-  }
-};
-
 Studio.displaySprite = function(i) {
   var xCoord = Studio.sprite[i].x * Studio.SQUARE_SIZE;
   var yCoord = Studio.sprite[i].y * Studio.SQUARE_SIZE + Studio.SPRITE_Y_OFFSET;
@@ -903,8 +880,12 @@ Studio.setBackground = function (value) {
 
 Studio.setSprite = function (index, value) {
   var element = document.getElementById('sprite' + index);
-  element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-    skinTheme(value).sprite);
+  element.setAttribute('visibility',
+                       (value === 'hidden') ? 'hidden' : 'visible');
+  if (value != 'hidden') {
+    element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+                           skinTheme(value).sprite);
+ }
 };
 
 Studio.hideSpeechBubble = function (index) {

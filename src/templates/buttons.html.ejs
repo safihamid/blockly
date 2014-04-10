@@ -40,5 +40,11 @@
 <% }; -%>
 
 <% if (data.sharingUrl) { -%>
-  <input type="text" id="sharing-input" value=<%= data.sharingUrl %> >
+  <input type="text" id="sharing-input" value=<%= data.sharingUrl %> readonly>
+<% }; -%>
+
+<% if (data.saveToGalleryUrl) { -%>
+  <button id="save-to-gallery-button" class="launch">
+    <%= msg.saveToGallery() %>
+  </button>
 <% }; -%>
