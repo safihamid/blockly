@@ -29,7 +29,7 @@ Instructions for MacOSX using [brew](http://brew.sh/) (instructions for other pl
 3. `brew update`
 4. `brew install cairo`
 
-### Installing and Running Blockly
+### Installing Blockly
 
 ```
 # Get the code
@@ -43,14 +43,37 @@ npm install -g grunt-cli
 # Build
 npm install
 MOOC_DEV=1 grunt build
+```
 
-# Run with live-reload server
+### Building during development
+
+#### Full build
+
+To run a full build (minus localization):
+
+```
+MOOC_DEV=1 grunt build
+```
+
+* `MOOC_DEV=1` builds a 'debug' version with more readable javascript
+
+#### Run with live-reload server
+
+```
 grunt dev
 open http://localhost:8000
+```
 
-# Run tests (after a build, or while dev is running)
+Note: this does not update asset files. For that, use a full `grunt build`.
+
+#### Running tests
+
+```
+grunt build # run a build before testing
 grunt test
 ```
+
+* Blockly tests target the `build/js/app_name` folder, so any build (minified or non-minified) will update the build folder
 
 ### Localization
 
