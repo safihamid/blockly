@@ -291,6 +291,8 @@ Studio.onTick = function() {
   if (Studio.tickCount === 1) {
     try { Studio.whenGameStarts(BlocklyApps, api); } catch (e) { }
   }
+
+  try { Studio.whenGameIsRunning(BlocklyApps, api); } catch (e) { }
   
   // Run key event handlers for any keys that are down:
   for (var key in Keycodes) {
@@ -542,6 +544,7 @@ Studio.clearEventHandlersKillTickLoop = function() {
   Studio.whenLeft = null;
   Studio.whenRight = null;
   Studio.whenUp = null;
+  Studio.whenGameIsRunning = null;
   Studio.whenGameStarts = null;
   Studio.whenSpriteClicked = [];
   Studio.whenSpriteCollided = [];
@@ -777,6 +780,14 @@ Studio.execute = function() {
 
   code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
+                                    'studio_whenGameIsRunning');
+  var whenGameIsRunningFunc = codegen.functionFromCode(
+                                     code, {
+                                      BlocklyApps: BlocklyApps,
+                                      Studio: api } );
+
+  code = Blockly.Generator.workspaceToCode(
+                                    'JavaScript',
                                     'studio_whenGameStarts');
   var whenGameStartsFunc = codegen.functionFromCode(
                                      code, {
@@ -833,6 +844,7 @@ Studio.execute = function() {
   Studio.whenRight = whenRightFunc;
   Studio.whenUp = whenUpFunc;
   Studio.whenDown = whenDownFunc;
+  Studio.whenGameIsRunning = whenGameIsRunningFunc;
   Studio.whenGameStarts = whenGameStartsFunc;
   Studio.whenSpriteClicked = whenSpriteClickedFunc;
   Studio.whenSpriteCollided = whenSpriteCollidedFunc;
