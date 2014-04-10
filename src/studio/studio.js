@@ -101,8 +101,8 @@ var loadLevel = function() {
   Studio.COLS = Studio.map[0].length;
   // Pixel height and width of each maze square (i.e. tile).
   Studio.SQUARE_SIZE = 50;
-  Studio.PEGMAN_HEIGHT = skin.pegmanHeight;
-  Studio.PEGMAN_WIDTH = skin.pegmanWidth;
+  Studio.SPRITE_HEIGHT = skin.spriteHeight;
+  Studio.SPRITE_WIDTH = skin.spriteWidth;
   Studio.SPRITE_Y_OFFSET = skin.spriteYOffset;
   // Height and width of the goal and obstacles.
   Studio.MARKER_HEIGHT = 43;
@@ -158,8 +158,8 @@ var drawMap = function() {
       spriteClip.setAttribute('id', 'spriteClipPath' + i);
       var spriteClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
       spriteClipRect.setAttribute('id', 'spriteClipRect' + i);
-      spriteClipRect.setAttribute('width', Studio.PEGMAN_WIDTH);
-      spriteClipRect.setAttribute('height', Studio.PEGMAN_HEIGHT);
+      spriteClipRect.setAttribute('width', Studio.SPRITE_WIDTH);
+      spriteClipRect.setAttribute('height', Studio.SPRITE_HEIGHT);
       spriteClip.appendChild(spriteClipRect);
       svg.appendChild(spriteClip);
       
@@ -168,8 +168,8 @@ var drawMap = function() {
       spriteIcon.setAttribute('id', 'sprite' + i);
       spriteIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                                 skin.sprite);
-      spriteIcon.setAttribute('height', Studio.PEGMAN_HEIGHT);
-      spriteIcon.setAttribute('width', Studio.PEGMAN_WIDTH);
+      spriteIcon.setAttribute('height', Studio.SPRITE_HEIGHT);
+      spriteIcon.setAttribute('width', Studio.SPRITE_WIDTH);
       spriteIcon.setAttribute('clip-path', 'url(#spriteClipPath' + i + ')');
       svg.appendChild(spriteIcon);
       
@@ -177,7 +177,8 @@ var drawMap = function() {
                                  delegate(this,
                                           Studio.onSpriteClicked,
                                           i));
-
+    }
+    for (i = 0; i < Studio.spriteCount; i++) {
       var spriteSpeechBubble = document.createElementNS(Blockly.SVG_NS, 'text');
       spriteSpeechBubble.setAttribute('id', 'speechBubble' + i);
       spriteSpeechBubble.setAttribute('class', 'studio-speech-bubble');
@@ -209,16 +210,6 @@ var drawMap = function() {
   score.appendChild(document.createTextNode(''));
   score.setAttribute('visibility', 'hidden');
   svg.appendChild(score);
-
-  // Add wall hitting animation
-  if (skin.hittingWallAnimation) {
-    var wallAnimationIcon = document.createElementNS(Blockly.SVG_NS, 'image');
-    wallAnimationIcon.setAttribute('id', 'wallAnimation');
-    wallAnimationIcon.setAttribute('height', Studio.SQUARE_SIZE);
-    wallAnimationIcon.setAttribute('width', Studio.SQUARE_SIZE);
-    wallAnimationIcon.setAttribute('visibility', 'hidden');
-    svg.appendChild(wallAnimationIcon);
-  }
 };
 
 var essentiallyEqual = function(float1, float2, opt_variance) {
@@ -255,7 +246,7 @@ var performQueuedMoves = function(i)
       nextX += Math.min(Studio.sprite[i].queuedX, Studio.sprite[i].speed);
     }
     // Clamp nextX to boundaries as newX:
-    var newX = Math.min(Studio.COLS - 1, Math.max(0, nextX));
+    var newX = Math.min(Studio.COLS - 2, Math.max(0, nextX));
     if (nextX != newX) {
       Studio.sprite[i].queuedX = 0;
     } else {
@@ -274,7 +265,7 @@ var performQueuedMoves = function(i)
       nextY += Math.min(Studio.sprite[i].queuedY, Studio.sprite[i].speed);
     }
     // Clamp nextY to boundaries as newY:
-    var newY = Math.min(Studio.ROWS - 1, Math.max(0, nextY));
+    var newY = Math.min(Studio.ROWS - 2, Math.max(0, nextY));
     if (nextY != newY) {
       Studio.sprite[i].queuedY = 0;
     } else {
@@ -589,6 +580,9 @@ BlocklyApps.reset = function(first) {
   // Reset configurable variables
   Studio.setBackground('cave');
 
+  var spriteStartingSkins = [ "green", "purple", "pink", "orange" ];
+  var numStartingSkins = spriteStartingSkins.length;
+
   // Move sprites into position.
   for (i = 0; i < Studio.spriteCount; i++) {
     Studio.sprite[i].x = Studio.spriteStart_[i].x;
@@ -597,8 +591,8 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].collisionMask = 0;
     Studio.sprite[i].queuedX = 0;
     Studio.sprite[i].queuedY = 0;
-
-    Studio.setSprite(i, 'hardcourt');
+    
+    Studio.setSprite(i, spriteStartingSkins[i % numStartingSkins]);
     Studio.displaySprite(i);
     document.getElementById('speechBubble' + i)
       .setAttribute('visibility', 'hidden');
@@ -930,7 +924,7 @@ Studio.displayScore = function() {
 };
 
 var skinTheme = function (value) {
-  if (value === 'hardcourt') {
+  if (value === 'green') {
     return skin;
   }
   return skin[value];
@@ -977,14 +971,14 @@ Studio.moveSingle = function (spriteIndex, dir) {
       break;
     case Direction.EAST:
       Studio.sprite[spriteIndex].x += Studio.sprite[spriteIndex].speed;
-      if (Studio.sprite[spriteIndex].x > (Studio.COLS - 1)) {
-        Studio.sprite[spriteIndex].x = Studio.COLS - 1;
+      if (Studio.sprite[spriteIndex].x > (Studio.COLS - 2)) {
+        Studio.sprite[spriteIndex].x = Studio.COLS - 2;
       }
       break;
     case Direction.SOUTH:
       Studio.sprite[spriteIndex].y += Studio.sprite[spriteIndex].speed;
-      if (Studio.sprite[spriteIndex].y > (Studio.ROWS - 1)) {
-        Studio.sprite[spriteIndex].y = Studio.ROWS - 1;
+      if (Studio.sprite[spriteIndex].y > (Studio.ROWS - 2)) {
+        Studio.sprite[spriteIndex].y = Studio.ROWS - 2;
       }
       break;
     case Direction.WEST:

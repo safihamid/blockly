@@ -18,7 +18,6 @@ exports.load = function(assetUrl, id) {
 
   skin.retro = {
     background: skin.assetUrl('retro_background.png'),
-    sprite: skin.assetUrl('retro_paddle.png'),
   };
   skin.cave = {
     background: skin.assetUrl('background_cave.png'),
@@ -32,14 +31,21 @@ exports.load = function(assetUrl, id) {
   skin.underwater = {
     background: skin.assetUrl('background_underwater.png'),
   };
+  skin.purple = {
+    sprite: skin.assetUrl('avatar2.png'),
+  };
+  skin.orange = {
+    sprite: skin.assetUrl('avatar3.png'),
+  };
+  skin.pink = {
+    sprite: skin.assetUrl('avatar4.png'),
+  };
 
   // Images
   skin.goal = skin.assetUrl('goal.png');
   skin.goalSuccess = skin.assetUrl('goal_success.png');
-  skin.sprite = skin.assetUrl('paddle.png');
+  skin.sprite = skin.assetUrl('avatar1.png');
   skin.goalAnimation = skin.assetUrl('goal.gif');
-  skin.hittingWallAnimation =
-      skin.assetUrl(config.hittingWallAnimation);
   skin.approachingGoalAnimation =
       skin.assetUrl(config.approachingGoalAnimation);
   // Sounds
@@ -73,8 +79,8 @@ exports.load = function(assetUrl, id) {
   } else {
     skin.background = skin.assetUrl('background.png');
   }
-  skin.pegmanHeight = config.pegmanHeight || 52;
-  skin.pegmanWidth = config.pegmanWidth || 49;
+  skin.spriteHeight = config.spriteHeight || 100;
+  skin.spriteWidth = config.spriteWidth || 100;
   skin.spriteYOffset = config.spriteYOffset || 0;
   return skin;
 };
