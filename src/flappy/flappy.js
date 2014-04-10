@@ -560,7 +560,7 @@ Flappy.init = function(config) {
   config.makeUrl = "http://code.org/flappy";
   config.makeImage = BlocklyApps.assetUrl('media/flappy_promo.png');
 
-  config.hideShowCode = true;
+  config.enableShowCode = false;
 
   config.preventExtraTopLevelBlocks = true;
 

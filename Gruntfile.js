@@ -7,7 +7,8 @@ var APPS = [
   'maze',
   'turtle',
   'bounce',
-  'flappy'
+  'flappy',
+  'studio'
 ];
 
 // Parse options from environment.
@@ -308,6 +309,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-strip-code');
+  grunt.loadNpmTasks('grunt-notify');
 
   grunt.loadTasks('tasks');
 

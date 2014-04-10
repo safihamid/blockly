@@ -18,7 +18,7 @@
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Congratulations! You have completed the final stage.",
   "finalStageTrophies": "Congratulations! You have completed the final stage and won {numTrophies, plural, one {a trophy} other {# trophies}}.",
-  "generatedCodeInfo": "The blocks for your program can also be represented in JavaScript, the world's most widely adopted programming language:",
+  "generatedCodeInfo": "Even top universities teach block-based coding (e.g., {berkeleyLink}, {harvardLink}). But under the hood, the blocks you have assembled can also be shown in JavaScript, the world's most widely used coding language:",
   "hashError": "Sorry, '%1' doesn't correspond with any saved program.",
   "help": "Help",
   "hintTitle": "Hint:",
@@ -59,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

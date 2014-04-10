@@ -24,11 +24,10 @@ One of the node modules, node-canvas, depends on Cairo being installed.
 
 Instructions for MacOSX using [brew](http://brew.sh/) (instructions for other platforms [can be found here](https://github.com/LearnBoost/node-canvas/wiki)):
 
-```
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"
-brew update
-brew install cairo
-```
+1. Install [XQuartz from here](http://xquartz.macosforge.org/landing/)
+2. `export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig"`
+3. `brew update`
+4. `brew install cairo`
 
 ### Installing and Running Blockly
 
@@ -52,6 +51,19 @@ open http://localhost:8000
 # Run tests (after a build, or while dev is running)
 grunt test
 ```
+
+### Localization
+
+Since localizing in to many languages dramatically slows down the build, the
+default target locales are `en_us` and `en_ploc` (pseudolocalized). To build
+all available locales, specify `MOOC_LOCALIZE=1` in your environment:
+
+```bash
+MOOC_LOCALIZE=1 grunt rebuild
+```
+
+See [cdo-i18n](https://github.com/code-dot-org/cdo-i18n) for more information
+about the localization of Code.org projects.
 
 ## Project Specification
 
@@ -93,20 +105,6 @@ For notes on our pull process, where to find tasks to work on, etc.—see the Da
 - 2 space indent.
 - 4 space indent on long line breaks.
 - `grunt jshint` should report 0 warnings or errors.
-
-### Localization
-
-Since localizing in to many languages dramatically slows down the build, the
-default target locales are `en_us` and `en_ploc` (pseudolocalized). To build
-all available locales, specify `MOOC_LOCALIZE=1` in your environment:
-
-```bash
-MOOC_LOCALIZE=1 grunt rebuild
-```
-
-See [cdo-i18n](https://github.com/code-dot-org/cdo-i18n) for more information
-about the localization of Code.org projects.
-
 
 ## Releases
 

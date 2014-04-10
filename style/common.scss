@@ -359,8 +359,36 @@ input[type="radio"] {
 }
 
 .blocklyText, .blocklyMenuText, .blocklyTreeLabel, .blocklyHtmlInput,
-    .blocklyIconMark, .blocklyTooltipText {
+    .blocklyIconMark, .blocklyTooltipText, .goog-menuitem-content {
   @include font;
+}
+.goog-menu {
+  box-shadow: 4px 4px 6px #bbb;
+  border-width: 2px;
+}
+
+.goog-menuitem {
+  height: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.goog-menuitem-highlight,
+.goog-menuitem-hover {
+  border-width: 0;
+  background-color: #57e;
+}
+
+.goog-menuitem-highlight .goog-menuitem-content {
+ color: #fff;
+}
+
+.goog-option-selected .goog-menuitem-checkbox:before {
+  content: "✓";
+}
+
+.goog-menuitem-checkbox {
+  background: ""
 }
 
 .generated-code-container {
@@ -369,6 +397,14 @@ input[type="radio"] {
     font-size: 14px;
     line-height: inherit;
     color: $charcoal;
+
+    a {
+      font-weight: bold;
+      color: $purple;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .generatedCode {
     font-size: 14px;
@@ -398,7 +434,7 @@ $modal-image-margin-gap: 10px;
   }
 
   .instruction-with-image {
-    padding-left: 42%
+    padding-left: 42%;
   }
 
   .feedback-image {
@@ -407,12 +443,50 @@ $modal-image-margin-gap: 10px;
     margin: 15px;
     float: left;
     border: lightgrey;
-    border-style: solid
+    border-style: solid;
   }
 
   .feedback-links {
     margin-top: 15px;
   }
+
+  .feedback-callout {
+    border: solid;
+    border-radius: 10px;
+    border-color: red;
+
+    p {
+      margin: 15px;
+      color: red;
+      padding-right: 20%;
+    }
+
+    .congrats {
+      font-size: 24px;
+      line-height: 27px;
+    }
+
+    .hint-header {
+      font-weight: bold;
+    }
+
+    .hint-image {
+      float: right;
+      width: 20%;
+    }
+  }
+}
+
+.yellow-background {
+  background-color: #ffc459;
+}
+
+.light-yellow-background {
+  background-color: #fff7df;
+}
+
+.white-background {
+  background-color: white;
 }
 
 .dialog-title {

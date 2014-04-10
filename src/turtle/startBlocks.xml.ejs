@@ -178,7 +178,7 @@ var spiral = function(i) {
   <% // No blocks are provided for levels 1 and 2. -%>
   <% if (level == 3 || level == 5) { -%>
     <% // Call "draw a square". -%>
-    <block type="draw_a_square" inline="true">
+    <block type="draw_a_square" inline="true" x="20" y="20">
       <value name="VALUE">
         <block type="math_number">
           <title name="NUM"><% if (level == 3) { %>100<% } else { %>50<% } %></title>
@@ -187,7 +187,7 @@ var spiral = function(i) {
     </block>
   <% } else if (level == 4) { -%>
     <% // Three-square code. -%>
-    <block type="controls_repeat" deletable="false" movable="false">
+    <block type="controls_repeat" deletable="false" movable="false" x="20" y="20">
       <title name="TIMES">???</title>
       <statement name="DO">
         <block id="set-color" type="draw_colour" deletable="false" movable="false">

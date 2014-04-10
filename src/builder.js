@@ -1,5 +1,6 @@
 var feedback = require('./feedback.js');
 var dom = require('./dom.js');
+var url = require('url');
 // Builds the dom to get more info from the user. After user enters info
 // and click "create level" onAttemptCallback is called to deliver the info
 // to the server.
@@ -15,9 +16,12 @@ exports.builderForm = function(onAttemptCallback) {
   dom.addClickTouchEvent(createLevelButton, function() {
     var instructions = builderDetails.querySelector('[name="instructions"]').value;
     var name = builderDetails.querySelector('[name="level_name"]').value;
+    var query = url.parse(window.location.href, true).query;
     onAttemptCallback({
       "instructions": instructions,
-      "name": name
+      "name": name,
+      "x": query.x,
+      "y": query.y
     });
   });
 

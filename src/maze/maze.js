@@ -70,7 +70,7 @@ Maze.scale = {
 
 var loadLevel = function() {
   // Load maps.
-  Maze.map = level.map;
+  Maze.map = level.maze ? JSON.parse(level.maze) : level.map;
   BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   Maze.initialDirtMap = level.initialDirt;
   Maze.finalDirtMap = level.finalDirt;
