@@ -1,13 +1,13 @@
 /*jshint multistr: true */
 
 var createToolbox = function(blocks) {
-  return '<xml id="toolbox" style="displastartY: none;">' + blocks + '</xml>';
+  return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
 };
 
 var jigsawBlock = function (type, x, y, child) {
   x = x || 0;
   y = y || 0;
-  return '<block type="' + type + '" deletable="false"' +
+    return '<block type="' + type + '" deletable="true"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
     (child ? '<next>' + child + '</next>' : '') +

@@ -132,6 +132,7 @@ Jigsaw.init = function(config) {
 
   config.trashcan = false;
   config.scrollbars = false;
+  config.concreteBlocks = true;
 
   config.enableShowCode = false;
 

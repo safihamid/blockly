@@ -109,6 +109,7 @@ exports.install = function(blockly, skin) {
 
   generateBlocksForLevel(blockly, skin, {
      image: skin.smiley,
+     HSV: [121, 1.00, 0.98],
      width: 200,
      height: 200,
      numBlocks: 2,
@@ -117,6 +118,7 @@ exports.install = function(blockly, skin) {
 
   generateBlocksForLevel(blockly, skin, {
      image: skin.smiley,
+     HSV: [0, 1.00, 0.98],
      width: 300,
      height: 300,
      numBlocks: 3,
@@ -125,6 +127,7 @@ exports.install = function(blockly, skin) {
 
   generateBlocksForLevel(blockly, skin, {
      image: skin.artist,
+     HSV: [0, 1.00, 0.98],
      width: 200,
      height: 200,
      numBlocks: 3,
@@ -133,6 +136,7 @@ exports.install = function(blockly, skin) {
 
   generateBlocksForLevel(blockly, skin, {
      image: skin.smiley,
+     HSV: [0, 1.00, 0.98],
      width: 400,
      height: 400,
      numBlocks: 5,
@@ -161,6 +165,7 @@ function generateBlocksForLevel(blockly, skin, options) {
   var height = options.height;
   var numBlocks = options.numBlocks;
   var level = options.level;
+  var HSV = options.HSV;
 
   var blockHeight = height / numBlocks;
   var titleWidth = width - 20;
@@ -174,7 +179,7 @@ function generateBlocksForLevel(blockly, skin, options) {
     blockly.Blocks[blockName] = {
       helpUrl: '',
       init: function () {
-        this.setHSV(0, 1.00, 0.98);
+        this.setHSV.apply(this, HSV);
         this.appendDummyInput()
           .appendTitle(new blockly.FieldImage(skin.blank, titleWidth, titleHeight));
         this.setPreviousStatement(blockNum !== 1);
