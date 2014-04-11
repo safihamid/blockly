@@ -46,11 +46,21 @@ var blocks = {
   SIMPLE_MOVE_DOWN: blockUtils.blockOfType('simple_move_down'),
   SIMPLE_MOVE_LEFT: blockUtils.blockOfType('simple_move_left'),
   SIMPLE_MOVE_RIGHT: blockUtils.blockOfType('simple_move_right'),
+  SIMPLE_JUMP_UP: blockUtils.blockOfType('simple_jump_up'),
+  SIMPLE_JUMP_DOWN: blockUtils.blockOfType('simple_jump_down'),
+  SIMPLE_JUMP_LEFT: blockUtils.blockOfType('simple_jump_left'),
+  SIMPLE_JUMP_RIGHT: blockUtils.blockOfType('simple_jump_right'),
   simple_move_blocks: function() {
     return this.SIMPLE_MOVE_UP +
       this.SIMPLE_MOVE_DOWN +
       this.SIMPLE_MOVE_LEFT +
       this.SIMPLE_MOVE_RIGHT;
+  },
+  simple_jump_blocks: function() {
+    return this.SIMPLE_JUMP_UP +
+      this.SIMPLE_JUMP_DOWN +
+      this.SIMPLE_JUMP_LEFT +
+      this.SIMPLE_JUMP_RIGHT;
   }
 };
 
@@ -796,7 +806,7 @@ module.exports = {
     answer: [],
     freePlay: false,
     initialY: 300,
-    toolbox: blockUtils.createToolbox(blocks.simple_move_blocks()),
+    toolbox: blockUtils.createToolbox(blocks.simple_move_blocks() + blocks.simple_jump_blocks()),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0

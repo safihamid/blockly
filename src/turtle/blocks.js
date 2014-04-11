@@ -464,6 +464,30 @@ exports.install = function(blockly, skin) {
         image: skin.downArrow,
         image_width: 84,
         image_height: 84
+      },
+      jump_left: {
+        moveFunction: 'jumpLeft',
+        image: skin.leftJumpArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      jump_right: {
+        moveFunction: 'jumpRight',
+        image: skin.rightJumpArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      jump_up: {
+        moveFunction: 'jumpUp',
+        image: skin.upJumpArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      jump_down: {
+        moveFunction: 'jumpDown',
+        image: skin.downJumpArrow,
+        image_width: 84,
+        image_height: 84
       }
     },
     generate_block: function(direction) {
@@ -487,6 +511,10 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_block('down');
   blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_block('left');
   blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_block('right');
+  blockly.Blocks.simple_jump_up = blockly.Blocks.simple_move.generate_block('jump_up');
+  blockly.Blocks.simple_jump_down = blockly.Blocks.simple_move.generate_block('jump_down');
+  blockly.Blocks.simple_jump_left = blockly.Blocks.simple_move.generate_block('jump_left');
+  blockly.Blocks.simple_jump_right = blockly.Blocks.simple_move.generate_block('jump_right');
 
   generator.generate_simple_move = function(direction) {
     return function() {
@@ -497,8 +525,12 @@ exports.install = function(blockly, skin) {
   generator.simple_move_up = generator.generate_simple_move('up');
   generator.simple_move_left = generator.generate_simple_move('left');
   generator.simple_move_right = generator.generate_simple_move('right');
-  generator.simple_move_down = generator.generate_simple_move('down'); 
-  
+  generator.simple_move_down = generator.generate_simple_move('down');
+  generator.simple_jump_up = generator.generate_simple_move('jump_up');
+  generator.simple_jump_left = generator.generate_simple_move('jump_left');
+  generator.simple_jump_right = generator.generate_simple_move('jump_right');
+  generator.simple_jump_down = generator.generate_simple_move('jump_down');
+
   blockly.Blocks.simple_jump = {
     helpUrl: '',
     init: function() {

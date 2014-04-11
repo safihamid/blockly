@@ -384,11 +384,17 @@ Turtle.step = function(command, values) {
     case 'JF':  // Jump forward
       Turtle.moveForward_(values[0]);
       break;
-    case 'MV':  // Move
+    case 'MV':  // Move (direction)
       var distance = values[0];
       var heading = values[1];
       Turtle.setHeading_(heading);
       Turtle.moveForwardAndDraw_(distance);
+      break;
+    case 'JD':  // Jump (direction)
+      distance = values[0];
+      heading = values[1];
+      Turtle.setHeading_(heading);
+      Turtle.moveForward_(distance);
       break;
     case 'RT':  // Right Turn
       Turtle.turnByDegrees_(values[0]);
