@@ -31,3 +31,10 @@ $root: '/blockly/media/jigsaw/'; //TODO: Parameterize for asset pipeline
 .hide {
   display: none;
 }
+#feedbackButtons {
+  text-align: right;
+}
+.modal-image {
+  border: 1px black solid;
+  margin-top: 0px;
+}

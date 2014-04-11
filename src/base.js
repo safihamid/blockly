@@ -243,6 +243,11 @@ BlocklyApps.init = function(config) {
   BlocklyApps.WIN_ICON = config.skin.winAvatar;
   BlocklyApps.FAILURE_ICON = config.skin.failureAvatar;
 
+  if (config.level.instructionsIcon) {
+    BlocklyApps.ICON = config.skin[config.level.instructionsIcon];
+    BlocklyApps.WIN_ICON = config.skin[config.level.instructionsIcon];
+  }
+
   if (config.showInstructionsWrapper) {
     config.showInstructionsWrapper(function() {
       showInstructions(config.level);
