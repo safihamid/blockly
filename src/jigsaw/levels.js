@@ -7,7 +7,7 @@ var createToolbox = function(blocks) {
 var jigsawBlock = function (type, x, y, child) {
   x = x || 0;
   y = y || 0;
-    return '<block type="' + type + '" deletable="true"' +
+  return '<block type="' + type + '" deletable="true"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
     (child ? '<next>' + child + '</next>' : '') +
