@@ -33,6 +33,10 @@ $root: '/blockly/media/jigsaw/'; //TODO: Parameterize for asset pipeline
 }
 #feedbackButtons {
   text-align: right;
+  padding: 1ex 3ex;
+}
+#continue-button {
+  margin: 5px;
 }
 .modal-image {
   border: 1px black solid;
