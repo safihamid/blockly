@@ -61,6 +61,7 @@ var validateSimplePuzzle = function (options) {
 
 module.exports = {
   '1': {
+    'instructionsIcon': 'smiley',
     'requiredBlocks': [],
     'freePlay': false,
     'goal': {
@@ -77,6 +78,7 @@ module.exports = {
   },
 
   '2': {
+    'instructionsIcon': 'smiley',
     'requiredBlocks': [],
     'freePlay': false,
     'goal': {
@@ -94,6 +96,7 @@ module.exports = {
   },
 
   '3': {
+    'instructionsIcon': 'artist',
     'requiredBlocks': [],
     'freePlay': false,
     'goal': {
@@ -115,7 +118,7 @@ module.exports = {
   },
 
   '4': {
-    'image': 'smiley',
+    'instructionsIcon': 'smiley',
     'requiredBlocks': [],
     'freePlay': false,
     'goal': {
