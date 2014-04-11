@@ -439,6 +439,83 @@ exports.install = function(blockly, skin) {
     }
   };
 
+  blockly.Blocks.simple_move = {
+    DIRECTIONS: {
+      left: {
+        moveFunction: 'moveLeft',
+        image: skin.leftArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      right: {
+        moveFunction: 'moveRight',
+        image: skin.rightArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      up: {
+        moveFunction: 'moveUp',
+        image: skin.upArrow,
+        image_width: 84,
+        image_height: 84
+      },
+      down: {
+        moveFunction: 'moveDown',
+        image: skin.downArrow,
+        image_width: 84,
+        image_height: 84
+      }
+    },
+    generate_block: function(direction) {
+      var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
+
+      return {
+        helpUrl: '',
+        init: function () {
+          this.setHSV(184, 1.00, 0.74);
+          this.appendDummyInput()
+            .appendTitle(new blockly.FieldImage(direction_config.image, direction_config.image_width, direction_config.image_height));
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+          this.setTooltip(msg.jumpTooltip());
+        }
+      };
+    }
+  };
+  
+  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generate_block('up');
+  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_block('down');
+  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_block('left');
+  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_block('right');
+
+  generator.generate_simple_move = function(direction) {
+    return function() {
+      return 'Turtle.' + blockly.Blocks.simple_move.DIRECTIONS[direction].moveFunction + '(50,' + '\'block_id_' + this.id + '\');\n';
+    };
+  };
+
+  generator.simple_move_up = generator.generate_simple_move('up');
+  generator.simple_move_left = generator.generate_simple_move('left');
+  generator.simple_move_right = generator.generate_simple_move('right');
+  generator.simple_move_down = generator.generate_simple_move('down'); 
+  
+  blockly.Blocks.simple_jump = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.appendDummyInput().appendTitle('JUMP')
+        .appendTitle(new blockly.FieldImage(skin.downArrow, 84, 84));
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.jumpTooltip());
+    }
+  };
+
+  generator.simple_jump = function() {
+    return 'Turtle.jumpForward(50,' + '\'block_id_' + this.id + '\');\n';
+  };
+
+
   blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];
@@ -546,6 +623,26 @@ exports.install = function(blockly, skin) {
         generator.ORDER_NONE) || '\'#000000\'';
     return 'Turtle.penColour(' + colour + ', \'block_id_' +
         this.id + '\');\n';
+  };
+  
+  blockly.Blocks.up_big = {
+    helpUrl: '',
+    init: function() {
+      this.setHSV(184, 1.00, 0.74);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldDropdown(this.STATE), 'VISIBILITY');
+      this.setTooltip(msg.turtleVisibilityTooltip());
+    }
+  };
+
+  generator.up_big = function() {
+    // Generate JavaScript for setting the colour.
+    var colour = generator.valueToCode(this, 'COLOUR',
+      generator.ORDER_NONE) || '\'#000000\'';
+    return 'Turtle.penColour(' + colour + ', \'block_id_' +
+      this.id + '\');\n';
   };
 
   blockly.Blocks.turtle_visibility = {

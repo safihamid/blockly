@@ -12,10 +12,9 @@ exports.Direction = {
   WEST: 3
 };
 
-exports.FINISH_COLLIDE_DISTANCE = 0.5;
-exports.SPRITE_COLLIDE_DISTANCE = 0.5;
+exports.FINISH_COLLIDE_DISTANCE = 1.5;
+exports.SPRITE_COLLIDE_DISTANCE = 1.5;
 exports.DEFAULT_SPRITE_SPEED = 0.1;
-exports.Y_TOP_BOUNDARY = -0.2;
 
 /**
  * The types of squares in the maze, which is represented

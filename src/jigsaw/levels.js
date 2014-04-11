@@ -1,8 +1,6 @@
 /*jshint multistr: true */
 
-var createToolbox = function(blocks) {
-  return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
-};
+var createToolbox = require('../block_utils').createToolbox;
 
 var jigsawBlock = function (type, x, y, child) {
   x = x || 0;

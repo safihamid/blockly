@@ -1,10 +1,7 @@
 /*jshint multistr: true */
 
 var Direction = require('./tiles').Direction;
-
-var tb = function(blocks) {
-  return '<xml id="toolbox" style="display: none;">' + blocks + '</xml>';
-};
+var tb = require('../block_utils').createToolbox;
 
 /*
  * Configuration for all levels.
@@ -138,11 +135,11 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
+      [0,16, 0, 0, 0,16, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0,16, 0, 0,16, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0,16, 0, 0,16, 0, 0]
+      [0,16, 0, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
     ],
     'toolbox':
       tb('<block type="studio_whenSpriteClicked"></block> \
