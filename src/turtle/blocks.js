@@ -490,9 +490,8 @@ exports.install = function(blockly, skin) {
         image_height: 84
       }
     },
-    generate_block: function(direction) {
+    generateBlock: function(direction) {
       var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
-
       return {
         helpUrl: '',
         init: function () {
@@ -507,14 +506,14 @@ exports.install = function(blockly, skin) {
     }
   };
   
-  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generate_block('up');
-  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generate_block('down');
-  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generate_block('left');
-  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generate_block('right');
-  blockly.Blocks.simple_jump_up = blockly.Blocks.simple_move.generate_block('jump_up');
-  blockly.Blocks.simple_jump_down = blockly.Blocks.simple_move.generate_block('jump_down');
-  blockly.Blocks.simple_jump_left = blockly.Blocks.simple_move.generate_block('jump_left');
-  blockly.Blocks.simple_jump_right = blockly.Blocks.simple_move.generate_block('jump_right');
+  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generateBlock('up');
+  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generateBlock('down');
+  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generateBlock('left');
+  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generateBlock('right');
+  blockly.Blocks.simple_jump_up = blockly.Blocks.simple_move.generateBlock('jump_up');
+  blockly.Blocks.simple_jump_down = blockly.Blocks.simple_move.generateBlock('jump_down');
+  blockly.Blocks.simple_jump_left = blockly.Blocks.simple_move.generateBlock('jump_left');
+  blockly.Blocks.simple_jump_right = blockly.Blocks.simple_move.generateBlock('jump_right');
 
   generator.generate_simple_move = function(direction) {
     return function() {
