@@ -99,7 +99,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.maze_turn.DIRECTION_CONFIGS =
+  blockly.Blocks.maze_turn.DIRECTIONS =
       [[msg.turnLeft() + ' \u21BA', 'turnLeft'],
        [msg.turnRight() + ' \u21BB', 'turnRight']];
 
@@ -121,7 +121,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.maze_isPath.DIRECTION_CONFIGS =
+  blockly.Blocks.maze_isPath.DIRECTIONS =
       [[msg.ifPathAhead(), 'isPathForward'],
        [msg.pathLeft() + ' \u21BA', 'isPathLeft'],
        [msg.pathRight() + ' \u21BB', 'isPathRight']];
@@ -148,8 +148,8 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.maze_if.DIRECTION_CONFIGS =
-      blockly.Blocks.maze_isPath.DIRECTION_CONFIGS;
+  blockly.Blocks.maze_if.DIRECTIONS =
+      blockly.Blocks.maze_isPath.DIRECTIONS;
 
   generator.maze_if = function() {
     // Generate JavaScript for 'if' conditional if there is a path.
@@ -178,8 +178,8 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.maze_ifElse.DIRECTION_CONFIGS =
-      blockly.Blocks.maze_isPath.DIRECTION_CONFIGS;
+  blockly.Blocks.maze_ifElse.DIRECTIONS =
+      blockly.Blocks.maze_isPath.DIRECTIONS;
 
   generator.maze_ifElse = function() {
     // Generate JavaScript for 'if/else' conditional if there is a path.
@@ -219,7 +219,7 @@ exports.install = function(blockly, skin) {
     return code;
   };
 
-  blockly.Blocks.karel_if.DIRECTION_CONFIGS = [
+  blockly.Blocks.karel_if.DIRECTIONS = [
        [msg.pilePresent(), 'pilePresent'],
        [msg.holePresent(), 'holePresent'],
        [msg.pathAhead(), 'isPathForward']
@@ -258,8 +258,8 @@ exports.install = function(blockly, skin) {
     return code;
   };
 
-  blockly.Blocks.karel_ifElse.DIRECTION_CONFIGS =
-      blockly.Blocks.karel_if.DIRECTION_CONFIGS;
+  blockly.Blocks.karel_ifElse.DIRECTIONS =
+      blockly.Blocks.karel_if.DIRECTIONS;
 
   blockly.Blocks.maze_whileNotClear = {
     helpUrl: 'http://code.google.com/p/blockly/wiki/Repeat',
@@ -283,7 +283,7 @@ exports.install = function(blockly, skin) {
     return 'while (' + argument + ') {\n' + branch + '}\n';
   };
 
-  blockly.Blocks.maze_whileNotClear.DIRECTION_CONFIGS = [
+  blockly.Blocks.maze_whileNotClear.DIRECTIONS = [
     [msg.while() + ' ' + msg.pilePresent(), 'pilePresent'],
     [msg.while() + ' ' + msg.holePresent(), 'holePresent']
   ];
@@ -353,7 +353,7 @@ exports.install = function(blockly, skin) {
     return 'while (' + argument + ') {\n' + branch + '}\n';
   };
 
-  blockly.Blocks.maze_untilBlockedOrNotClear.DIRECTION_CONFIGS = [
+  blockly.Blocks.maze_untilBlockedOrNotClear.DIRECTIONS = [
        [msg.while() + ' ' + msg.pilePresent(), 'pilePresent'],
        [msg.while() + ' ' + msg.holePresent(), 'holePresent'],
        [msg.repeatUntilBlocked(), 'isPathForward']

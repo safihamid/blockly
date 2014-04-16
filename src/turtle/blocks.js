@@ -58,7 +58,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_move.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_move.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('100',
             blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -86,7 +86,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.VALUE), 'VALUE')
           .appendTitle(msg.degrees());
@@ -116,7 +116,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('90',
               blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -151,7 +151,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.VALUE), 'VALUE')
           .appendTitle(msg.degrees());
@@ -181,7 +181,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('90',
               blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -399,7 +399,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_move.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_move.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.dots());
       this.setInputsInline(true);
@@ -409,7 +409,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.draw_move.DIRECTION_CONFIGS =
+  blockly.Blocks.draw_move.DIRECTIONS =
       [[msg.moveForward(), 'moveForward'],
        [msg.moveBackward(), 'moveBackward']];
 
@@ -429,7 +429,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.jump.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.jump.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.dots());
       this.setInputsInline(true);
@@ -543,7 +543,7 @@ exports.install = function(blockly, skin) {
   };
 
 
-  blockly.Blocks.jump.DIRECTION_CONFIGS =
+  blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];
 
@@ -563,7 +563,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.degrees());
       this.setInputsInline(true);
@@ -573,7 +573,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.draw_turn.DIRECTION_CONFIGS =
+  blockly.Blocks.draw_turn.DIRECTIONS =
       [[msg.turnRight(), 'turnRight'],
        [msg.turnLeft(), 'turnLeft']];
 
