@@ -7,7 +7,7 @@ A new Block consists of three parts. For a new block named `new_block_name`:
       blockly.Blocks.new_block_name = {
           init: function() {
             this.setHSV(258, 0.35, 0.62);
-            this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.downJumpArrow, 15, 15)); // TODO(bjordan): placeholder
+            this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.downJumpArrow, 15, 15));
             this.setOutput(true, 'Number');
           }
         };
