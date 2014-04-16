@@ -58,7 +58,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_move.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_move.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('100',
             blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -86,7 +86,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.VALUE), 'VALUE')
           .appendTitle(msg.degrees());
@@ -116,7 +116,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('90',
               blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -151,7 +151,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(this.VALUE), 'VALUE')
           .appendTitle(msg.degrees());
@@ -181,7 +181,7 @@ exports.install = function(blockly, skin) {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(new blockly.FieldTextInput('90',
               blockly.FieldTextInput.numberValidator), 'VALUE')
@@ -399,7 +399,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_move.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_move.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.dots());
       this.setInputsInline(true);
@@ -409,7 +409,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.draw_move.DIRECTIONS =
+  blockly.Blocks.draw_move.DIRECTION_CONFIGS =
       [[msg.moveForward(), 'moveForward'],
        [msg.moveBackward(), 'moveBackward']];
 
@@ -429,7 +429,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.jump.DIRECTIONS), 'DIR');
+              blockly.Blocks.jump.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.dots());
       this.setInputsInline(true);
@@ -439,103 +439,99 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.simple_move = {
-    DIRECTIONS: {
-      left: {
-        moveFunction: 'moveLeft',
-        image: skin.leftArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      right: {
-        moveFunction: 'moveRight',
-        image: skin.rightArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      up: {
-        moveFunction: 'moveUp',
-        image: skin.upArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      down: {
-        moveFunction: 'moveDown',
-        image: skin.downArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      jump_left: {
-        moveFunction: 'jumpLeft',
-        image: skin.leftJumpArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      jump_right: {
-        moveFunction: 'jumpRight',
-        image: skin.rightJumpArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      jump_up: {
-        moveFunction: 'jumpUp',
-        image: skin.upJumpArrow,
-        image_width: 84,
-        image_height: 84
-      },
-      jump_down: {
-        moveFunction: 'jumpDown',
-        image: skin.downJumpArrow,
-        image_width: 84,
-        image_height: 84
-      }
+  var SimpleMove = {
+    DEFAULT_MOVE_LENGTH: 50,
+    SHORT_MOVE_LENGTH: 25,
+    LONG_MOVE_LENGTH: 100,
+    DIRECTION_CONFIGS: {
+      left: { letter: 'W', moveFunction: 'moveLeft', image: skin.leftArrow, image_width: 42, image_height: 42 },
+      right: { letter: 'E', moveFunction: 'moveRight', image: skin.rightArrow, image_width: 42, image_height: 42 },
+      up: { letter: 'N', moveFunction: 'moveUp', image: skin.upArrow, image_width: 42, image_height: 42 },
+      down: { letter: 'S', moveFunction: 'moveDown', image: skin.downArrow, image_width: 42, image_height: 42 },
+      jump_left: { letter: 'W', moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
+      jump_right: { letter: 'E', moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
+      jump_up: { letter: 'N', moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
+      jump_down: { letter: 'S', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 }
     },
-    generateBlock: function(direction) {
-      var direction_config = blockly.Blocks.simple_move.DIRECTIONS[direction];
+    generateBlocksForAllDirections: function() {
+      SimpleMove.generateBlocksForDirection("up");
+      SimpleMove.generateBlocksForDirection("down");
+      SimpleMove.generateBlocksForDirection("left");
+      SimpleMove.generateBlocksForDirection("right");
+    },
+    generateBlocksForDirection: function(direction) {
+      generator["simple_move_" + direction] = SimpleMove.generateCodeGenerator(direction);
+      generator["simple_jump_" + direction] = SimpleMove.generateCodeGenerator('jump_' + direction);
+      generator["simple_move_" + direction + "_length"] = SimpleMove.generateCodeGenerator(direction, true);
+      generator["simple_jump_" + direction + "_length"] = SimpleMove.generateCodeGenerator('jump_' + direction, true);
+      blockly.Blocks['simple_move_' + direction + '_length'] = SimpleMove.generateBlock(direction, true);
+      blockly.Blocks['simple_jump_' + direction + '_length'] = SimpleMove.generateBlock('jump_' + direction, true);
+      blockly.Blocks['simple_move_' + direction] = SimpleMove.generateBlock(direction);
+      blockly.Blocks['simple_jump_' + direction] = SimpleMove.generateBlock('jump_' + direction);
+    },
+    generateBlock: function(direction, hasLengthInput) {
+      var directionConfig = SimpleMove.DIRECTION_CONFIGS[direction];
       return {
         helpUrl: '',
         init: function () {
           this.setHSV(184, 1.00, 0.74);
           this.appendDummyInput()
-            .appendTitle(new blockly.FieldImage(direction_config.image, direction_config.image_width, direction_config.image_height));
+            .appendTitle(directionConfig.letter)
+            .appendTitle(new blockly.FieldImage(directionConfig.image, directionConfig.image_width, directionConfig.image_height))
           this.setPreviousStatement(true);
           this.setNextStatement(true);
           this.setTooltip(msg.jumpTooltip());
+          if (hasLengthInput) {
+            this.setInputsInline(true);
+            this.appendValueInput("length").setCheck("Number");
+          }
         }
+      };
+    },
+    generateCodeGenerator: function(direction, hasLengthInput) {
+      return function() {
+        var length = SimpleMove.DEFAULT_MOVE_LENGTH;
+
+        if (hasLengthInput) {
+          var lengthInputOutput = generator.valueToCode(this, 'length', generator.ORDER_ATOMIC);
+          length = lengthInputOutput || length; // Allow empty input
+        }
+        return 'Turtle.' + SimpleMove.DIRECTION_CONFIGS[direction].moveFunction + '(' + length + ',' + '\'block_id_' + this.id + '\');\n';
       };
     }
   };
-  
-  blockly.Blocks.simple_move_up = blockly.Blocks.simple_move.generateBlock('up');
-  blockly.Blocks.simple_move_down = blockly.Blocks.simple_move.generateBlock('down');
-  blockly.Blocks.simple_move_left = blockly.Blocks.simple_move.generateBlock('left');
-  blockly.Blocks.simple_move_right = blockly.Blocks.simple_move.generateBlock('right');
-  blockly.Blocks.simple_jump_up = blockly.Blocks.simple_move.generateBlock('jump_up');
-  blockly.Blocks.simple_jump_down = blockly.Blocks.simple_move.generateBlock('jump_down');
-  blockly.Blocks.simple_jump_left = blockly.Blocks.simple_move.generateBlock('jump_left');
-  blockly.Blocks.simple_jump_right = blockly.Blocks.simple_move.generateBlock('jump_right');
 
-  generator.generate_simple_move = function(direction) {
-    return function() {
-      return 'Turtle.' + blockly.Blocks.simple_move.DIRECTIONS[direction].moveFunction + '(50,' + '\'block_id_' + this.id + '\');\n';
-    };
+  SimpleMove.generateBlocksForAllDirections();
+
+  blockly.Blocks.simple_move_length_short = {
+    init: function() {
+      this.setHSV(258, 0.35, 0.62);
+      this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.shortLine, 35, 5));
+      this.setOutput(true, 'Number');
+    }
+  };
+  blockly.Blocks.simple_move_length_long = {
+    init: function() {
+      this.setHSV(258, 0.35, 0.62);
+      this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.longLine, 70, 5));
+      this.setOutput(true, 'Number');
+    }
   };
 
-  generator.simple_move_up = generator.generate_simple_move('up');
-  generator.simple_move_left = generator.generate_simple_move('left');
-  generator.simple_move_right = generator.generate_simple_move('right');
-  generator.simple_move_down = generator.generate_simple_move('down');
-  generator.simple_jump_up = generator.generate_simple_move('jump_up');
-  generator.simple_jump_left = generator.generate_simple_move('jump_left');
-  generator.simple_jump_right = generator.generate_simple_move('jump_right');
-  generator.simple_jump_down = generator.generate_simple_move('jump_down');
+  
+  generator.simple_move_length_short = function () {
+    return [SimpleMove.SHORT_MOVE_LENGTH, generator.ORDER_ATOMIC];
+  };
+  generator.simple_move_length_long = function () {
+    return [SimpleMove.LONG_MOVE_LENGTH, generator.ORDER_ATOMIC];
+  };
 
   blockly.Blocks.simple_jump = {
     helpUrl: '',
     init: function() {
       this.setHSV(184, 1.00, 0.74);
       this.appendDummyInput().appendTitle('JUMP')
-        .appendTitle(new blockly.FieldImage(skin.downArrow, 84, 84));
+        .appendTitle(new blockly.FieldImage(skin.downArrow, 42, 42));
       this.setPreviousStatement(true);
       this.setNextStatement(true);
       this.setTooltip(msg.jumpTooltip());
@@ -547,7 +543,7 @@ exports.install = function(blockly, skin) {
   };
 
 
-  blockly.Blocks.jump.DIRECTIONS =
+  blockly.Blocks.jump.DIRECTION_CONFIGS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];
 
@@ -567,7 +563,7 @@ exports.install = function(blockly, skin) {
       this.appendValueInput('VALUE')
           .setCheck('Number')
           .appendTitle(new blockly.FieldDropdown(
-              blockly.Blocks.draw_turn.DIRECTIONS), 'DIR');
+              blockly.Blocks.draw_turn.DIRECTION_CONFIGS), 'DIR');
       this.appendDummyInput()
           .appendTitle(msg.degrees());
       this.setInputsInline(true);
@@ -577,7 +573,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  blockly.Blocks.draw_turn.DIRECTIONS =
+  blockly.Blocks.draw_turn.DIRECTION_CONFIGS =
       [[msg.turnRight(), 'turnRight'],
        [msg.turnLeft(), 'turnLeft']];
 

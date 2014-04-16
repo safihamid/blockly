@@ -28,6 +28,8 @@ exports.load = function(assetUrl, id) {
     downJumpArrow: skinUrl('down_jump.png'),
     upJumpArrow: skinUrl('up_jump.png'),
     rightJumpArrow: skinUrl('right_jump.png'),
+    shortLine: skinUrl('shortLine.png'),
+    longLine: skinUrl('longLine.png'),
     // Sounds
     startSound: [skinUrl('start.mp3'), skinUrl('start.ogg')],
     winSound: [skinUrl('win.mp3'), skinUrl('win.ogg')],
