@@ -26,6 +26,7 @@ BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
 
 Blockly.BlockSvg.NOTCH_WIDTH = 50;
+Blockly.SNAP_RADIUS = 60;
 
 var notchHeight = 8;
 var notchWidthA = 6;
@@ -119,8 +120,6 @@ Jigsaw.init = function(config) {
      * Blockly's default is 0.45.
      */
     Blockly.HSV_SATURATION = 0.6;
-
-    Blockly.SNAP_RADIUS *= Jigsaw.scale.snapRadius;
 
     drawMap();
   };
