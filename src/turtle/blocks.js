@@ -493,8 +493,8 @@ exports.install = function(blockly, skin) {
         var length = SimpleMove.DEFAULT_MOVE_LENGTH;
 
         if (hasLengthInput) {
-          var lengthInputOutput = generator.valueToCode(this, 'length', generator.ORDER_ATOMIC);
-          length = lengthInputOutput || length; // Allow empty input
+          var lengthInputResult = generator.valueToCode(this, 'length', generator.ORDER_ATOMIC);
+          length = lengthInputResult || length; // Allow empty input
         }
         return 'Turtle.' + SimpleMove.DIRECTION_CONFIGS[direction].moveFunction + '(' + length + ',' + '\'block_id_' + this.id + '\');\n';
       };
