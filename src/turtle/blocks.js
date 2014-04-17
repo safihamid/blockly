@@ -501,7 +501,7 @@ exports.install = function(blockly, skin) {
     },
     stretchedLine: function(width) {
       var lineImage = new blockly.FieldImage(skin.offsetLineSlice, width, 9);
-      lineImage.setPreserveAspectRatio(false);
+      lineImage.setPreserveAspectRatio("none");
       return lineImage;
     }
   };
