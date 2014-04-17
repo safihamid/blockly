@@ -45,7 +45,6 @@ var patternCache = {
       return false;
     }
 
-    var equal = true;
     Object.keys(patternInfo).forEach(function (key) {
       if (patternInfo[key] !== cached[key]) {
         equal = false;
