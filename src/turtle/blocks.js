@@ -526,23 +526,6 @@ exports.install = function(blockly, skin) {
     return [SimpleMove.LONG_MOVE_LENGTH, generator.ORDER_ATOMIC];
   };
 
-  blockly.Blocks.simple_jump = {
-    helpUrl: '',
-    init: function() {
-      this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput().appendTitle('JUMP')
-        .appendTitle(new blockly.FieldImage(skin.downArrow, 42, 42));
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(msg.jumpTooltip());
-    }
-  };
-
-  generator.simple_jump = function() {
-    return 'Turtle.jumpForward(50,' + '\'block_id_' + this.id + '\');\n';
-  };
-
-
   blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];
