@@ -14,7 +14,7 @@ var patternCache = {
   created: {},
 
   /**
-   * Stick an item in our queu
+   * Stick an item in our queue
    */
   addToQueue: function (patternInfo) {
     this.queued.push(patternInfo);
@@ -52,13 +52,13 @@ var patternCache = {
       }
     });
     if (!equal) {
-      throw new Error("Can't add attribute of same id with different attribuets");
+      throw new Error("Can't add attribute of same id with different attributes");
     }
     return true;
   },
 
   /**
-   * Mark that we've create an svg pattern
+   * Mark that we've created an svg pattern
    */
   markCreated: function (patternInfo) {
     if (this.created[patternInfo.id]) {
