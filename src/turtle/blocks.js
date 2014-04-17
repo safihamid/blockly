@@ -498,6 +498,11 @@ exports.install = function(blockly, skin) {
         }
         return 'Turtle.' + SimpleMove.DIRECTION_CONFIGS[direction].moveFunction + '(' + length + ',' + '\'block_id_' + this.id + '\');\n';
       };
+    },
+    stretchedLine: function(width) {
+      var lineImage = new blockly.FieldImage(skin.offsetLineSlice, width, 9);
+      lineImage.setPreserveAspectRatio(false);
+      return lineImage;
     }
   };
 
@@ -506,14 +511,14 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.simple_move_length_short = {
     init: function() {
       this.setHSV(258, 0.35, 0.62);
-      this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.shortLine, 35, 5));
+      this.appendDummyInput().appendTitle(SimpleMove.stretchedLine(SimpleMove.SHORT_MOVE_LENGTH));
       this.setOutput(true, 'Number');
     }
   };
   blockly.Blocks.simple_move_length_long = {
     init: function() {
       this.setHSV(258, 0.35, 0.62);
-      this.appendDummyInput().appendTitle(new blockly.FieldImage(skin.longLine, 70, 5));
+      this.appendDummyInput().appendTitle(SimpleMove.stretchedLine(SimpleMove.LONG_MOVE_LENGTH));
       this.setOutput(true, 'Number');
     }
   };
