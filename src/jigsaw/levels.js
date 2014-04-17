@@ -61,75 +61,103 @@ var validateSimplePuzzle = function (options) {
 
 module.exports = {
   '1': {
-    'instructionsIcon': 'smiley',
-    'requiredBlocks': [],
-    'freePlay': false,
-    'goal': {
+    instructionsIcon: 'smiley',
+    image: {
+      name: 'smiley',
+      width: 200,
+      height: 200
+    },
+    ghost: {
+      x: 500,
+      y: 50
+    },
+    numBlocks: 2,
+    requiredBlocks: [],
+    freePlay: false,
+    goal: {
       successCondition: function () {
         return validateSimplePuzzle({level: 1, numBlocks: 2});
       },
     },
-    'scale': {
-      'snapRadius': 2
-    },
-    'startBlocks':
+    startBlocks:
       jigsawBlock('jigsaw_1A', 20, 20) +
       jigsawBlock('jigsaw_1B', 245, 65)
   },
 
   '2': {
-    'instructionsIcon': 'smiley',
-    'requiredBlocks': [],
-    'freePlay': false,
-    'goal': {
+    instructionsIcon: 'smiley',
+    image: {
+      name: 'smiley',
+      width: 300,
+      height: 300,
+    },
+    ghost: {
+      x: 700,
+      y: 50
+    },
+    numBlocks: 3,
+    requiredBlocks: [],
+    freePlay: false,
+    goal: {
       successCondition: function () {
         return validateSimplePuzzle({level: 2, numBlocks: 3});
       },
     },
-    'scale': {
-      'snapRadius': 2
-    },
-    'startBlocks':
+    startBlocks:
       jigsawBlock('jigsaw_2A', 260, 20) +
       jigsawBlock('jigsaw_2B', 120, 190) +
       jigsawBlock('jigsaw_2C', 20, 70)
   },
 
   '3': {
-    'instructionsIcon': 'artist',
-    'requiredBlocks': [],
-    'freePlay': false,
-    'goal': {
+    instructionsIcon: 'artist',
+    image: {
+      name: 'artist',
+      width: 200,
+      height: 200
+    },
+    numBlocks: 3,
+    notchedEnds: true,
+    requiredBlocks: [],
+    freePlay: false,
+    goal: {
       successCondition: function () {
         return validateSimplePuzzle({level: 3, numBlocks: 3});
       },
     },
-    'scale': {
-      'snapRadius': 2
+    ghost: {
+      x: 100,
+      y: 50
     },
-    'toolbox':
+    toolbox:
       createToolbox(
         jigsawBlock('jigsaw_3C') +
         jigsawBlock('jigsaw_3B') +
         jigsawBlock('jigsaw_3A')
       ),
-    'startBlocks': ''
-
+    startBlocks: ''
   },
 
   '4': {
-    'instructionsIcon': 'smiley',
-    'requiredBlocks': [],
-    'freePlay': false,
-    'goal': {
+    instructionsIcon: 'smiley',
+    image: {
+      name: 'smiley',
+      width: 400,
+      height: 400
+    },
+    ghost: {
+      x: 100,
+      y: 50
+    },
+    numBlocks: 5,
+    requiredBlocks: [],
+    freePlay: false,
+    goal: {
       successCondition: function () {
         return validateSimplePuzzle({level: 4, numBlocks: 5});
       },
     },
-    'scale': {
-      'snapRadius': 2
-    },
-    'toolbox':
+    toolbox:
       createToolbox(
         jigsawBlock('jigsaw_4B') +
         jigsawBlock('jigsaw_4A') +
@@ -137,7 +165,6 @@ module.exports = {
         jigsawBlock('jigsaw_4C') +
         jigsawBlock('jigsaw_4E')
       ),
-    'startBlocks': ''
-
+    startBlocks: ''
   }
 };

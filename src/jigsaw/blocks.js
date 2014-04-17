@@ -8,6 +8,7 @@
 
 var msg = require('../../locale/current/jigsaw');
 var dom = require('../dom');
+var levels = require('./levels');
 
 var patternCache = {
   queued: [],
@@ -152,44 +153,23 @@ exports.install = function(blockly, skin) {
     }
   });
 
+  // could make this settable on the level if I need
+  var HSV = [0, 1.00, 0.98];
+
   var existingBlocks = Object.keys(blockly.Blocks);
 
-  generateBlocksForLevel(blockly, skin, {
-     image: skin.smiley,
-     HSV: [121, 1.00, 0.98],
-     width: 200,
-     height: 200,
-     numBlocks: 2,
-     level: 1
-   });
-
-  generateBlocksForLevel(blockly, skin, {
-     image: skin.smiley,
-     HSV: [0, 1.00, 0.98],
-     width: 300,
-     height: 300,
-     numBlocks: 3,
-     level: 2
-   });
-
-  generateBlocksForLevel(blockly, skin, {
-     image: skin.artist,
-     HSV: [0, 1.00, 0.98],
-     width: 200,
-     height: 200,
-     numBlocks: 3,
-     level: 3,
-     notchedEnds: true
-   });
-
-  generateBlocksForLevel(blockly, skin, {
-     image: skin.smiley,
-     HSV: [0, 1.00, 0.98],
-     width: 400,
-     height: 400,
-     numBlocks: 5,
-     level: 4
-   });
+  Object.keys(levels).forEach(function(key) {
+    var level = levels[key];
+    generateBlocksForLevel(blockly, skin, {
+      image: skin[level.image.name],
+      HSV: HSV,
+      width: level.image.width,
+      height: level.image.height,
+      numBlocks: level.numBlocks,
+      notchedEnds: level.notchedEnds,
+      level: key
+    });
+  });
 
   // Go through all added blocks, and add empty generators for those that
   // weren't already given generators
