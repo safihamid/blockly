@@ -476,7 +476,7 @@ exports.install = function(blockly, skin) {
         init: function () {
           this.setHSV(184, 1.00, 0.74);
           this.appendDummyInput()
-            .appendTitle(directionConfig.letter)
+            .appendTitle(new blockly.FieldLabel(directionConfig.letter, "direction-letter"))
             .appendTitle(new blockly.FieldImage(directionConfig.image, directionConfig.image_width, directionConfig.image_height));
           this.setPreviousStatement(true);
           this.setNextStatement(true);
