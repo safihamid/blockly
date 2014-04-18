@@ -79,9 +79,6 @@ var AVATAR_Y_OFFSET = constants.AVATAR_Y_OFFSET;
 
 var loadLevel = function() {
   // Load maps.
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
-
   infoText = (level.infoText === undefined ? true : level.infoText);
   if (!infoText) {
     Flappy.gameState = Flappy.GameStates.ACTIVE;

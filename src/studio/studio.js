@@ -86,8 +86,6 @@ var loadLevel = function() {
   Studio.map = level.map;
   Studio.timeoutFailureTick = level.timeoutFailureTick || Infinity;
   Studio.softButtons_ = level.softButtons || [];
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
   // Override scalars.
   for (var key in level.scale) {

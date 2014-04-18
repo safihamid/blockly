@@ -559,7 +559,6 @@ module.exports = {
   },
   'custom': {
     'toolbox': toolbox(3, 4),
-    'ideal': 7,
     'codeFunctions': [
       {'func': 'move', 'alias': 'Maze.moveForward();'},
       {'func': 'turnleft', 'alias': 'Maze.turnLeft();'},
