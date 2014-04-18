@@ -88,13 +88,13 @@ var move = function(direction, id) {
  * @param {string} id ID of block that triggered this action.
  */
 var turn = function(direction, id) {
-  if (direction) {
+  if (direction == TurnDirection.RIGHT) {
     // Right turn (clockwise).
-    Maze.pegmanD++;
+    Maze.pegmanD += TurnDirection.RIGHT;
     BlocklyApps.log.push(['right', id]);
   } else {
     // Left turn (counterclockwise).
-    Maze.pegmanD--;
+    Maze.pegmanD += TurnDirection.LEFT;
     BlocklyApps.log.push(['left', id]);
   }
   Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD);
@@ -110,22 +110,25 @@ var turnTo = function(newDirection, id) {
   var currentDirection = Maze.pegmanD;
   if (isTurnAround(currentDirection, newDirection)) {
     var shouldTurnCWToPreferStageFront = currentDirection - newDirection < 0;
-    var relativeTurnDirection = shouldTurnCWToPreferStageFront ? 1 : 0;
+    var relativeTurnDirection = shouldTurnCWToPreferStageFront ? TurnDirection.RIGHT : TurnDirection.LEFT;
     turn(relativeTurnDirection, id);
     turn(relativeTurnDirection, id);
   } else if (isRightTurn(currentDirection, newDirection)) {
-    turn(1, id);
+    turn(TurnDirection.RIGHT, id);
   } else if (isLeftTurn(currentDirection, newDirection)) {
-    turn(0, id);
+    turn(TurnDirection.LEFT, id);
   }
 };
 
+var TurnDirection = { LEFT: -1, RIGHT: 1};
+var MoveDirection = { FORWARD: 0, RIGHT: 1, BACKWARD: 2, LEFT: 3};
+
 function isLeftTurn(direction, newDirection) {
-  return newDirection === Maze.constrainDirection4(direction - 1);
+  return newDirection === Maze.constrainDirection4(direction + TurnDirection.LEFT);
 }
 
 function isRightTurn(direction, newDirection) {
-  return newDirection === Maze.constrainDirection4(direction + 1);
+  return newDirection === Maze.constrainDirection4(direction + TurnDirection.RIGHT);
 }
 
 /**
@@ -135,62 +138,63 @@ function isRightTurn(direction, newDirection) {
  * @returns {boolean}
  */
 function isTurnAround(direction, newDirection) {
-  return Math.abs(direction - newDirection) == 2;
+  return Math.abs(direction - newDirection) == MoveDirection.BACKWARD;
+}
+
+function moveAbsoluteDirection(direction, id) {
+  turnTo(direction, id);
+  move(MoveDirection.FORWARD, id);
 }
 
 exports.moveForward = function(id) {
-  move(0, id);
+  move(MoveDirection.FORWARD, id);
 };
 
 exports.moveBackward = function(id) {
-  move(2, id);
+  move(MoveDirection.BACKWARD, id);
 };
 
 exports.moveNorth = function(id) {
-  turnTo(Direction.NORTH, id);
-  move(0, id);
+  moveAbsoluteDirection(Direction.NORTH, id);
 };
 
 exports.moveSouth = function(id) {
-  turnTo(Direction.SOUTH, id);
-  move(0, id);
+  moveAbsoluteDirection(Direction.SOUTH, id);
 };
 
 exports.moveEast = function(id) {
-  turnTo(Direction.EAST, id);
-  move(0, id);
+  moveAbsoluteDirection(Direction.EAST, id);
 };
 
 exports.moveWest = function(id) {
-  turnTo(Direction.WEST, id);
-  move(0, id);
+  moveAbsoluteDirection(Direction.WEST, id);
 };
 
 exports.turnLeft = function(id) {
-  turn(0, id);
+  turn(TurnDirection.LEFT, id);
 };
 
 exports.turnRight = function(id) {
-  turn(1, id);
+  turn(TurnDirection.RIGHT, id);
 };
 
 exports.isPathForward = function(id) {
-  return isPath(0, id);
+  return isPath(MoveDirection.FORWARD, id);
 };
 exports.noPathForward = function(id) {
-  return !isPath(0, id);
+  return !isPath(MoveDirection.FORWARD, id);
 };
 
 exports.isPathRight = function(id) {
-  return isPath(1, id);
+  return isPath(MoveDirection.RIGHT, id);
 };
 
 exports.isPathBackward = function(id) {
-  return isPath(2, id);
+  return isPath(MoveDirection.BACKWARD, id);
 };
 
 exports.isPathLeft = function(id) {
-  return isPath(3, id);
+  return isPath(MoveDirection.LEFT, id);
 };
 
 exports.pilePresent = function(id) {
