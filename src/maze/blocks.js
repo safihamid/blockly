@@ -52,10 +52,10 @@ exports.install = function(blockly, skin) {
 
   var SimpleMove = {
     DIRECTION_CONFIGS: {
-      West: { letter: 'W', moveFunction: 'moveLeft', image: skin.leftArrow, image_width: 42, image_height: 42 },
-      East: { letter: 'E', moveFunction: 'moveRight', image: skin.rightArrow, image_width: 42, image_height: 42 },
-      North: { letter: 'N', moveFunction: 'moveUp', image: skin.upArrow, image_width: 42, image_height: 42 },
-      South: { letter: 'S', moveFunction: 'moveDown', image: skin.downArrow, image_width: 42, image_height: 42 },
+      West: { letter: 'W' },
+      East: { letter: 'E' },
+      North: { letter: 'N' },
+      South: { letter: 'S' },
     },
     generateBlocksForAllDirections: function() {
       SimpleMove.generateBlocksForDirection("North");
