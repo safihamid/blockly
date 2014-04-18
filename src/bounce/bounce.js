@@ -93,8 +93,6 @@ var loadLevel = function() {
   Bounce.softButtons_ = level.softButtons || [];
   Bounce.respawnBalls = level.respawnBalls || false;
   Bounce.failOnBallExit = level.failOnBallExit || false;
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
   // Override scalars.
   for (var key in level.scale) {

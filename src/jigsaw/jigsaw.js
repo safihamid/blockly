@@ -64,9 +64,6 @@ Jigsaw.scale = {
 
 var loadLevel = function() {
   // Load maps.
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
-
   // Override scalars.
   for (var key in level.scale) {
     Jigsaw.scale[key] = level.scale[key];

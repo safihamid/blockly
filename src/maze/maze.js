@@ -71,11 +71,9 @@ Maze.scale = {
 var loadLevel = function() {
   // Load maps.
   Maze.map = level.maze ? JSON.parse(level.maze) : level.map;
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
   Maze.initialDirtMap = level.initialDirt;
   Maze.finalDirtMap = level.finalDirt;
   Maze.startDirection = level.startDirection;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks;
 
   // Override scalars.
   for (var key in level.scale) {

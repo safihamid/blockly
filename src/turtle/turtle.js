@@ -80,9 +80,6 @@ Turtle.init = function(config) {
   Turtle.AVATAR_HEIGHT = 51;
   Turtle.AVATAR_WIDTH = 70;
 
-  BlocklyApps.IDEAL_BLOCK_NUM = level.ideal || Infinity;
-  BlocklyApps.REQUIRED_BLOCKS = level.requiredBlocks || [];
-
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
     data: {
