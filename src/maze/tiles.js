@@ -1,5 +1,7 @@
 'use strict';
 
+var utils = require('../utils');
+
 var Tiles = module.exports;
 
 /**
@@ -55,12 +57,7 @@ Tiles.direction4to16 = function(direction4) {
  * @return {number} Legal direction value.
  */
 Tiles.constrainDirection4 = function(d) {
-  if (d < 0) {
-    d += 4;
-  } else if (d > 3) {
-    d -= 4;
-  }
-  return d;
+  return utils.mod(d, 4);
 };
 
 /**
@@ -69,10 +66,5 @@ Tiles.constrainDirection4 = function(d) {
  * @return {number} Legal direction value.
  */
 Tiles.constrainDirection16 = function(d) {
-  if (d < 0) {
-    d += 16;
-  } else if (d > 15) {
-    d -= 16;
-  }
-  return d;
+  return utils.mod(d, 16);
 };
