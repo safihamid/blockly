@@ -17,6 +17,7 @@ exports.load = function(assetUrl, id) {
 
   skin.smiley = skin.assetUrl('smiley.png');
   skin.artist = skin.assetUrl('artist.png');
+  skin.blocks = skin.assetUrl('blocks.png');
 
   skin.blank = skin.assetUrl('blank.png');
 
