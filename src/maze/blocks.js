@@ -50,6 +50,46 @@ exports.install = function(blockly, skin) {
     return 'Maze.moveForward(\'block_id_' + this.id + '\');\n';
   };
 
+  var SimpleMove = {
+    DIRECTION_CONFIGS: {
+      West: { letter: 'W', moveFunction: 'moveLeft', image: skin.leftArrow, image_width: 42, image_height: 42 },
+      East: { letter: 'E', moveFunction: 'moveRight', image: skin.rightArrow, image_width: 42, image_height: 42 },
+      North: { letter: 'N', moveFunction: 'moveUp', image: skin.upArrow, image_width: 42, image_height: 42 },
+      South: { letter: 'S', moveFunction: 'moveDown', image: skin.downArrow, image_width: 42, image_height: 42 },
+    },
+    generateBlocksForAllDirections: function() {
+      SimpleMove.generateBlocksForDirection("North");
+      SimpleMove.generateBlocksForDirection("South");
+      SimpleMove.generateBlocksForDirection("West");
+      SimpleMove.generateBlocksForDirection("East");
+    },
+    generateBlocksForDirection: function(direction) {
+      generator["maze_move" + direction] = SimpleMove.generateCodeGenerator(direction);
+      blockly.Blocks['maze_move' + direction] = SimpleMove.generateBlock(direction);
+    },
+    generateBlock: function(direction) {
+      var directionConfig = SimpleMove.DIRECTION_CONFIGS[direction];
+      return {
+        helpUrl: '',
+        init: function () {
+          this.setHSV(184, 1.00, 0.74);
+          this.appendDummyInput()
+            .appendTitle(directionConfig.letter);
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+          this.setTooltip(msg.moveForwardTooltip());
+        }
+      }
+    },
+    generateCodeGenerator: function(direction) {
+      return function() {
+        return 'Maze.move' + direction + '(\'block_id_' + this.id + '\');\n';
+      }
+    }
+  };
+
+  SimpleMove.generateBlocksForAllDirections();
+
   blockly.Blocks.maze_fill = {
     // Block for putting dirt on to a tile.
     helpUrl: 'http://code.google.com/p/blockly/wiki/PutDown',

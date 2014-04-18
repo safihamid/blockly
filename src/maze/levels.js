@@ -1,6 +1,7 @@
 var Direction = require('./tiles').Direction;
 var karelLevels = require('./karelLevels');
 var reqBlocks = require('./requiredBlocks');
+var blockUtils = require('../block_utils');
 
 //TODO: Fix hacky level-number-dependent toolbox.
 var toolbox = function(page, level) {
@@ -27,6 +28,30 @@ module.exports = {
 
   '2_1': {
     'toolbox': toolbox(2, 1),
+    'ideal': 3,
+    'requiredBlocks': [
+      [reqBlocks.MOVE_FORWARD],
+    ],
+    'startDirection': Direction.EAST,
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 2, 1, 1, 3, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'startBlocks': startBlocks(2, 1)
+  },
+  'k1_demo': {
+    'toolbox': blockUtils.createToolbox(
+      blockUtils.blockOfType('maze_moveNorth') +
+      blockUtils.blockOfType('maze_moveSouth') +
+      blockUtils.blockOfType('maze_moveEast') +
+      blockUtils.blockOfType('maze_moveWest')
+    ),
     'ideal': 3,
     'requiredBlocks': [
       [reqBlocks.MOVE_FORWARD],

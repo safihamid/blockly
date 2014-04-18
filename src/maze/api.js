@@ -100,12 +100,70 @@ var turn = function(direction, id) {
   Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD);
 };
 
+/**
+ * Turn pegman towards a given direction, turning through stage front (south)
+ * when possible.
+ * @param {number} newDirection Direction to turn to (e.g., Direction.NORTH)
+ * @param {string} id ID of block that triggered this action.
+ */
+var turnTo = function(newDirection, id) {
+  var currentDirection = Maze.pegmanD;
+  if (isTurnAround(currentDirection, newDirection)) {
+    var shouldTurnCWToPreferStageFront = currentDirection - newDirection < 0;
+    var relativeTurnDirection = shouldTurnCWToPreferStageFront ? 1 : 0;
+    turn(relativeTurnDirection, id);
+    turn(relativeTurnDirection, id);
+  } else if (isRightTurn(currentDirection, newDirection)) {
+    turn(1, id);
+  } else if (isLeftTurn(currentDirection, newDirection)) {
+    turn(0, id);
+  }
+};
+
+function isLeftTurn(direction, newDirection) {
+  return newDirection === Maze.constrainDirection4(direction - 1);
+}
+
+function isRightTurn(direction, newDirection) {
+  return newDirection === Maze.constrainDirection4(direction + 1);
+}
+
+/**
+ * Returns whether turning from direction to newDirection would be a 180° turn
+ * @param {number} direction
+ * @param {number} newDirection
+ * @returns {boolean}
+ */
+function isTurnAround(direction, newDirection) {
+  return Math.abs(direction - newDirection) == 2;
+}
+
 exports.moveForward = function(id) {
   move(0, id);
 };
 
 exports.moveBackward = function(id) {
   move(2, id);
+};
+
+exports.moveNorth = function(id) {
+  turnTo(Direction.NORTH, id);
+  move(0, id);
+};
+
+exports.moveSouth = function(id) {
+  turnTo(Direction.SOUTH, id);
+  move(0, id);
+};
+
+exports.moveEast = function(id) {
+  turnTo(Direction.EAST, id);
+  move(0, id);
+};
+
+exports.moveWest = function(id) {
+  turnTo(Direction.WEST, id);
+  move(0, id);
 };
 
 exports.turnLeft = function(id) {
