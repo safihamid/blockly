@@ -1,5 +1,7 @@
 var tiles = require('./tiles');
 var Direction = tiles.Direction;
+var MoveDirection = tiles.MoveDirection;
+var TurnDirection = tiles.TurnDirection;
 var SquareType = tiles.SquareType;
 
 //TODO: This file should be void of logic like turtle/api.js
@@ -17,7 +19,7 @@ var isPath = function(direction, id) {
   var effectiveDirection = Maze.pegmanD + direction;
   var square;
   var command;
-  switch (Maze.constrainDirection4(effectiveDirection)) {
+  switch (tiles.constrainDirection4(effectiveDirection)) {
     case Direction.NORTH:
       square = Maze.map[Maze.pegmanY - 1] &&
           Maze.map[Maze.pegmanY - 1][Maze.pegmanX];
@@ -60,7 +62,7 @@ var move = function(direction, id) {
   // If moving backward, flip the effective direction.
   var effectiveDirection = Maze.pegmanD + direction;
   var command;
-  switch (Maze.constrainDirection4(effectiveDirection)) {
+  switch (tiles.constrainDirection4(effectiveDirection)) {
     case Direction.NORTH:
       Maze.pegmanY--;
       command = 'north';
@@ -97,7 +99,7 @@ var turn = function(direction, id) {
     Maze.pegmanD += TurnDirection.LEFT;
     BlocklyApps.log.push(['left', id]);
   }
-  Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD);
+  Maze.pegmanD = tiles.constrainDirection4(Maze.pegmanD);
 };
 
 /**
@@ -120,15 +122,12 @@ var turnTo = function(newDirection, id) {
   }
 };
 
-var TurnDirection = { LEFT: -1, RIGHT: 1};
-var MoveDirection = { FORWARD: 0, RIGHT: 1, BACKWARD: 2, LEFT: 3};
-
 function isLeftTurn(direction, newDirection) {
-  return newDirection === Maze.constrainDirection4(direction + TurnDirection.LEFT);
+  return newDirection === tiles.constrainDirection4(direction + TurnDirection.LEFT);
 }
 
 function isRightTurn(direction, newDirection) {
-  return newDirection === Maze.constrainDirection4(direction + TurnDirection.RIGHT);
+  return newDirection === tiles.constrainDirection4(direction + TurnDirection.RIGHT);
 }
 
 /**

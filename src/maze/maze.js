@@ -36,6 +36,7 @@ var dom = require('../dom');
 
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
+var TurnDirection = tiles.TurnDirection;
 
 /**
  * Create a namespace for the application.
@@ -672,13 +673,13 @@ BlocklyApps.reset = function(first) {
     Maze.scheduleFinish(false);
     Maze.pidList.push(window.setTimeout(function() {
       stepSpeed = 100;
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4 - 4]);
+      Maze.schedule([Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD)],
+                    [Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD + TurnDirection.LEFT)]);
       Maze.pegmanD++;
     }, stepSpeed * 5));
   } else {
     Maze.pegmanD = Maze.startDirection;
-    Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4);
+    Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD));
   }
 
   var svg = document.getElementById('svgMaze');
@@ -987,24 +988,16 @@ Maze.animate = function() {
 
   switch (action[0]) {
     case 'north':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY - 1, Maze.pegmanD * 4]);
-      Maze.pegmanY--;
+      Maze.animatedMove(Direction.NORTH);
       break;
     case 'east':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX + 1, Maze.pegmanY, Maze.pegmanD * 4]);
-      Maze.pegmanX++;
+      Maze.animatedMove(Direction.EAST);
       break;
     case 'south':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY + 1, Maze.pegmanD * 4]);
-      Maze.pegmanY++;
+      Maze.animatedMove(Direction.SOUTH);
       break;
     case 'west':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX - 1, Maze.pegmanY, Maze.pegmanD * 4]);
-      Maze.pegmanX--;
+      Maze.animatedMove(Direction.WEST);
       break;
     case 'look_north':
       Maze.scheduleLook(Direction.NORTH);
@@ -1025,14 +1018,16 @@ Maze.animate = function() {
       Maze.scheduleFail(false);
       break;
     case 'left':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4 - 4]);
-      Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD - 1);
+      var newDirection = Maze.pegmanD + TurnDirection.LEFT;
+      Maze.schedule([Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD)],
+                    [Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(newDirection)]);
+      Maze.pegmanD = tiles.constrainDirection4(newDirection);
       break;
     case 'right':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4 + 4]);
-      Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD + 1);
+      newDirection = Maze.pegmanD + TurnDirection.RIGHT;
+      Maze.schedule([Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD)],
+                    [Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(newDirection)]);
+      Maze.pegmanD = tiles.constrainDirection4(newDirection);
       break;
     case 'finish':
       // Only schedule victory animation for certain conditions:
@@ -1067,6 +1062,17 @@ Maze.animate = function() {
   var scaledStepSpeed =
       stepSpeed * Maze.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
   Maze.pidList.push(window.setTimeout(Maze.animate, scaledStepSpeed));
+};
+
+Maze.animatedMove = function (direction) {
+  var positionChange = tiles.directionToDxDy(direction);
+  var newX = Maze.pegmanX + positionChange.dx;
+  var newY = Maze.pegmanY + positionChange.dy;
+  Maze.schedule(
+    [Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD)],
+    [newX, newY, tiles.direction4to16(Maze.pegmanD)]);
+  Maze.pegmanX = newX;
+  Maze.pegmanY = newY;
 };
 
 /**
@@ -1111,7 +1117,7 @@ Maze.schedule = function(startPos, endPos) {
       movePegmanIcon.setAttribute('visibility', 'hidden');
       pegmanIcon.setAttribute('visibility', 'visible');
       Maze.displayPegman(endPos[0], endPos[1],
-                         Maze.constrainDirection16(endPos[2]));
+                         tiles.constrainDirection16(endPos[2]));
     }, stepSpeed * 6 / numFrames * frameIdx));
   } else {
     numFrames = 4;
@@ -1120,22 +1126,22 @@ Maze.schedule = function(startPos, endPos) {
     deltaDirection = (endPos[2] - startPos[2]) / numFrames;
     Maze.displayPegman(startPos[0] + deltaX,
                        startPos[1] + deltaY,
-                       Maze.constrainDirection16(startPos[2] + deltaDirection));
+                       tiles.constrainDirection16(startPos[2] + deltaDirection));
     Maze.pidList.push(window.setTimeout(function() {
         Maze.displayPegman(
             startPos[0] + deltaX * 2,
             startPos[1] + deltaY * 2,
-            Maze.constrainDirection16(startPos[2] + deltaDirection * 2));
+            tiles.constrainDirection16(startPos[2] + deltaDirection * 2));
     }, stepSpeed));
     Maze.pidList.push(window.setTimeout(function() {
         Maze.displayPegman(
             startPos[0] + deltaX * 3,
             startPos[1] + deltaY * 3,
-            Maze.constrainDirection16(startPos[2] + deltaDirection * 3));
+            tiles.constrainDirection16(startPos[2] + deltaDirection * 3));
     }, stepSpeed * 2));
       Maze.pidList.push(window.setTimeout(function() {
           Maze.displayPegman(endPos[0], endPos[1],
-                             Maze.constrainDirection16(endPos[2]));
+                             tiles.constrainDirection16(endPos[2]));
     }, stepSpeed * 3));
   }
 
@@ -1155,7 +1161,7 @@ Maze.schedule = function(startPos, endPos) {
 };
 
 /**
- * Replace the tiles surronding the obstacle with broken tiles.
+ * Replace the tiles surrounding the obstacle with broken tiles.
  */
 Maze.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
   var tileCoords = [
@@ -1184,22 +1190,10 @@ Maze.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
  * @param {boolean} forward True if forward, false if backward.
  */
 Maze.scheduleFail = function(forward) {
-  var deltaX = 0;
-  var deltaY = 0;
-  switch (Maze.pegmanD) {
-    case Direction.NORTH:
-      deltaY = -1;
-      break;
-    case Direction.EAST:
-      deltaX = 1;
-      break;
-    case Direction.SOUTH:
-      deltaY = 1;
-      break;
-    case Direction.WEST:
-      deltaX = -1;
-      break;
-  }
+  var dxDy = tiles.directionToDxDy(Maze.pegmanD);
+  var deltaX = dxDy.dx;
+  var deltaY = dxDy.dy;
+
   if (!forward) {
     deltaX = -deltaX;
     deltaY = -deltaY;
@@ -1207,7 +1201,7 @@ Maze.scheduleFail = function(forward) {
 
   var targetX = Maze.pegmanX + deltaX;
   var targetY = Maze.pegmanY + deltaY;
-  var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
+  var direction16 = tiles.constrainDirection16(tiles.direction4to16(Maze.pegmanD));
   Maze.displayPegman(Maze.pegmanX + deltaX / 4,
                      Maze.pegmanY + deltaY / 4,
                      direction16);
@@ -1332,7 +1326,7 @@ Maze.setTileTransparent = function() {
  * @param {boolean} sound Play the victory sound.
  */
 Maze.scheduleFinish = function(sound) {
-  var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
+  var direction16 = tiles.constrainDirection16(tiles.direction4to16(Maze.pegmanD));
   Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 16);
 
   // Setting the tiles to be transparent
@@ -1477,34 +1471,6 @@ Maze.scheduleLookStep = function(path, delay) {
       path.style.display = 'none';
     }, stepSpeed * 2);
   }, delay));
-};
-
-/**
- * Keep the direction within 0-3, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Maze.constrainDirection4 = function(d) {
-  if (d < 0) {
-    d += 4;
-  } else if (d > 3) {
-    d -= 4;
-  }
-  return d;
-};
-
-/**
- * Keep the direction within 0-15, wrapping at both ends.
- * @param {number} d Potentially out-of-bounds direction value.
- * @return {number} Legal direction value.
- */
-Maze.constrainDirection16 = function(d) {
-  if (d < 0) {
-    d += 16;
-  } else if (d > 15) {
-    d -= 16;
-  }
-  return d;
 };
 
 var atFinish = function() {

@@ -79,12 +79,12 @@ exports.install = function(blockly, skin) {
           this.setNextStatement(true);
           this.setTooltip(msg.moveForwardTooltip());
         }
-      }
+      };
     },
     generateCodeGenerator: function(direction) {
       return function() {
         return 'Maze.move' + direction + '(\'block_id_' + this.id + '\');\n';
-      }
+      };
     }
   };
 
