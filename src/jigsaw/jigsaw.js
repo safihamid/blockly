@@ -86,6 +86,21 @@ var drawMap = function() {
   var belowVisualization = document.getElementById('belowVisualization');
   belowVisualization.style.width = Jigsaw.MAZE_WIDTH + 'px';
   belowVisualization.style.display = 'none';
+
+  // account for toolbox if there
+  var toolboxWidth = -Blockly.mainWorkspace.getMetrics().viewLeft;
+
+  var svg = document.querySelectorAll(".blocklySvg")[0];
+  var image = Blockly.createSvgElement('rect', {
+    fill: "url(#pat_" + level.id + "A)",
+    "fill-opacity": "0.2",
+    width: level.image.width,
+    height: level.image.height,
+    transform: "translate(" + (toolboxWidth + level.ghost.x) + ", " +
+      level.ghost.y + ")"
+  });
+  // we want it to be first, so it's behind everything
+  svg.insertBefore(image, svg.childNodes[0]);
 };
 
 /**
