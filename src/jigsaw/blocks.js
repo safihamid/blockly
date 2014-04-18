@@ -159,9 +159,6 @@ exports.install = function(blockly, skin) {
 
   Object.keys(levels).forEach(function(key) {
     var level = levels[key];
-    if (!level.image) {
-      return;
-    }
     generateJigsawBlocksForLevel(blockly, skin, {
       image: skin[level.image.name],
       HSV: HSV,
@@ -180,10 +177,10 @@ exports.install = function(blockly, skin) {
     }
   });
 
-  genetateBlankBlock(blockly, skin, 'jigsaw_repeat', [322, 0.90, 0.95], 100, true);
-  genetateBlankBlock(blockly, skin, 'jigsaw_green', [140, 1.00, 0.74], 80);
-  genetateBlankBlock(blockly, skin, 'jigsaw_blue', [184, 1.00, 0.74], 80);
-  genetateBlankBlock(blockly, skin, 'jigsaw_purple', [312, 0.32, 0.62], 80);
+  generateBlankBlock(blockly, skin, 'jigsaw_repeat', [322, 0.90, 0.95], 100, true);
+  generateBlankBlock(blockly, skin, 'jigsaw_green', [140, 1.00, 0.74], 80);
+  generateBlankBlock(blockly, skin, 'jigsaw_blue', [184, 1.00, 0.74], 80);
+  generateBlankBlock(blockly, skin, 'jigsaw_purple', [312, 0.32, 0.62], 80);
 
   // Go through all added blocks, and add empty generators for those that
   // weren't already given generators
@@ -203,7 +200,7 @@ exports.install = function(blockly, skin) {
   delete blockly.Blocks.procedures_ifreturn;
 };
 
-function genetateBlankBlock(blockly, skin, name, hsv, width, hasAppend) {
+function generateBlankBlock(blockly, skin, name, hsv, width, hasAppend) {
   blockly.Blocks[name] = {
     helpUrl: '',
     init: function () {
