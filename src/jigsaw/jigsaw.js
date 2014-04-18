@@ -25,35 +25,36 @@ BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 //The number of blocks to show as feedback.
 BlocklyApps.NUM_REQUIRED_BLOCKS_TO_FLAG = 1;
 
-Blockly.BlockSvg.NOTCH_WIDTH = 50;
-Blockly.SNAP_RADIUS = 90;
+function largeNotches() {
+  Blockly.BlockSvg.NOTCH_WIDTH = 50;
 
-var notchHeight = 8;
-var notchWidthA = 6;
-var notchWidthB = 10;
+  var notchHeight = 8;
+  var notchWidthA = 6;
+  var notchWidthB = 10;
 
-Blockly.BlockSvg.NOTCH_PATH_WIDTH = notchWidthA * 2 + notchWidthB;
+  Blockly.BlockSvg.NOTCH_PATH_WIDTH = notchWidthA * 2 + notchWidthB;
 
-Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l ' +
-  notchWidthA + ',' + notchHeight + ' ' +
-  notchWidthB + ',0 ' +
-  notchWidthA + ',-' + notchHeight;
-Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l ' +
-  '-' + notchWidthA + ',' + notchHeight + ' ' +
-  '-' + notchWidthB + ',0 ' +
-  '-' + notchWidthA + ',-' + notchHeight;
-// Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
-// Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
+  Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l ' +
+    notchWidthA + ',' + notchHeight + ' ' +
+    notchWidthB + ',0 ' +
+    notchWidthA + ',-' + notchHeight;
+  Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l ' +
+    '-' + notchWidthA + ',' + notchHeight + ' ' +
+    '-' + notchWidthB + ',0 ' +
+    '-' + notchWidthA + ',-' + notchHeight;
+  // Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
+  // Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
 
-var notchHighlightHeight = notchHeight; //4;
-var notchHighlightWidthA = notchWidthA + 0.5; //6.5;
-var notchHighlightWidthB = notchWidthB - 1; //2;
+  var notchHighlightHeight = notchHeight; //4;
+  var notchHighlightWidthA = notchWidthA + 0.5; //6.5;
+  var notchHighlightWidthB = notchWidthB - 1; //2;
 
-Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l ' +
-  notchHighlightWidthA + ',' + notchHighlightHeight + ' ' +
-  notchHighlightWidthB + ',0 ' +
-  notchHighlightWidthA + ',-' + notchHighlightHeight;
-// Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
+  Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l ' +
+    notchHighlightWidthA + ',' + notchHighlightHeight + ' ' +
+    notchHighlightWidthB + ',0 ' +
+    notchHighlightWidthA + ',-' + notchHighlightHeight;
+  // Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
+}
 
 
 // Default Scalings
@@ -87,17 +88,19 @@ var drawMap = function() {
   // account for toolbox if there
   var toolboxWidth = -Blockly.mainWorkspace.getMetrics().viewLeft;
 
-  var svg = document.querySelectorAll(".blocklySvg")[0];
-  var image = Blockly.createSvgElement('rect', {
-    fill: "url(#pat_" + level.id + "A)",
-    "fill-opacity": "0.2",
-    width: level.image.width,
-    height: level.image.height,
-    transform: "translate(" + (toolboxWidth + level.ghost.x) + ", " +
-      level.ghost.y + ")"
-  });
-  // we want it to be first, so it's behind everything
-  svg.insertBefore(image, svg.childNodes[0]);
+  if (level.ghost) {
+    var svg = document.querySelectorAll(".blocklySvg")[0];
+    var image = Blockly.createSvgElement('rect', {
+      fill: "url(#pat_" + level.id + "A)",
+      "fill-opacity": "0.2",
+      width: level.image.width,
+      height: level.image.height,
+      transform: "translate(" + (toolboxWidth + level.ghost.x) + ", " +
+        level.ghost.y + ")"
+    });
+    // we want it to be first, so it's behind everything
+    svg.insertBefore(image, svg.childNodes[0]);
+  }
 };
 
 /**
@@ -108,6 +111,11 @@ Jigsaw.init = function(config) {
   skin = config.skin;
   level = config.level;
   loadLevel();
+
+  if (level.largeNotches) {
+    largeNotches();
+  }
+  Blockly.SNAP_RADIUS = level.snapRadius || 90;
 
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,

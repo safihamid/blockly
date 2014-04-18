@@ -25,9 +25,6 @@ var patternCache = {
    * Add all the svg patterns we've queued up.
    */
   addQueuedPatterns: function () {
-    if (document.readyState !== "complete") {
-      throw new Error('Should only add queued patterns after fully loaded');
-    }
     this.queued.forEach(function (pattern) {
       addPattern(pattern.id, pattern.imagePath, pattern.width, pattern.height,
         pattern.offsetX, pattern.offsetY);
@@ -144,15 +141,17 @@ var blockWidth = function (type) {
   return blockOfType(type).getHeightWidth().width;
 };
 
+function addQueuedWhenReady() {
+  if (!document.getElementById('blocklySvgDefs')) {
+    setTimeout(addQueuedWhenReady, 100);
+    return;
+  }
+  patternCache.addQueuedPatterns();
+}
+
+
 // Install extensions to Blockly's language and JavaScript generator.
 exports.install = function(blockly, skin) {
-  // don't add patterns until ready
-  dom.addReadyListener(function() {
-    if (document.readyState === "complete") {
-      patternCache.addQueuedPatterns();
-    }
-  });
-
   // could make this settable on the level if I need
   var HSV = [0, 1.00, 0.98];
 
@@ -160,7 +159,10 @@ exports.install = function(blockly, skin) {
 
   Object.keys(levels).forEach(function(key) {
     var level = levels[key];
-    generateBlocksForLevel(blockly, skin, {
+    if (!level.image) {
+      return;
+    }
+    generateJigsawBlocksForLevel(blockly, skin, {
       image: skin[level.image.name],
       HSV: HSV,
       width: level.image.width,
@@ -169,7 +171,19 @@ exports.install = function(blockly, skin) {
       notchedEnds: level.notchedEnds,
       level: key
     });
+
+    if (level.numBlocks === 0) {
+      // still want the pattern for the ghost
+      var patternName = 'pat_' + level.id + 'A';
+      addPattern(patternName, skin[level.image.name], level.image.width,
+        level.image.height, 0, 0);
+    }
   });
+
+  genetateBlankBlock(blockly, skin, 'jigsaw_repeat', [322, 0.90, 0.95], 100, true);
+  genetateBlankBlock(blockly, skin, 'jigsaw_green', [140, 1.00, 0.74], 80);
+  genetateBlankBlock(blockly, skin, 'jigsaw_blue', [184, 1.00, 0.74], 80);
+  genetateBlankBlock(blockly, skin, 'jigsaw_purple', [312, 0.32, 0.62], 80);
 
   // Go through all added blocks, and add empty generators for those that
   // weren't already given generators
@@ -183,11 +197,29 @@ exports.install = function(blockly, skin) {
     }
   });
 
+  addQueuedWhenReady();
+
   delete blockly.Blocks.procedures_defreturn;
   delete blockly.Blocks.procedures_ifreturn;
 };
 
-function generateBlocksForLevel(blockly, skin, options) {
+function genetateBlankBlock(blockly, skin, name, hsv, width, hasAppend) {
+  blockly.Blocks[name] = {
+    helpUrl: '',
+    init: function () {
+      this.setHSV.apply(this, hsv);
+      this.appendDummyInput()
+        .appendTitle(new blockly.FieldImage(skin.blank, width, 1));
+      this.setPreviousStatement(true);
+      if (hasAppend) {
+        this.appendStatementInput('');
+      }
+      this.setNextStatement(true);
+    }
+  };
+}
+
+function generateJigsawBlocksForLevel(blockly, skin, options) {
   var image = options.image;
   var width = options.width;
   var height = options.height;
