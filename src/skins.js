@@ -23,6 +23,7 @@ exports.load = function(assetUrl, id) {
     leftArrow: skinUrl('left.png'),
     downArrow: skinUrl('down.png'),
     upArrow: skinUrl('up.png'),
+    repeat: skinUrl('repeat.png'),
     rightArrow: skinUrl('right.png'),
     leftJumpArrow: skinUrl('left_jump.png'),
     downJumpArrow: skinUrl('down_jump.png'),
