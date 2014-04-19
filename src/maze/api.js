@@ -1,5 +1,7 @@
 var tiles = require('./tiles');
 var Direction = tiles.Direction;
+var MoveDirection = tiles.MoveDirection;
+var TurnDirection = tiles.TurnDirection;
 var SquareType = tiles.SquareType;
 
 //TODO: This file should be void of logic like turtle/api.js
@@ -17,7 +19,7 @@ var isPath = function(direction, id) {
   var effectiveDirection = Maze.pegmanD + direction;
   var square;
   var command;
-  switch (Maze.constrainDirection4(effectiveDirection)) {
+  switch (tiles.constrainDirection4(effectiveDirection)) {
     case Direction.NORTH:
       square = Maze.map[Maze.pegmanY - 1] &&
           Maze.map[Maze.pegmanY - 1][Maze.pegmanX];
@@ -60,7 +62,7 @@ var move = function(direction, id) {
   // If moving backward, flip the effective direction.
   var effectiveDirection = Maze.pegmanD + direction;
   var command;
-  switch (Maze.constrainDirection4(effectiveDirection)) {
+  switch (tiles.constrainDirection4(effectiveDirection)) {
     case Direction.NORTH:
       Maze.pegmanY--;
       command = 'north';
@@ -88,51 +90,110 @@ var move = function(direction, id) {
  * @param {string} id ID of block that triggered this action.
  */
 var turn = function(direction, id) {
-  if (direction) {
+  if (direction == TurnDirection.RIGHT) {
     // Right turn (clockwise).
-    Maze.pegmanD++;
+    Maze.pegmanD += TurnDirection.RIGHT;
     BlocklyApps.log.push(['right', id]);
   } else {
     // Left turn (counterclockwise).
-    Maze.pegmanD--;
+    Maze.pegmanD += TurnDirection.LEFT;
     BlocklyApps.log.push(['left', id]);
   }
-  Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD);
+  Maze.pegmanD = tiles.constrainDirection4(Maze.pegmanD);
 };
 
+/**
+ * Turn pegman towards a given direction, turning through stage front (south)
+ * when possible.
+ * @param {number} newDirection Direction to turn to (e.g., Direction.NORTH)
+ * @param {string} id ID of block that triggered this action.
+ */
+var turnTo = function(newDirection, id) {
+  var currentDirection = Maze.pegmanD;
+  if (isTurnAround(currentDirection, newDirection)) {
+    var shouldTurnCWToPreferStageFront = currentDirection - newDirection < 0;
+    var relativeTurnDirection = shouldTurnCWToPreferStageFront ? TurnDirection.RIGHT : TurnDirection.LEFT;
+    turn(relativeTurnDirection, id);
+    turn(relativeTurnDirection, id);
+  } else if (isRightTurn(currentDirection, newDirection)) {
+    turn(TurnDirection.RIGHT, id);
+  } else if (isLeftTurn(currentDirection, newDirection)) {
+    turn(TurnDirection.LEFT, id);
+  }
+};
+
+function isLeftTurn(direction, newDirection) {
+  return newDirection === tiles.constrainDirection4(direction + TurnDirection.LEFT);
+}
+
+function isRightTurn(direction, newDirection) {
+  return newDirection === tiles.constrainDirection4(direction + TurnDirection.RIGHT);
+}
+
+/**
+ * Returns whether turning from direction to newDirection would be a 180° turn
+ * @param {number} direction
+ * @param {number} newDirection
+ * @returns {boolean}
+ */
+function isTurnAround(direction, newDirection) {
+  return Math.abs(direction - newDirection) == MoveDirection.BACKWARD;
+}
+
+function moveAbsoluteDirection(direction, id) {
+  turnTo(direction, id);
+  move(MoveDirection.FORWARD, id);
+}
+
 exports.moveForward = function(id) {
-  move(0, id);
+  move(MoveDirection.FORWARD, id);
 };
 
 exports.moveBackward = function(id) {
-  move(2, id);
+  move(MoveDirection.BACKWARD, id);
+};
+
+exports.moveNorth = function(id) {
+  moveAbsoluteDirection(Direction.NORTH, id);
+};
+
+exports.moveSouth = function(id) {
+  moveAbsoluteDirection(Direction.SOUTH, id);
+};
+
+exports.moveEast = function(id) {
+  moveAbsoluteDirection(Direction.EAST, id);
+};
+
+exports.moveWest = function(id) {
+  moveAbsoluteDirection(Direction.WEST, id);
 };
 
 exports.turnLeft = function(id) {
-  turn(0, id);
+  turn(TurnDirection.LEFT, id);
 };
 
 exports.turnRight = function(id) {
-  turn(1, id);
+  turn(TurnDirection.RIGHT, id);
 };
 
 exports.isPathForward = function(id) {
-  return isPath(0, id);
+  return isPath(MoveDirection.FORWARD, id);
 };
 exports.noPathForward = function(id) {
-  return !isPath(0, id);
+  return !isPath(MoveDirection.FORWARD, id);
 };
 
 exports.isPathRight = function(id) {
-  return isPath(1, id);
+  return isPath(MoveDirection.RIGHT, id);
 };
 
 exports.isPathBackward = function(id) {
-  return isPath(2, id);
+  return isPath(MoveDirection.BACKWARD, id);
 };
 
 exports.isPathLeft = function(id) {
-  return isPath(3, id);
+  return isPath(MoveDirection.LEFT, id);
 };
 
 exports.pilePresent = function(id) {

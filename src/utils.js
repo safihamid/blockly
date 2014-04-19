@@ -28,3 +28,13 @@ exports.escapeHtml = function(unsafe) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 };
+
+/**
+ * Version of modulo which, unlike javascript's `%` operator,
+ * will always return a positive remainder.
+ * @param number
+ * @param mod
+ */
+exports.mod = function(number, mod) {
+  return ((number % mod) + mod) % mod;
+};

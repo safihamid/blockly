@@ -46,11 +46,47 @@ var blocks = {
   SIMPLE_MOVE_DOWN: blockUtils.blockOfType('simple_move_down'),
   SIMPLE_MOVE_LEFT: blockUtils.blockOfType('simple_move_left'),
   SIMPLE_MOVE_RIGHT: blockUtils.blockOfType('simple_move_right'),
-  simple_move_blocks: function() {
+  SIMPLE_JUMP_UP: blockUtils.blockOfType('simple_jump_up'),
+  SIMPLE_JUMP_DOWN: blockUtils.blockOfType('simple_jump_down'),
+  SIMPLE_JUMP_LEFT: blockUtils.blockOfType('simple_jump_left'),
+  SIMPLE_JUMP_RIGHT: blockUtils.blockOfType('simple_jump_right'),
+  SIMPLE_MOVE_UP_LENGTH: blockUtils.blockOfType('simple_move_up_length'),
+  SIMPLE_MOVE_DOWN_LENGTH: blockUtils.blockOfType('simple_move_down_length'),
+  SIMPLE_MOVE_LEFT_LENGTH: blockUtils.blockOfType('simple_move_left_length'),
+  SIMPLE_MOVE_RIGHT_LENGTH: blockUtils.blockOfType('simple_move_right_length'),
+  SIMPLE_JUMP_UP_LENGTH: blockUtils.blockOfType('simple_jump_up_length'),
+  SIMPLE_JUMP_DOWN_LENGTH: blockUtils.blockOfType('simple_jump_down_length'),
+  SIMPLE_JUMP_LEFT_LENGTH: blockUtils.blockOfType('simple_jump_left_length'),
+  SIMPLE_JUMP_RIGHT_LENGTH: blockUtils.blockOfType('simple_jump_right_length'),
+  SIMPLE_MOVE_LENGTH_SHORT: blockUtils.blockOfType('simple_move_length_short'),
+  SIMPLE_MOVE_LENGTH_LONG: blockUtils.blockOfType('simple_move_length_long'),
+  simpleMoveBlocks: function() {
     return this.SIMPLE_MOVE_UP +
       this.SIMPLE_MOVE_DOWN +
       this.SIMPLE_MOVE_LEFT +
       this.SIMPLE_MOVE_RIGHT;
+  },
+  simpleJumpBlocks: function() {
+    return this.SIMPLE_JUMP_UP +
+      this.SIMPLE_JUMP_DOWN +
+      this.SIMPLE_JUMP_LEFT +
+      this.SIMPLE_JUMP_RIGHT;
+  },
+  simpleMoveLengthBlocks: function() {
+    return this.SIMPLE_MOVE_UP_LENGTH +
+      this.SIMPLE_MOVE_DOWN_LENGTH +
+      this.SIMPLE_MOVE_LEFT_LENGTH +
+      this.SIMPLE_MOVE_RIGHT_LENGTH;
+  },
+  simpleJumpLengthBlocks: function() {
+    return this.SIMPLE_JUMP_UP_LENGTH +
+      this.SIMPLE_JUMP_DOWN_LENGTH +
+      this.SIMPLE_JUMP_LEFT_LENGTH +
+      this.SIMPLE_JUMP_RIGHT_LENGTH;
+  },
+  simpleLengthBlocks: function() {
+    return this.SIMPLE_MOVE_LENGTH_SHORT +
+      this.SIMPLE_MOVE_LENGTH_LONG;
   }
 };
 
@@ -796,7 +832,13 @@ module.exports = {
     answer: [],
     freePlay: false,
     initialY: 300,
-    toolbox: blockUtils.createToolbox(blocks.simple_move_blocks()),
+    toolbox: blockUtils.createToolbox(
+        blocks.simpleMoveBlocks() +
+        blocks.simpleJumpBlocks() +
+        blocks.simpleMoveLengthBlocks() +
+        blocks.simpleJumpLengthBlocks() +
+        blocks.simpleLengthBlocks()
+      ),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
