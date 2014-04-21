@@ -5,6 +5,7 @@ if (typeof global !== 'undefined') {
 }
 
 var addReadyListener = require('./dom').addReadyListener;
+var blocksCommon = require('./blocksCommon');
 
 function StubDialog() {
   for (var argument in arguments) {
@@ -52,6 +53,7 @@ module.exports = function(app, levels, options) {
 
   options.skin = options.skinsModule.load(BlocklyApps.assetUrl, options.skinId);
   options.blocksModule.install(Blockly, options.skin);
+  blocksCommon.install(Blockly);
 
   addReadyListener(function() {
     if (options.readonly) {

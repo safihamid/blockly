@@ -530,40 +530,6 @@ exports.install = function(blockly, skin) {
     return [SimpleMove.LONG_MOVE_LENGTH, generator.ORDER_ATOMIC];
   };
 
-  generator.controls_repeat_k1 = function() {
-    // Repeat n times (internal number).
-    var repeats = Number(this.getTitleValue('TIMES'));
-    var branch = Blockly.JavaScript.statementToCode(this, 'DO');
-    if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-      branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-          '\'' + this.id + '\'') + branch;
-    }
-    var loopVar = Blockly.JavaScript.variableDB_.getDistinctName(
-      'count', Blockly.Variables.NAME_TYPE);
-    var code = 'for (var ' + loopVar + ' = 0; ' +
-      loopVar + ' < ' + repeats + '; ' +
-      loopVar + '++) {\n' +
-      branch + '}\n';
-    return code;
-  };
-
-  blockly.Blocks.controls_repeat_k1 = {
-    // Repeat n times (internal number).
-    init: function() {
-      this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
-      this.setHSV(322, 0.90, 0.95);
-      this.appendStatementInput('DO')
-        .appendTitle(new blockly.FieldImage(skin.repeat, 24, 24));
-      this.appendDummyInput()
-        .appendTitle(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
-        .appendTitle(new Blockly.FieldTextInput('10',
-          Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES')
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
-    }
-  };
-
   blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
        [msg.jumpBackward(), 'jumpBackward']];

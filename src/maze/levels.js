@@ -50,7 +50,8 @@ module.exports = {
       blockUtils.blockOfType('maze_moveNorth') +
       blockUtils.blockOfType('maze_moveSouth') +
       blockUtils.blockOfType('maze_moveEast') +
-      blockUtils.blockOfType('maze_moveWest')
+      blockUtils.blockOfType('maze_moveWest') +
+      blockUtils.blockOfType('controls_repeat_simplified')
     ),
     'ideal': 3,
     'requiredBlocks': [

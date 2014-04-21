@@ -838,7 +838,7 @@ module.exports = {
         blocks.simpleMoveLengthBlocks() +
         blocks.simpleJumpLengthBlocks() +
         blocks.simpleLengthBlocks() +
-        blockUtils.blockOfType('controls_repeat_k1')
+        blockUtils.blockOfType('controls_repeat_simplified')
       ),
     startBlocks: '',
     startDirection: 0,
