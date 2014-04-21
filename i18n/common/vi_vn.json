@@ -14,7 +14,7 @@
   "dialogCancel": "Huỷ",
   "dialogOK": "Đồng ý",
   "emptyBlocksErrorMsg": "Miếng ghép được \"Lặp lại\" hay \"Nếu\" cần có những miếng ghép bên trong để hoạt động. Đảm bảo là miếng gạch đó khớp hoàn toàn phần ở trong của miếng gạch kia.",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "Bạn có khối phụ không gắn liền với một sự kiện khối.",
   "finalStage": "Chúc mừng. Bạn vừa hoàn thành xong bước cuối cùng.",
   "finalStageTrophies": "Chúc mừng! Bạn vừa hoàn thành bước cuối cùng và dành danh hiệu. {numTrophies} nhiều.",
   "generatedCodeInfo": "Những mảnh ghép cho chương trình của bạn cũng có thể được trình bày bằng ngôn ngữ lập trình phổ biến nhất thế giới, Javascript;",
@@ -45,9 +45,10 @@
   "flappySpecificFail": "Dòng mã lập trình của bạn có vẻ tốt -  nó sẽ vỗ cánh với mỗi lượt bấm chuột. Nhưng bạn cần phải bấm nhiều lần để bay tới mục tiêu.",
   "toolboxHeader": "Các khối lệnh",
   "openWorkspace": "Hoạt động ra sao",
-  "totalNumLinesOfCodeWritten": "Thời gian tổng cộng: {số dòng, số nhiều, một {1 dòng} dòng khác {# dòng}} của mã chương trình.",
+  "totalNumLinesOfCodeWritten": "Thời gian tổng cộng: {numLines, plural, one {1 dòng} other {# dòng}} của mã chương trình.",
   "tryAgain": "Thử lại",
   "backToPreviousLevel": "Chơi lại màn trước",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Nhập mã JavaScript của bạn theo hướng dẫn bên dưới.",
   "typeFuncs": "Các hàm có sẵn:%1",
   "typeHint": "Lưu ý rằng dấu ngoặc đơn và dấu chấm phẩy là bắt buộc.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Bạn muốn học lập trình?",
   "watchVideo": "Xem Video",
   "tryHOC": "Học thử Hour of Code",
-  "signup": "Đăng ký cho khóa học mở đầu"
+  "signup": "Đăng ký cho khóa học mở đầu",
+  "hintHeader": "Here's a tip:"
 }

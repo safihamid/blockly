@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Najlepszy zanotowany dotąd wynik: {numLines, plural, one {1 linia} other {# linii}} kodu.",
   "tryAgain": "Spróbuj ponownie",
   "backToPreviousLevel": "Wróć do poprzedniego poziomu",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Wpisz swój JavaScript kod poniżej tych instrukcji.",
   "typeFuncs": "Dostępne funkcje:%1",
   "typeHint": "Zauważ, że nawiasy i średniki są wymagane.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Czy chcesz nauczyć się kodowania (programowania)?",
   "watchVideo": "Obejrzyj wideo",
   "tryHOC": "Weź udział w Godzinie kodowania (the Hour Code)",
-  "signup": "Zapisz się na kurs wprowadzający"
+  "signup": "Zapisz się na kurs wprowadzający",
+  "hintHeader": "Here's a tip:"
 }

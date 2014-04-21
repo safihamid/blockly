@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Total de todos os tempos: {numLines, plural, one {1 linha} other {# linhas}} de código.",
   "tryAgain": "Tentar novamente",
   "backToPreviousLevel": "Voltar ao nível anterior",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Coloca o teu código Javascript abaixo destas instruções.",
   "typeFuncs": "Funções disponíveis:%1",
   "typeHint": "Repara que os parêntesis e ponto e vírgula são necessários.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

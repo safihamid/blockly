@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Ümumi cəm: {numLines, plural, one {1 sətir} other {# sətir}} kod.",
   "tryAgain": "Bir daha cəhd edin",
   "backToPreviousLevel": "Əvvəlki mərhələyə qayıt",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Bu təlimatların aşağısında öz JavaScript kodunuzu yazın.",
   "typeFuncs": "Mövcud funksiyalar:%1",
   "typeHint": "Nəzərə alın ki, mötəriləzər və nöqtəli vergüllər vacibdir.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Vidəo izle",
   "tryHOC": "Kodlama Saati'ni dənə",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

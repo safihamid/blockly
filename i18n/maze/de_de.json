@@ -17,7 +17,7 @@
   "finalLevel": "Glückwunsch! Sie haben das letzte Puzzle gelöst.",
   "heightParameter": "Höhe",
   "holePresent": "dort ist ein Loch",
-  "ifCode": "if",
+  "ifCode": "wenn",
   "ifPathAhead": "Wenn Weg voraus",
   "ifTooltip": "Wenn ein Weg in die benannte Richtung existiert, dann führe ein paar Aktionen aus.",
   "ifelseTooltip": "Wenn ein Weg in die benannte Richtung existiert, beginnen Sie mit dem ersten Block, ansonsten nehmen Sie sich den zweiten Block vor.",

@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Total de tots els temps: {numLines, plural, one {1 línia} other {# línies}} de codi.",
   "tryAgain": "Torna a intentar-ho",
   "backToPreviousLevel": "Torna al nivell anterior",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Escriu el teu codi JavaScript sota aquestes instruccions.",
   "typeFuncs": "Funcions disponibles:%1",
   "typeHint": "Tingueu en compte que els parèntesis i els punts i coma són obligatoris.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

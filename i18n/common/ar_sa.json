@@ -14,7 +14,7 @@
   "dialogCancel": "إلغاء",
   "dialogOK": "موافق",
   "emptyBlocksErrorMsg": "قطعة \" أكرر\" او \" اذا \" تحتاج ان تحتوي على قطع اخرى داخلها من اجل العمل . تأكد من القطع الداخلية بحيث يجب ان تكون تناسب القطع المحتوية في الداخل .",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "لديك قطع إضافية لم ترفق على قطع الاحتفالية.",
   "finalStage": "تهانينا! لقد اتممت المرحلة النهائية.",
   "finalStageTrophies": "تهانينا! لقد أكملت المرحلة النهائية وفزت بـ {numTrophies, plural, one {جائزة} other {# جوائز}}.",
   "generatedCodeInfo": "القطع في برنامجك تستطيع كذلك بأعادة تمثيلها في الـ Java Script , بحيث تعتبر اللغة البرمجية واسعة التكيف عالميا :",
@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "مجموع كل الاوقات: {numLines, plural, one {1 خط} other {# خطوط}}  من الكود البرمجي.",
   "tryAgain": "حاول مرة أخرى",
   "backToPreviousLevel": "الرجوع إلى المستوى السابق",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "اكتب كود الـ JavaScript الخاص بك تحت هذه التعليمات.",
   "typeFuncs": "الدوال المتاحة: %1",
   "typeHint": "تذكر أن الأقواس والفواصل المنقوطة ضرورية.",
@@ -56,7 +57,8 @@
   "rotateText": "دور النص.",
   "orientationLock": "قم بتعطيل قفل التوجه في اعدادات المستخدم.",
   "wantToLearn": "هل تريد أن تتعلم البرمجة؟",
-  "watchVideo": "مشاهدة الفيديو",
+  "watchVideo": "شاهد الفيديو",
   "tryHOC": "جرب \"Hour of Code\"",
-  "signup": "سجل للمتابعة لبداية الدرس"
+  "signup": "سجل لمشاهدة مقدمة الدورة",
+  "hintHeader": "Here's a tip:"
 }

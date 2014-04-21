@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Total masa keseluruhan: {numLines, plural, one {1 line} other {# lines}} kod.",
   "tryAgain": "Cuba lagi",
   "backToPreviousLevel": "Kembali ke tahap yang sebelumnya",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Taip kod JavaScript anda di bawah arahan ini.",
   "typeFuncs": "fungsi sedia ada:%1",
   "typeHint": "Ambil perhatian bahawa kurungan dan koma bertindih adalah perlu.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

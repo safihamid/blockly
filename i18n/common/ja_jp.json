@@ -1,11 +1,11 @@
 {
-  "blocklyMessage": "ブロックリー",
+  "blocklyMessage": "ブロック状の",
   "catActions": "操作",
   "catColour": "色",
   "catLogic": "ロジック（論理）",
   "catLists": "リスト",
   "catLoops": "繰り返し",
-  "catMath": "計算",
+  "catMath": "数値",
   "catProcedures": "関数",
   "catText": "文字列",
   "catVariables": "変数",
@@ -14,7 +14,7 @@
   "dialogCancel": "キャンセル",
   "dialogOK": "OK",
   "emptyBlocksErrorMsg": "”Repeat”または\"If\"のブロックを動作をさせるためには内側に別のブロックが必要になります。内側のブロックが構成されているブロック 内に適切にはめ込まれているか確認をしてください。\n\n\n",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "イベントブロックに付いていない余分なブロックがあります。",
   "finalStage": "おめでとうございます ！最終ステージをクリアしました。",
   "finalStageTrophies": "おめでとうございます ！最終ステージをクリアしたので  {numTrophies, plural, one {トロフィー} other {# トロフィー}}を獲得しました。",
   "generatedCodeInfo": "あなたのプログラムのブロックは、世界で最も広く採用されているプログラミング言語である JavaScript で表すこともできます。",
@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "すべての時間の合計: コードの {numLines, plural, one {1 ライン} other {# ライン}}。\n",
   "tryAgain": "やり直す",
   "backToPreviousLevel": "前のレベルに戻る",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "これらの指示の下、JavaScript のコードを入力してください。",
   "typeFuncs": "利用可能な機能:%1",
   "typeHint": "カッコとセミコロンが必要な事に注意してください。",
@@ -58,5 +59,6 @@
   "wantToLearn": "コードのしかたを習いたいですか？",
   "watchVideo": "ビデオを見る",
   "tryHOC": "コードの時間を試してください。",
-  "signup": "イントロのコースに申し込む"
+  "signup": "イントロのコースに申し込む",
+  "hintHeader": "Here's a tip:"
 }

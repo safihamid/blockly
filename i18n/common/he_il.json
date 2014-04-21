@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "סך כל הזמנים:  {numLines, plural, one {שורה אחת} other {# שורות}} של קוד.",
   "tryAgain": "נסה שוב",
   "backToPreviousLevel": "חזרה לשלב הקודם",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "הקלד את קוד ה JavaScript שלך מתחת להוראות אלו.",
   "typeFuncs": "פונקציות אפשריות: %1",
   "typeHint": "שימו לב כי סוגריים ונקודה-פסיק הכרחיים.",
@@ -58,5 +59,6 @@
   "wantToLearn": "רוצה ללמוד לתכנת?",
   "watchVideo": "צפה בסרטון",
   "tryHOC": "נסה את \"שעת הקוד\" (Hour of Code)",
-  "signup": "הירשם לקורס המבוא"
+  "signup": "הירשם לקורס המבוא",
+  "hintHeader": "Here's a tip:"
 }

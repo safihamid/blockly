@@ -13,8 +13,8 @@
   "continue": "Продължи",
   "dialogCancel": "Отказ",
   "dialogOK": "OK",
-  "emptyBlocksErrorMsg": "Блоковете \"Repeat\" и \"If\" трябва да съдържат други блокове в себе си, за да работят. Уверете се, че вътрешния блок се вписва правилно във външния блок.",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "emptyBlocksErrorMsg": "Блоковете \"Повтори\" и \"или\" трябва да съдържат други блокове в себе си, за да работят. Уверете се, че вътрешния блок се вписва правилно във външния блок.",
+  "extraTopBlocks": "Имате допълнителни блокчета, които не са били използвани в блока за програмиране.",
   "finalStage": "Поздравления! Вие завършихте последния етап.",
   "finalStageTrophies": "Поздравления! Вие завършихте последния етап и спечелихте {numTrophies, plural, one {трофей} other {# трофея}}.",
   "generatedCodeInfo": "Блоковете за вашата програма също могат да бъдат представени в JavaScript, най-широко приетия език за програмиране:",
@@ -33,7 +33,7 @@
   "numLinesOfCodeWritten": "Вие написахте {numLines, plural, one {1 ред} other {# реда}} код!",
   "puzzleTitle": "Пъзел {puzzle_number} от {stage_total}",
   "resetProgram": "Възстановяване",
-  "runProgram": "Пусни програмата",
+  "runProgram": "Стартиране на програмата",
   "runTooltip": "Пусни програмата, определена от блоковете в работното поле.",
   "showCodeHeader": "Покажи кода",
   "showGeneratedCode": "Покажи код",
@@ -46,8 +46,9 @@
   "toolboxHeader": "Блокове",
   "openWorkspace": "Как работи",
   "totalNumLinesOfCodeWritten": "Общо: {numLines, plural, one {1 ред} other {# реда}} код.",
-  "tryAgain": "Опитайте пак",
+  "tryAgain": "Опитайте отново",
   "backToPreviousLevel": "Обратно към предишното ниво",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Въведете вашия JavaScript код под тези инструкции.",
   "typeFuncs": "Достъпни функции:%1",
   "typeHint": "Обърнете внимание, че скобите и знаците 'точка и запетая' са задължителни.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Искате ли да се научите да кодирате?",
   "watchVideo": "Гледайте видеото",
   "tryHOC": "Опитайте Часа на Кодирането",
-  "signup": "Регистрация във встъпителния курс"
+  "signup": "Регистрация във встъпителния курс",
+  "hintHeader": "Here's a tip:"
 }

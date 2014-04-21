@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Totalt: {numLines, plural, one {1 linje} other {# linjer}} med kode.",
   "tryAgain": "Forsøk igjen",
   "backToPreviousLevel": "Tilbake til forrige nivå",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Skriv din JavaScript-kode under disse instruksjonene.",
   "typeFuncs": "Tilgjengelige funksjoner: %1",
   "typeHint": "Legg merke til at paranteser og semikolon er nødvendig.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Vil du lære å kode?",
   "watchVideo": "Se videoen",
   "tryHOC": "Prøv Kodetimen",
-  "signup": "Registrer deg for intro kurset"
+  "signup": "Registrer deg for intro kurset",
+  "hintHeader": "Here's a tip:"
 }

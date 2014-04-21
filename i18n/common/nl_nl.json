@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Totale tijd: {numLines, plural, one {1 regel} other {# regels}} code.",
   "tryAgain": "Probeer opnieuw",
   "backToPreviousLevel": "Terug naar het vorige niveau",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Typ jouw JavaScript-code onder deze instructies.",
   "typeFuncs": "Beschikbare functies: %1",
   "typeHint": "Merk op dat de haakjes en puntkomma's vereist zijn.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Wil je leren programmeren?",
   "watchVideo": "Bekijk de video",
   "tryHOC": "Probeer \"Hour of Code\"",
-  "signup": "Neem deel aan de introductie cursus"
+  "signup": "Neem deel aan de introductie cursus",
+  "hintHeader": "Here's a tip:"
 }

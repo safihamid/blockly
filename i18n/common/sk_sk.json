@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Celkovo: {numLines, plural, one {1 riadok} other {# riadkov}} kódu.",
   "tryAgain": "skús znova",
   "backToPreviousLevel": "Späť na predchádzajúcu úlohu",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Napíšte Váš JavaScript kód pod tieto pokyny.",
   "typeFuncs": "Dostupné funkcie:%1",
   "typeHint": "Všimnite si, že sú potrebné zátvorky a bodkočiarky.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Chcete sa naučiť programovať?",
   "watchVideo": "Pozrieť video",
   "tryHOC": "Vyskúšajte hodinu kódovania",
-  "signup": "Prihlásiť sa na úvodný kurz"
+  "signup": "Prihlásiť sa na úvodný kurz",
+  "hintHeader": "Here's a tip:"
 }

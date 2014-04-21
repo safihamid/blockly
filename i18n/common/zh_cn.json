@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "全程统计： {numLines, plural, one {1 行} other {# 行}}代码。",
   "tryAgain": "再次尝试",
   "backToPreviousLevel": "返回到上一级",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "在这些说明下面输入您的 JavaScript代码。",
   "typeFuncs": "可用功能:%1",
   "typeHint": "注意圆括号和分号是需要的。",
@@ -58,5 +59,6 @@
   "wantToLearn": "想要学习如何写代码吗？",
   "watchVideo": "观看视频",
   "tryHOC": "来试试编程训练",
-  "signup": "注册账号后参加简介课程"
+  "signup": "注册账号后参加简介课程",
+  "hintHeader": "Here's a tip:"
 }

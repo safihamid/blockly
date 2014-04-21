@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "All-time total: {numLines, plural, one {1 line} other {# lines}} of code.",
   "tryAgain": "மீண்டும் முயற்சி செய்",
   "backToPreviousLevel": "முந்தைய நிலைக்கு திரும்பவும்",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "இந்த அறிவுரைகளுக்கு கீழே உங்கள் ஜாவா குறியீட்டை தட்டச்சு செய்யவும்.",
   "typeFuncs": "கிடைக்கப்பெறும் செயல்பாடுகள்: %1",
   "typeHint": "குறிப்பு, அந்த அடைப்புக்குறிகள் மற்றும் அரைப்புள்ளிகள் தேவையானது.",
@@ -58,5 +59,6 @@
   "wantToLearn": "குறியீடுகள் கற்க வேண்டுமா?",
   "watchVideo": "காணொளியை பார்க்கவும்",
   "tryHOC": "Try the Hour of Code",
-  "signup": "ஆரம்ப பாடத்திற்கு பதிவுபெறவும்"
+  "signup": "ஆரம்ப பாடத்திற்கு பதிவுபெறவும்",
+  "hintHeader": "Here's a tip:"
 }

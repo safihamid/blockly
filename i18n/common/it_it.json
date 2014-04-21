@@ -14,7 +14,7 @@
   "dialogCancel": "Annulla",
   "dialogOK": "Ok",
   "emptyBlocksErrorMsg": "Il blocco \"ripeti\" o \"se\" deve avere all'interno altri blocchi per poter funzionare. Assicurati che i blocchi interni siano inseriti correttamente all'interno del blocco principale.",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "Ci sono blocchi che non sono attaccati ad un blocco evento.",
   "finalStage": "Complimenti! Hai completato l'ultima lezione.",
   "finalStageTrophies": "Complimenti! Hai completato l'ultima lezione e vinto {numTrophies, plural, one {un trofeo} other {# trofei}}.",
   "generatedCodeInfo": "I blocchi per il tuo programma possono essere rappresentati anche in JavaScript, uno dei linguaggi di programmazione più usati al mondo:",
@@ -42,12 +42,13 @@
   "tooFewBlocksMsg": "Stai usando tutti i tipi di blocchi necessari, ma prova usando più blocchi o usandoli diversamente.",
   "tooManyBlocksMsg": "Questo puzzle può essere risolto con < x id= 'START_SPAN'/><x id='END_SPAN'/> blocchi.",
   "tooMuchWork": "Mi hai fatto fare un sacco di lavoro!  Puoi provare a farmi fare meno ripetizioni?",
-  "flappySpecificFail": "Il tuo codice sembra buono - sbatte le ali ad ogni click. Ma devi cliccare molte volte per volare fino alla meta.",
+  "flappySpecificFail": "Il tuo codice sembra buono: Flappy sbatte le ali ad ogni clic. Ma devi cliccare molte volte per volare fino al bersaglio disegnato.",
   "toolboxHeader": "Blocchi",
   "openWorkspace": "Come funziona",
   "totalNumLinesOfCodeWritten": "Totale complessivo: {numLines, plural, one {1 linea} other {# linee}} di codice.",
   "tryAgain": "Riprova",
   "backToPreviousLevel": "Torna al livello precedente",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Digita il tuo codice JavaScript sotto queste istruzioni.",
   "typeFuncs": "Funzioni disponibili: %1",
   "typeHint": "Sono necessarie le parentesi e i punto e virgola.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Vuoi imparare a programmare?",
   "watchVideo": "Guarda il video",
   "tryHOC": "Prova l'Ora di Codice",
-  "signup": "Iscriviti al corso introduttivo"
+  "signup": "Iscriviti al corso introduttivo",
+  "hintHeader": "Here's a tip:"
 }

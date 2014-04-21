@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Γενικό σύνολο: {numLines, plural, one {1 γραμμή} other {# γραμμές}} κώδικα.",
   "tryAgain": "Δοκίμασε ξανά",
   "backToPreviousLevel": "Πίσω στο προηγούμενο επίπεδο",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Γράψε το δικό σου κώδικα JavaScript κάτω από αυτές τις οδηγίες.",
   "typeFuncs": "Διαθέσιμες συναρτήσεις: %1",
   "typeHint": "Σημείωσε ότι οι παρενθέσεις και ερωτηματικά είναι υποχρεωτικά.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

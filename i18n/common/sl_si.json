@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Seštevek vseh skupaj:  {numLines, plural, one {1 vrstica} other {# vrstic}} kode.",
   "tryAgain": "Poskusi ponovno",
   "backToPreviousLevel": "Nazaj na prejšnjo raven",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Vtipkaj tvojo JavaScript kodo pod temi navodili.",
   "typeFuncs": "Razpoložljive funkcije: %1",
   "typeHint": "Zapomni si, oklepaji in podpičja so zahtevana.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Se želiš naučiti programirati?",
   "watchVideo": "Glej video",
   "tryHOC": "Poizkusi Uro za programiranje (Hour to Code)",
-  "signup": "Vpiši se za uvodni tečaj"
+  "signup": "Vpiši se za uvodni tečaj",
+  "hintHeader": "Here's a tip:"
 }

@@ -14,7 +14,7 @@
   "dialogCancel": "Скасувати",
   "dialogOK": "Гаразд",
   "emptyBlocksErrorMsg": "Блоки \"Повторити\" та \"Якщо\" повинні містити інші блоки. Переконайтесь, що внутрішній блок належно розміщений всередині зовнішнього.",
-  "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
+  "extraTopBlocks": "У вас є додаткові блоки, які не прив'язані до жодного блоку подій.",
   "finalStage": "Вітання! Завершено останній етап.",
   "finalStageTrophies": "Вітання! Ви завершили останній етап і виграли {numTrophies, plural, one {a trophy} other {# trophies}}.",
   "generatedCodeInfo": "Блоки програми можна представити мовою JavaScript, яка є найпоширенішою мовою програмування у світі:",
@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "За весь час: {numLines, plural, one {1 рядок} other {# рядків}} коду.",
   "tryAgain": "Спробуй знову",
   "backToPreviousLevel": "Повернутися до попереднього рівня",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Запишіть нижче свій код JavaScript згідно із вказівками.",
   "typeFuncs": "Доступні функції: %1",
   "typeHint": "Зверніть увагу: потрібні дужки та крапки з комою.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Хочете навчитись програмувати?",
   "watchVideo": "Переглянути відео",
   "tryHOC": "Спробуйте годину коду",
-  "signup": "Підпишіться на вступний курс"
+  "signup": "Підпишіться на вступний курс",
+  "hintHeader": "Here's a tip:"
 }

@@ -48,6 +48,7 @@
   "totalNumLinesOfCodeWritten": "Kokonaismäärä: {numLines, plural, one {yksi rivi} other {# riviä}} koodia.",
   "tryAgain": "Yritä uudestaan",
   "backToPreviousLevel": "Takaisin edelliseen tasoon",
+  "saveToGallery": "Save to your gallery",
   "typeCode": "Kirjoita JavaScript-koodisi näiden ohjeiden alle.",
   "typeFuncs": "Käytettävissä olevat funktiot: %1",
   "typeHint": "Sulkeet ja puolipisteet ovat pakollisia.",
@@ -58,5 +59,6 @@
   "wantToLearn": "Haluatko oppia koodaamaan?",
   "watchVideo": "Katso Video",
   "tryHOC": "Kokeile koodaustuntia",
-  "signup": "Rekisteröidy johdantokurssille"
+  "signup": "Rekisteröidy johdantokurssille",
+  "hintHeader": "Here's a tip:"
 }
