@@ -2,13 +2,18 @@
 
 var createToolbox = require('../block_utils').createToolbox;
 
-var jigsawBlock = function (type, x, y, child) {
+var jigsawBlock = function (type, x, y, child, childType) {
+  var childAttr = '';
   x = x || 0;
   y = y || 0;
+  childType = childType || "next";
+  if (childType === 'statement') {
+    childAttr = " name='child'";
+  }
   return '<block type="' + type + '" deletable="true"' +
     ' x="' + x + '"' +
     ' y="' + y + '">' +
-    (child ? '<next>' + child + '</next>' : '') +
+    (child ? '<' + childType + childAttr + '>' + child + '</' + childType + '>' : '') +
     '</block>';
 };
 
@@ -79,8 +84,7 @@ module.exports = {
     largeNotches: true,
     goal: {
       successCondition: function () {
-        // todo (brent) : not yet implemented
-        return false;
+        return Jigsaw.BLOCK1_CLICKED;
       }
     },
     startBlocks:
@@ -126,8 +130,8 @@ module.exports = {
       height: 200
     },
     ghost: {
-      x: 100,
-      y: 20
+      x: 400,
+      y: 100
     },
     numBlocks: 2,
     requiredBlocks: [],
@@ -139,7 +143,7 @@ module.exports = {
       },
     },
     startBlocks:
-      jigsawBlock('jigsaw_3A', 100, 20) +
+      jigsawBlock('jigsaw_3A', 400, 100) +
       jigsawBlock('jigsaw_3B', 100, 220)
   },
 
@@ -151,8 +155,8 @@ module.exports = {
       height: 200
     },
     ghost: {
-      x: 100,
-      y: 38
+      x: 400,
+      y: 100
     },
     numBlocks: 2,
     requiredBlocks: [],
@@ -164,8 +168,8 @@ module.exports = {
       },
     },
     startBlocks:
-      jigsawBlock('jigsaw_4A', 100, 280) +
-      jigsawBlock('jigsaw_4B', 100, 140)
+      jigsawBlock('jigsaw_4A', 100, 140) +
+      jigsawBlock('jigsaw_4B', 400, 200)
   },
 
   '5': {
@@ -177,7 +181,7 @@ module.exports = {
     },
     ghost: {
       x: 400,
-      y: 20
+      y: 100
     },
     numBlocks: 3,
     requiredBlocks: [],
@@ -201,6 +205,10 @@ module.exports = {
       width: 200,
       height: 200
     },
+    ghost: {
+      x: 400,
+      y: 100
+    },
     numBlocks: 3,
     requiredBlocks: [],
     freePlay: false,
@@ -222,6 +230,10 @@ module.exports = {
       name: 'artist',
       width: 200,
       height: 200
+    },
+    ghost: {
+      x: 400,
+      y: 100
     },
     numBlocks: 3,
     requiredBlocks: [],
@@ -245,6 +257,10 @@ module.exports = {
       width: 200,
       height: 200
     },
+    ghost: {
+      x: 400,
+      y: 100
+    },
     numBlocks: 3,
     requiredBlocks: [],
     freePlay: false,
@@ -267,6 +283,10 @@ module.exports = {
       width: 200,
       height: 200
     },
+    ghost: {
+      x: 400,
+      y: 100
+    },
     numBlocks: 3,
     requiredBlocks: [],
     freePlay: false,
@@ -288,6 +308,10 @@ module.exports = {
       width: 200,
       height: 200
     },
+    ghost: {
+      x: 400,
+      y: 100
+    },
     numBlocks: 3,
     requiredBlocks: [],
     freePlay: false,
@@ -303,6 +327,36 @@ module.exports = {
   },
 
   '11': {
+    instructionsIcon: 'blocks',
+    image: {
+      name: 'blocks',
+      width: 140,
+      height: 140
+    },
+    ghost: {
+      x: 200,
+      y: 12
+    },
+    numBlocks: 0,
+    requiredBlocks: [],
+    freePlay: false,
+    notchedEnds: true,
+    largeNotches: false,
+    snapRadius: 30,
+    goal: {
+      successCondition: function () {
+        return validateSimplePuzzle(['jigsaw_repeat', 'jigsaw_purple',
+          'jigsaw_blue', 'jigsaw_green'], {});
+      },
+    },
+    startBlocks: jigsawBlock('jigsaw_repeat', 20, 20,
+      jigsawBlock('jigsaw_purple', 0, 0, jigsawBlock('jigsaw_blue')), 'statement'),
+    toolbox: createToolbox(
+      jigsawBlock('jigsaw_green')
+    )
+  },
+
+  '12': {
     instructionsIcon: 'blocks',
     image: {
       name: 'blocks',

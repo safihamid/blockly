@@ -161,6 +161,15 @@ Jigsaw.init = function(config) {
   Blockly.addChangeListener(function(evt) {
     BlocklyApps.runButtonClick();
   });
+
+  // Only used by level1, in which the success criteria is clicking on the block
+  var block1 = document.querySelectorAll("[block-id='1']")[0];
+  if (block1) {
+    dom.addMouseDownTouchEvent(block1, function () {
+      Jigsaw.BLOCK1_CLICKED = true;
+      Blockly.runButtonClick();
+    });
+  }
 };
 
 BlocklyApps.runButtonClick = function() {

@@ -209,7 +209,7 @@ function generateBlankBlock(blockly, skin, name, hsv, width, hasAppend) {
         .appendTitle(new blockly.FieldImage(skin.blank, width, 1));
       this.setPreviousStatement(true);
       if (hasAppend) {
-        this.appendStatementInput('');
+        this.appendStatementInput('child');
       }
       this.setNextStatement(true);
     }
