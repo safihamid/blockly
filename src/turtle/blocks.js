@@ -523,7 +523,6 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  
   generator.simple_move_length_short = function () {
     return [SimpleMove.SHORT_MOVE_LENGTH, generator.ORDER_ATOMIC];
   };
