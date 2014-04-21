@@ -129,6 +129,7 @@ module.exports = {
       'downButton',
       'upButton'
     ],
+    'minWorkspaceHeight': 800,
     'freePlay': true,
     'showScore': true,
     'map': [
