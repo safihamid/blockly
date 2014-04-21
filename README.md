@@ -83,6 +83,7 @@ grunt test
 ```
 
 * Blockly tests target the `build/js/app_name` folder
+* If you see an error like `ReferenceError: Blockly is not defined` or notes about missing npm packages, double check that you've run `grunt build` before `grunt test`
 
 ### Localization
 
