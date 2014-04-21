@@ -42,6 +42,7 @@ npm install -g grunt-cli
 
 # Perform first full build
 npm install
+npm install request cssstyle cssom contextify htmlparser2 nwmatcher
 MOOC_DEV=1 grunt build
 ```
 
