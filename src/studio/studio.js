@@ -85,6 +85,7 @@ var loadLevel = function() {
   // Load maps.
   Studio.map = level.map;
   Studio.timeoutFailureTick = level.timeoutFailureTick || Infinity;
+  Studio.minWorkspaceHeight = level.minWorkspaceHeight;
   Studio.softButtons_ = level.softButtons || [];
 
   // Override scalars.
@@ -129,6 +130,10 @@ var drawMap = function() {
   visualization.style.width = Studio.MAZE_WIDTH + 'px';
   var belowVisualization = document.getElementById('belowVisualization');
   belowVisualization.style.width = Studio.MAZE_WIDTH + 'px';
+  if (Studio.minWorkspaceHeight > Studio.MAZE_HEIGHT) {
+    belowVisualization.style.minHeight =
+      (Studio.minWorkspaceHeight - Studio.MAZE_HEIGHT) + 'px';
+  }
 
   // Adjust button table width.
   var buttonTable = document.getElementById('gameButtons');
