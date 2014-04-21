@@ -52,8 +52,8 @@ module.exports = function(app, levels, options) {
   };
 
   options.skin = options.skinsModule.load(BlocklyApps.assetUrl, options.skinId);
-  options.blocksModule.install(Blockly, options.skin);
   blocksCommon.install(Blockly);
+  options.blocksModule.install(Blockly, options.skin);
 
   addReadyListener(function() {
     if (options.readonly) {
