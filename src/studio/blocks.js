@@ -41,6 +41,10 @@ exports.install = function(blockly, skin) {
 
   var generator = blockly.Generator.get('JavaScript');
   blockly.JavaScript = generator;
+  
+  generator.studio_eventHandlerPrologue = function() {
+    return 'var numHandler = Studio.acquireEventHandlerNum();\n\n';
+  };
 
   blockly.Blocks.studio_spriteCount = 6;
   
@@ -57,10 +61,7 @@ exports.install = function(blockly, skin) {
     }
   };
   
-  generator.studio_whenLeft = function() {
-    // Generate JavaScript for handling Left arrow button event.
-    return '\n';
-  };
+  generator.studio_whenLeft = generator.studio_eventHandlerPrologue;
   
   blockly.Blocks.studio_whenRight = {
     // Block to handle event when the Right arrow button is pressed.
@@ -75,10 +76,7 @@ exports.install = function(blockly, skin) {
     }
   };
   
-  generator.studio_whenRight = function() {
-    // Generate JavaScript for handling Right arrow button event.
-    return '\n';
-  };
+  generator.studio_whenRight = generator.studio_eventHandlerPrologue;
   
   blockly.Blocks.studio_whenUp = {
     // Block to handle event when the Up arrow button is pressed.
@@ -93,10 +91,7 @@ exports.install = function(blockly, skin) {
     }
   };
   
-  generator.studio_whenUp = function() {
-    // Generate JavaScript for handling Up arrow button event.
-    return '\n';
-  };
+  generator.studio_whenUp = generator.studio_eventHandlerPrologue;
   
   blockly.Blocks.studio_whenDown = {
     // Block to handle event when the Down arrow button is pressed.
@@ -111,10 +106,7 @@ exports.install = function(blockly, skin) {
     }
   };
   
-  generator.studio_whenDown = function() {
-    // Generate JavaScript for handling Down arrow button event.
-    return '\n';
-  };
+  generator.studio_whenDown = generator.studio_eventHandlerPrologue;
   
   blockly.Blocks.studio_whenGameStarts = {
     // Block to handle event when the game starts
@@ -129,10 +121,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  generator.studio_whenGameStarts = function () {
-    // Generate JavaScript for handling run button click
-    return '\n';
-  };
+  generator.studio_whenGameStarts = generator.studio_eventHandlerPrologue;
 
   blockly.Blocks.studio_whenGameIsRunning = {
     // Block to handle the repeating tick event while the game is running.
@@ -147,10 +136,7 @@ exports.install = function(blockly, skin) {
     }
   };
 
-  generator.studio_whenGameIsRunning = function () {
-    // Generate JavaScript for handling the repeating tick event
-    return '\n';
-  };
+  generator.studio_whenGameIsRunning = generator.studio_eventHandlerPrologue;
 
   blockly.Blocks.studio_whenSpriteClicked = {
     // Block to handle event when sprite is clicked.
@@ -176,10 +162,7 @@ exports.install = function(blockly, skin) {
      [msg.whenSpriteClicked5(), '4'],
      [msg.whenSpriteClicked6(), '5']];
   
-  generator.studio_whenSpriteClicked = function() {
-    // Generate JavaScript for handle when a sprite is clicked event.
-    return '\n';
-  };
+  generator.studio_whenSpriteClicked = generator.studio_eventHandlerPrologue;
 
   blockly.Blocks.studio_whenSpriteCollided = {
     // Block to handle event when sprite collides with another sprite.
@@ -220,10 +203,7 @@ exports.install = function(blockly, skin) {
        [msg.whenSpriteCollidedWith5(), '4'],
        [msg.whenSpriteCollidedWith6(), '5']];
   
-  generator.studio_whenSpriteCollided = function() {
-    // Generate JavaScript for handle when a sprite collision event.
-    return '\n';
-  };
+  generator.studio_whenSpriteCollided = generator.studio_eventHandlerPrologue;
 
   blockly.Blocks.studio_move = {
     // Block for moving one frame a time.
@@ -528,7 +508,7 @@ exports.install = function(blockly, skin) {
 
   generator.studio_saySprite = function() {
     // Generate JavaScript for saying.
-    return 'Studio.saySprite(\'block_id_' + this.id + '\', ' +
+    return 'Studio.saySprite(\'block_id_' + this.id + '\', numHandler || 0, ' +
                this.getTitleValue('SPRITE') + ', ' +
                blockly.JavaScript.quote_(this.getTitleValue('TEXT')) + ');\n';
   };
