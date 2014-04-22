@@ -12,6 +12,10 @@ exports.random = function (values) {
   return values[key];
 };
 
+exports.acquireEventHandlerNum = function() {
+  return Studio.eventHandlerNumber++;
+};
+
 exports.setBackground = function (id, value) {
   BlocklyApps.highlight(id);
   Studio.setBackground(value);
@@ -22,9 +26,9 @@ exports.setSprite = function (id, spriteIndex, value) {
   Studio.setSprite(spriteIndex, value);
 };
 
-exports.saySprite = function (id, spriteIndex, text) {
+exports.saySprite = function (id, numHandler, spriteIndex, text) {
   BlocklyApps.highlight(id);
-  Studio.saySprite(spriteIndex, text);
+  Studio.saySprite(numHandler, spriteIndex, text);
 };
 
 exports.setBackground = function (id, value) {

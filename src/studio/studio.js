@@ -76,6 +76,8 @@ Studio.scale = {
   'stepSpeed': 33
 };
 
+Studio.SPEECH_BUBBLE_TIMEOUT = 3000;
+
 var twitterOptions = {
   text: studioMsg.shareStudioTwitter(),
   hashtag: "StudioCode"
@@ -279,6 +281,29 @@ var performQueuedMoves = function(i)
   }
 };
 
+//
+// Show speech bubbles queued in sayQueues (called from inside onTick)
+//
+
+var showSpeechBubbles = function() {
+  for (var i = 0; i < Studio.eventHandlerNumber; i++) {
+    var sayCmd;
+    var sayQueue = Studio.sayQueues[i];
+    while (sayQueue &&
+           (sayCmd = sayQueue[0]) && sayCmd.tickCount <= Studio.tickCount) {
+      // Remove this item from the queue
+      sayQueue.shift();
+      var speechBubble = document.getElementById('speechBubble' + sayCmd.index);
+      speechBubble.textContent = sayCmd.text;
+      speechBubble.setAttribute('visibility', 'visible');
+      window.clearTimeout(Studio.sprite[sayCmd.index].bubbleTimeout);
+      Studio.sprite[sayCmd.index].bubbleTimeout = window.setTimeout(
+          delegate(this, Studio.hideSpeechBubble, sayCmd.index),
+          Studio.SPEECH_BUBBLE_TIMEOUT);
+    }
+  }
+};
+
 Studio.onTick = function() {
   Studio.tickCount++;
 
@@ -357,6 +382,8 @@ Studio.onTick = function() {
     // Display sprite:
     Studio.displaySprite(i);
   }
+  
+  showSpeechBubbles();
   
   if (checkFinished()) {
     Studio.onPuzzleComplete();
@@ -582,6 +609,10 @@ BlocklyApps.reset = function(first) {
 
   // Reset configurable variables
   Studio.setBackground('cave');
+  
+  // Reset the eventHandlerNumber
+  Studio.eventHandlerNumber = 0;
+  Studio.sayQueues = [];
 
   var spriteStartingSkins = [ "green", "purple", "pink", "orange" ];
   var numStartingSkins = spriteStartingSkins.length;
@@ -954,14 +985,32 @@ Studio.hideSpeechBubble = function (index) {
   speechBubble.setAttribute('visibility', 'hidden');
 };
 
-Studio.saySprite = function (index, text) {
-  var speechBubble = document.getElementById('speechBubble' + index);
-  speechBubble.textContent = text;
-  speechBubble.setAttribute('visibility', 'visible');
-  window.clearTimeout(Studio.sprite[index].bubbleTimeout);
-  Studio.sprite[index].bubbleTimeout = window.setTimeout(
-      delegate(this, Studio.hideSpeechBubble, index),
-      3000);
+var stampNextQueuedSayTick = function (numHandler) {
+  var tickCount = Studio.tickCount;
+  var sayQueue = Studio.sayQueues[numHandler];
+  if (sayQueue) {
+    // Use the last item in this event handler's queue of say commands,
+    // clone that tickCount and add the SPEECH_BUBBLE_TIMEOUT (in ticks)
+    var sayCmd = sayQueue.slice(-1)[0];
+    if (sayCmd) {
+      tickCount = sayCmd.tickCount +
+          Math.round(Studio.SPEECH_BUBBLE_TIMEOUT / Studio.scale.stepSpeed);
+    }
+  }
+  return tickCount;
+};
+
+Studio.saySprite = function (numHandler, index, text) {
+  if (!Studio.sayQueues[numHandler]) {
+    Studio.sayQueues[numHandler] = [];
+  }
+  
+  var sayCmd = {
+      'tickCount': stampNextQueuedSayTick(numHandler),
+      'index': index,
+      'text': text
+  };
+  Studio.sayQueues[numHandler].push(sayCmd);
 };
 
 Studio.moveSingle = function (spriteIndex, dir) {

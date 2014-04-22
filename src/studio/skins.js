@@ -16,6 +16,9 @@ exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
 
+  skin.hardcourt = {
+    background: skin.assetUrl('background.png'),
+  };
   skin.retro = {
     background: skin.assetUrl('retro_background.png'),
   };
