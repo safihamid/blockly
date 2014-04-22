@@ -58,8 +58,6 @@ var blocks = {
   SIMPLE_JUMP_DOWN_LENGTH: blockUtils.blockOfType('simple_jump_down_length'),
   SIMPLE_JUMP_LEFT_LENGTH: blockUtils.blockOfType('simple_jump_left_length'),
   SIMPLE_JUMP_RIGHT_LENGTH: blockUtils.blockOfType('simple_jump_right_length'),
-  SIMPLE_MOVE_LENGTH_SHORT: blockUtils.blockOfType('simple_move_length_short'),
-  SIMPLE_MOVE_LENGTH_LONG: blockUtils.blockOfType('simple_move_length_long'),
   simpleMoveBlocks: function() {
     return this.SIMPLE_MOVE_UP +
       this.SIMPLE_MOVE_DOWN +
@@ -83,10 +81,6 @@ var blocks = {
       this.SIMPLE_JUMP_DOWN_LENGTH +
       this.SIMPLE_JUMP_LEFT_LENGTH +
       this.SIMPLE_JUMP_RIGHT_LENGTH;
-  },
-  simpleLengthBlocks: function() {
-    return this.SIMPLE_MOVE_LENGTH_SHORT +
-      this.SIMPLE_MOVE_LENGTH_LONG;
   }
 };
 
@@ -837,7 +831,6 @@ module.exports = {
         blocks.simpleJumpBlocks() +
         blocks.simpleMoveLengthBlocks() +
         blocks.simpleJumpLengthBlocks() +
-        blocks.simpleLengthBlocks() +
         blockUtils.blockOfType('controls_repeat_simplified')
       ),
     startBlocks: '',
