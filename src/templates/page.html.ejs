@@ -54,6 +54,9 @@ var helpArea = function(html) { -%>
         <%- data.controls %>
       <% } %>
     </tr>
+    <% if (data.extraControlRows) { %>
+      <%- data.extraControlRows %>
+    <% } %>
   </table>
 
   <% instructions() %>
