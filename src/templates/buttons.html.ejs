@@ -6,45 +6,45 @@
       <%= msg.dialogOK() %>
     </button>
   </div>
-<% }; -%>
+<% } -%>
 
 <% if (data.previousLevel) { -%>
   <button id="back-button" class="launch">
     <%= msg.backToPreviousLevel() %>
   </button>
-<% }; -%>
+<% } -%>
 
 <% if (data.tryAgain) { -%>
   <button id="again-button" class="launch">
     <%= msg.tryAgain() %>
   </button>
-<% }; -%>
+<% } -%>
 
 <% if (data.nextLevel) { -%>
   <button id="continue-button" class="launch">
     <%= msg.continue() %>
   </button>
-<% }; -%>
+<% } -%>
 
 <% if (data.facebookUrl) { -%>
   <a href=<%= data.facebookUrl %> target="_blank">
     <img src=<%= BlocklyApps.assetUrl("media/facebook_purple.png") %>>
   </a>
-<% }; -%>
+<% } -%>
 
 <% if (data.twitterUrl) { -%>
   <a href=<%= data.twitterUrl %> target="_blank">
     <img src=<%= BlocklyApps.assetUrl("media/twitter_purple.png") %> >
   </a>
   <br>
-<% }; -%>
+<% } -%>
 
 <% if (data.sharingUrl) { -%>
   <input type="text" id="sharing-input" value=<%= data.sharingUrl %> readonly>
-<% }; -%>
+<% } -%>
 
 <% if (data.saveToGalleryUrl) { -%>
   <button id="save-to-gallery-button" class="launch">
     <%= msg.saveToGallery() %>
   </button>
-<% }; -%>
+<% } -%>
