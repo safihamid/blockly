@@ -132,7 +132,7 @@ var initWallMap = function() {
 /**
  * PIDs of async tasks currently executing.
  */
-var pidList = require('../pidList');
+var timeoutList = require('../timeoutList');
 
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/East/South/West squares.
@@ -560,7 +560,7 @@ Bounce.onTick = function() {
           //" x=" + Bounce.ballX[i] + " y=" + Bounce.ballY[i]);
           try { Bounce.whenBallInGoal(BlocklyApps, api); } catch (e) { }
           Bounce.ballFlags[i] |= Bounce.BallFlags.IN_GOAL;
-          pidList.setTimeout(
+          timeoutList.setTimeout(
               delegate(this, Bounce.moveBallOffscreen, i),
               1000);
           if (Bounce.respawnBalls) {
@@ -588,7 +588,7 @@ Bounce.onTick = function() {
         //" x=" + Bounce.ballX[i] + " y=" + Bounce.ballY[i]);
         try { Bounce.whenBallMissesPaddle(BlocklyApps, api); } catch (e) { }
         Bounce.ballFlags[i] |= Bounce.BallFlags.MISSED_PADDLE;
-        pidList.setTimeout(
+        timeoutList.setTimeout(
             delegate(this, Bounce.moveBallOffscreen, i),
             1000);
         if (Bounce.respawnBalls) {
@@ -800,7 +800,7 @@ Bounce.clearEventHandlersKillTickLoop = function() {
   }
   Bounce.intervalId = 0;
   // Kill all tasks.
-  pidList.clearTimeouts();
+  timeoutList.clearTimeouts();
 };
 
 /**
@@ -831,7 +831,7 @@ Bounce.playSoundAndResetBall = function(i) {
  */
 Bounce.launchBall = function(i) {
   Bounce.ballFlags[i] |= Bounce.BallFlags.LAUNCHING;
-  pidList.setTimeout(delegate(this, Bounce.playSoundAndResetBall, i), 3000);
+  timeoutList.setTimeout(delegate(this, Bounce.playSoundAndResetBall, i), 3000);
 };
 
 /**

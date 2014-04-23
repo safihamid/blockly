@@ -119,7 +119,7 @@ var initWallMap = function() {
 /**
  * PIDs of animation tasks currently executing.
  */
-var pidList = require('../pidList');
+var timeoutList = require('../timeoutList');
 
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/West/South/East squares.
@@ -657,7 +657,7 @@ var updatePegmanAnimation = function(options) {
 BlocklyApps.reset = function(first) {
   var i;
   // Kill all tasks.
-  pidList.clearTimeouts();
+  timeoutList.clearTimeouts();
 
   // Move Pegman into position.
   Maze.pegmanX = Maze.start_.x;
@@ -666,7 +666,7 @@ BlocklyApps.reset = function(first) {
   if (first) {
     Maze.pegmanD = Maze.startDirection + 1;
     Maze.scheduleFinish(false);
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       stepSpeed = 100;
       Maze.schedule([Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD)],
                     [Maze.pegmanX, Maze.pegmanY, tiles.direction4to16(Maze.pegmanD + TurnDirection.LEFT)]);
@@ -954,7 +954,7 @@ Maze.execute = function() {
   // Speeding up specific levels
   var scaledStepSpeed =
       stepSpeed * Maze.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  pidList.setTimeout(Maze.animate, scaledStepSpeed);
+  timeoutList.setTimeout(Maze.animate, scaledStepSpeed);
 };
 
 /**
@@ -962,7 +962,7 @@ Maze.execute = function() {
  */
 Maze.animate = function() {
   // All tasks should be complete now.  Clean up the PID list.
-  Maze.pidList = [];
+  timeoutList.clearTimeouts();
 
   var action = BlocklyApps.log.shift();
   if (!action) {
@@ -1033,7 +1033,7 @@ Maze.animate = function() {
           Maze.scheduleFinish(true);
           break;
         default:
-          pidList.setTimeout(function() {
+          timeoutList.setTimeout(function() {
             BlocklyApps.playAudio('failure', {volume: 0.5});
           }, stepSpeed);
           break;
@@ -1056,7 +1056,7 @@ Maze.animate = function() {
   // Speeding up specific levels
   var scaledStepSpeed =
       stepSpeed * Maze.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  pidList.setTimeout(Maze.animate, scaledStepSpeed);
+  timeoutList.setTimeout(Maze.animate, scaledStepSpeed);
 };
 
 Maze.animatedMove = function (direction) {
@@ -1077,7 +1077,7 @@ Maze.animatedMove = function (direction) {
  */
 Maze.schedule = function(startPos, endPos) {
   function updateMoveFrame(frameIdx) {
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       pegmanIcon.setAttribute('visibility', 'hidden');
       updatePegmanAnimation({
         idStr: 'move',
@@ -1108,7 +1108,7 @@ Maze.schedule = function(startPos, endPos) {
     }
 
     // Hide movePegman and set pegman to the end position.
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       movePegmanIcon.setAttribute('visibility', 'hidden');
       pegmanIcon.setAttribute('visibility', 'visible');
       Maze.displayPegman(endPos[0], endPos[1],
@@ -1122,19 +1122,19 @@ Maze.schedule = function(startPos, endPos) {
     Maze.displayPegman(startPos[0] + deltaX,
                        startPos[1] + deltaY,
                        tiles.constrainDirection16(startPos[2] + deltaDirection));
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
         Maze.displayPegman(
             startPos[0] + deltaX * 2,
             startPos[1] + deltaY * 2,
             tiles.constrainDirection16(startPos[2] + deltaDirection * 2));
     }, stepSpeed);
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
         Maze.displayPegman(
             startPos[0] + deltaX * 3,
             startPos[1] + deltaY * 3,
             tiles.constrainDirection16(startPos[2] + deltaDirection * 3));
     }, stepSpeed * 2);
-      pidList.setTimeout(function() {
+      timeoutList.setTimeout(function() {
           Maze.displayPegman(endPos[0], endPos[1],
                              tiles.constrainDirection16(endPos[2]));
     }, stepSpeed * 3);
@@ -1213,7 +1213,7 @@ Maze.scheduleFail = function(forward) {
 
     // Play the animation of hitting the wall
     if (skin.hittingWallAnimation) {
-      pidList.setTimeout(function() {
+      timeoutList.setTimeout(function() {
         var wallAnimationIcon = document.getElementById('wallAnimation');
         wallAnimationIcon.setAttribute(
             'x',
@@ -1229,22 +1229,22 @@ Maze.scheduleFail = function(forward) {
           skin.hittingWallAnimation);
       }, stepSpeed / 2);
     }
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX,
                          Maze.pegmanY,
                          direction16);
     }, stepSpeed);
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX + deltaX / 4,
                          Maze.pegmanY + deltaY / 4,
                          direction16);
       BlocklyApps.playAudio('failure', {volume: 0.5});
     }, stepSpeed * 2);
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
     }, stepSpeed * 3);
     if (skin.wallPegmanAnimation) {
-      pidList.setTimeout(function() {
+      timeoutList.setTimeout(function() {
         var pegmanIcon = document.getElementById('pegman');
         pegmanIcon.setAttribute('visibility', 'hidden');
         updatePegmanAnimation({
@@ -1265,7 +1265,7 @@ Maze.scheduleFail = function(forward) {
     obsIcon.setAttributeNS(
         'http://www.w3.org/1999/xlink', 'xlink:href',
         skin.obstacleAnimation);
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX + deltaX / 2,
                          Maze.pegmanY + deltaY / 2,
                          direction16);
@@ -1273,7 +1273,7 @@ Maze.scheduleFail = function(forward) {
 
     // Replace the objects around obstacles with broken objects
     if (skin.largerObstacleAnimationTiles) {
-      pidList.setTimeout(function() {
+      timeoutList.setTimeout(function() {
         Maze.updateSurroundingTiles(
             targetY, targetX, skin.largerObstacleAnimationTiles);
       }, stepSpeed);
@@ -1284,11 +1284,11 @@ Maze.scheduleFail = function(forward) {
       var svgMaze = document.getElementById('svgMaze');
       var pegmanIcon = document.getElementById('pegman');
 
-      pidList.setTimeout(function() {
+      timeoutList.setTimeout(function() {
         pegmanIcon.setAttribute('visibility', 'hidden');
       }, stepSpeed * 2);
     }
-    pidList.setTimeout(function() {
+    timeoutList.setTimeout(function() {
       BlocklyApps.playAudio('failure', {volume: 0.5});
     }, stepSpeed);
   }
@@ -1341,19 +1341,19 @@ Maze.scheduleFinish = function(sound) {
     BlocklyApps.playAudio('win', {volume: 0.5});
   }
   stepSpeed = 150;  // Slow down victory animation a bit.
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 18);
   }, stepSpeed);
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 20);
   }, stepSpeed * 2);
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 18);
   }, stepSpeed * 3);
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 20);
   }, stepSpeed * 4);
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
   }, stepSpeed * 5);
 };
@@ -1460,7 +1460,7 @@ Maze.scheduleLook = function(d) {
  * @param {number} delay Milliseconds to wait before making wave appear.
  */
 Maze.scheduleLookStep = function(path, delay) {
-  pidList.setTimeout(function() {
+  timeoutList.setTimeout(function() {
     path.style.display = 'inline';
     window.setTimeout(function() {
       path.style.display = 'none';
