@@ -43,7 +43,7 @@ exports.install = function(blockly, skin) {
   blockly.JavaScript = generator;
   
   generator.studio_eventHandlerPrologue = function() {
-    return 'var numHandler = Studio.acquireEventHandlerNum();\n\n';
+    return 'var executionCtx = Studio.acquireEventHandlerNum();\n\n';
   };
 
   blockly.Blocks.studio_spriteCount = 6;
@@ -223,7 +223,7 @@ exports.install = function(blockly, skin) {
         this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
         this.appendDummyInput()
-          .appendTitle(msg.moveSeparator());
+          .appendTitle('\t');
       } else {
         this.appendDummyInput()
           .appendTitle(msg.moveSprite());
@@ -269,7 +269,7 @@ exports.install = function(blockly, skin) {
         this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
         this.appendDummyInput()
-          .appendTitle(msg.moveSeparator());
+          .appendTitle('\t');
       } else {
         this.appendDummyInput()
           .appendTitle(msg.moveSprite());
@@ -277,7 +277,7 @@ exports.install = function(blockly, skin) {
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
       this.appendDummyInput()
-        .appendTitle(msg.moveSeparator());
+        .appendTitle('\t');
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.DISTANCE), 'DISTANCE');
       this.setPreviousStatement(true);
@@ -310,7 +310,8 @@ exports.install = function(blockly, skin) {
 
   generator.studio_moveDistance = function() {
     // Generate JavaScript for moving.
-    return 'Studio.moveDistance(\'block_id_' + this.id + '\', ' +
+    return 'Studio.moveDistance(\'block_id_' + this.id +
+        '\', executionCtx || 0, ' +
         (this.getTitleValue('SPRITE') || '0') + ', ' +
         this.getTitleValue('DIR') + ', ' +
         this.getTitleValue('DISTANCE') + ');\n';
@@ -540,7 +541,8 @@ exports.install = function(blockly, skin) {
 
   generator.studio_saySprite = function() {
     // Generate JavaScript for saying.
-    return 'Studio.saySprite(\'block_id_' + this.id + '\', numHandler || 0, ' +
+    return 'Studio.saySprite(\'block_id_' + this.id +
+               '\', executionCtx || 0, ' +
                (this.getTitleValue('SPRITE') || '0') + ', ' +
                blockly.JavaScript.quote_(this.getTitleValue('TEXT')) + ');\n';
   };
