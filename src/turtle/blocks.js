@@ -451,7 +451,15 @@ exports.install = function(blockly, skin) {
       jump_left: { letter: 'W', moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
       jump_right: { letter: 'E', moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
       jump_up: { letter: 'N', moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
-      jump_down: { letter: 'S', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 }
+      jump_down: { letter: 'S', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 },
+      jump_left_long: { letter: 'W long', moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
+      jump_right_long: { letter: 'E long', moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
+      jump_up_long: { letter: 'N long', moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
+      jump_down_long: { letter: 'S long', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 },
+      jump_left_short: { letter: 'W short', moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
+      jump_right_short: { letter: 'E short', moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
+      jump_up_short: { letter: 'N short', moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
+      jump_down_short: { letter: 'S short', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 }
     },
     LENGTHS: [
       ['short', "SHORT_MOVE_LENGTH"],
@@ -467,9 +475,11 @@ exports.install = function(blockly, skin) {
       generator["simple_move_" + direction] = SimpleMove.generateCodeGenerator(direction);
       generator["simple_jump_" + direction] = SimpleMove.generateCodeGenerator('jump_' + direction);
       generator["simple_move_" + direction + "_length"] = SimpleMove.generateCodeGenerator(direction, true);
-      generator["simple_jump_" + direction + "_length"] = SimpleMove.generateCodeGenerator('jump_' + direction, true);
+      generator["simple_jump_" + direction + "_long"] = SimpleMove.generateCodeGenerator('jump_' + direction, false, SimpleMove.LONG_MOVE_LENGTH);
+      generator["simple_jump_" + direction + "_short"] = SimpleMove.generateCodeGenerator('jump_' + direction, false, SimpleMove.SHORT_MOVE_LENGTH);
       blockly.Blocks['simple_move_' + direction + '_length'] = SimpleMove.generateBlock(direction, true);
-      blockly.Blocks['simple_jump_' + direction + '_length'] = SimpleMove.generateBlock('jump_' + direction, true);
+      blockly.Blocks['simple_jump_' + direction + '_long'] = SimpleMove.generateBlock('jump_' + direction + '_long');
+      blockly.Blocks['simple_jump_' + direction + '_short'] = SimpleMove.generateBlock('jump_' + direction + '_short');
       blockly.Blocks['simple_move_' + direction] = SimpleMove.generateBlock(direction);
       blockly.Blocks['simple_jump_' + direction] = SimpleMove.generateBlock('jump_' + direction);
     },
@@ -493,9 +503,9 @@ exports.install = function(blockly, skin) {
         }
       };
     },
-    generateCodeGenerator: function(direction, hasLengthInput) {
+    generateCodeGenerator: function(direction, hasLengthInput, length) {
       return function() {
-        var length = SimpleMove.DEFAULT_MOVE_LENGTH;
+        length = length || SimpleMove.DEFAULT_MOVE_LENGTH;
 
         if (hasLengthInput) {
           length = SimpleMove[this.getTitleValue("length")];
