@@ -1,7 +1,9 @@
 /*jshint multistr: true */
 
+var blockUtils = require('../block_utils');
 var Direction = require('./tiles').Direction;
-var tb = require('../block_utils').createToolbox;
+var tb = blockUtils.createToolbox;
+var blockOfType = blockUtils.blockOfType;
 
 /*
  * Configuration for all levels.
@@ -32,8 +34,8 @@ module.exports = {
     },
     'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block> \
-          <block type="studio_saySprite"></block>'),
+      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+         blockOfType('studio_saySprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
   },
@@ -56,10 +58,151 @@ module.exports = {
     ],
     'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block> \
-          <block type="studio_saySprite"></block>'),
+      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+         blockOfType('studio_saySprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
+  },
+  '3': {
+    'requiredBlocks': [
+      [{'test': 'moveDistance', 'type': 'studio_moveDistance'}],
+      [{'test': 'saySprite', 'type': 'studio_saySprite'}]
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'timeoutFailureTick': 200,
+    'toolbox':
+      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+         blockOfType('studio_saySprite')),
+    'startBlocks':
+     '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
+      <block type="studio_whenSpriteCollided" deletable="false" x="20" y="120"></block>'
+  },
+  '4': {
+    'requiredBlocks': [
+      [{'test': 'move', 'type': 'studio_move'}]
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'softButtons': [
+      'leftButton',
+      'rightButton',
+      'downButton',
+      'upButton'
+    ],
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'toolbox':
+      tb(blockOfType('studio_move') +
+         blockOfType('studio_saySprite')),
+    'startBlocks':
+     '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
+      <block type="studio_whenRight" deletable="false" x="180" y="20"></block> \
+      <block type="studio_whenUp" deletable="false" x="20" y="120"></block> \
+      <block type="studio_whenDown" deletable="false" x="180" y="120"></block>'
+  },
+  '5': {
+    'requiredBlocks': [
+      [{'test': 'moveDistance', 'type': 'studio_moveDistance'}]
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'map': [
+      [0, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0,16, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'spriteStartingImage': 1,
+    'timeoutFailureTick': 200,
+    'toolbox':
+      tb(blockOfType('studio_moveDistance') +
+         blockOfType('studio_saySprite')),
+    'startBlocks':
+     '<block type="studio_whenGameIsRunning" deletable="false" x="20" y="20"></block>'
+  },
+  '6': {
+    'requiredBlocks': [
+      [{'test': 'move', 'type': 'studio_move'}],
+      [{'test': 'saySprite', 'type': 'studio_saySprite'}]
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'softButtons': [
+      'leftButton',
+      'rightButton',
+      'downButton',
+      'upButton'
+    ],
+    'map': [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [16,0, 0, 0,16, 0, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'toolbox':
+      tb(blockOfType('studio_moveDistance') +
+         blockOfType('studio_move') +
+         blockOfType('studio_saySprite')),
+    'minWorkspaceHeight': 600,
+    'startBlocks':
+     '<block type="studio_whenLeft" deletable="false" x="20" y="20"> \
+        <next><block type="studio_move"> \
+                <title name="DIR">3</title></block> \
+        </next></block> \
+      <block type="studio_whenRight" deletable="false" x="20" y="100"> \
+        <next><block type="studio_move"> \
+                <title name="DIR">1</title></block> \
+        </next></block> \
+      <block type="studio_whenUp" deletable="false" x="20" y="180"> \
+        <next><block type="studio_move"> \
+                <title name="DIR">0</title></block> \
+        </next></block> \
+      <block type="studio_whenDown" deletable="false" x="20" y="260"> \
+        <next><block type="studio_move"> \
+                <title name="DIR">2</title></block> \
+        </next></block> \
+      <block type="studio_whenGameIsRunning" deletable="false" x="20" y="340"> \
+        <next><block type="studio_moveDistance"> \
+                <title name="SPRITE">1</title> \
+                <title name="DISTANCE">400</title> \
+          <next><block type="studio_moveDistance"> \
+                  <title name="SPRITE">1</title> \
+                  <title name="DISTANCE">400</title> \
+                  <title name="DIR">2</title></block> \
+          </next></block> \
+      </next></block> \
+      <block type="studio_whenSpriteCollided" deletable="false" x="20" y="440"></block>'
   },
   '99': {
     'requiredBlocks': [
@@ -86,17 +229,17 @@ module.exports = {
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
     'toolbox':
-      tb('<block type="studio_whenSpriteClicked"></block> \
-          <block type="studio_whenSpriteCollided"></block> \
-          <block type="studio_whenGameIsRunning"></block> \
-          <block type="studio_move"></block> \
-          <block type="studio_moveDistance"></block> \
-          <block type="studio_playSound"></block> \
-          <block type="studio_incrementScore"></block> \
-          <block type="studio_saySprite"></block> \
-          <block type="studio_setSpriteSpeed"></block> \
-          <block type="studio_setBackground"></block> \
-          <block type="studio_setSprite"></block>'),
+      tb(blockOfType('studio_whenSpriteClicked') +
+         blockOfType('studio_whenSpriteCollided') +
+         blockOfType('studio_whenGameIsRunning') +
+         blockOfType('studio_move') +
+         blockOfType('studio_moveDistance') +
+         blockOfType('studio_playSound') +
+         blockOfType('studio_incrementScore') +
+         blockOfType('studio_saySprite') +
+         blockOfType('studio_setSpriteSpeed') +
+         blockOfType('studio_setBackground') +
+         blockOfType('studio_setSprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenLeft" deletable="false" x="20" y="120"></block> \

@@ -26,9 +26,9 @@ exports.setSprite = function (id, spriteIndex, value) {
   Studio.setSprite(spriteIndex, value);
 };
 
-exports.saySprite = function (id, numHandler, spriteIndex, text) {
+exports.saySprite = function (id, executionCtx, spriteIndex, text) {
   BlocklyApps.highlight(id);
-  Studio.saySprite(numHandler, spriteIndex, text);
+  Studio.saySprite(executionCtx, spriteIndex, text);
 };
 
 exports.setBackground = function (id, value) {
@@ -51,9 +51,9 @@ exports.move = function(id, spriteIndex, dir) {
   Studio.moveSingle(spriteIndex, dir);
 };
 
-exports.moveDistance = function(id, spriteIndex, dir, distance) {
+exports.moveDistance = function(id, executionCtx, spriteIndex, dir, distance) {
   BlocklyApps.highlight(id);
-  Studio.moveDistance(spriteIndex, dir, distance);
+  Studio.moveDistance(executionCtx, spriteIndex, dir, distance);
 };
 
 exports.incrementScore = function(id, player) {
