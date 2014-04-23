@@ -25,26 +25,3 @@
     <%= msg.continue() %>
   </button>
 <% } -%>
-
-<% if (data.facebookUrl) { -%>
-  <a href=<%= data.facebookUrl %> target="_blank">
-    <img src=<%= BlocklyApps.assetUrl("media/facebook_purple.png") %>>
-  </a>
-<% } -%>
-
-<% if (data.twitterUrl) { -%>
-  <a href=<%= data.twitterUrl %> target="_blank">
-    <img src=<%= BlocklyApps.assetUrl("media/twitter_purple.png") %> >
-  </a>
-  <br>
-<% } -%>
-
-<% if (data.sharingUrl) { -%>
-  <input type="text" id="sharing-input" value=<%= data.sharingUrl %> readonly>
-<% } -%>
-
-<% if (data.saveToGalleryUrl) { -%>
-  <button id="save-to-gallery-button" class="launch">
-    <%= msg.saveToGallery() %>
-  </button>
-<% } -%>

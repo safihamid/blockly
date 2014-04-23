@@ -13,7 +13,7 @@ exports.displayFeedback = function(options) {
   var displayShowCode = BlocklyApps.enableShowCode && canContinue;
   var feedback = document.createElement('div');
   var feedbackMessage = getFeedbackMessage(options);
-  var sharingDiv = createSharingDiv(options);
+  var sharingDiv = canContinue ? exports.createSharingDiv(options) : null;
   var showCode = displayShowCode ? getShowCodeElement(options) : null;
   var feedbackBlocks = new FeedbackBlocks(options);
 
@@ -38,6 +38,7 @@ exports.displayFeedback = function(options) {
   if (showCode) {
     feedback.appendChild(showCode);
   }
+
   feedback.appendChild(getFeedbackButtons(
     options.feedbackType, options.level.showPreviousLevelButton));
 
@@ -297,18 +298,15 @@ var isFeedbackMessageCustomized = function(options) {
        options.level.other1StarError);
 };
 
-exports.createSharingButtons = function(options) {
-  var sharingWrapper = document.createElement('div');
-  var sharingButtons = document.createElement('div');
-  var sharingUrl = document.createElement('div');
-  sharingButtons.className = 'social-buttons';
-  sharingUrl.className = 'feedback-links';
-  sharingUrl.innerHTML = require('./templates/buttons.html')({
-    data: {
-      sharingUrl: options.response.level_source
-    }
-  });
+exports.createSharingDiv = function(options) {
+  // Create the sharing div only when showingSharing is set and the solution is
+  // a passing solution.
+  if (!options.showingSharing ||
+			!options.response.level_source) {
+    return null;
+  } 
 
+	// set up the twitter share url
   var twitterUrl = "https://twitter.com/intent/tweet?url=" +
                    options.response.level_source;
 
@@ -318,71 +316,35 @@ exports.createSharingButtons = function(options) {
   if (options.twitter  && options.twitter.hashtag !== undefined) {
     twitterUrl += "&button_hashtag=" + options.twitter.hashtag;
   }
+	options.twitterUrl = twitterUrl;
 
-  sharingButtons.innerHTML = require('./templates/buttons.html')({
-    data: {
-      facebookUrl: "https://www.facebook.com/sharer/sharer.php?u=" +
-                    options.response.level_source,
-      twitterUrl: twitterUrl,
-      makeYourOwn: options.makeYourOwn,
-      saveToGalleryUrl: options.saveToGalleryUrl
-    }
-  });
-  var sharingInput = sharingUrl.querySelector('#sharing-input');
+	// set up the facebook share url
+  var facebookUrl = "https://www.facebook.com/sharer/sharer.php?u=" +
+                    options.response.level_source;
+	options.facebookUrl = facebookUrl;
+
+	// use a generic image for the level if a feedback image has not been supplied.
+	if (options.level && options.level.instructionImageUrl && !options.feedbackImage) {
+		options.feedbackImage = options.level.instructionImageUrl;
+	}
+
+  var sharingDiv = document.createElement('div');
+  sharingDiv.setAttribute('style', 'display:inline-block');
+  sharingDiv.innerHTML = require('./templates/sharing.html')({
+    options: options
+	});
+
+  var sharingInput = sharingDiv.querySelector('#sharing-input');
   if (sharingInput) {
     dom.addClickTouchEvent(sharingInput, function() {
       sharingInput.focus();
       sharingInput.select();
     });
   }
-  sharingWrapper.appendChild(sharingUrl);
-  sharingWrapper.appendChild(sharingButtons);
-  return sharingWrapper;
+
+	return sharingDiv;
 };
 
-
-var createSharingDiv = function(options) {
-  // Creates the sharing div only when showingSharing is set and the solution is
-  // a passing solution.
-  if (options.showingSharing &&
-      exports.canContinueToNextLevel(options.feedbackType)) {
-    var sharingDiv = document.createElement('div');
-    sharingDiv.setAttribute('style', 'display:inline-block');
-    var sharingImage = document.createElement('div');
-
-    var feedbackImage = createFeedbackImage(options);
-    if (feedbackImage) {
-        sharingImage.appendChild(feedbackImage);
-        sharingDiv.appendChild(sharingImage);
-    }
-
-    if (options.response && options.response.level_source) {
-      var sharingText = document.createElement('div');
-      if (options.appStrings) {
-        dom.setText(sharingText, options.appStrings.sharingText);
-      }
-      sharingText.className = 'shareDrawingMsg';
-      sharingDiv.appendChild(sharingText);
-
-      sharingDiv.appendChild(exports.createSharingButtons(options));
-    }
-    return sharingDiv;
-  } else {
-    return null;
-  }
-};
-
-var createFeedbackImage = function(options) {
-  var feedbackImage;
-  var feedbackImageSrc =
-      options.level.instructionImageUrl || options.feedbackImage;
-  if (feedbackImageSrc) {
-    feedbackImage = document.createElement('img');
-    feedbackImage.className = 'feedback-image';
-    feedbackImage.src = feedbackImageSrc;
-  }
-  return feedbackImage;
-};
 
 var numTrophiesEarned = function(options) {
   if (options.response && options.response.trophy_updates) {

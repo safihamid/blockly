@@ -99,8 +99,8 @@ button {
   color: #000;
 }
 button.launch {
-  border: 1px solid #FFA000;
-  background-color: #FFA000;
+  border: 1px solid $orange;
+  background-color: $orange;
   color: #fff;
   font-size: large;
   min-width: 96px;
@@ -247,15 +247,7 @@ input[type="radio"] {
   color: #7E5BA0;
   font-weight: bold;
 }
-.shareDrawingMsg {
-  margin-top: 25px;
-  font-size: 20px;
-  color: #5A6A73;
-}
-.shareDiv {
-  display: inline-block;
-  width: 90%;
-}
+
 #show-code {
   margin-bottom: 5px;
 }
@@ -489,7 +481,7 @@ $modal-image-margin-gap: 10px;
   .lines-of-code-message {
     font-size: 20px;
     line-height: normal;
-    color: #5A6A73;
+    color: $charcoal;
     margin: 0 0 8px;
   }
 }
@@ -579,6 +571,20 @@ $modal-image-margin-gap: 10px;
     display: none;
   }
 }
-.social-buttons a:hover {
-  text-decoration: none;
+
+.sharing {
+  font-size: 20px;
+  color: $charcoal;
+
+  div {
+    margin: 10px 0;
+  }
+  .social-buttons {
+    a:hover {
+      text-decoration: none;
+    }
+  }
+  #sharing-input {
+    cursor: copy;
+  }
 }

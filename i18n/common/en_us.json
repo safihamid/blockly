@@ -50,6 +50,7 @@
   "tryAgain": "Try again",
   "backToPreviousLevel": "Back to previous level",
   "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Type your JavaScript code below these instructions.",
   "typeFuncs": "Available functions:%1",
   "typeHint": "Note that the parentheses and semicolons are required.",

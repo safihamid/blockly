@@ -604,7 +604,10 @@ var displayFeedback = function() {
     feedbackImage: Turtle.ctxScratch.canvas.toDataURL("image/png"),
     // add 'impressive':true to non-freeplay levels that we deem are relatively impressive (see #66990480)
     showingSharing: level.freePlay || level.impressive,
-    saveToGalleryUrl: (level.freePlay || level.impressive) && Turtle.response.save_to_gallery_url,
+    // impressive levels are already saved
+    alreadySaved: level.impressive,
+    // allow users to save freeplay levels to their gallery (impressive non-freeplay levels are autosaved)
+    saveToGalleryUrl: level.freePlay && Turtle.response.save_to_gallery_url,
     appStrings: {
       reinfFeedbackMsg: msg.reinfFeedbackMsg(),
       sharingText: msg.shareDrawing()
@@ -717,20 +720,7 @@ Turtle.checkAnswer = function() {
     BlocklyApps.playAudio('failure', {volume : 0.5});
   }
 
-  // Get the canvas data for feedback.
-  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
-    BlocklyApps.report({
-      app: 'turtle',
-      level: level.id,
-      builder: level.builder,
-      result: BlocklyApps.levelComplete,
-      testResult: Turtle.testResults,
-      program: encodeURIComponent(textBlocks),
-      onComplete: Turtle.onReportComplete,
-      image : getFeedbackImage()
-    });
-  } else {
-    BlocklyApps.report({
+  var reportData = {
       app: 'turtle',
       level: level.id,
       builder: level.builder,
@@ -738,8 +728,18 @@ Turtle.checkAnswer = function() {
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
       onComplete: Turtle.onReportComplete
-    });
+  };
+
+  // Get the canvas data for feedback.
+  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
+    reportData.image = getFeedbackImage();
   }
+
+  if (level.impressive) {
+    reportData.save_to_gallery = true;
+  }
+
+  BlocklyApps.report(reportData);
 
   // The call to displayFeedback() will happen later in onReportComplete()
 };
