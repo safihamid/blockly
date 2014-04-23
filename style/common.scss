@@ -47,13 +47,24 @@ html[dir="RTL"] .farSide {
   bottom: 10px;
   margin-left: 415px;
 }
-.show-code-div {
+
+#show-code-button {
   @media screen and (max-device-width: 540px) {
     display: none;
   }
-  margin-top: 5px;
-  margin-bottom: 5px;
+
+  background-color: $green;
+  border-color: $green;
+  padding: 2px 8px;
+  margin: -5px 0 0 6px;
+  font-size: small;
+  color: white;
 }
+
+.share-code-spacer {
+  min-height:25px;
+}
+
 #codeTextbox {
   position: absolute;
   bottom: 10px;
@@ -236,11 +247,6 @@ input[type="radio"] {
   color: #7E5BA0;
   font-weight: bold;
 }
-.linesOfCodeMsg {
-  font-size: 20px;
-  line-height: normal;
-  color: #5A6A73;
-}
 .shareDrawingMsg {
   margin-top: 25px;
   font-size: 20px;
@@ -400,6 +406,7 @@ input[type="radio"] {
     font-size: 14px;
     line-height: inherit;
     color: $charcoal;
+    margin-bottom: 10px;
 
     a {
       font-weight: bold;
@@ -477,6 +484,13 @@ $modal-image-margin-gap: 10px;
       float: right;
       width: 20%;
     }
+  }
+
+  .lines-of-code-message {
+    font-size: 20px;
+    line-height: normal;
+    color: #5A6A73;
+    margin: 0 0 8px;
   }
 }
 
