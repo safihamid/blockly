@@ -24,7 +24,7 @@ var generateSetterCode = function (opts) {
 
   if (opts.index) {
     return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
-      opts.ctx.getTitleValue(opts.index) + ', ' + value + ');\n';
+      (opts.ctx.getTitleValue(opts.index) || '0') + ', ' + value + ');\n';
   }
   else {
     return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
@@ -145,8 +145,13 @@ exports.install = function(blockly, skin) {
       this.setHSV(140, 1.00, 0.74);
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.whenSpriteClicked());
+      }
       this.setPreviousStatement(false);
       this.setInputsInline(true);
       this.setNextStatement(true);
@@ -173,7 +178,9 @@ exports.install = function(blockly, skin) {
       var dropdownArray2 =
           this.SPRITE2.slice(0, blockly.Blocks.studio_spriteCount);
       var dropdown2 = new blockly.FieldDropdown(dropdownArray2);
-      dropdown2.setValue(dropdownArray2[1][1]); // default to 2
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        dropdown2.setValue(dropdownArray2[1][1]); // default to 2
+      }
 
       this.setHSV(140, 1.00, 0.74);
       this.appendDummyInput()
@@ -212,10 +219,15 @@ exports.install = function(blockly, skin) {
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
-      this.appendDummyInput()
-        .appendTitle(msg.moveSeparator());
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+        this.appendDummyInput()
+          .appendTitle(msg.moveSeparator());
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.moveSprite());
+      }
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
       this.setPreviousStatement(true);
@@ -242,7 +254,7 @@ exports.install = function(blockly, skin) {
   generator.studio_move = function() {
     // Generate JavaScript for moving.
     return 'Studio.move(\'block_id_' + this.id + '\', ' +
-        this.getTitleValue('SPRITE') + ', ' +
+        (this.getTitleValue('SPRITE') || '0') + ', ' +
         this.getTitleValue('DIR') + ');\n';
   };
 
@@ -253,10 +265,15 @@ exports.install = function(blockly, skin) {
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
-      this.appendDummyInput()
-        .appendTitle(msg.moveSeparator());
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+        this.appendDummyInput()
+          .appendTitle(msg.moveSeparator());
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.moveSprite());
+      }
       this.appendDummyInput()
         .appendTitle(new blockly.FieldDropdown(this.DIR), 'DIR');
       this.appendDummyInput()
@@ -294,7 +311,7 @@ exports.install = function(blockly, skin) {
   generator.studio_moveDistance = function() {
     // Generate JavaScript for moving.
     return 'Studio.moveDistance(\'block_id_' + this.id + '\', ' +
-        this.getTitleValue('SPRITE') + ', ' +
+        (this.getTitleValue('SPRITE') || '0') + ', ' +
         this.getTitleValue('DIR') + ', ' +
         this.getTitleValue('DISTANCE') + ');\n';
   };
@@ -366,8 +383,13 @@ exports.install = function(blockly, skin) {
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
 
       this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.setSprite());
+      }
       this.appendDummyInput()
         .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
@@ -445,8 +467,13 @@ exports.install = function(blockly, skin) {
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
 
       this.setHSV(312, 0.32, 0.62);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.setSprite());
+      }
       this.appendDummyInput()
         .appendTitle(dropdown, 'VALUE');
       this.setInputsInline(true);
@@ -483,8 +510,13 @@ exports.install = function(blockly, skin) {
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
       this.setHSV(184, 1.00, 0.74);
-      this.appendDummyInput()
-        .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.saySprite());
+      }
       this.appendDummyInput()
         .appendTitle(new Blockly.FieldImage(
                 Blockly.assetUrl('media/quote0.png'), 12, 12))
@@ -509,7 +541,7 @@ exports.install = function(blockly, skin) {
   generator.studio_saySprite = function() {
     // Generate JavaScript for saying.
     return 'Studio.saySprite(\'block_id_' + this.id + '\', numHandler || 0, ' +
-               this.getTitleValue('SPRITE') + ', ' +
+               (this.getTitleValue('SPRITE') || '0') + ', ' +
                blockly.JavaScript.quote_(this.getTitleValue('TEXT')) + ');\n';
   };
   

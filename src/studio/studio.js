@@ -106,8 +106,8 @@ var loadLevel = function() {
   Studio.SPRITE_WIDTH = skin.spriteWidth;
   Studio.SPRITE_Y_OFFSET = skin.spriteYOffset;
   // Height and width of the goal and obstacles.
-  Studio.MARKER_HEIGHT = 43;
-  Studio.MARKER_WIDTH = 50;
+  Studio.MARKER_HEIGHT = 100;
+  Studio.MARKER_WIDTH = 100;
 
   Studio.MAZE_WIDTH = Studio.SQUARE_SIZE * Studio.COLS;
   Studio.MAZE_HEIGHT = Studio.SQUARE_SIZE * Studio.ROWS;
@@ -193,17 +193,17 @@ var drawMap = function() {
     }
   }
   
-  if (Studio.paddleFinish_) {
-    for (i = 0; i < Studio.paddleFinishCount; i++) {
+  if (Studio.sprite0Finish_) {
+    for (i = 0; i < Studio.sprite0FinishCount; i++) {
       // Add finish markers.
-      var paddleFinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-      paddleFinishMarker.setAttribute('id', 'paddlefinish' + i);
-      paddleFinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
-                                        'xlink:href',
-                                        skin.goal);
-      paddleFinishMarker.setAttribute('height', Studio.MARKER_HEIGHT);
-      paddleFinishMarker.setAttribute('width', Studio.MARKER_WIDTH);
-      svg.appendChild(paddleFinishMarker);
+      var sprite0FinishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
+      sprite0FinishMarker.setAttribute('id', 'sprite0finish' + i);
+      sprite0FinishMarker.setAttributeNS('http://www.w3.org/1999/xlink',
+                                         'xlink:href',
+                                         skin.goal);
+      sprite0FinishMarker.setAttribute('height', Studio.MARKER_HEIGHT);
+      sprite0FinishMarker.setAttribute('width', Studio.MARKER_WIDTH);
+      svg.appendChild(sprite0FinishMarker);
     }
   }
 
@@ -524,19 +524,19 @@ Studio.init = function(config) {
 
   config.preventExtraTopLevelBlocks = true;
 
-  Studio.paddleFinishCount = 0;
+  Studio.sprite0FinishCount = 0;
   Studio.spriteCount = 0;
   Studio.sprite = [];
   
   // Locate the start and finish squares.
   for (var y = 0; y < Studio.ROWS; y++) {
     for (var x = 0; x < Studio.COLS; x++) {
-      if (Studio.map[y][x] & SquareType.PADDLEFINISH) {
-        if (0 === Studio.paddleFinishCount) {
-          Studio.paddleFinish_ = [];
+      if (Studio.map[y][x] & SquareType.SPRITE0FINISH) {
+        if (0 === Studio.sprite0FinishCount) {
+          Studio.sprite0Finish_ = [];
         }
-        Studio.paddleFinish_[Studio.paddleFinishCount] = {x: x, y: y};
-        Studio.paddleFinishCount++;
+        Studio.sprite0Finish_[Studio.sprite0FinishCount] = {x: x, y: y};
+        Studio.sprite0FinishCount++;
       } else if (Studio.map[y][x] & SquareType.SPRITESTART) {
         if (0 === Studio.spriteCount) {
           Studio.spriteStart_ = [];
@@ -612,9 +612,10 @@ BlocklyApps.reset = function(first) {
   // Reset configurable variables
   Studio.setBackground('cave');
   
-  // Reset the eventHandlerNumber
+  // Reset the eventHandlerNumber, say queues and complete counts:
   Studio.eventHandlerNumber = 0;
   Studio.sayQueues = [];
+  Studio.sayComplete = 0;
 
   var spriteStartingSkins = [ "green", "purple", "pink", "orange" ];
   var numStartingSkins = spriteStartingSkins.length;
@@ -636,22 +637,20 @@ BlocklyApps.reset = function(first) {
 
   var svg = document.getElementById('svgStudio');
 
-  if (Studio.paddleFinish_) {
-    for (i = 0; i < Studio.paddleFinishCount; i++) {
+  if (Studio.sprite0Finish_) {
+    for (i = 0; i < Studio.sprite0FinishCount; i++) {
       // Mark each finish as incomplete.
-      Studio.paddleFinish_[i].finished = false;
+      Studio.sprite0Finish_[i].finished = false;
 
       // Move the finish icons into position.
-      var paddleFinishIcon = document.getElementById('paddlefinish' + i);
-      paddleFinishIcon.setAttribute(
+      var sprite0FinishIcon = document.getElementById('sprite0finish' + i);
+      sprite0FinishIcon.setAttribute(
           'x',
-          Studio.SQUARE_SIZE * (Studio.paddleFinish_[i].x + 0.5) -
-          paddleFinishIcon.getAttribute('width') / 2);
-      paddleFinishIcon.setAttribute(
+          Studio.SQUARE_SIZE * Studio.sprite0Finish_[i].x);
+      sprite0FinishIcon.setAttribute(
           'y',
-          Studio.SQUARE_SIZE * (Studio.paddleFinish_[i].y + 0.9) -
-          paddleFinishIcon.getAttribute('height'));
-      paddleFinishIcon.setAttributeNS(
+          Studio.SQUARE_SIZE * Studio.sprite0Finish_[i].y);
+      sprite0FinishIcon.setAttributeNS(
           'http://www.w3.org/1999/xlink',
           'xlink:href',
           skin.goal);
@@ -688,8 +687,7 @@ BlocklyApps.runButtonClick = function() {
     shareCell.className = 'share-cell-enabled';
   }
   
-  if (level.showScore) {
-    document.getElementById('score').setAttribute('visibility', 'visible');
+  if (level.showZeroZeroScore) {
     Studio.displayScore();
   }
 };
@@ -957,6 +955,7 @@ Studio.displayScore = function() {
     playerScore: Studio.playerScore,
     opponentScore: Studio.opponentScore
   });
+  score.setAttribute('visibility', 'visible');
 };
 
 var skinTheme = function (value) {
@@ -985,6 +984,7 @@ Studio.setSprite = function (index, value) {
 Studio.hideSpeechBubble = function (index) {
   var speechBubble = document.getElementById('speechBubble' + index);
   speechBubble.setAttribute('visibility', 'hidden');
+  Studio.sayComplete++;
 };
 
 var stampNextQueuedSayTick = function (numHandler) {
@@ -1067,23 +1067,23 @@ Studio.timedOut = function() {
 
 Studio.allFinishesComplete = function() {
   var i;
-  if (Studio.paddleFinish_) {
+  if (Studio.sprite0Finish_) {
     var finished, playSound;
-    for (i = 0, finished = 0; i < Studio.paddleFinishCount; i++) {
-      if (!Studio.paddleFinish_[i].finished) {
+    for (i = 0, finished = 0; i < Studio.sprite0FinishCount; i++) {
+      if (!Studio.sprite0Finish_[i].finished) {
         if (essentiallyEqual(Studio.sprite[0].x,
-                             Studio.paddleFinish_[i].x,
+                             Studio.sprite0Finish_[i].x,
                              tiles.FINISH_COLLIDE_DISTANCE) &&
             essentiallyEqual(Studio.sprite[0].y,
-                             Studio.paddleFinish_[i].y,
+                             Studio.sprite0Finish_[i].y,
                              tiles.FINISH_COLLIDE_DISTANCE)) {
-          Studio.paddleFinish_[i].finished = true;
+          Studio.sprite0Finish_[i].finished = true;
           finished++;
           playSound = true;
 
           // Change the finish icon to goalSuccess.
-          var paddleFinishIcon = document.getElementById('paddlefinish' + i);
-          paddleFinishIcon.setAttributeNS(
+          var sprite0FinishIcon = document.getElementById('sprite0finish' + i);
+          sprite0FinishIcon.setAttributeNS(
               'http://www.w3.org/1999/xlink',
               'xlink:href',
               skin.goalSuccess);
@@ -1092,11 +1092,11 @@ Studio.allFinishesComplete = function() {
         finished++;
       }
     }
-    if (playSound && finished != Studio.paddleFinishCount) {
+    if (playSound && finished != Studio.sprite0FinishCount) {
       // Play a sound unless we've hit the last flag
       BlocklyApps.playAudio('flag', {volume: 0.5});
     }
-    return (finished == Studio.paddleFinishCount);
+    return (finished == Studio.sprite0FinishCount);
   }
   return false;
 };

@@ -23,6 +23,6 @@ exports.DEFAULT_SPRITE_SPEED = 0.1;
  */
 exports.SquareType = {
   OPEN: 0,
-  PADDLEFINISH: 8,
+  SPRITE0FINISH: 1,
   SPRITESTART: 16,
 };
