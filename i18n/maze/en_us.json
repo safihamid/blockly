@@ -43,6 +43,7 @@
   "repeatUntil": "repeat until",
   "repeatUntilBlocked": "while path ahead",
   "repeatUntilFinish": "repeat until finish",
+  "step": "Step",
   "turnLeft": "turn left",
   "turnRight": "turn right",
   "turnTooltip": "Turns me left or right by 90 degrees.",

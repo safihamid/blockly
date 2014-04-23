@@ -420,10 +420,15 @@ Maze.init = function(config) {
     data: {
       localeDirection: BlocklyApps.localeDirection(),
       visualization: require('./visualization.html')(),
+      controls: require('./controls.html')({
+        assetUrl: BlocklyApps.assetUrl,
+        showStepButton: level.step
+      }),
       blockUsed: undefined,
       idealBlockNumber: undefined,
-      blockCounterClass: 'block-counter-default'
-    }
+      blockCounterClass: 'block-counter-default',
+    },
+    hideRunButton: level.stepOnly
   });
 
   config.loadAudio = function() {
@@ -478,6 +483,9 @@ Maze.init = function(config) {
     resetDirt();
 
     drawMap();
+
+    var stepButton = document.getElementById('stepButton');
+    dom.addClickTouchEvent(stepButton, BlocklyApps.runButtonClick);
   };
 
   config.getDisplayWidth = function() {

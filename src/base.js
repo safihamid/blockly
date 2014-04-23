@@ -569,7 +569,8 @@ BlocklyApps.highlight = function(id) {
       id = m[1];
     }
   }
-  Blockly.mainWorkspace.highlightBlock(id);
+  // todo (brent): only spotlight if we're in step mode
+  Blockly.mainWorkspace.highlightBlock(id, true);
 };
 
 /**
@@ -758,6 +759,7 @@ BlocklyApps.report = function(options) {
 BlocklyApps.resetButtonClick = function() {
   document.getElementById('runButton').style.display = 'inline';
   document.getElementById('resetButton').style.display = 'none';
+  BlocklyApps.highlight(null);
   Blockly.mainWorkspace.traceOn(false);
   BlocklyApps.reset(false);
 };
