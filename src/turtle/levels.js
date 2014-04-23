@@ -54,12 +54,14 @@ var blocks = {
   SIMPLE_MOVE_DOWN_LENGTH: blockUtils.blockOfType('simple_move_down_length'),
   SIMPLE_MOVE_LEFT_LENGTH: blockUtils.blockOfType('simple_move_left_length'),
   SIMPLE_MOVE_RIGHT_LENGTH: blockUtils.blockOfType('simple_move_right_length'),
-  SIMPLE_JUMP_UP_LENGTH: blockUtils.blockOfType('simple_jump_up_length'),
-  SIMPLE_JUMP_DOWN_LENGTH: blockUtils.blockOfType('simple_jump_down_length'),
-  SIMPLE_JUMP_LEFT_LENGTH: blockUtils.blockOfType('simple_jump_left_length'),
-  SIMPLE_JUMP_RIGHT_LENGTH: blockUtils.blockOfType('simple_jump_right_length'),
-  SIMPLE_MOVE_LENGTH_SHORT: blockUtils.blockOfType('simple_move_length_short'),
-  SIMPLE_MOVE_LENGTH_LONG: blockUtils.blockOfType('simple_move_length_long'),
+  SIMPLE_JUMP_UP_LONG: blockUtils.blockOfType('simple_jump_up_long'),
+  SIMPLE_JUMP_DOWN_LONG: blockUtils.blockOfType('simple_jump_down_long'),
+  SIMPLE_JUMP_LEFT_LONG: blockUtils.blockOfType('simple_jump_left_long'),
+  SIMPLE_JUMP_RIGHT_LONG: blockUtils.blockOfType('simple_jump_right_long'),
+  SIMPLE_JUMP_UP_SHORT: blockUtils.blockOfType('simple_jump_up_short'),
+  SIMPLE_JUMP_DOWN_SHORT: blockUtils.blockOfType('simple_jump_down_short'),
+  SIMPLE_JUMP_LEFT_SHORT: blockUtils.blockOfType('simple_jump_left_short'),
+  SIMPLE_JUMP_RIGHT_SHORT: blockUtils.blockOfType('simple_jump_right_short'),
   simpleMoveBlocks: function() {
     return this.SIMPLE_MOVE_UP +
       this.SIMPLE_MOVE_DOWN +
@@ -79,14 +81,14 @@ var blocks = {
       this.SIMPLE_MOVE_RIGHT_LENGTH;
   },
   simpleJumpLengthBlocks: function() {
-    return this.SIMPLE_JUMP_UP_LENGTH +
-      this.SIMPLE_JUMP_DOWN_LENGTH +
-      this.SIMPLE_JUMP_LEFT_LENGTH +
-      this.SIMPLE_JUMP_RIGHT_LENGTH;
-  },
-  simpleLengthBlocks: function() {
-    return this.SIMPLE_MOVE_LENGTH_SHORT +
-      this.SIMPLE_MOVE_LENGTH_LONG;
+    return this.SIMPLE_JUMP_UP_LONG +
+      this.SIMPLE_JUMP_UP_SHORT +
+      this.SIMPLE_JUMP_DOWN_LONG +
+      this.SIMPLE_JUMP_DOWN_SHORT +
+      this.SIMPLE_JUMP_LEFT_LONG +
+      this.SIMPLE_JUMP_LEFT_SHORT +
+      this.SIMPLE_JUMP_RIGHT_LONG +
+      this.SIMPLE_JUMP_RIGHT_SHORT;
   }
 };
 
@@ -837,7 +839,6 @@ module.exports = {
         blocks.simpleJumpBlocks() +
         blocks.simpleMoveLengthBlocks() +
         blocks.simpleJumpLengthBlocks() +
-        blocks.simpleLengthBlocks() +
         blockUtils.blockOfType('controls_repeat_simplified')
       ),
     startBlocks: '',
