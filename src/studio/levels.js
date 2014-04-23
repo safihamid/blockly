@@ -10,112 +10,56 @@ module.exports = {
 
   '1': {
     'requiredBlocks': [
-      [{'test': 'move', 'type': 'studio_move'}]
+      [{'test': 'saySprite', 'type': 'studio_saySprite'}]
     ],
     'scale': {
       'snapRadius': 2
     },
-    'softButtons': [
-      'leftButton'
-    ],
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 16,0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [8, 0, 0,16, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
+    'goal': {
+      successCondition: function () {
+        return (Studio.sayComplete > 0);
+      }
+    },
+    'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_move"></block>'),
+      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block> \
+          <block type="studio_saySprite"></block>'),
     'startBlocks':
-     '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block>'
+     '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
   },
   '2': {
-    'ideal': 4,
     'requiredBlocks': [
-      [{'test': 'move', 'type': 'studio_move'}],
+      [{'test': 'moveDistance', 'type': 'studio_moveDistance'}]
     ],
     'scale': {
       'snapRadius': 2
     },
-    'softButtons': [
-      'leftButton',
-      'rightButton'
-    ],
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,16, 0, 0, 1, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [8, 0, 0,16, 0, 0, 0, 8],
       [0, 0, 0, 0, 0, 0, 0, 0]
     ],
+    'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_move"></block>'),
+      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block> \
+          <block type="studio_saySprite"></block>'),
     'startBlocks':
-     '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
-      <block type="studio_whenRight" deletable="false" x="180" y="20"></block>'
-  },
-  '3': {
-    'requiredBlocks': [
-      [{'test': 'moveUp', 'type': 'studio_moveUp'}]
-    ],
-    'scale': {
-      'snapRadius': 2
-    },
-    'softButtons': [
-      'upButton'
-    ],
-    'map': [
-      [0, 0, 0, 8, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0,16, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
-    ],
-    'toolbox':
-      tb('<block type="studio_move"></block>'),
-    'startBlocks':
-     '<block type="studio_whenUp" deletable="false" x="20" y="20"></block>'
-  },
-  '4': {
-    'requiredBlocks': [
-      [{'test': 'move', 'type': 'studio_move'}],
-    ],
-    'scale': {
-      'snapRadius': 2
-    },
-    'softButtons': [
-      'leftButton',
-      'rightButton',
-      'downButton',
-      'upButton'
-    ],
-    'map': [
-      [0, 0, 8, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 8],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [8, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0,16, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 8, 0, 0]
-    ],
-    'toolbox':
-      tb('<block type="studio_move"></block>'),
-    'startBlocks':
-     '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
-      <block type="studio_whenRight" deletable="false" x="180" y="20"></block> \
-      <block type="studio_whenUp" deletable="false" x="20" y="120"></block> \
-      <block type="studio_whenDown" deletable="false" x="180" y="120"></block>'
+     '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
   },
   '99': {
     'requiredBlocks': [
@@ -131,7 +75,6 @@ module.exports = {
     ],
     'minWorkspaceHeight': 800,
     'freePlay': true,
-    'showScore': true,
     'map': [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
