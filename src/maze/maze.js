@@ -562,15 +562,15 @@ var removeDirt = function(row, col) {
  */
 var getPegmanYForRow = function (mazeRow) {
   var y = Maze.SQUARE_SIZE * (mazeRow + 0.5) - Maze.PEGMAN_HEIGHT / 2 +
-    Maze.PEGMAN_Y_OFFSET - 8;
-    return Math.floor(y);
+    Maze.PEGMAN_Y_OFFSET;
+  return Math.floor(y);
 };
 
 /**
  * Calculate the Y offset within the sheet
  */
 var getPegmanFrameOffsetY = function (animationRow) {
-  animationRow |= 0;
+  animationRow = animationRow || 0;
   return animationRow * Maze.PEGMAN_HEIGHT;
 };
 
@@ -631,7 +631,7 @@ var createPegmanAnimation = function(options) {
   * col required which column the pegman is at.
   * row required which row the pegman is at.
   * direction required which direction the pegman is facing at.
-  * rowIdx which column of the pegman the animation needs, default is 0.
+  * animationRow which row of the sprite sheet the pegman animation needs
   */
 var updatePegmanAnimation = function(options) {
   var rect = document.getElementById(options.idStr + 'PegmanClipRect');
@@ -641,7 +641,7 @@ var updatePegmanAnimation = function(options) {
   var x = Maze.SQUARE_SIZE * options.col -
       options.direction * Maze.PEGMAN_WIDTH + 1;
   img.setAttribute('x', x);
-  var y = getPegmanYForRow(options.row) - getPegmanFrameOffsetY(options.rowIdx);
+  var y = getPegmanYForRow(options.row) - getPegmanFrameOffsetY(options.animationRow);
   img.setAttribute('y', y);
   img.setAttribute('visibility', 'visible');
 };
@@ -1080,7 +1080,7 @@ Maze.schedule = function(startPos, endPos) {
         col: startPos[0] + deltaX * frameIdx,
         row: startPos[1] + deltaY * frameIdx,
         direction: direction,
-        rowIdx: frameIdx
+        animationRow: frameIdx
       });
     }, stepSpeed * 6 / numFrames * frameIdx);
   }
