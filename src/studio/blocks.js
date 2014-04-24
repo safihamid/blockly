@@ -11,6 +11,7 @@ var codegen = require('../codegen');
 var tiles = require('./tiles');
 
 var Direction = tiles.Direction;
+var Emotions = tiles.Emotions;
 
 var generateSetterCode = function (opts) {
   var value = opts.ctx.getTitleValue('VALUE');
@@ -462,7 +463,7 @@ exports.install = function(blockly, skin) {
     helpUrl: '',
     init: function() {
       var dropdown = new blockly.FieldDropdown(this.VALUES);
-      dropdown.setValue(this.VALUES[2][1]);  // default to green
+      dropdown.setValue(this.VALUES[2][1]);  // default to witch
 
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
@@ -495,6 +496,7 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.studio_setSprite.VALUES =
       [[msg.setSpriteHidden(), '"hidden"'],
        [msg.setSpriteRandom(), 'random'],
+       [msg.setSpriteWitch(), '"witch"'],
        [msg.setSpriteGreen(), '"green"'],
        [msg.setSpritePurple(), '"purple"'],
        [msg.setSpritePink(), '"pink"'],
@@ -503,6 +505,52 @@ exports.install = function(blockly, skin) {
   generator.studio_setSprite = function() {
     return generateSetterCode(
               {ctx: this, random: 2, index: 'SPRITE', name: 'setSprite'});
+  };
+
+  blockly.Blocks.studio_setSpriteEmotion = {
+    helpUrl: '',
+    init: function() {
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]);  // default to normal
+
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+
+      this.setHSV(312, 0.32, 0.62);
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.setSprite());
+      }
+      this.appendDummyInput()
+        .appendTitle(dropdown, 'VALUE');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setSpriteEmotionTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_setSpriteEmotion.SPRITE =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
+
+  blockly.Blocks.studio_setSpriteEmotion.VALUES =
+      [[msg.setSpriteEmotionRandom(), 'random'],
+       [msg.setSpriteEmotionNormal(), Emotions.NORMAL.toString()],
+       [msg.setSpriteEmotionHappy(), Emotions.HAPPY.toString()],
+       [msg.setSpriteEmotionAngry(), Emotions.ANGRY.toString()],
+       [msg.setSpriteEmotionSad(), Emotions.SAD.toString()]];
+
+  generator.studio_setSpriteEmotion = function() {
+    return generateSetterCode(
+              {ctx: this, index: 'SPRITE', name: 'setSpriteEmotion'});
   };
 
   blockly.Blocks.studio_saySprite = {

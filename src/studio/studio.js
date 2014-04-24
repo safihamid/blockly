@@ -21,6 +21,7 @@ var dom = require('../dom');
 
 var Direction = tiles.Direction;
 var SquareType = tiles.SquareType;
+var Emotions = tiles.Emotions;
 
 /**
  * Create a namespace for the application.
@@ -37,7 +38,19 @@ var ButtonState = {
 
 var SpriteFlags = {
   LOOPING_MOVE_X_PENDING: 1,
-  LOOPING_MOVE_Y_PENDING: 2
+  LOOPING_MOVE_Y_PENDING: 2,
+  EMOTIONS: 4,
+  ANIMATION: 8,
+  TURNS: 16,
+};
+
+var SF_SKINS_MASK =
+  SpriteFlags.EMOTIONS | SpriteFlags.ANIMATION | SpriteFlags.TURNS;
+
+var SpriteOffsets = {
+  EMOTIONS: 3,
+  ANIMATION: 1,
+  TURNS: 7,
 };
 
 var ArrowIds = {
@@ -163,13 +176,10 @@ var drawMap = function() {
       spriteClip.appendChild(spriteClipRect);
       svg.appendChild(spriteClip);
       
-      // Add sprite.
+      // Add sprite (not setting href attribute or width until displaySprite).
       var spriteIcon = document.createElementNS(Blockly.SVG_NS, 'image');
       spriteIcon.setAttribute('id', 'sprite' + i);
-      spriteIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.sprite);
       spriteIcon.setAttribute('height', Studio.SPRITE_HEIGHT);
-      spriteIcon.setAttribute('width', Studio.SPRITE_WIDTH);
       spriteIcon.setAttribute('clip-path', 'url(#spriteClipPath' + i + ')');
       svg.appendChild(spriteIcon);
       
@@ -660,7 +670,7 @@ BlocklyApps.reset = function(first) {
   Studio.sayComplete = 0;
   Studio.loopingPendingSayCmds = 0;
 
-  var spriteStartingSkins = [ "green", "purple", "pink", "orange" ];
+  var spriteStartingSkins = [ "witch", "green", "purple", "pink", "orange" ];
   var numStartingSkins = spriteStartingSkins.length;
   var skinBias = Studio.spriteStartingImage || 0;
 
@@ -675,6 +685,7 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].queuedY = 0;
     Studio.sprite[i].queuedYContext = -1;
     Studio.sprite[i].flags = 0;
+    Studio.sprite[i].emotion = Emotions.NORMAL;
     Studio.sprite[i].xMoveQueue = [];
     Studio.sprite[i].yMoveQueue = [];
     
@@ -981,12 +992,45 @@ Studio.onPuzzleComplete = function() {
                      });
 };
 
+var spriteFrameNumber = function (index) {
+  var showThisAnimFrame = 0;
+  if ((Studio.sprite[index].flags & SpriteFlags.ANIMATION) &&
+      Studio.tickCount &&
+      Math.round(Studio.tickCount / 20) % 2) {
+    // BUGBUG: +2 is temporary until we get a new PNG
+    showThisAnimFrame = (Studio.sprite[index].flags & SpriteFlags.EMOTIONS) ?
+                         SpriteOffsets.EMOTIONS + 2 : 0;
+  }
+  if (Studio.sprite[index].emotion !== Emotions.NORMAL &&
+      Studio.sprite[index].flags & SpriteFlags.EMOTIONS) {
+    return showThisAnimFrame ? showThisAnimFrame : Studio.sprite[index].emotion;
+  }
+  return showThisAnimFrame;
+};
+
+var spriteTotalFrames = function (index) {
+  var frames = 1;
+  if (Studio.sprite[index].flags & SpriteFlags.EMOTIONS) {
+    frames += SpriteOffsets.EMOTIONS;
+  }
+  if (Studio.sprite[index].flags & SpriteFlags.ANIMATION) {
+    frames += SpriteOffsets.ANIMATION;
+  }
+  if (Studio.sprite[index].flags & SpriteFlags.TURNS) {
+    frames += SpriteOffsets.TURNS;
+  }
+  return frames;
+};
+
 Studio.displaySprite = function(i) {
   var xCoord = Studio.sprite[i].x * Studio.SQUARE_SIZE;
   var yCoord = Studio.sprite[i].y * Studio.SQUARE_SIZE + Studio.SPRITE_Y_OFFSET;
+  
+  // BUGBUG: -2 is temporary until we get a fixed bitmap
+  var xOffset = (Studio.SPRITE_WIDTH - 2.083333) * spriteFrameNumber(i);
 
   var spriteIcon = document.getElementById('sprite' + i);
-  spriteIcon.setAttribute('x', xCoord);
+  spriteIcon.setAttribute('x', xCoord - xOffset);
   spriteIcon.setAttribute('y', yCoord);
   
   var spriteClipRect = document.getElementById('spriteClipRect' + i);
@@ -1008,7 +1052,7 @@ Studio.displayScore = function() {
 };
 
 var skinTheme = function (value) {
-  if (value === 'green') {
+  if (value === 'witch') {
     return skin;
   }
   return skin[value];
@@ -1021,13 +1065,21 @@ Studio.setBackground = function (value) {
 };
 
 Studio.setSprite = function (index, value) {
+  // Inherit some flags from the skin:
+  Studio.sprite[index].flags &= ~SF_SKINS_MASK;
+  Studio.sprite[index].flags |= skinTheme(value).spriteFlags;
+  
   var element = document.getElementById('sprite' + index);
   element.setAttribute('visibility',
                        (value === 'hidden') ? 'hidden' : 'visible');
   if (value != 'hidden') {
     element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                            skinTheme(value).sprite);
- }
+    element.setAttribute('width',
+                         (Studio.SPRITE_WIDTH - 2.083333) * spriteTotalFrames(index));
+    // call display right away since the frame number may have changed:
+    Studio.displaySprite(index);
+  }
 };
 
 Studio.hideSpeechBubble = function (sayCmd) {

@@ -12,6 +12,13 @@ exports.Direction = {
   WEST: 3
 };
 
+exports.Emotions = {
+  NORMAL: 0,
+  HAPPY: 1,
+  ANGRY: 2,
+  SAD: 3,
+};
+
 exports.FINISH_COLLIDE_DISTANCE = 1.5;
 exports.SPRITE_COLLIDE_DISTANCE = 1.5;
 exports.DEFAULT_SPRITE_SPEED = 0.1;
