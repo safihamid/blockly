@@ -13,7 +13,7 @@ exports.displayFeedback = function(options) {
   var displayShowCode = BlocklyApps.enableShowCode && canContinue;
   var feedback = document.createElement('div');
   var feedbackMessage = getFeedbackMessage(options);
-  var sharingDiv = canContinue ? exports.createSharingDiv(options) : null;
+  var sharingDiv = (canContinue && showingSharing) ? exports.createSharingDiv(options) : null;
   var showCode = displayShowCode ? getShowCodeElement(options) : null;
   var feedbackBlocks = new FeedbackBlocks(options);
 
@@ -299,10 +299,9 @@ var isFeedbackMessageCustomized = function(options) {
 };
 
 exports.createSharingDiv = function(options) {
-  // Create the sharing div only when showingSharing is set and the solution is
-  // a passing solution.
-  if (!options.showingSharing ||
-      !options.response.level_source) {
+  if (!options.response || !options.response.level_source) {
+    // don't even try if our caller didn't give us something that can be shared
+    // options.response.level_source is the url that we are sharing
     return null;
   } 
 

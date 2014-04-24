@@ -123,7 +123,6 @@ BlocklyApps.init = function(config) {
       openWorkspace.appendChild(document.createTextNode(msg.openWorkspace()));
 
       belowViz.appendChild(feedback.createSharingDiv({
-				showingSharing: true,
         response: {
           level_source: window.location
         },
