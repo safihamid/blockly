@@ -302,11 +302,11 @@ exports.createSharingDiv = function(options) {
   // Create the sharing div only when showingSharing is set and the solution is
   // a passing solution.
   if (!options.showingSharing ||
-			!options.response.level_source) {
+      !options.response.level_source) {
     return null;
   } 
 
-	// set up the twitter share url
+  // set up the twitter share url
   var twitterUrl = "https://twitter.com/intent/tweet?url=" +
                    options.response.level_source;
 
@@ -316,23 +316,23 @@ exports.createSharingDiv = function(options) {
   if (options.twitter  && options.twitter.hashtag !== undefined) {
     twitterUrl += "&button_hashtag=" + options.twitter.hashtag;
   }
-	options.twitterUrl = twitterUrl;
+  options.twitterUrl = twitterUrl;
 
-	// set up the facebook share url
+  // set up the facebook share url
   var facebookUrl = "https://www.facebook.com/sharer/sharer.php?u=" +
                     options.response.level_source;
-	options.facebookUrl = facebookUrl;
+  options.facebookUrl = facebookUrl;
 
-	// use a generic image for the level if a feedback image has not been supplied.
-	if (options.level && options.level.instructionImageUrl && !options.feedbackImage) {
-		options.feedbackImage = options.level.instructionImageUrl;
-	}
+  // use a generic image for the level if a feedback image has not been supplied.
+  if (options.level && options.level.instructionImageUrl && !options.feedbackImage) {
+    options.feedbackImage = options.level.instructionImageUrl;
+  }
 
   var sharingDiv = document.createElement('div');
   sharingDiv.setAttribute('style', 'display:inline-block');
   sharingDiv.innerHTML = require('./templates/sharing.html')({
     options: options
-	});
+  });
 
   var sharingInput = sharingDiv.querySelector('#sharing-input');
   if (sharingInput) {
@@ -342,7 +342,7 @@ exports.createSharingDiv = function(options) {
     });
   }
 
-	return sharingDiv;
+  return sharingDiv;
 };
 
 
