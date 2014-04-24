@@ -1,0 +1,45 @@
+<% var msg = require('../../locale/current/common'); %>
+<% if (options.feedbackImage) { %>
+  <div class="sharing-image">
+    <img class="feedback-image" src="<%= options.feedbackImage %>">
+  </div>
+<% } %>
+
+<div class="sharing">
+<% if (options.alreadySaved) { %>
+  <div class="saved-to-gallery">
+    <%= msg.savedToGallery() %>
+  </div>
+<% } else if (options.saveToGalleryUrl) { %>
+  <div class="social-buttons">
+  <button id="save-to-gallery-button" class="launch">
+    <%= msg.saveToGallery() %>
+  </button>
+  </div>
+<% } %>
+
+<% if (options.response && options.response.level_source) { %>
+  <% if (options.appStrings && options.appStrings.sharingText) { %>
+    <div><%= options.appStrings.sharingText %></div>
+  <% } %>
+
+  <div>
+    <input type="text" id="sharing-input" value=<%= options.response.level_source %> readonly>
+  </div>
+
+  <div class='social-buttons'>
+    <% if (options.facebookUrl) { -%>
+      <a href=<%= options.facebookUrl %> target="_blank">
+        <img src=<%= BlocklyApps.assetUrl("media/facebook_purple.png") %>>
+      </a>
+    <% } -%>
+  
+    <% if (options.twitterUrl) { -%>
+      <a href=<%= options.twitterUrl %> target="_blank">
+        <img src=<%= BlocklyApps.assetUrl("media/twitter_purple.png") %> >
+      </a>
+    <% } -%>
+  </div>
+<% } %>
+</div>
+
