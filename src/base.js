@@ -562,15 +562,15 @@ BlocklyApps.resizeHeaders = function() {
  * Highlight the block (or clear highlighting).
  * @param {?string} id ID of block that triggered this action.
  */
-BlocklyApps.highlight = function(id) {
+BlocklyApps.highlight = function(id, spotlight) {
   if (id) {
     var m = id.match(/^block_id_(\d+)$/);
     if (m) {
       id = m[1];
     }
   }
-  // todo (brent): only spotlight if we're in step mode
-  Blockly.mainWorkspace.highlightBlock(id, true);
+
+  Blockly.mainWorkspace.highlightBlock(id, spotlight);
 };
 
 /**

@@ -52,6 +52,12 @@ var skin;
  */
 var stepSpeed;
 
+/**
+ * Actions in BlocklyApps.log are a tupple in the form [command, block_id]
+ */
+var ACTION_COMMAND = 0;
+var ACTION_BLOCK_ID = 1;
+
 //TODO: Make configurable.
 BlocklyApps.CHECK_FOR_EMPTY_BLOCKS = true;
 
@@ -487,7 +493,11 @@ Maze.init = function(config) {
     drawMap();
 
     var stepButton = document.getElementById('stepButton');
-    dom.addClickTouchEvent(stepButton, BlocklyApps.runButtonClick);
+    dom.addClickTouchEvent(stepButton, stepButtonClick);
+
+    // base also calls BlocklyApps.resetButtonClick
+    var resetButton = document.getElementById('resetButton');
+    dom.addClickTouchEvent(resetButton, Maze.resetButtonClick);
   };
 
   config.getDisplayWidth = function() {
@@ -497,6 +507,19 @@ Maze.init = function(config) {
 
   BlocklyApps.init(config);
 };
+
+/**
+ * Handle a click on the step button.  If we're already animating, we should
+ * perform a single step.  Otherwise, we call beginAttempt which will do
+ * some initial setup, and then perform the first step.
+ */
+function stepButtonClick() {
+  if (Maze.animating_) {
+    Maze.performStep(true);
+  } else {
+    Maze.beginAttempt(true);
+  }
+}
 
 var dirtPositionToIndex = function(row, col) {
   return Maze.COLS * row + col;
@@ -666,6 +689,8 @@ BlocklyApps.reset = function(first) {
   // Kill all tasks.
   timeoutList.clearTimeouts();
 
+  Maze.animating_ = false;
+
   // Move Pegman into position.
   Maze.pegmanX = Maze.start_.x;
   Maze.pegmanY = Maze.start_.y;
@@ -686,9 +711,9 @@ BlocklyApps.reset = function(first) {
     // Move the finish icon into position.
     var finishIcon = document.getElementById('finish');
     finishIcon.setAttribute('x', Maze.SQUARE_SIZE * (Maze.finish_.x + 0.5) -
-        finishIcon.getAttribute('width') / 2);
+      finishIcon.getAttribute('width') / 2);
     finishIcon.setAttribute('y', Maze.SQUARE_SIZE * (Maze.finish_.y + 0.9) -
-        finishIcon.getAttribute('height'));
+      finishIcon.getAttribute('height'));
     finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                               skin.goal);
   }
@@ -773,6 +798,10 @@ BlocklyApps.reset = function(first) {
  */
 // XXX This is the only method used by the templates!
 BlocklyApps.runButtonClick = function() {
+  Maze.beginAttempt(false);
+};
+
+Maze.beginAttempt = function (stepMode) {
   // Only allow a single top block on some levels.
   if (level.singleTopBlock &&
       Blockly.mainWorkspace.getTopBlocks().length > 1) {
@@ -781,16 +810,23 @@ BlocklyApps.runButtonClick = function() {
   }
   var runButton = document.getElementById('runButton');
   var resetButton = document.getElementById('resetButton');
+  var stepButton = document.getElementById('stepButton');
   // Ensure that Reset button is at least as wide as Run button.
   if (!resetButton.style.minWidth) {
     resetButton.style.minWidth = runButton.offsetWidth + 'px';
   }
   runButton.style.display = 'none';
   resetButton.style.display = 'inline';
+  stepButton.style.display = stepMode ? 'inline' : 'none';
   Blockly.mainWorkspace.traceOn(true);
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
-  Maze.execute();
+  Maze.execute(stepMode);
+}
+
+Maze.resetButtonClick = function () {
+  var stepButton = document.getElementById('stepButton');
+  stepButton.style.display = level.step ? 'inline' : 'none';
 };
 
 /**
@@ -837,7 +873,7 @@ Maze.onReportComplete = function(response) {
 /**
  * Execute the user's code.  Heaven help us...
  */
-Maze.execute = function() {
+Maze.execute = function(stepMode) {
   BlocklyApps.log = [];
   BlocklyApps.ticks = 100; //TODO: Set higher for some levels
   var code = Blockly.Generator.workspaceToCode('JavaScript');
@@ -930,7 +966,6 @@ Maze.execute = function() {
   var textBlocks = Blockly.Xml.domToText(xml);
 
   Maze.waitingForReport = true;
-  Maze.animating_ = true;
 
   // Report result to server.
   BlocklyApps.report({
@@ -945,7 +980,7 @@ Maze.execute = function() {
   // BlocklyApps.log now contains a transcript of all the user's actions.
   // Reset the maze and animate the transcript.
   BlocklyApps.reset(false);
-
+  Maze.animating_ = true;
 
   // Removing the idle animation and replace with pegman sprite
   if (skin.idlePegmanAnimation) {
@@ -956,17 +991,24 @@ Maze.execute = function() {
   }
 
   // Speeding up specific levels
-  var scaledStepSpeed =
-      stepSpeed * Maze.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  timeoutList.setTimeout(Maze.animate, scaledStepSpeed);
+  var scaledStepSpeed = stepSpeed * Maze.scale.stepSpeed *
+    skin.movePegmanAnimationSpeedScale;
+
+  timeoutList.setTimeout(function () {
+    Maze.performStep(stepMode);
+  }, scaledStepSpeed);
 };
 
 /**
  * Iterate through the recorded path and animate pegman's actions.
  */
-Maze.animate = function() {
+Maze.performStep = function(stepMode) {
   // All tasks should be complete now.  Clean up the PID list.
   timeoutList.clearTimeouts();
+
+  // set this on every step, as clicking elsewhere in the workspace while
+  // running/stepping will turn it off
+  Blockly.mainWorkspace.traceOn(true);
 
   var action = BlocklyApps.log.shift();
   if (!action) {
@@ -977,21 +1019,34 @@ Maze.animate = function() {
     return;
   }
 
-  animateAction(action);
+  animateAction(action, stepMode);
 
-  // Speeding up specific levels
-  var scaledStepSpeed =
-      stepSpeed * Maze.scale.stepSpeed * skin.movePegmanAnimationSpeedScale;
-  timeoutList.setTimeout(Maze.animate, scaledStepSpeed);
+  var nextStep = !stepMode;
+  if (stepMode) {
+    // If we've run out of steps, finish things up
+    if (BlocklyApps.log.length === 0 || BlocklyApps.log.length === 1 &&
+      BlocklyApps.log[0][ACTION_COMMAND] === "finish") {
+      nextStep = true;
+    }
+  }
+
+  if (nextStep) {
+    // Speeding up specific levels
+    var scaledStepSpeed = stepSpeed * Maze.scale.stepSpeed *
+      skin.movePegmanAnimationSpeedScale;
+    timeoutList.setTimeout(function () {
+      Maze.performStep(false);
+    }, scaledStepSpeed);
+  }
 };
 
 /**
  * Animates a single action
  */
-function animateAction (action) {
-  BlocklyApps.highlight(action[1]);
+function animateAction (action, stepMode) {
+  BlocklyApps.highlight(action[ACTION_BLOCK_ID], stepMode);
 
-  switch (action[0]) {
+  switch (action[ACTION_COMMAND]) {
     case 'north':
       Maze.animatedMove(Direction.NORTH);
       break;
