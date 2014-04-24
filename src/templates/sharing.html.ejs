@@ -27,18 +27,18 @@
     <input type="text" id="sharing-input" value=<%= options.response.level_source %> readonly>
   </div>
 
-	<div class='social-buttons'>
-		<% if (options.facebookUrl) { -%>
+  <div class='social-buttons'>
+    <% if (options.facebookUrl) { -%>
       <a href=<%= options.facebookUrl %> target="_blank">
-				<img src=<%= BlocklyApps.assetUrl("media/facebook_purple.png") %>>
-			</a>
-  	<% } -%>
-	
-		<% if (options.twitterUrl) { -%>
+        <img src=<%= BlocklyApps.assetUrl("media/facebook_purple.png") %>>
+      </a>
+    <% } -%>
+  
+    <% if (options.twitterUrl) { -%>
       <a href=<%= options.twitterUrl %> target="_blank">
-				<img src=<%= BlocklyApps.assetUrl("media/twitter_purple.png") %> >
-		  </a>
-		<% } -%>
+        <img src=<%= BlocklyApps.assetUrl("media/twitter_purple.png") %> >
+      </a>
+    <% } -%>
   </div>
 <% } %>
 </div>
