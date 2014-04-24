@@ -668,7 +668,6 @@ BlocklyApps.reset = function(first) {
       Maze.scheduleTurn(Maze.startDirection);
     }, stepSpeed * 5);
   } else {
-    Maze.pegmanD = Maze.startDirection;
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, tiles.directionToFrame(Maze.pegmanD));
   }
 
