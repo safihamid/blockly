@@ -573,11 +573,16 @@ $modal-image-margin-gap: 10px;
 }
 
 .sharing {
+  margin-top: 15px;
   font-size: 20px;
   color: $charcoal;
 
   div {
-    margin: 10px 0;
+    margin: 15px 0;
+  }
+  
+  .saved-to-gallery {
+    color: $purple;
   }
   .social-buttons {
     a:hover {
@@ -586,5 +591,6 @@ $modal-image-margin-gap: 10px;
   }
   #sharing-input {
     cursor: copy;
+    margin: 0;
   }
 }
