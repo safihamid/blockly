@@ -660,13 +660,12 @@ BlocklyApps.reset = function(first) {
   Maze.pegmanX = Maze.start_.x;
   Maze.pegmanY = Maze.start_.y;
 
+  Maze.pegmanD = Maze.startDirection;
   if (first) {
-    Maze.pegmanD = Maze.startDirection + TurnDirection.RIGHT;
     Maze.scheduleFinish(false);
     timeoutList.setTimeout(function() {
       stepSpeed = 100;
       Maze.scheduleTurn(Maze.startDirection);
-      Maze.pegmanD = Maze.pegmanD + TurnDirection.RIGHT;
     }, stepSpeed * 5);
   } else {
     Maze.pegmanD = Maze.startDirection;
