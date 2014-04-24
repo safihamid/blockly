@@ -38,3 +38,14 @@ exports.escapeHtml = function(unsafe) {
 exports.mod = function(number, mod) {
   return ((number % mod) + mod) % mod;
 };
+
+/**
+ * Generates an array of integers from start to end inclusive
+ */
+exports.range = function(start, end) {
+  var ints = [];
+  for (var i = start; i <= end; i++) {
+    ints.push(i);
+  }
+  return ints;
+};
