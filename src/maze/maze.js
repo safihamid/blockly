@@ -827,6 +827,15 @@ Maze.beginAttempt = function (stepMode) {
 Maze.resetButtonClick = function () {
   var stepButton = document.getElementById('stepButton');
   stepButton.style.display = level.step ? 'inline' : 'none';
+
+  if (Maze.cachedBlockState) {
+    Maze.cachedBlockState.forEach(function (cached) {
+      cached.block.setMovable(cached.movable);
+      cached.block.setDeletable(cached.deletable);
+      cached.block.setEditable(cached.editable);
+    });
+    Maze.animating_State = [];
+  }
 };
 
 /**
@@ -981,6 +990,22 @@ Maze.execute = function(stepMode) {
   // Reset the maze and animate the transcript.
   BlocklyApps.reset(false);
   Maze.animating_ = true;
+
+  Maze.cachedBlockState = [];
+  if (stepMode) {
+    // Disable all blocks, caching their state first
+    Blockly.mainWorkspace.getAllBlocks().forEach(function (block) {
+      Maze.cachedBlockState.push({
+        block: block,
+        movable: block.isMovable(),
+        deletable: block.isDeletable(),
+        editable: block.isEditable()
+      });
+      block.setMovable(false);
+      block.setDeletable(true);
+      block.setEditable(false);
+    });
+  }
 
   // Removing the idle animation and replace with pegman sprite
   if (skin.idlePegmanAnimation) {
