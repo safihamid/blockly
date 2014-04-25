@@ -39,8 +39,6 @@ exports.setBackground = function (id, value) {
 exports.setSpriteEmotion = function (id, spriteIndex, value) {
   BlocklyApps.highlight(id);
   Studio.sprite[spriteIndex].emotion = value;
-  // call display right away since the frame number may have changed:
-  Studio.displaySprite(spriteIndex);
 };
 
 exports.setSpriteSpeed = function (id, spriteIndex, value) {
