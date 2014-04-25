@@ -516,7 +516,7 @@ exports.install = function(blockly, skin) {
       var dropdownArray =
           this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
 
-      this.setHSV(312, 0.32, 0.62);
+      this.setHSV(184, 1.00, 0.74);
       if (blockly.Blocks.studio_spriteCount > 1) {
         this.appendDummyInput()
           .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');

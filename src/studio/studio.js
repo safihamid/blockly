@@ -20,6 +20,7 @@ var feedback = require('../feedback.js');
 var dom = require('../dom');
 
 var Direction = tiles.Direction;
+var NextTurn = tiles.NextTurn;
 var SquareType = tiles.SquareType;
 var Emotions = tiles.Emotions;
 
@@ -685,6 +686,8 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].queuedY = 0;
     Studio.sprite[i].queuedYContext = -1;
     Studio.sprite[i].flags = 0;
+    Studio.sprite[i].dir = 0;
+    Studio.sprite[i].displayDir = Direction.SOUTH;
     Studio.sprite[i].emotion = Emotions.NORMAL;
     Studio.sprite[i].xMoveQueue = [];
     Studio.sprite[i].yMoveQueue = [];
@@ -993,17 +996,51 @@ Studio.onPuzzleComplete = function() {
 };
 
 var spriteFrameNumber = function (index) {
+  var sprite = Studio.sprite[index];
   var showThisAnimFrame = 0;
-  if ((Studio.sprite[index].flags & SpriteFlags.ANIMATION) &&
+  if ((sprite.flags & SpriteFlags.TURNS) &&
+      (sprite.displayDir !== Direction.SOUTH)) {
+    var frameOffset = 1;
+    frameOffset += (sprite.flags & SpriteFlags.EMOTIONS) ?
+                    SpriteOffsets.EMOTIONS : 0;
+    // BUGBUG: +1's are temporary until we get a new PNG
+    frameOffset += (sprite.flags & SpriteFlags.ANIMATION) ?
+                    SpriteOffsets.ANIMATION + 1 : 0;
+    frameOffset += 1;
+    
+    var frameDirection;
+    switch (sprite.displayDir) {
+      case Direction.NORTH:
+      case Direction.NORTHEAST:
+      case Direction.NORTHWEST:
+        // BUGBUG: need new frames once we get a new PNG
+        frameDirection = 2;
+        break;
+      case Direction.EAST:
+        frameDirection = 0;
+        break;
+      case Direction.WEST:
+        frameDirection = 1;
+        break;
+      case Direction.SOUTHEAST:
+        frameDirection = 3;
+        break;
+      case Direction.SOUTHWEST:
+        frameDirection = 4;
+        break;
+    }
+    return frameOffset + frameDirection;
+  }
+  if ((sprite.flags & SpriteFlags.ANIMATION) &&
       Studio.tickCount &&
       Math.round(Studio.tickCount / 20) % 2) {
     // BUGBUG: +2 is temporary until we get a new PNG
-    showThisAnimFrame = (Studio.sprite[index].flags & SpriteFlags.EMOTIONS) ?
+    showThisAnimFrame = (sprite.flags & SpriteFlags.EMOTIONS) ?
                          SpriteOffsets.EMOTIONS + 2 : 0;
   }
-  if (Studio.sprite[index].emotion !== Emotions.NORMAL &&
-      Studio.sprite[index].flags & SpriteFlags.EMOTIONS) {
-    return showThisAnimFrame ? showThisAnimFrame : Studio.sprite[index].emotion;
+  if (sprite.emotion !== Emotions.NORMAL &&
+      sprite.flags & SpriteFlags.EMOTIONS) {
+    return showThisAnimFrame ? showThisAnimFrame : sprite.emotion;
   }
   return showThisAnimFrame;
 };
@@ -1030,10 +1067,42 @@ Studio.displaySprite = function(i) {
   var xOffset = (Studio.SPRITE_WIDTH - 2.083333) * spriteFrameNumber(i);
 
   var spriteIcon = document.getElementById('sprite' + i);
+  var spriteClipRect = document.getElementById('spriteClipRect' + i);
+
+  var xCoordPrev = spriteClipRect.getAttribute('x');
+  var yCoordPrev = spriteClipRect.getAttribute('y');
+  
+  var dirPrev = Studio.sprite[i].dir;
+  if (dirPrev === 0) {
+    // direction not yet set, start at SOUTH (forward facing)
+    Studio.sprite[i].dir = Direction.SOUTH;
+  }
+  else if ((xCoord != xCoordPrev) || (yCoord != yCoordPrev)) {
+    Studio.sprite[i].dir = 0;
+    if (xCoord < xCoordPrev) {
+      Studio.sprite[i].dir |= Direction.WEST;
+    } else if (xCoord > xCoordPrev) {
+      Studio.sprite[i].dir |= Direction.EAST;
+    }
+    if (yCoord < yCoordPrev) {
+      Studio.sprite[i].dir |= Direction.NORTH;
+    } else if (yCoord > yCoordPrev) {
+      Studio.sprite[i].dir |= Direction.SOUTH;
+    }
+  }
+  
+  if (Studio.sprite[i].dir !== Studio.sprite[i].displayDir) {
+    // Every other frame, assign a new displayDir from state table
+    // (only one turn at a time):
+    if (Studio.tickCount && (0 === Studio.tickCount % 2)) {
+      Studio.sprite[i].displayDir =
+          NextTurn[Studio.sprite[i].displayDir][Studio.sprite[i].dir];
+    }
+  }
+  
   spriteIcon.setAttribute('x', xCoord - xOffset);
   spriteIcon.setAttribute('y', yCoord);
   
-  var spriteClipRect = document.getElementById('spriteClipRect' + i);
   spriteClipRect.setAttribute('x', xCoord);
   spriteClipRect.setAttribute('y', yCoord);
 
@@ -1067,12 +1136,13 @@ Studio.setBackground = function (value) {
 Studio.setSprite = function (index, value) {
   // Inherit some flags from the skin:
   Studio.sprite[index].flags &= ~SF_SKINS_MASK;
-  Studio.sprite[index].flags |= skinTheme(value).spriteFlags;
+  Studio.sprite[index].flags |= (value !== 'hidden') ?
+                                  skinTheme(value).spriteFlags : 0;
   
   var element = document.getElementById('sprite' + index);
   element.setAttribute('visibility',
                        (value === 'hidden') ? 'hidden' : 'visible');
-  if (value != 'hidden') {
+  if (value !== 'hidden') {
     element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
                            skinTheme(value).sprite);
     element.setAttribute('width',

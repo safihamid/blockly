@@ -34,7 +34,7 @@ module.exports = {
     },
     'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+      tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
          blockOfType('studio_saySprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
@@ -58,7 +58,7 @@ module.exports = {
     ],
     'timeoutFailureTick': 100,
     'toolbox':
-      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+      tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
          blockOfType('studio_saySprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
@@ -89,7 +89,7 @@ module.exports = {
     },
     'timeoutFailureTick': 200,
     'toolbox':
-      tb('<block type="studio_moveDistance"><title name="DIR">1</title></block>' +
+      tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
          blockOfType('studio_saySprite')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
@@ -184,19 +184,19 @@ module.exports = {
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"> \
         <next><block type="studio_move"> \
-                <title name="DIR">3</title></block> \
+                <title name="DIR">8</title></block> \
         </next></block> \
       <block type="studio_whenRight" deletable="false" x="20" y="100"> \
         <next><block type="studio_move"> \
-                <title name="DIR">1</title></block> \
+                <title name="DIR">2</title></block> \
         </next></block> \
       <block type="studio_whenUp" deletable="false" x="20" y="180"> \
         <next><block type="studio_move"> \
-                <title name="DIR">0</title></block> \
+                <title name="DIR">1</title></block> \
         </next></block> \
       <block type="studio_whenDown" deletable="false" x="20" y="260"> \
         <next><block type="studio_move"> \
-                <title name="DIR">2</title></block> \
+                <title name="DIR">4</title></block> \
         </next></block> \
       <block type="studio_whenGameIsRunning" deletable="false" x="20" y="340"> \
         <next><block type="studio_moveDistance"> \
@@ -205,7 +205,7 @@ module.exports = {
           <next><block type="studio_moveDistance"> \
                   <title name="SPRITE">1</title> \
                   <title name="DISTANCE">400</title> \
-                  <title name="DIR">2</title></block> \
+                  <title name="DIR">4</title></block> \
           </next></block> \
       </next></block> \
       <block type="studio_whenSpriteCollided" deletable="false" x="20" y="440"></block>'
