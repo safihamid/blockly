@@ -696,6 +696,7 @@ BlocklyApps.reset = function(first) {
   Maze.pegmanY = Maze.start_.y;
 
   Maze.pegmanD = Maze.startDirection;
+  if (first) {
     Maze.scheduleDance(false);
     timeoutList.setTimeout(function() {
       stepSpeed = 100;
