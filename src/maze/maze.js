@@ -53,7 +53,7 @@ var skin;
 var stepSpeed;
 
 /**
- * Actions in BlocklyApps.log are a tupple in the form [command, block_id]
+ * Actions in BlocklyApps.log are a tuple in the form [command, block_id]
  */
 var ACTION_COMMAND = 0;
 var ACTION_BLOCK_ID = 1;
@@ -836,7 +836,7 @@ Maze.resetButtonClick = function () {
       cached.block.setDeletable(cached.deletable);
       cached.block.setEditable(cached.editable);
     });
-    Maze.animating_State = [];
+    Maze.cachedBlockState = [];
   }
 };
 
@@ -1039,7 +1039,7 @@ Maze.performStep = function(stepMode) {
 
   var action = BlocklyApps.log.shift();
   if (!action) {
-    BlocklyApps.highlight(null);
+    BlocklyApps.clearHighlighting();
     Maze.animating_ = false;
     window.setTimeout(displayFeedback(),
       Maze.result === ResultType.TIMEOUT ? 0 : 1000);

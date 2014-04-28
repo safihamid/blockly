@@ -602,7 +602,7 @@ var getMissingRequiredBlocks = function () {
             break;
           }
         } else {
-          throw new Erorr('Bad test: ' + test);
+          throw new Error('Bad test: ' + test);
         }
       }
       if (!usedRequiredBlock) {
