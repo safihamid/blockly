@@ -265,7 +265,7 @@ var performQueuedMoves = function(i)
       var newQX = Studio.sprite[i].queuedX - (nextX - Studio.sprite[i].x);
       Studio.sprite[i].queuedX = newQX;
       // for very small numbers, reset to integer zero
-      if ("0.00" === newQX.toFixed(2)) {
+      if ("0.00" === Math.abs(newQX).toFixed(2)) {
         Studio.sprite[i].queuedX = 0;
       }
     }
@@ -299,7 +299,7 @@ var performQueuedMoves = function(i)
       var newQY = Studio.sprite[i].queuedY - (nextY - Studio.sprite[i].y);
       Studio.sprite[i].queuedY = newQY;
       // for very small numbers, reset to integer zero
-      if ("0.00" === newQY.toFixed(2)) {
+      if ("0.00" === Math.abs(newQY).toFixed(2)) {
         Studio.sprite[i].queuedY = 0;
       }
     }

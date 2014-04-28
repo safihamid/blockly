@@ -1,9 +1,11 @@
 /*jshint multistr: true */
 
+var msg = require('../../locale/current/studio');
 var blockUtils = require('../block_utils');
 var Direction = require('./tiles').Direction;
 var tb = blockUtils.createToolbox;
 var blockOfType = blockUtils.blockOfType;
+var createCategory = blockUtils.createCategory;
 
 /*
  * Configuration for all levels.
@@ -247,6 +249,64 @@ module.exports = {
          blockOfType('studio_setSpriteEmotion') +
          blockOfType('studio_setBackground') +
          blockOfType('studio_setSprite')),
+    'startBlocks':
+     '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
+      <block type="studio_whenLeft" deletable="false" x="20" y="120"></block> \
+      <block type="studio_whenRight" deletable="false" x="20" y="200"></block> \
+      <block type="studio_whenUp" deletable="false" x="20" y="280"></block> \
+      <block type="studio_whenDown" deletable="false" x="20" y="360"></block>'
+  },
+  '100': {
+    'requiredBlocks': [
+    ],
+    'scale': {
+      'snapRadius': 2
+    },
+    'softButtons': [
+      'leftButton',
+      'rightButton',
+      'downButton',
+      'upButton'
+    ],
+    'minWorkspaceHeight': 800,
+    'freePlay': true,
+    'map': [
+      [0,16, 0, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0,16, 0, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0,16, 0, 0, 0,16, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    'toolbox':
+      tb(createCategory(msg.catActions(),
+                          blockOfType('studio_move') +
+                          blockOfType('studio_moveDistance') +
+                          blockOfType('studio_playSound') +
+                          blockOfType('studio_incrementScore') +
+                          blockOfType('studio_saySprite') +
+                          blockOfType('studio_setSpriteSpeed') +
+                          blockOfType('studio_setSpriteEmotion') +
+                          blockOfType('studio_setBackground') +
+                          blockOfType('studio_setSprite')) +
+         createCategory(msg.catEvents(),
+                          blockOfType('studio_whenSpriteClicked') +
+                          blockOfType('studio_whenSpriteCollided') +
+                          blockOfType('studio_whenGameIsRunning')) +
+         createCategory(msg.catControl(),
+                          blockOfType('controls_repeat')) +
+         createCategory(msg.catLogic(),
+                          blockOfType('controls_if') +
+                          blockOfType('logic_compare') +
+                          blockOfType('logic_operation') +
+                          blockOfType('logic_negate') +
+                          blockOfType('logic_boolean')) +
+         createCategory(msg.catMath(),
+                          blockOfType('math_number') +
+                          blockOfType('math_arithmetic')) +
+         createCategory(msg.catVariables(), '', 'VARIABLE')),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenLeft" deletable="false" x="20" y="120"></block> \
