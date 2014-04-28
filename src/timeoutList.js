@@ -11,6 +11,6 @@ exports.setTimeout = function (fn, time) {
  * Clears all timeouts in our list and resets the list
  */
 exports.clearTimeouts = function () {
-  list.forEach(window.clearTimeout);
+  list.forEach(window.clearTimeout, window);
   list = [];
 };
