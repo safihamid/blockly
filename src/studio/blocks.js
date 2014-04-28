@@ -16,21 +16,17 @@ var Emotions = tiles.Emotions;
 var generateSetterCode = function (opts) {
   var value = opts.ctx.getTitleValue('VALUE');
   if (value === "random") {
-    var randomIndex = opts.random || 1;
-    var allValues = opts.ctx.VALUES.slice(randomIndex).map(function (item) {
+    var randomIndex = opts.random || 0;
+    // opts.random is the index of where the 'random' items is in beginning of
+    // the VALUES table (defaults to 0).
+    var allValues = opts.ctx.VALUES.slice(randomIndex + 1).map(function (item) {
       return item[1];
     });
     value = 'Studio.random([' + allValues + '])';
   }
 
-  if (opts.index) {
-    return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
-      (opts.ctx.getTitleValue(opts.index) || '0') + ', ' + value + ');\n';
-  }
-  else {
-    return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
-      value + ');\n';
-  }
+  return 'Studio.' + opts.name + '(\'block_id_' + opts.ctx.id + '\', ' +
+    (opts.extraParams ? opts.extraParams + ', ' : '') + value + ');\n';
 };
 
 exports.setSpriteCount = function(blockly, count) {
@@ -307,15 +303,26 @@ exports.install = function(blockly, skin) {
        [msg.moveDistance50(), '50'],
        [msg.moveDistance100(), '100'],
        [msg.moveDistance200(), '200'],
-       [msg.moveDistance400(), '400']];
+       [msg.moveDistance400(), '400'],
+       [msg.moveDistanceRandom(), 'random']];
 
   generator.studio_moveDistance = function() {
     // Generate JavaScript for moving.
+
+    var allDistances = this.DISTANCE.slice(0, -1).map(function (item) {
+      return item[1];
+    });
+    var distParam = this.getTitleValue('DISTANCE');
+    
+    if (distParam === 'random') {
+      distParam = 'Studio.random([' + allDistances + '])';
+    }
+
     return 'Studio.moveDistance(\'block_id_' + this.id +
         '\', executionCtx || 0, ' +
         (this.getTitleValue('SPRITE') || '0') + ', ' +
         this.getTitleValue('DIR') + ', ' +
-        this.getTitleValue('DISTANCE') + ');\n';
+        distParam + ');\n';
   };
 
   blockly.Blocks.studio_playSound = {
@@ -420,7 +427,7 @@ exports.install = function(blockly, skin) {
   generator.studio_setSpriteSpeed = function () {
     return generateSetterCode({
       ctx: this,
-      index: 'SPRITE',
+      extraParams: (this.getTitleValue('SPRITE') || '0'),
       name: 'setSpriteSpeed'});
   };
 
@@ -503,8 +510,11 @@ exports.install = function(blockly, skin) {
        [msg.setSpriteOrange(), '"orange"']];
 
   generator.studio_setSprite = function() {
-    return generateSetterCode(
-              {ctx: this, random: 2, index: 'SPRITE', name: 'setSprite'});
+    return generateSetterCode({
+      ctx: this,
+      random: 2,
+      extraParams: (this.getTitleValue('SPRITE') || '0'),
+      name: 'setSprite'});
   };
 
   blockly.Blocks.studio_setSpriteEmotion = {
@@ -549,8 +559,10 @@ exports.install = function(blockly, skin) {
        [msg.setSpriteEmotionSad(), Emotions.SAD.toString()]];
 
   generator.studio_setSpriteEmotion = function() {
-    return generateSetterCode(
-              {ctx: this, index: 'SPRITE', name: 'setSpriteEmotion'});
+    return generateSetterCode({
+      ctx: this,
+      extraParams: (this.getTitleValue('SPRITE') || '0'),
+      name: 'setSpriteEmotion'});
   };
 
   blockly.Blocks.studio_saySprite = {
