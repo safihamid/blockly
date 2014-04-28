@@ -1022,7 +1022,7 @@ Maze.execute = function(stepMode) {
 
   timeoutList.setTimeout(function () {
     Maze.performStep(stepMode);
-  }, scaledStepSpeed);
+  }, stepMode ? 0 : scaledStepSpeed);
 };
 
 /**
@@ -1047,16 +1047,16 @@ Maze.performStep = function(stepMode) {
 
   animateAction(action, stepMode);
 
-  var nextStep = !stepMode;
+  var scheduleNextStep = !stepMode;
   if (stepMode) {
     // If we've run out of steps, finish things up
     if (BlocklyApps.log.length === 0 || BlocklyApps.log.length === 1 &&
       BlocklyApps.log[0][ACTION_COMMAND] === "finish") {
-      nextStep = true;
+      scheduleNextStep = true;
     }
   }
 
-  if (nextStep) {
+  if (scheduleNextStep) {
     // Speeding up specific levels
     var scaledStepSpeed = stepSpeed * Maze.scale.stepSpeed *
       skin.movePegmanAnimationSpeedScale;
