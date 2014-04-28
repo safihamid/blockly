@@ -1,0 +1,8 @@
+<% var msg = require('../../locale/current/maze') %>
+
+<td id="step-cell">
+  <button id="stepButton" class="launch <%= showStepButton ? '' : 'hide' %>">
+    <img src="<%= assetUrl('media/1x1.gif') %>">
+    <%= msg.step() %>
+  </button>
+</td>

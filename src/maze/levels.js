@@ -2,6 +2,7 @@ var Direction = require('./tiles').Direction;
 var karelLevels = require('./karelLevels');
 var reqBlocks = require('./requiredBlocks');
 var blockUtils = require('../block_utils');
+var utils = require('../utils');
 
 //TODO: Fix hacky level-number-dependent toolbox.
 var toolbox = function(page, level) {
@@ -605,7 +606,23 @@ module.exports = {
   }
 };
 
+
 // Merge in Karel levels.
 for (var levelId in karelLevels) {
   module.exports['karel_' + levelId] = karelLevels[levelId];
 }
+
+// Add some step levels
+function cloneWithStep(level, step, stepOnly) {
+  var obj = utils.extend({}, module.exports[level]);
+
+  obj.step = step;
+  obj.stepOnly = stepOnly;
+  module.exports[level + '_step'] = obj;
+}
+
+cloneWithStep('2_1', true, false);
+cloneWithStep('2_2', true, false);
+cloneWithStep('2_17', true, false);
+cloneWithStep('karel_1_9', true, false);
+cloneWithStep('karel_2_9', true, false);
