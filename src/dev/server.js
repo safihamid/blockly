@@ -45,6 +45,10 @@ app.get('/maze', function(req, res) {
   renderApp('maze', req, res);
 });
 
+app.get('/wordsearch', function (req, res) {
+    renderApp('wordsearch', req, res);
+});
+
 app.get('/turtle', function(req, res) {
   renderApp('turtle', req, res);
 });

@@ -4,12 +4,7 @@ var localify = require('./src/dev/localify');
 var config = {};
 
 var APPS = [
-  'maze',
-  'turtle',
-  'bounce',
-  'flappy',
-  'studio',
-  'jigsaw'
+  'wordsearch'
 ];
 
 // Parse options from environment.
@@ -263,7 +258,8 @@ config.jshint = {
       BlocklyApps: true,
       Maze: true,
       Turtle: true,
-      Bounce: true
+      Bounce: true,
+      WordSearch: true
     }
   },
   all: [
