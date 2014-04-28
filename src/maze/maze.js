@@ -823,13 +823,14 @@ Maze.beginAttempt = function (stepMode) {
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Maze.execute(stepMode);
-}
+};
 
 Maze.resetButtonClick = function () {
   var stepButton = document.getElementById('stepButton');
   stepButton.style.display = level.step ? 'inline' : 'none';
 
   if (Maze.cachedBlockState) {
+    // restore moveable/deletable/editable state from before we started stepping
     Maze.cachedBlockState.forEach(function (cached) {
       cached.block.setMovable(cached.movable);
       cached.block.setDeletable(cached.deletable);
@@ -1022,7 +1023,7 @@ Maze.execute = function(stepMode) {
 
   timeoutList.setTimeout(function () {
     Maze.performStep(stepMode);
-  }, stepMode ? 0 : scaledStepSpeed);
+  }, scaledStepSpeed);
 };
 
 /**
@@ -1047,16 +1048,18 @@ Maze.performStep = function(stepMode) {
 
   animateAction(action, stepMode);
 
-  var scheduleNextStep = !stepMode;
+  var performNextStep = false;
   if (stepMode) {
     // If we've run out of steps, finish things up
     if (BlocklyApps.log.length === 0 || BlocklyApps.log.length === 1 &&
       BlocklyApps.log[0][ACTION_COMMAND] === "finish") {
-      scheduleNextStep = true;
+      performNextStep = true;
     }
+  } else {
+    performNextStep = true;
   }
 
-  if (scheduleNextStep) {
+  if (performNextStep) {
     // Speeding up specific levels
     var scaledStepSpeed = stepSpeed * Maze.scale.stepSpeed *
       skin.movePegmanAnimationSpeedScale;
