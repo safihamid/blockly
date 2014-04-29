@@ -243,10 +243,10 @@ exports.install = function(blockly, skin) {
        [msg.moveSprite6(), '5']];
   
   blockly.Blocks.studio_move.DIR =
-      [[msg.up(), Direction.NORTH.toString()],
-       [msg.down(), Direction.SOUTH.toString()],
-       [msg.left(), Direction.WEST.toString()],
-       [msg.right(), Direction.EAST.toString()]];
+      [[msg.moveDirectionUp(), Direction.NORTH.toString()],
+       [msg.moveDirectionDown(), Direction.SOUTH.toString()],
+       [msg.moveDirectionLeft(), Direction.WEST.toString()],
+       [msg.moveDirectionRight(), Direction.EAST.toString()]];
 
   generator.studio_move = function() {
     // Generate JavaScript for moving.
@@ -293,10 +293,11 @@ exports.install = function(blockly, skin) {
      [msg.moveSprite6(), '5']];
 
   blockly.Blocks.studio_moveDistance.DIR =
-      [[msg.up(), Direction.NORTH.toString()],
-       [msg.down(), Direction.SOUTH.toString()],
-       [msg.left(), Direction.WEST.toString()],
-       [msg.right(), Direction.EAST.toString()]];
+      [[msg.moveDirectionUp(), Direction.NORTH.toString()],
+       [msg.moveDirectionDown(), Direction.SOUTH.toString()],
+       [msg.moveDirectionLeft(), Direction.WEST.toString()],
+       [msg.moveDirectionRight(), Direction.EAST.toString()],
+       [msg.moveDirectionRandom(), 'random']];
 
   blockly.Blocks.studio_moveDistance.DISTANCE =
       [[msg.moveDistance25(), '25'],
@@ -313,15 +314,21 @@ exports.install = function(blockly, skin) {
       return item[1];
     });
     var distParam = this.getTitleValue('DISTANCE');
-    
     if (distParam === 'random') {
       distParam = 'Studio.random([' + allDistances + '])';
+    }
+    var allDirections = this.DIR.slice(0, -1).map(function (item) {
+      return item[1];
+    });
+    var dirParam = this.getTitleValue('DIR');
+    if (dirParam === 'random') {
+      dirParam = 'Studio.random([' + allDirections + '])';
     }
 
     return 'Studio.moveDistance(\'block_id_' + this.id +
         '\', executionCtx || 0, ' +
         (this.getTitleValue('SPRITE') || '0') + ', ' +
-        this.getTitleValue('DIR') + ', ' +
+        dirParam + ', ' +
         distParam + ');\n';
   };
 
