@@ -460,11 +460,11 @@ exports.install = function(blockly, skin) {
   blockly.Blocks.studio_setBackground.VALUES =
       [[msg.setBackgroundRandom(), 'random'],
        [msg.setBackgroundCave(), '"cave"'],
-       [msg.setBackgroundSanta(), '"santa"'],
-       [msg.setBackgroundScifi(), '"scifi"'],
+       [msg.setBackgroundNight(), '"night"'],
+       [msg.setBackgroundCloudy(), '"cloudy"'],
        [msg.setBackgroundUnderwater(), '"underwater"'],
        [msg.setBackgroundHardcourt(), '"hardcourt"'],
-       [msg.setBackgroundRetro(), '"retro"']];
+       [msg.setBackgroundBlack(), '"black"']];
 
   generator.studio_setBackground = function() {
     return generateSetterCode({ctx: this, name: 'setBackground'});

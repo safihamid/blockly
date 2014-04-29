@@ -19,16 +19,16 @@ exports.load = function(assetUrl, id) {
   skin.hardcourt = {
     background: skin.assetUrl('background.png'),
   };
-  skin.retro = {
+  skin.black = {
     background: skin.assetUrl('retro_background.png'),
   };
   skin.cave = {
     background: skin.assetUrl('background_cave.png'),
   };
-  skin.santa = {
+  skin.night = {
     background: skin.assetUrl('background_santa.png'),
   };
-  skin.scifi = {
+  skin.cloudy = {
     background: skin.assetUrl('background_scifi.png'),
   };
   skin.underwater = {
