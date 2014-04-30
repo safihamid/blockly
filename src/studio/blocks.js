@@ -11,6 +11,7 @@ var codegen = require('../codegen');
 var tiles = require('./tiles');
 
 var Direction = tiles.Direction;
+var Position = tiles.Position;
 var Emotions = tiles.Emotions;
 
 var generateSetterCode = function (opts) {
@@ -242,6 +243,58 @@ exports.install = function(blockly, skin) {
     // Generate JavaScript for stopping the movement of a sprite.
     return 'Studio.stop(\'block_id_' + this.id + '\', ' +
         (this.getTitleValue('SPRITE') || '0') + ');\n';
+  };
+
+  blockly.Blocks.studio_setSpritePosition = {
+    // Block for jumping a sprite to different position.
+    helpUrl: '',
+    init: function() {
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+      var dropdown = new blockly.FieldDropdown(this.VALUES);
+      dropdown.setValue(this.VALUES[1][1]); // default to top-left
+      this.setHSV(184, 1.00, 0.74);
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.setSprite());
+      }
+      this.appendDummyInput()
+        .appendTitle(dropdown, 'VALUE');
+      this.setPreviousStatement(true);
+      this.setInputsInline(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.setSpritePositionTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_setSpritePosition.SPRITE =
+      [[msg.setSprite1(), '0'],
+       [msg.setSprite2(), '1'],
+       [msg.setSprite3(), '2'],
+       [msg.setSprite4(), '3'],
+       [msg.setSprite5(), '4'],
+       [msg.setSprite6(), '5']];
+  
+  blockly.Blocks.studio_setSpritePosition.VALUES =
+      [[msg.positionRandom(), 'random'],
+       [msg.positionTopLeft(), Position.TOPLEFT.toString()],
+       [msg.positionTopCenter(), Position.TOPCENTER.toString()],
+       [msg.positionTopRight(), Position.TOPRIGHT.toString()],
+       [msg.positionMiddleLeft(), Position.MIDDLELEFT.toString()],
+       [msg.positionMiddleCenter(), Position.MIDDLECENTER.toString()],
+       [msg.positionMiddleRight(), Position.MIDDLERIGHT.toString()],
+       [msg.positionBottomLeft(), Position.BOTTOMLEFT.toString()],
+       [msg.positionBottomCenter(), Position.BOTTOMCENTER.toString()],
+       [msg.positionBottomRight(), Position.BOTTOMRIGHT.toString()]];
+
+  generator.studio_setSpritePosition = function() {
+    return generateSetterCode({
+      ctx: this,
+      extraParams: (this.getTitleValue('SPRITE') || '0'),
+      name: 'setSpritePosition'});
   };
 
   blockly.Blocks.studio_move = {

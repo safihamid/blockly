@@ -1,6 +1,7 @@
 'use strict';
 
 exports.Direction = {
+  NONE: 0,
   NORTH: 1,
   EAST: 2,
   SOUTH: 4,
@@ -11,11 +12,51 @@ exports.Direction = {
   NORTHWEST: 9,
 };
 
-var Dir = exports.Direction;
+exports.Position = {
+  TOPLEFT: 1,
+  TOPCENTER: 2,
+  TOPRIGHT: 3,
+  MIDDLELEFT: 4,
+  MIDDLECENTER: 5,
+  MIDDLERIGHT: 6,
+  BOTTOMLEFT: 7,
+  BOTTOMCENTER: 8,
+  BOTTOMRIGHT: 9,
+};
+
+//
+// Coordinates for each Position (revisit when Sprite size is variable)
+//
+
+var Pos = exports.Position;
+
+exports.xFromPosition = {};
+exports.xFromPosition[Pos.TOPLEFT] = 0;
+exports.xFromPosition[Pos.TOPCENTER] = 3;
+exports.xFromPosition[Pos.TOPRIGHT] = 6;
+exports.xFromPosition[Pos.MIDDLELEFT] = 0;
+exports.xFromPosition[Pos.MIDDLECENTER] = 3;
+exports.xFromPosition[Pos.MIDDLERIGHT] = 6;
+exports.xFromPosition[Pos.BOTTOMLEFT] = 0;
+exports.xFromPosition[Pos.BOTTOMCENTER] = 3;
+exports.xFromPosition[Pos.BOTTOMRIGHT] = 6;
+
+exports.yFromPosition = {};
+exports.yFromPosition[Pos.TOPLEFT] = 0;
+exports.yFromPosition[Pos.TOPCENTER] = 0;
+exports.yFromPosition[Pos.TOPRIGHT] = 0;
+exports.yFromPosition[Pos.MIDDLELEFT] = 3;
+exports.yFromPosition[Pos.MIDDLECENTER] = 3;
+exports.yFromPosition[Pos.MIDDLERIGHT] = 3;
+exports.yFromPosition[Pos.BOTTOMLEFT] = 6;
+exports.yFromPosition[Pos.BOTTOMCENTER] = 6;
+exports.yFromPosition[Pos.BOTTOMRIGHT] = 6;
 
 //
 // Turn state machine, use as NextTurn[fromDir][toDir]
 //
+
+var Dir = exports.Direction;
 
 exports.NextTurn = {};
 

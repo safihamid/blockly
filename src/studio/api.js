@@ -1,3 +1,6 @@
+var tiles = require('./tiles');
+var xFromPosition = tiles.xFromPosition;
+var yFromPosition = tiles.yFromPosition;
 
 exports.SpriteSpeed = {
   VERY_SLOW: 0.04,
@@ -44,6 +47,13 @@ exports.setSpriteEmotion = function (id, spriteIndex, value) {
 exports.setSpriteSpeed = function (id, spriteIndex, value) {
   BlocklyApps.highlight(id);
   Studio.sprite[spriteIndex].speed = value;
+};
+
+exports.setSpritePosition = function (id, spriteIndex, value) {
+  BlocklyApps.highlight(id);
+  Studio.setSpritePosition(spriteIndex,
+                           xFromPosition[value],
+                           yFromPosition[value]);
 };
 
 exports.playSound = function(id, soundName) {

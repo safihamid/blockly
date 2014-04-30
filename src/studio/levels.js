@@ -225,6 +225,7 @@ module.exports = {
       'upButton'
     ],
     'minWorkspaceHeight': 800,
+    'spritesHiddenToStart': true,
     'freePlay': true,
     'map': [
       [0,16, 0, 0, 0,16, 0, 0],
@@ -246,6 +247,7 @@ module.exports = {
          blockOfType('studio_playSound') +
          blockOfType('studio_incrementScore') +
          blockOfType('studio_saySprite') +
+         blockOfType('studio_setSpritePosition') +
          blockOfType('studio_setSpriteSpeed') +
          blockOfType('studio_setSpriteEmotion') +
          blockOfType('studio_setBackground') +
@@ -270,6 +272,7 @@ module.exports = {
       'upButton'
     ],
     'minWorkspaceHeight': 800,
+    'spritesHiddenToStart': true,
     'freePlay': true,
     'map': [
       [0,16, 0, 0, 0,16, 0, 0],
@@ -289,6 +292,7 @@ module.exports = {
                           blockOfType('studio_playSound') +
                           blockOfType('studio_incrementScore') +
                           blockOfType('studio_saySprite') +
+                          blockOfType('studio_setSpritePosition') +
                           blockOfType('studio_setSpriteSpeed') +
                           blockOfType('studio_setSpriteEmotion') +
                           blockOfType('studio_setBackground') +
