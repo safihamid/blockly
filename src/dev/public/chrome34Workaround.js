@@ -49,13 +49,13 @@ window.setTimeout(function(){
 
     var observer = new WebKitMutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
-        for (var i = 0; i < mutation.addedNodes.length; i++) {
-          var newNode = mutation.addedNodes[i];
+        for (var addedIndex = 0; addedIndex < mutation.addedNodes.length; addedIndex++) {
+          var newNode = mutation.addedNodes[addedIndex];
           if (newNode.nodeName == 'image') { newImages[jQuery(newNode).attr('id')] = newNode; }
           if (newNode.nodeName == 'clipPath') { newClipPaths[jQuery(newNode).attr('id')] = newNode; }
         }
-        for (var i = 0; i < mutation.removedNodes.length; i++) {
-          var removedNode = mutation.removedNodes[i];
+        for (var removedIndex = 0; removedIndex < mutation.removedNodes.length; removedIndex++) {
+          var removedNode = mutation.removedNodes[removedIndex];
           if (removedNode.nodeName == 'image' || removedNode.nodeName == 'clipPath') {
             jQuery('svg > svg:empty').remove();
           }
