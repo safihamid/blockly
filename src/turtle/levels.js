@@ -815,7 +815,7 @@ module.exports = {
     answer: [],
     freePlay: true,
     initialY: 300,
-    toolbox: toolbox(5, 6),
+    toolbox: toolbox(5, 7),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
@@ -825,7 +825,7 @@ module.exports = {
     answer: [],
     freePlay: false,
     initialY: 300,
-    toolbox: toolbox(5, 6),
+    toolbox: toolbox(5, 7),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
