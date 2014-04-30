@@ -462,8 +462,8 @@ exports.install = function(blockly, skin) {
       jump_down_short: { letter: 'S short', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 }
     },
     LENGTHS: [
-      ['short', "SHORT_MOVE_LENGTH"],
-      ['long', "LONG_MOVE_LENGTH"]
+      [skin.shortLineDraw, "SHORT_MOVE_LENGTH"],
+      [skin.longLineDraw, "LONG_MOVE_LENGTH"]
     ],
     generateBlocksForAllDirections: function() {
       SimpleMove.generateBlocksForDirection("up");
@@ -491,12 +491,11 @@ exports.install = function(blockly, skin) {
           this.setHSV(184, 1.00, 0.74);
           var input = this.appendDummyInput()
             .appendTitle(directionConfig.letter)
-            .appendTitle(new blockly.FieldImage(directionConfig.image, directionConfig.image_width, directionConfig.image_height));
+            .appendTitle(new blockly.FieldImage(directionConfig.image, directionConfig.image_width, directionConfig.image_height))
           this.setPreviousStatement(true);
           this.setNextStatement(true);
-          this.setTooltip(msg.jumpTooltip());
           if (hasLengthInput) {
-            var dropdown = new blockly.FieldDropdown(SimpleMove.LENGTHS);
+            var dropdown = new blockly.FieldImageDropdown(SimpleMove.LENGTHS);
             dropdown.setValue(SimpleMove.LENGTHS[0][1]);
             input.appendTitle(dropdown, 'length');
           }
@@ -512,11 +511,6 @@ exports.install = function(blockly, skin) {
         }
         return 'Turtle.' + SimpleMove.DIRECTION_CONFIGS[direction].moveFunction + '(' + length + ',' + '\'block_id_' + this.id + '\');\n';
       };
-    },
-    stretchedLine: function(width) {
-      var lineImage = new blockly.FieldImage(skin.offsetLineSlice, width, 9);
-      lineImage.setPreserveAspectRatio("none");
-      return lineImage;
     }
   };
 
