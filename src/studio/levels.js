@@ -242,6 +242,7 @@ module.exports = {
          blockOfType('studio_whenGameIsRunning') +
          blockOfType('studio_move') +
          blockOfType('studio_moveDistance') +
+         blockOfType('studio_stop') +
          blockOfType('studio_playSound') +
          blockOfType('studio_incrementScore') +
          blockOfType('studio_saySprite') +
@@ -284,6 +285,7 @@ module.exports = {
       tb(createCategory(msg.catActions(),
                           blockOfType('studio_move') +
                           blockOfType('studio_moveDistance') +
+                          blockOfType('studio_stop') +
                           blockOfType('studio_playSound') +
                           blockOfType('studio_incrementScore') +
                           blockOfType('studio_saySprite') +

@@ -209,6 +209,41 @@ exports.install = function(blockly, skin) {
   
   generator.studio_whenSpriteCollided = generator.studio_eventHandlerPrologue;
 
+  blockly.Blocks.studio_stop = {
+    // Block for stopping the movement of a sprite.
+    helpUrl: '',
+    init: function() {
+      var dropdownArray =
+          this.SPRITE.slice(0, blockly.Blocks.studio_spriteCount);
+      this.setHSV(184, 1.00, 0.74);
+      if (blockly.Blocks.studio_spriteCount > 1) {
+        this.appendDummyInput()
+          .appendTitle(new blockly.FieldDropdown(dropdownArray), 'SPRITE');
+      } else {
+        this.appendDummyInput()
+          .appendTitle(msg.stopSprite());
+      }
+      this.setPreviousStatement(true);
+      this.setInputsInline(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.stopTooltip());
+    }
+  };
+
+  blockly.Blocks.studio_stop.SPRITE =
+      [[msg.stopSprite1(), '0'],
+       [msg.stopSprite2(), '1'],
+       [msg.stopSprite3(), '2'],
+       [msg.stopSprite4(), '3'],
+       [msg.stopSprite5(), '4'],
+       [msg.stopSprite6(), '5']];
+  
+  generator.studio_stop = function() {
+    // Generate JavaScript for stopping the movement of a sprite.
+    return 'Studio.stop(\'block_id_' + this.id + '\', ' +
+        (this.getTitleValue('SPRITE') || '0') + ');\n';
+  };
+
   blockly.Blocks.studio_move = {
     // Block for moving one frame a time.
     helpUrl: '',

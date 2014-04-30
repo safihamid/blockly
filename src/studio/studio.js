@@ -267,19 +267,31 @@ var delegate = function(scope, func, data)
 };
 
 //
+// Return the next position for this sprite on a given coordinate axis
+// given the queued moves (yAxis == false means xAxis)
+// NOTE: position values returned are not clamped to playspace boundaries
+//
+
+var getNextPosition = function (i, yAxis) {
+  var nextPos = yAxis ? Studio.sprite[i].y : Studio.sprite[i].x;
+  var queuedVal = yAxis ? Studio.sprite[i].queuedY : Studio.sprite[i].queuedX;
+  if (queuedVal) {
+    if (queuedVal < 0) {
+      nextPos -= Math.min(Math.abs(queuedVal), Studio.sprite[i].speed);
+    } else {
+      nextPos += Math.min(queuedVal, Studio.sprite[i].speed);
+    }
+  }
+  return nextPos;
+};
+
+//
 // Perform Queued Moves in the X and Y axes (called from inside onTick)
 //
-var performQueuedMoves = function(i)
-{
+var performQueuedMoves = function (i) {
   // Make queued moves in the X axis (fixed to .01 values):
   if (Studio.sprite[i].queuedX) {
-    var nextX = Studio.sprite[i].x;
-    if (Studio.sprite[i].queuedX < 0) {
-      nextX -= Math.min(Math.abs(Studio.sprite[i].queuedX),
-                        Studio.sprite[i].speed);
-    } else {
-      nextX += Math.min(Studio.sprite[i].queuedX, Studio.sprite[i].speed);
-    }
+    var nextX = getNextPosition(i, false);
     // Clamp nextX to boundaries as newX:
     var newX = Math.min(Studio.COLS - 2, Math.max(0, nextX));
     if (nextX != newX) {
@@ -307,13 +319,7 @@ var performQueuedMoves = function(i)
   }
   // Make queued moves in the Y axis (fixed to .01 values):
   if (Studio.sprite[i].queuedY) {
-    var nextY = Studio.sprite[i].y;
-    if (Studio.sprite[i].queuedY < 0) {
-      nextY -= Math.min(Math.abs(Studio.sprite[i].queuedY),
-                        Studio.sprite[i].speed);
-    } else {
-      nextY += Math.min(Studio.sprite[i].queuedY, Studio.sprite[i].speed);
-    }
+    var nextY = getNextPosition(i, true);
     // Clamp nextY to boundaries as newY:
     var newY = Math.min(Studio.ROWS - 2, Math.max(0, nextY));
     if (nextY != newY) {
@@ -496,20 +502,19 @@ Studio.onTick = function() {
     }
   }
   
-  // Do per-sprite tasks:
+  // Check for collisions (note that we use the positions they are about
+  // to attain with queued moves - this allows the moves to be canceled before
+  // the actual movements take place):
   for (var i = 0; i < Studio.spriteCount; i++) {
-    performQueuedMoves(i);
-
-    // Check for collisions:
     for (var j = 0; j < Studio.spriteCount; j++) {
       if (i == j) {
         continue;
       }
-      if (essentiallyEqual(Studio.sprite[i].x,
-                           Studio.sprite[j].x,
+      if (essentiallyEqual(getNextPosition(i, false),
+                           getNextPosition(j, false),
                            tiles.SPRITE_COLLIDE_DISTANCE) &&
-          essentiallyEqual(Studio.sprite[i].y,
-                           Studio.sprite[j].y,
+          essentiallyEqual(getNextPosition(i, true),
+                           getNextPosition(j, true),
                            tiles.SPRITE_COLLIDE_DISTANCE)) {
         if (0 === (Studio.sprite[i].collisionMask & Math.pow(2, j))) {
           Studio.sprite[i].collisionMask |= Math.pow(2, j);
@@ -521,6 +526,11 @@ Studio.onTick = function() {
           Studio.sprite[i].collisionMask &= ~(Math.pow(2, j));
       }
     }
+  }
+  
+  for (i = 0; i < Studio.spriteCount; i++) {
+    performQueuedMoves(i);
+
     // Display sprite:
     Studio.displaySprite(i);
   }
@@ -1272,6 +1282,25 @@ Studio.saySprite = function (executionCtx, index, text) {
     Studio.loopingPendingSayCmds++;
   }
   Studio.sayQueues[executionCtx].push(sayCmd);
+};
+
+Studio.stop = function (spriteIndex) {
+  Studio.sprite[spriteIndex].queuedYContext = -1;
+  Studio.sprite[spriteIndex].queuedY = 0;
+  Studio.sprite[spriteIndex].yMoveQueue = [];
+  Studio.sprite[spriteIndex].queuedXContext = -1;
+  Studio.sprite[spriteIndex].queuedX = 0;
+  Studio.sprite[spriteIndex].xMoveQueue = [];
+  Studio.sprite[spriteIndex].flags &=
+    ~(SpriteFlags.LOOPING_MOVE_Y_PENDING | SpriteFlags.LOOPING_MOVE_X_PENDING);
+  // Reset collisionMask so the next movement will fire another collision
+  // event against the same sprite. This makes it easier to write code that
+  // says "when sprite X touches Y" => "stop sprite X", and have it do what
+  // you expect it to do...
+  
+  // TBD: should we cancel this sprite from the collisionMask of the other
+  // sprites?
+  Studio.sprite[spriteIndex].collisionMask = 0;
 };
 
 Studio.moveSingle = function (spriteIndex, dir) {

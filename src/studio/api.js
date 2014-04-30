@@ -51,6 +51,11 @@ exports.playSound = function(id, soundName) {
   BlocklyApps.playAudio(soundName, {volume: 0.5});
 };
 
+exports.stop = function(id, spriteIndex) {
+  BlocklyApps.highlight(id);
+  Studio.stop(spriteIndex);
+};
+
 exports.move = function(id, spriteIndex, dir) {
   BlocklyApps.highlight(id);
   Studio.moveSingle(spriteIndex, dir);
