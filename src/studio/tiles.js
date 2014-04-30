@@ -108,7 +108,7 @@ exports.Emotions = {
 };
 
 exports.FINISH_COLLIDE_DISTANCE = 1.5;
-exports.SPRITE_COLLIDE_DISTANCE = 1.5;
+exports.SPRITE_COLLIDE_DISTANCE = 1.8;
 exports.DEFAULT_SPRITE_SPEED = 0.1;
 
 /**
