@@ -111,6 +111,7 @@ var loadLevel = function() {
   Studio.timeoutFailureTick = level.timeoutFailureTick || Infinity;
   Studio.minWorkspaceHeight = level.minWorkspaceHeight;
   Studio.spriteStartingImage = level.spriteStartingImage;
+  Studio.spritesHiddenToStart = level.spritesHiddenToStart;
   Studio.softButtons_ = level.softButtons || [];
 
   // Override scalars.
@@ -780,13 +781,16 @@ BlocklyApps.reset = function(first) {
     Studio.sprite[i].queuedY = 0;
     Studio.sprite[i].queuedYContext = -1;
     Studio.sprite[i].flags = 0;
-    Studio.sprite[i].dir = 0;
+    Studio.sprite[i].dir = Direction.NONE;
     Studio.sprite[i].displayDir = Direction.SOUTH;
     Studio.sprite[i].emotion = Emotions.NORMAL;
     Studio.sprite[i].xMoveQueue = [];
     Studio.sprite[i].yMoveQueue = [];
     
-    Studio.setSprite(i, spriteStartingSkins[(i + skinBias) % numStartingSkins]);
+    Studio.setSprite(i,
+                     Studio.spritesHiddenToStart ?
+                      "hidden" :
+                      spriteStartingSkins[(i + skinBias) % numStartingSkins]);
     Studio.displaySprite(i);
     document.getElementById('speechBubble' + i)
       .setAttribute('visibility', 'hidden');
@@ -1146,12 +1150,12 @@ Studio.displaySprite = function(i) {
   var yCoordPrev = spriteClipRect.getAttribute('y');
   
   var dirPrev = Studio.sprite[i].dir;
-  if (dirPrev === 0) {
+  if (dirPrev === Direction.NONE) {
     // direction not yet set, start at SOUTH (forward facing)
     Studio.sprite[i].dir = Direction.SOUTH;
   }
   else if ((xCoord != xCoordPrev) || (yCoord != yCoordPrev)) {
-    Studio.sprite[i].dir = 0;
+    Studio.sprite[i].dir = Direction.NONE;
     if (xCoord < xCoordPrev) {
       Studio.sprite[i].dir |= Direction.WEST;
     } else if (xCoord > xCoordPrev) {
@@ -1284,7 +1288,7 @@ Studio.saySprite = function (executionCtx, index, text) {
   Studio.sayQueues[executionCtx].push(sayCmd);
 };
 
-Studio.stop = function (spriteIndex) {
+Studio.stop = function (spriteIndex, dontResetCollisions) {
   Studio.sprite[spriteIndex].queuedYContext = -1;
   Studio.sprite[spriteIndex].queuedY = 0;
   Studio.sprite[spriteIndex].yMoveQueue = [];
@@ -1293,14 +1297,32 @@ Studio.stop = function (spriteIndex) {
   Studio.sprite[spriteIndex].xMoveQueue = [];
   Studio.sprite[spriteIndex].flags &=
     ~(SpriteFlags.LOOPING_MOVE_Y_PENDING | SpriteFlags.LOOPING_MOVE_X_PENDING);
-  // Reset collisionMask so the next movement will fire another collision
-  // event against the same sprite. This makes it easier to write code that
-  // says "when sprite X touches Y" => "stop sprite X", and have it do what
-  // you expect it to do...
-  
-  // TBD: should we cancel this sprite from the collisionMask of the other
-  // sprites?
-  Studio.sprite[spriteIndex].collisionMask = 0;
+
+  if (!dontResetCollisions) {
+    // Reset collisionMasks so the next movement will fire another collision
+    // event against the same sprite if needed. This makes it easier to write code
+    // that says "when sprite X touches Y" => "stop sprite X", and have it do what
+    // you expect it to do...
+    Studio.sprite[spriteIndex].collisionMask = 0;
+    for (var i = 0; i < Studio.spriteCount; i++) {
+      if (i === spriteIndex) {
+        continue;
+      }
+      Studio.sprite[i].collisionMask &= ~(Math.pow(2, spriteIndex));
+    }
+  }
+};
+
+Studio.setSpritePosition = function (index, x, y) {
+  var samePosition =
+      (Studio.sprite[index].x === x && Studio.sprite[index].y === y);
+
+  // Don't reset collisions inside stop() if we're in the same position
+  Studio.stop(index, samePosition);
+  Studio.sprite[index].x = x;
+  Studio.sprite[index].y = y;
+  // Reset to "no direction" so no turn animation will take place
+  Studio.sprite[index].dir = Direction.NONE;
 };
 
 Studio.moveSingle = function (spriteIndex, dir) {
