@@ -52,7 +52,7 @@ module.exports = function(app, levels, options) {
   };
 
   options.skin = options.skinsModule.load(BlocklyApps.assetUrl, options.skinId);
-  blocksCommon.install(Blockly);
+  blocksCommon.install(Blockly, options.skin);
   options.blocksModule.install(Blockly, options.skin);
 
   addReadyListener(function() {
