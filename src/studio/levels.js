@@ -11,7 +11,7 @@ var defaultSayBlock = function () {
   return '<block type="studio_saySprite"><title name="TEXT">' +
           msg.defaultSayText() +
           '</title></block>';
-}
+};
 
 /*
  * Configuration for all levels.
