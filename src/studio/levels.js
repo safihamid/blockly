@@ -7,6 +7,12 @@ var tb = blockUtils.createToolbox;
 var blockOfType = blockUtils.blockOfType;
 var createCategory = blockUtils.createCategory;
 
+var defaultSayBlock = function () {
+  return '<block type="studio_saySprite"><title name="TEXT">' +
+          msg.defaultSayText() +
+          '</title></block>';
+}
+
 /*
  * Configuration for all levels.
  */
@@ -37,7 +43,7 @@ module.exports = {
     'timeoutFailureTick': 100,
     'toolbox':
       tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
   },
@@ -61,7 +67,7 @@ module.exports = {
     'timeoutFailureTick': 100,
     'toolbox':
       tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block>'
   },
@@ -92,7 +98,7 @@ module.exports = {
     'timeoutFailureTick': 200,
     'toolbox':
       tb('<block type="studio_moveDistance"><title name="DIR">2</title></block>' +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'startBlocks':
      '<block type="studio_whenGameStarts" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenSpriteCollided" deletable="false" x="20" y="120"></block>'
@@ -122,7 +128,7 @@ module.exports = {
     ],
     'toolbox':
       tb(blockOfType('studio_move') +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"></block> \
       <block type="studio_whenRight" deletable="false" x="180" y="20"></block> \
@@ -150,7 +156,7 @@ module.exports = {
     'timeoutFailureTick': 200,
     'toolbox':
       tb(blockOfType('studio_moveDistance') +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'startBlocks':
      '<block type="studio_whenGameIsRunning" deletable="false" x="20" y="20"></block>'
   },
@@ -181,7 +187,7 @@ module.exports = {
     'toolbox':
       tb(blockOfType('studio_moveDistance') +
          blockOfType('studio_move') +
-         blockOfType('studio_saySprite')),
+         defaultSayBlock()),
     'minWorkspaceHeight': 600,
     'startBlocks':
      '<block type="studio_whenLeft" deletable="false" x="20" y="20"> \
@@ -246,7 +252,7 @@ module.exports = {
          blockOfType('studio_stop') +
          blockOfType('studio_playSound') +
          blockOfType('studio_incrementScore') +
-         blockOfType('studio_saySprite') +
+         defaultSayBlock() +
          blockOfType('studio_setSpritePosition') +
          blockOfType('studio_setSpriteSpeed') +
          blockOfType('studio_setSpriteEmotion') +
@@ -291,7 +297,7 @@ module.exports = {
                           blockOfType('studio_stop') +
                           blockOfType('studio_playSound') +
                           blockOfType('studio_incrementScore') +
-                          blockOfType('studio_saySprite') +
+                          defaultSayBlock() +
                           blockOfType('studio_setSpritePosition') +
                           blockOfType('studio_setSpriteSpeed') +
                           blockOfType('studio_setSpriteEmotion') +
