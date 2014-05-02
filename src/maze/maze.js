@@ -894,14 +894,6 @@ Maze.execute = function(stepMode) {
   Maze.animating_ = false;
   Maze.response = null;
 
-  // Check for empty top level blocks to warn user about bugs,
-  // especially ones that lead to infinite loops.
-  if (feedback.hasEmptyTopLevelBlocks()) {
-    Maze.testResults = BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
-    displayFeedback();
-    return;
-  }
-
   if (level.editCode) {
     var codeTextbox = document.getElementById('codeTextbox');
     code = dom.getText(codeTextbox);
