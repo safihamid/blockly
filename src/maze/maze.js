@@ -423,6 +423,8 @@ Maze.init = function(config) {
   level = config.level;
   loadLevel();
 
+  Maze.cachedBlockState = [];
+
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
     data: {
@@ -829,6 +831,7 @@ Maze.resetButtonClick = function () {
   var stepButton = document.getElementById('stepButton');
   stepButton.style.display = level.step ? 'inline' : 'none';
 
+  Blockly.mainWorkspace.setEnableToolbox(true);
   if (Maze.cachedBlockState) {
     // restore moveable/deletable/editable state from before we started stepping
     Maze.cachedBlockState.forEach(function (cached) {
@@ -859,6 +862,8 @@ var displayFeedback = function() {
   if (Maze.waitingForReport || Maze.animating_) {
     return;
   }
+  var stepButton = document.getElementById('stepButton');
+  stepButton.style.display = 'none';
   BlocklyApps.displayFeedback({
     app: 'maze', //XXX
     skin: skin.id,
@@ -993,8 +998,11 @@ Maze.execute = function(stepMode) {
   BlocklyApps.reset(false);
   Maze.animating_ = true;
 
-  Maze.cachedBlockState = [];
   if (stepMode) {
+    if (Maze.cachedBlockState.length !== 0) {
+      throw new Error('Unexpected cachedBlockState');
+    }
+    Blockly.mainWorkspace.setEnableToolbox(false);
     // Disable all blocks, caching their state first
     Blockly.mainWorkspace.getAllBlocks().forEach(function (block) {
       Maze.cachedBlockState.push({
