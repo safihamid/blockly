@@ -423,7 +423,7 @@ Maze.init = function(config) {
   level = config.level;
   loadLevel();
 
-  Maze.cachedBlockState = [];
+  Maze.cachedBlockStates = [];
 
   config.html = page({
     assetUrl: BlocklyApps.assetUrl,
@@ -832,14 +832,14 @@ Maze.resetButtonClick = function () {
   stepButton.style.display = level.step ? 'inline' : 'none';
 
   Blockly.mainWorkspace.setEnableToolbox(true);
-  if (Maze.cachedBlockState) {
+  if (Maze.cachedBlockStates) {
     // restore moveable/deletable/editable state from before we started stepping
-    Maze.cachedBlockState.forEach(function (cached) {
+    Maze.cachedBlockStates.forEach(function (cached) {
       cached.block.setMovable(cached.movable);
       cached.block.setDeletable(cached.deletable);
       cached.block.setEditable(cached.editable);
     });
-    Maze.cachedBlockState = [];
+    Maze.cachedBlockStates = [];
   }
 };
 
@@ -999,13 +999,13 @@ Maze.execute = function(stepMode) {
   Maze.animating_ = true;
 
   if (stepMode) {
-    if (Maze.cachedBlockState.length !== 0) {
-      throw new Error('Unexpected cachedBlockState');
+    if (Maze.cachedBlockStates.length !== 0) {
+      throw new Error('Unexpected cachedBlockStates');
     }
     Blockly.mainWorkspace.setEnableToolbox(false);
     // Disable all blocks, caching their state first
     Blockly.mainWorkspace.getAllBlocks().forEach(function (block) {
-      Maze.cachedBlockState.push({
+      Maze.cachedBlockStates.push({
         block: block,
         movable: block.isMovable(),
         deletable: block.isDeletable(),
