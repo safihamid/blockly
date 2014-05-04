@@ -74,6 +74,7 @@ exports.load = function(assetUrl, id) {
   var config = CONFIGS[skin.id];
   // Images
   skin.tiles = skin.assetUrl('tiles.png');
+  skin.tilesHighlighted = skin.assetUrl('tilesHighlighted.png');
   skin.goal = skin.assetUrl('goal.png');
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.obstacle = skin.assetUrl('obstacle.png');

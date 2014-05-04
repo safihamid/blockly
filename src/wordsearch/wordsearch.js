@@ -125,32 +125,33 @@ Maze.pidList = [];
 // Input: Binary string representing Centre/North/West/South/East squares.
 // Output: [x, y] coordinates of each tile's sprite in tiles.png.
 var TILE_SHAPES = {
-  'l0': [0, 0],  
-  'l1': [1, 0],  
-  'l2': [2, 0],  
-  'l3': [3, 0],  
-  'l4': [4, 0],  
-  'l5': [5, 0],  
-  'l6': [6, 0],  
-  'l7': [0, 1],  
-  'l8': [1, 1],  
-  'l9': [2, 1],  
-  'l10': [3, 1],  
-  'l11': [4, 1],  
-  'l12': [5, 1],  
-  'l13': [6, 1],  
-  'l14': [0, 2],  
-  'l15': [1, 2],  
-  'l16': [2, 2],  
-  'l17': [3, 2],  
-  'l18': [4, 2],  
-  'l19': [5, 2],  
-  'l20': [6, 2],
-  'l21': [0, 3],  
-  'l22': [1, 3],  
-  'l23': [2, 3],  
-  'l24': [3, 3],  
-  'l25': [4, 3]  
+  'l0': [0, 0],  // A
+  'l1': [1, 0],  // B
+  'l2': [2, 0],  // C
+  'l3': [3, 0],  // D
+  'l4': [4, 0],  // E
+  'l5': [5, 0],  // F
+  'l6': [6, 0],  // G
+  'l7': [0, 1],  // H
+  'l8': [1, 1],  // I
+  'l9': [2, 1],  // J
+  'l10': [3, 1],  // K
+  'l11': [4, 1],  // L
+  'l12': [5, 1],  // M
+  'l13': [6, 1],  // N
+  'l14': [0, 2],  // O
+  'l15': [1, 2],  // P
+  'l16': [2, 2],  // Q
+  'l17': [3, 2],  // R
+  'l18': [4, 2],  // S
+  'l19': [5, 2],  // T
+  'l20': [6, 2],  // U
+  'l21': [0, 3],  // V
+  'l22': [1, 3],  // W
+  'l23': [2, 3],  // X
+  'l24': [3, 3],  // Y
+  'l25': [4, 3],  // Z
+    'empty':[5,3]
 };
 
 var drawMap = function() {
@@ -231,7 +232,7 @@ var drawMap = function() {
   };
 
   // Compute and draw the tile for each square.
-  var tileId = 0;
+  var isFinish = 0;
   for (y = 0; y < Maze.ROWS; y++) {
     for (x = 0; x < Maze.COLS; x++) {
       // Compute the tile index.
@@ -242,18 +243,33 @@ var drawMap = function() {
           normalize(x - 1, y);   // East.
 
       // Draw the tile.
-      if (!TILE_SHAPES[tile]) {
-        // Empty square.  Use null0 for large areas, with null1-4 for borders.
+      //if (!TILE_SHAPES[tile]) {
+      if (Maze.map[y][x] == SquareType.WALL) {
+          // Empty square.  Use null0 for large areas, with null1-4 for borders.
           var wallIdx = Math.floor( Math.random() * 25);
           Maze.wallMap[y][x] = wallIdx;
-          tile = 'l' + wallIdx;
-        
+          tile = 'l' + wallIdx;   
       }
+      else if(Maze.map[y][x] >= SquareType.A && Maze.map[y][x] <= SquareType.Z){
+          var pathIdx = (Maze.map[y][x] - 10);
+          Maze.wallMap[y][x] = pathIdx;
+          tile = 'l' + pathIdx;
+      }
+      else if (Maze.map[y][x] >= SquareType.AEND && Maze.map[y][x] <= SquareType.ZEND) {
+          var pathIdx = (Maze.map[y][x] - 40);
+          Maze.wallMap[y][x] = pathIdx;
+          tile = 'l' + pathIdx;
+          isFinish = 1;
+      }
+      else {
+          tile = 'empty';
+      }
+
       var left = TILE_SHAPES[tile][0];
       var top = TILE_SHAPES[tile][1];
       // Tile's clipPath element.
       var tileClip = document.createElementNS(Blockly.SVG_NS, 'clipPath');
-      tileClip.setAttribute('id', 'tileClipPath' + tileId);
+      tileClip.setAttribute('id', 'tileClipPath' + x + '-' + y);
       var tileClipRect = document.createElementNS(Blockly.SVG_NS, 'rect');
       tileClipRect.setAttribute('width', Maze.SQUARE_SIZE);
       tileClipRect.setAttribute('height', Maze.SQUARE_SIZE);
@@ -265,21 +281,28 @@ var drawMap = function() {
       svg.appendChild(tileClip);
       // Tile sprite.
       var tileElement = document.createElementNS(Blockly.SVG_NS, 'image');
-      tileElement.setAttribute('id', 'tileElement' + tileId);
+
+      if (!isFinish) {
+          tileElement.setAttribute('id', 'tileElement' + x + '-' + y);
+      } else {
+          tileElement.setAttribute('id', 'finish');
+          isFinish = 0;
+      }
+          
       tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
                                  'xlink:href',
                                  skin.tiles);
       tileElement.setAttribute('height', Maze.SQUARE_SIZE * 4);
       tileElement.setAttribute('width', Maze.SQUARE_SIZE * 7);
       tileElement.setAttribute('clip-path',
-                               'url(#tileClipPath' + tileId + ')');
+                               'url(#tileClipPath'  + x + '-' + y + ')');
       tileElement.setAttribute('x', (x - left) * Maze.SQUARE_SIZE);
       tileElement.setAttribute('y', (y - top) * Maze.SQUARE_SIZE);
       svg.appendChild(tileElement);
       // Tile animation
       var tileAnimation = document.createElementNS(Blockly.SVG_NS,
                                                    'animate');
-      tileAnimation.setAttribute('id', 'tileAnimation' + tileId);
+      tileAnimation.setAttribute('id', 'tileAnimation' + x + '-' + y);
       tileAnimation.setAttribute('attributeType', 'CSS');
       tileAnimation.setAttribute('attributeName', 'opacity');
       tileAnimation.setAttribute('from', 1);
@@ -288,7 +311,6 @@ var drawMap = function() {
       tileAnimation.setAttribute('begin', 'indefinite');
       tileElement.appendChild(tileAnimation);
 
-      tileId++;
     }
   }
 
@@ -313,16 +335,22 @@ var drawMap = function() {
   pegmanIcon.setAttribute('clip-path', 'url(#pegmanClipPath)');
   svg.appendChild(pegmanIcon);
 
-  if (Maze.finish_) {
-    // Add finish marker.
-    var finishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
-    finishMarker.setAttribute('id', 'finish');
-    finishMarker.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.goal);
-    finishMarker.setAttribute('height', Maze.MARKER_HEIGHT);
-    finishMarker.setAttribute('width', Maze.MARKER_WIDTH);
-    svg.appendChild(finishMarker);
-  }
+  //if (Maze.finish_) {
+  //  // Add finish marker.
+  //  var left = TILE_SHAPES[finishTile][0];
+  //  var top = TILE_SHAPES[finishTile][1];
+
+  //  var finishMarker = document.createElementNS(Blockly.SVG_NS, 'image');
+  //  finishMarker.setAttribute('id', 'finish');
+  //  finishMarker.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  //                              skin.tiles);
+  //  finishMarker.setAttribute('height', Maze.SQUARE_SIZE * 4);
+  //  finishMarker.setAttribute('width', Maze.SQUARE_SIZE * 7);
+  //  finishMarker.setAttribute('x', (finishX - left) * Maze.SQUARE_SIZE);
+  //  finishMarker.setAttribute('y', (finishY - top) * Maze.SQUARE_SIZE);
+
+  //  svg.appendChild(finishMarker);
+  //}
 
   // Add wall hitting animation
   if (skin.hittingWallAnimation) {
@@ -461,7 +489,7 @@ Maze.init = function(config) {
       for (var x = 0; x < Maze.COLS; x++) {
         if (Maze.map[y][x] == SquareType.START) {
           Maze.start_ = {x: x, y: y};
-        } else if (Maze.map[y][x] == SquareType.FINISH) {
+        } else if (Maze.map[y][x] >= SquareType.AEND && Maze.map[y][x] <= SquareType.ZEND) {
           Maze.finish_ = {x: x, y: y};
         } else if (Maze.map[y][x] == SquareType.STARTANDFINISH) {
           Maze.start_ = {x: x, y: y};
@@ -678,16 +706,16 @@ BlocklyApps.reset = function(first) {
 
   var svg = document.getElementById('svgMaze');
 
-  if (Maze.finish_) {
-    // Move the finish icon into position.
-    var finishIcon = document.getElementById('finish');
-    finishIcon.setAttribute('x', Maze.SQUARE_SIZE * (Maze.finish_.x + 0.5) -
-        finishIcon.getAttribute('width') / 2);
-    finishIcon.setAttribute('y', Maze.SQUARE_SIZE * (Maze.finish_.y + 0.9) -
-        finishIcon.getAttribute('height'));
-    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.goal);
-  }
+  //if (Maze.finish_) {
+  //  // Move the finish icon into position.
+  //  var finishIcon = document.getElementById('finish');
+  //  finishIcon.setAttribute('x', Maze.SQUARE_SIZE * (Maze.finish_.x + 0.5) -
+  //      finishIcon.getAttribute('width') / 2);
+  //  finishIcon.setAttribute('y', Maze.SQUARE_SIZE * (Maze.finish_.y + 0.9) -
+  //      finishIcon.getAttribute('height'));
+  //  finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  //                            skin.goal);
+  //}
 
   // Make 'look' icon invisible and promote to top.
   var lookIcon = document.getElementById('look');
@@ -747,18 +775,18 @@ BlocklyApps.reset = function(first) {
   }
 
   // Reset the tiles
-  var tileId = 0;
   for (y = 0; y < Maze.ROWS; y++) {
     for (x = 0; x < Maze.COLS; x++) {
       // Tile's clipPath element.
-      var tileClip = document.getElementById('tileClipPath' + tileId);
+        var tileClip = document.getElementById('tileClipPath' + x + '-' + y);
       tileClip.setAttribute('visibility', 'visible');
       // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + tileId);
-      tileElement.setAttributeNS(
-          'http://www.w3.org/1999/xlink', 'xlink:href', skin.tiles);
-      tileElement.setAttribute('opacity', 1);
-      tileId++;
+      var tileElement = document.getElementById('tileElement' + x + '-' + y);
+      if (tileElement != null && tileElement != undefined) {
+          tileElement.setAttributeNS(
+              'http://www.w3.org/1999/xlink', 'xlink:href', skin.tiles);
+          tileElement.setAttribute('opacity', 1);
+      }
     }
   }
 
@@ -1060,6 +1088,8 @@ Maze.animate = function() {
 
 Maze.animatedMove = function (direction) {
   var positionChange = tiles.directionToDxDy(direction);
+
+  highlightMaze(Maze.pegmanX, Maze.pegmanY);
   var newX = Maze.pegmanX + positionChange.dx;
   var newY = Maze.pegmanY + positionChange.dy;
   Maze.schedule(
@@ -1067,6 +1097,15 @@ Maze.animatedMove = function (direction) {
     [newX, newY, tiles.direction4to16(Maze.pegmanD)]);
   Maze.pegmanX = newX;
   Maze.pegmanY = newY;
+};
+
+var highlightMaze = function (x, y) {
+    if (Maze.map[y][x] !== SquareType.START) {
+        var tileElement = document.getElementById('tileElement' + x + '-' + y);
+        tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
+                               'xlink:href',
+                                 skin.tilesHighlighted);
+    }
 };
 
 /**
@@ -1139,19 +1178,19 @@ Maze.schedule = function(startPos, endPos) {
     }, stepSpeed * 3));
   }
 
-  if (skin.approachingGoalAnimation) {
-    var finishIcon = document.getElementById('finish');
-    // If pegman is close to the goal
-    // Replace the goal file with approachingGoalAnimation
-    if (Maze.finish_ && Math.abs(endPos[0] - Maze.finish_.x) <= 1 &&
-        Math.abs(endPos[1] - Maze.finish_.y) <= 1) {
-      finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.approachingGoalAnimation);
-    } else {
-      finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                                skin.goal);
-    }
-  }
+  //if (skin.approachingGoalAnimation) {
+  //  var finishIcon = document.getElementById('finish');
+  //  // If pegman is close to the goal
+  //  // Replace the goal file with approachingGoalAnimation
+  //  if (Maze.finish_ && Math.abs(endPos[0] - Maze.finish_.x) <= 1 &&
+  //      Math.abs(endPos[1] - Maze.finish_.y) <= 1) {
+  //    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  //                              skin.approachingGoalAnimation);
+  //  } else {
+  //    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  //                              skin.goal);
+  //  }
+  //}
 };
 
 /**
@@ -1169,6 +1208,7 @@ Maze.updateSurroundingTiles = function(obstacleY, obstacleX, brokenTiles) {
     [obstacleY + 1, obstacleX],
     [obstacleY + 1, obstacleX + 1]
   ];
+    // TODO: broken?
   for (var idx = 0; idx < tileCoords.length; ++idx) {
     var tileIdx = tileCoords[idx][1] + Maze.COLS * tileCoords[idx][0];
     var tileElement = document.getElementById('tileElement' + tileIdx);
@@ -1297,12 +1337,11 @@ Maze.scheduleFail = function(forward) {
  * Set the tiles to be transparent gradually.
  */
 Maze.setTileTransparent = function() {
-  var tileId = 0;
   for (var y = 0; y < Maze.ROWS; y++) {
     for (var x = 0; x < Maze.COLS; x++) {
       // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + tileId);
-      var tileAnimation = document.getElementById('tileAnimation' + tileId);
+        var tileElement = document.getElementById('tileElement' + x + '-' + y);
+        var tileAnimation = document.getElementById('tileAnimation' + x + '-' + y);
       if (tileElement) {
         tileElement.setAttribute('opacity', 0);
       }
@@ -1310,7 +1349,6 @@ Maze.setTileTransparent = function() {
         // IE doesn't support beginElement, so check for it.
         tileAnimation.beginElement();
       }
-      tileId++;
     }
   }
 };
@@ -1332,8 +1370,8 @@ Maze.scheduleFinish = function(sound) {
   var finishIcon = document.getElementById('finish');
   if (sound && finishIcon) {
     BlocklyApps.playAudio('winGoal', {volume: 0.5});
-    finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-                              skin.goalAnimation);
+    //finishIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+    //                          skin.goalAnimation);
   }
 
   if (sound) {
