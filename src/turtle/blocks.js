@@ -625,7 +625,30 @@ exports.install = function(blockly, skin) {
     return 'Turtle.penColour(' + colour + ', \'block_id_' +
         this.id + '\');\n';
   };
-  
+
+  blockly.Blocks.draw_colour_simple = {
+    // Simplified dropdown block for setting the colour.
+    init: function() {
+      var colours = [Colours.RED, Colours.BLACK, Colours.GREY, Colours.KHAKI, Colours.WHITE, Colours.PINK,
+        Colours.ORANGE, Colours.YELLOW, Colours.GREEN, Colours.BLUE, Colours.AQUAMARINE, Colours.PLUM];
+      this.setHSV(42, 0.89, 0.99);
+      var colourField = new Blockly.FieldColourDropdown(colours, 75, 40);
+      this.appendDummyInput()
+          .appendTitle(msg.setColour())
+          .appendTitle(colourField, 'COLOUR');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.colourTooltip());
+    }
+  };
+
+  generator.draw_colour_simple = function() {
+    // Generate JavaScript for setting the colour.
+    var colour = this.getTitleValue('COLOUR') || '\'#000000\'';
+    return 'Turtle.penColour("' + colour + '", \'block_id_' +
+        this.id + '\');\n';
+  };
+
   blockly.Blocks.up_big = {
     helpUrl: '',
     init: function() {
