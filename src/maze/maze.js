@@ -401,15 +401,14 @@ var drawMap = function() {
 };
 
 var resetDirt = function() {
+  if (!Maze.initialDirtMap) {
+    return;
+  }
   // Init the dirt so that all places are empty
   Maze.dirt_ = new Array(Maze.ROWS);
   // Locate the dirt in dirt_map
   for (var y = 0; y < Maze.ROWS; y++) {
-    if (Maze.initialDirtMap) {
-      Maze.dirt_[y] = Maze.initialDirtMap[y].slice(0);
-    } else {
-      Maze.dirt_[y] = new Array(Maze.COLS);
-    }
+    Maze.dirt_[y] = Maze.initialDirtMap[y].slice(0);
   }
 };
 
@@ -1568,6 +1567,10 @@ var atFinish = function() {
 };
 
 var isDirtCorrect = function() {
+  if(!Maze.dirt_) {
+    return true;
+  }
+
   for (var y = 0; y < Maze.ROWS; y++) {
     for (var x = 0; x < Maze.COLS; x++) {
       if (getTile(Maze.dirt_, x, y) !== 0) {
