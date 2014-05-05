@@ -1570,7 +1570,7 @@ var atFinish = function() {
 var isDirtCorrect = function() {
   for (var y = 0; y < Maze.ROWS; y++) {
     for (var x = 0; x < Maze.COLS; x++) {
-      if (getTile(Maze.dirt_, x, y) != 0) {
+      if (getTile(Maze.dirt_, x, y) !== 0) {
         return false;
       }
     }
