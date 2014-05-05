@@ -632,7 +632,7 @@ exports.install = function(blockly, skin) {
       var colours = [Colours.RED, Colours.BLACK, Colours.PINK, Colours.ORANGE,
         Colours.YELLOW, Colours.GREEN, Colours.BLUE, Colours.AQUAMARINE, Colours.PLUM];
       this.setHSV(42, 0.89, 0.99);
-      var colourField = new Blockly.FieldColourDropdown(colours, 75, 40);
+      var colourField = new Blockly.FieldColourDropdown(colours, 45, 35);
       this.appendDummyInput()
           .appendTitle(msg.setColour())
           .appendTitle(colourField, 'COLOUR');
