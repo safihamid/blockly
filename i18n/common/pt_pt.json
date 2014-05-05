@@ -30,7 +30,7 @@
   "nextStage": "Parabéns! Completaste a fase {stageNumber}.",
   "nextStageTrophies": "Parabéns! Completaste a fase {stageNumber} e ganhaste {numTrophies, plural, one {troféu} other {# troféus}}.",
   "numBlocksNeeded": "Parabéns! Completaste o puzzle {puzzleNumber}. (Apesar disso, poderias ter usado somente {numBlocks, plural, one {1 bloco} other {# blocos}}.)",
-  "numLinesOfCodeWritten": "Acabaste de escrever {numTrophies, plural, one {1 linha} other {# linhas}} de código!",
+  "numLinesOfCodeWritten": "Acabaste de escrever {numLines, plural, one {1 linha} other {# linhas}} de código!",
   "puzzleTitle": "Puzzle {puzzle_number} de {stage_total}",
   "resetProgram": "Repor",
   "runProgram": "Executa o programa",
