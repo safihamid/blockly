@@ -80,7 +80,6 @@ var loadLevel = function() {
   // Load maps.
   Maze.map = level.map;
   Maze.initialDirtMap = level.initialDirt;
-  Maze.finalDirtMap = level.finalDirt;
   Maze.startDirection = level.startDirection;
 
   Maze.animating_ = false;
@@ -1571,7 +1570,7 @@ var atFinish = function() {
 var isDirtCorrect = function() {
   for (var y = 0; y < Maze.ROWS; y++) {
     for (var x = 0; x < Maze.COLS; x++) {
-      if (getTile(Maze.dirt_, x, y) != getTile(Maze.finalDirtMap, x, y)) {
+      if (getTile(Maze.dirt_, x, y) != 0) {
         return false;
       }
     }
