@@ -1070,14 +1070,6 @@ Bounce.execute = function() {
   Bounce.waitingForReport = false;
   Bounce.response = null;
 
-  // Check for empty top level blocks to warn user about bugs,
-  // especially ones that lead to infinite loops.
-  if (feedback.hasEmptyTopLevelBlocks()) {
-    Bounce.testResults = BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
-    displayFeedback();
-    return;
-  }
-
   if (level.editCode) {
     var codeTextbox = document.getElementById('codeTextbox');
     code = dom.getText(codeTextbox);
