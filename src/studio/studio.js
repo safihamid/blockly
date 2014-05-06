@@ -1285,6 +1285,10 @@ var TIP_X_SHIFT = 10;
 // onTop, onRight are booleans that are used to tell this function if the
 //     bubble is appearing on top and on the right of the sprite.
 //
+// Thanks to Remy for the original rounded rect path function
+/*
+http://www.remy-mellet.com/blog/179-draw-rectangle-with-123-or-4-rounded-corner/
+*/
 
 var createSpeechBubblePath = function (x, y, w, h, r, onTop, onRight) {
   var strPath = "M"+p(x+r,y); //A
