@@ -121,20 +121,25 @@ exports.install = function(blockly, skin) {
 
   generator.studio_whenGameStarts = generator.studio_eventHandlerPrologue;
 
-  blockly.Blocks.studio_whenGameIsRunning = {
+  blockly.Blocks.studio_repeatForever = {
     // Block to handle the repeating tick event while the game is running.
     helpUrl: '',
     init: function () {
-      this.setHSV(140, 1.00, 0.74);
+      this.setHSV(322, 0.90, 0.95);
       this.appendDummyInput()
-        .appendTitle(msg.whenGameIsRunning());
+        .appendTitle(msg.repeatForever());
+      this.appendStatementInput('DO')
+        .appendTitle(msg.repeatDo());
       this.setPreviousStatement(false);
-      this.setNextStatement(true);
-      this.setTooltip(msg.whenGameIsRunningTooltip());
+      this.setNextStatement(false);
+      this.setTooltip(msg.repeatForeverTooltip());
     }
   };
 
-  generator.studio_whenGameIsRunning = generator.studio_eventHandlerPrologue;
+  generator.studio_repeatForever = function () {
+    var branch = Blockly.JavaScript.statementToCode(this, 'DO');
+    return generator.studio_eventHandlerPrologue() + branch;
+  };
 
   blockly.Blocks.studio_whenSpriteClicked = {
     // Block to handle event when sprite is clicked.

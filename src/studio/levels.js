@@ -158,7 +158,7 @@ module.exports = {
       tb(blockOfType('studio_moveDistance') +
          defaultSayBlock()),
     'startBlocks':
-     '<block type="studio_whenGameIsRunning" deletable="false" x="20" y="20"></block>'
+     '<block type="studio_repeatForever" deletable="false" x="20" y="20"></block>'
   },
   '6': {
     'requiredBlocks': [
@@ -206,8 +206,8 @@ module.exports = {
         <next><block type="studio_move"> \
                 <title name="DIR">4</title></block> \
         </next></block> \
-      <block type="studio_whenGameIsRunning" deletable="false" x="20" y="340"> \
-        <next><block type="studio_moveDistance"> \
+      <block type="studio_repeatForever" deletable="false" x="20" y="340"> \
+        <statement name="DO"><block type="studio_moveDistance"> \
                 <title name="SPRITE">1</title> \
                 <title name="DISTANCE">400</title> \
           <next><block type="studio_moveDistance"> \
@@ -215,8 +215,8 @@ module.exports = {
                   <title name="DISTANCE">400</title> \
                   <title name="DIR">4</title></block> \
           </next></block> \
-      </next></block> \
-      <block type="studio_whenSpriteCollided" deletable="false" x="20" y="440"></block>'
+      </statement></block> \
+      <block type="studio_whenSpriteCollided" deletable="false" x="20" y="450"></block>'
   },
   '99': {
     'requiredBlocks': [
@@ -246,7 +246,7 @@ module.exports = {
     'toolbox':
       tb(blockOfType('studio_whenSpriteClicked') +
          blockOfType('studio_whenSpriteCollided') +
-         blockOfType('studio_whenGameIsRunning') +
+         blockOfType('studio_repeatForever') +
          blockOfType('studio_move') +
          blockOfType('studio_moveDistance') +
          blockOfType('studio_stop') +
@@ -306,7 +306,7 @@ module.exports = {
          createCategory(msg.catEvents(),
                           blockOfType('studio_whenSpriteClicked') +
                           blockOfType('studio_whenSpriteCollided') +
-                          blockOfType('studio_whenGameIsRunning')) +
+                          blockOfType('studio_repeatForever')) +
          createCategory(msg.catControl(),
                           blockOfType('controls_repeat')) +
          createCategory(msg.catLogic(),

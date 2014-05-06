@@ -431,9 +431,9 @@ var showSpeechBubbles = function() {
 };
 
 //
-// Check to see if all async code executed inside the whenGameIsRunning event
+// Check to see if all async code executed inside the repeatForever block
 // is complete. This means checking for moveDistance blocks or SaySprite blocks
-// that started during a previous whenGameIsRunning event and are still going.
+// that started during a previous repeatForever block and are still going.
 //
 // If this function returns true, it is reasonable to fire the event again...
 //
@@ -455,11 +455,11 @@ Studio.onTick = function() {
     try { Studio.whenGameStarts(BlocklyApps, api); } catch (e) { }
   }
 
-  Studio.calledFromWhenGameRunning = true;
+  Studio.calledFromRepeatForever = true;
   if (loopingAsyncCodeComplete()) {
-    try { Studio.whenGameIsRunning(BlocklyApps, api); } catch (e) { }
+    try { Studio.repeatForever(BlocklyApps, api); } catch (e) { }
   }
-  Studio.calledFromWhenGameRunning = false;
+  Studio.calledFromRepeatForever = false;
   
   // Run key event handlers for any keys that are down:
   for (var key in Keycodes) {
@@ -719,7 +719,7 @@ Studio.clearEventHandlersKillTickLoop = function() {
   Studio.whenLeft = null;
   Studio.whenRight = null;
   Studio.whenUp = null;
-  Studio.whenGameIsRunning = null;
+  Studio.repeatForever = null;
   Studio.whenGameStarts = null;
   Studio.whenSpriteClicked = [];
   Studio.whenSpriteCollided = [];
@@ -960,8 +960,8 @@ Studio.execute = function() {
 
   code = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
-                                    'studio_whenGameIsRunning');
-  var whenGameIsRunningFunc = codegen.functionFromCode(
+                                    'studio_repeatForever');
+  var repeatForeverFunc = codegen.functionFromCode(
                                      code, {
                                       BlocklyApps: BlocklyApps,
                                       Studio: api } );
@@ -1024,7 +1024,7 @@ Studio.execute = function() {
   Studio.whenRight = whenRightFunc;
   Studio.whenUp = whenUpFunc;
   Studio.whenDown = whenDownFunc;
-  Studio.whenGameIsRunning = whenGameIsRunningFunc;
+  Studio.repeatForever = repeatForeverFunc;
   Studio.whenGameStarts = whenGameStartsFunc;
   Studio.whenSpriteClicked = whenSpriteClickedFunc;
   Studio.whenSpriteCollided = whenSpriteCollidedFunc;
@@ -1323,7 +1323,7 @@ Studio.hideSpeechBubble = function (sayCmd) {
   speechBubble.removeAttribute('onRight');
   speechBubble.removeAttribute('height');
   Studio.sayComplete++;
-  if (sayCmd.calledFromWhenGameRunning) {
+  if (sayCmd.calledFromRepeatForever) {
     Studio.loopingPendingSayCmds--;
   }
 };
@@ -1350,11 +1350,11 @@ Studio.saySprite = function (executionCtx, index, text) {
   
   var sayCmd = {
       'tickCount': stampNextQueuedSayTick(executionCtx),
-      'calledFromWhenGameRunning': Studio.calledFromWhenGameRunning,
+      'calledFromRepeatForever': Studio.calledFromRepeatForever,
       'index': index,
       'text': text
   };
-  if (Studio.calledFromWhenGameRunning) {
+  if (Studio.calledFromRepeatForever) {
     Studio.loopingPendingSayCmds++;
   }
   Studio.sayQueues[executionCtx].push(sayCmd);
@@ -1469,7 +1469,7 @@ Studio.moveDistance = function (executionCtx, index, dir, distance) {
       }
       break;
   }
-  if (Studio.calledFromWhenGameRunning) {
+  if (Studio.calledFromRepeatForever) {
     Studio.sprite[index].flags |= loopingFlag;
   } else {
     Studio.sprite[index].flags &= ~loopingFlag;
