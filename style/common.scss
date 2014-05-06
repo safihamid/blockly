@@ -4,7 +4,6 @@ $charcoal: #5b6770;
 $orange: #ffa400;
 $purple: #7665a0;
 $green: #b9bf15;
-$white: #ffffff;
 @mixin fill-container {
   height: 100%;
   width: auto;
@@ -515,7 +514,7 @@ $modal-image-margin-gap: 10px;
   .k1 & {
     text-align: center;
     border: none;
-    background: $white url("#{$common_root}#{$filename}");
+    background: white url("#{$common_root}#{$filename}");
     width: $image_width;
     height: 147px;
     font-size: 35px;
