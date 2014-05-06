@@ -208,24 +208,7 @@ var drawMap = function() {
       var speechRect = document.createElementNS(Blockly.SVG_NS, 'path');
       speechRect.setAttribute('id', 'speechBubblePath' + i);
       speechRect.setAttribute('class', 'studio-speech-bubble-path');
-/*
-      speechRect.setAttribute('d',
-                              createSpeechBubblePath(0,
-                                                     0,
-                                                     SPEECH_BUBBLE_WIDTH,
-                                                     SPEECH_BUBBLE_HEIGHT,
-                                                     SPEECH_BUBBLE_RADIUS,
-                                                     true,
-                                                     true));
-*/
-/*
-      speechRect.setAttribute('x', 0);
-      speechRect.setAttribute('y', 0);
-      speechRect.setAttribute('rx', SPEECH_BUBBLE_RADIUS);
-      speechRect.setAttribute('ry', SPEECH_BUBBLE_RADIUS);
-      speechRect.setAttribute('width', SPEECH_BUBBLE_WIDTH);
-      speechRect.setAttribute('height', SPEECH_BUBBLE_HEIGHT);
-*/
+
       var speechText = document.createElementNS(Blockly.SVG_NS, 'text');
       speechText.setAttribute('id', 'speechBubbleText' + i);
       speechText.setAttribute('class', 'studio-speech-bubble');
@@ -435,7 +418,7 @@ var showSpeechBubbles = function() {
       speechBubblePath.setAttribute('height', bblHeight);
       updateSpeechBubblePath(speechBubblePath);
       
-      // displaySprite will reposition the bubble and draw the rect path
+      // displaySprite will reposition the bubble
       Studio.displaySprite(sayCmd.index);
       speechBubble.setAttribute('visibility', 'visible');
 
