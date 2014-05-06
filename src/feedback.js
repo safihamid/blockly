@@ -38,6 +38,9 @@ exports.displayFeedback = function(options) {
   if (showCode) {
     feedback.appendChild(showCode);
   }
+  if (options.level.is_k1) {
+    feedback.className += " k1";
+  }
 
   feedback.appendChild(getFeedbackButtons(
     options.feedbackType, options.level.showPreviousLevelButton));
