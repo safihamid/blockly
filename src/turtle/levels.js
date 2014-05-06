@@ -820,7 +820,8 @@ module.exports = {
         blocks.simpleMoveBlocks() +
         blocks.simpleJumpBlocks() +
         blocks.simpleMoveLengthBlocks() +
-        blockUtils.blockOfType('controls_repeat_simplified')
+        blockUtils.blockOfType('controls_repeat_simplified') +
+        blockUtils.blockOfType('draw_colour_simple')
       ),
     startBlocks: '',
     startDirection: 0,
