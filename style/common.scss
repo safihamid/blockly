@@ -511,18 +511,12 @@ $modal-image-margin-gap: 10px;
   min-width: 100px;
 }
 
-#again-button {
-  background-color: $green;
-  border: 1px solid $green;
-  color: white;
-  margin-left: 0px;
-  margin-right: 10px;
+@mixin k1-image-button ($filename, $image_width) {
   .k1 & {
     text-align: center;
-    background-color: $white;
     border: none;
-    background-image: url("#{$common_root}tryagain-arrow.png");
-    width: 255px;
+    background: $white url("#{$common_root}#{$filename}");
+    width: $image_width;
     height: 147px;
     font-size: 35px;
     &:hover {
@@ -531,24 +525,22 @@ $modal-image-margin-gap: 10px;
   }
 }
 
+#again-button {
+  background-color: $green;
+  border: 1px solid $green;
+  color: white;
+  margin-left: 0px;
+  margin-right: 10px;
+  @include k1-image-button('tryagain-arrow.png', 255px);
+}
+
 #continue-button {
   background-color: $orange;
   border: 1px solid $orange;
   color: white;
   margin-left: 0px;
   margin-right: 10px;
-  .k1 & {
-    text-align: center;
-    background-color: $white;
-    border: none;
-    background-image: url("#{$common_root}next-arrow.png");
-    width: 214px;
-    height: 147px;
-    font-size: 35px;
-    &:hover {
-      box-shadow: none;
-    }
-  }
+  @include k1-image-button('next-arrow.png', 214px);
 }
 
 #save-to-gallery-button {
