@@ -445,14 +445,14 @@ exports.install = function(blockly, skin) {
     SHORT_MOVE_LENGTH: 25,
     LONG_MOVE_LENGTH: 100,
     DIRECTION_CONFIGS: {
-      left: { letter: commonMsg.directionWestLetter(), moveFunction: 'moveLeft', image: skin.leftArrow, image_width: 42, image_height: 42 },
-      right: { letter: commonMsg.directionEastLetter(), moveFunction: 'moveRight', image: skin.rightArrow, image_width: 42, image_height: 42 },
-      up: { letter: commonMsg.directionNorthLetter(), moveFunction: 'moveUp', image: skin.upArrow, image_width: 42, image_height: 42 },
-      down: { letter: commonMsg.directionSouthLetter(), moveFunction: 'moveDown', image: skin.downArrow, image_width: 42, image_height: 42 },
-      jump_left: { letter: commonMsg.directionWestLetter(), moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
-      jump_right: { letter: commonMsg.directionEastLetter(), moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
-      jump_up: { letter: commonMsg.directionNorthLetter(), moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
-      jump_down: { letter: commonMsg.directionSouthLetter(), moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 },
+      left: { letter: commonMsg.directionWestLetter(), moveFunction: 'moveLeft', image: skin.leftArrow, tooltip: msg.moveWestTooltip() },
+      right: { letter: commonMsg.directionEastLetter(), moveFunction: 'moveRight', image: skin.rightArrow, tooltip: msg.moveEastTooltip() },
+      up: { letter: commonMsg.directionNorthLetter(), moveFunction: 'moveUp', image: skin.upArrow, tooltip: msg.moveNorthTooltip() },
+      down: { letter: commonMsg.directionSouthLetter(), moveFunction: 'moveDown', image: skin.downArrow, tooltip: msg.moveSouthTooltip() },
+      jump_left: { letter: commonMsg.directionWestLetter(), moveFunction: 'jumpLeft', image: skin.leftJumpArrow, tooltip: msg.jumpWestTooltip() },
+      jump_right: { letter: commonMsg.directionEastLetter(), moveFunction: 'jumpRight', image: skin.rightJumpArrow, tooltip: msg.jumpEastTooltip() },
+      jump_up: { letter: commonMsg.directionNorthLetter(), moveFunction: 'jumpUp', image: skin.upJumpArrow, tooltip: msg.jumpNorthTooltip() },
+      jump_down: { letter: commonMsg.directionSouthLetter(), moveFunction: 'jumpDown', image: skin.downJumpArrow, tooltip: msg.jumpSouthTooltip() }
     },
     LENGTHS: [
       [skin.shortLineDraw, "SHORT_MOVE_LENGTH"],
@@ -482,6 +482,7 @@ exports.install = function(blockly, skin) {
             .appendTitle(new blockly.FieldImage(directionConfig.image));
           this.setPreviousStatement(true);
           this.setNextStatement(true);
+          this.setTooltip(directionConfig.tooltip);
           if (hasLengthInput) {
             var dropdown = new blockly.FieldImageDropdown(SimpleMove.LENGTHS);
             dropdown.setValue(SimpleMove.LENGTHS[0][1]);

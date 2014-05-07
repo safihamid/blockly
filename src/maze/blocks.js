@@ -52,10 +52,10 @@ exports.install = function(blockly, skin) {
 
   var SimpleMove = {
     DIRECTION_CONFIGS: {
-      West: { letter: 'W' },
-      East: { letter: 'E' },
-      North: { letter: 'N' },
-      South: { letter: 'S' },
+      West: { letter: 'W', image: skin.leftArrow, tooltip: msg.moveWestTooltip() },
+      East: { letter: 'E', image: skin.rightArrow, tooltip: msg.moveEastTooltip() },
+      North: { letter: 'N', image: skin.upArrow, tooltip: msg.moveNorthTooltip() },
+      South: { letter: 'S', image: skin.downArrow, tooltip: msg.moveSouthTooltip() }
     },
     generateBlocksForAllDirections: function() {
       SimpleMove.generateBlocksForDirection("North");
@@ -74,10 +74,11 @@ exports.install = function(blockly, skin) {
         init: function () {
           this.setHSV(184, 1.00, 0.74);
           this.appendDummyInput()
-            .appendTitle(directionConfig.letter);
+            .appendTitle(directionConfig.letter)
+            .appendTitle(new blockly.FieldImage(directionConfig.image));
           this.setPreviousStatement(true);
           this.setNextStatement(true);
-          this.setTooltip(msg.moveForwardTooltip());
+          this.setTooltip(directionConfig.tooltip);
         }
       };
     },
