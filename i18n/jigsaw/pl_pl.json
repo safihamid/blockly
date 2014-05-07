@@ -1,11 +1,11 @@
 {
   "continue": "Kontynuuj",
-  "nextLevel": "Gratulacje! Ukończyłeś tę zagadkę.",
+  "nextLevel": "Gratulacje! Ukończyłeś tę łamigłówkę.",
   "no": "Nie",
-  "numBlocksNeeded": "Ta zagadka może być rozwiązana z użyciem %1 bloków.",
-  "oneTopBlock": "W tej łamigłówce musisz połączyć ze sobą wszystkie bloki w białym obszarze pracy.",
+  "numBlocksNeeded": "Ta łamigłówka może być rozwiązana z użyciem %1 bloków.",
+  "oneTopBlock": "W tej łamigłówce musisz połączyć ze sobą wszystkie bloki w białym obszarze roboczym.",
   "reinfFeedbackMsg": "Możesz nacisnąć przycisk \"Spróbuj ponownie\", aby powrócić do swojej gry.",
   "share": "Udostępnij",
-  "shareGame": "Podziel się swoją grą:",
+  "shareGame": "Udostępnij swoją grę:",
   "yes": "Tak"
 }

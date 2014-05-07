@@ -1,11 +1,11 @@
 {
-  "continue": "Continue",
-  "nextLevel": "Congratulations! You have completed this puzzle.",
-  "no": "No",
-  "numBlocksNeeded": "This puzzle can be solved with %1 blocks.",
-  "oneTopBlock": "For this puzzle, you need to stack together all of the blocks in the white workspace.",
-  "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
-  "share": "Share",
-  "shareGame": "Share your game:",
-  "yes": "Yes"
+  "continue": "Magpatuloy",
+  "nextLevel": "Maligayang pagbati! Natapos mo ang puzzle na ito.",
+  "no": "Hindi",
+  "numBlocksNeeded": "Ang puzzle na ito ay maaaring malutas sa %1 na mga block.",
+  "oneTopBlock": "Para sa puzzle na ito, kailangan mo isalansan lahat ang mga block sa puting workspace.",
+  "reinfFeedbackMsg": "Maaarin mo pindutin ang \"Subukan muli\" na button upang bumalik sa paglalaro.",
+  "share": "Ibahagi",
+  "shareGame": "Ibahagi ang iyong laro:",
+  "yes": "Oo"
 }

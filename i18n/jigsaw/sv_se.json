@@ -1,11 +1,11 @@
 {
   "continue": "Fortsätt",
-  "nextLevel": "Grattis! Du har slutfört detta pusslet.",
+  "nextLevel": "Grattis! Du har klarat den här uppgiften.",
   "no": "Nej",
-  "numBlocksNeeded": "Detta pusslet kan lösas med %1 block.",
-  "oneTopBlock": "För detta pussel måste du använda alla block och sätta ihop dem i den vita arbetsytan.",
-  "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
-  "share": "Share",
-  "shareGame": "Share your game:",
+  "numBlocksNeeded": "Den här uppgiften kan lösas med %1 block.",
+  "oneTopBlock": "För den här uppgiften måste du använda alla block och sätta ihop dem i den vita arbetsytan.",
+  "reinfFeedbackMsg": "Du kan klicka på \"Försök igen\" för att gå tillbaka till att spela ditt spel.",
+  "share": "Dela",
+  "shareGame": "Dela ditt spel:",
   "yes": "Ja"
 }

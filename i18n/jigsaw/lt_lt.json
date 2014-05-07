@@ -1,11 +1,11 @@
 {
-  "continue": "Continue",
-  "nextLevel": "Congratulations! You have completed this puzzle.",
-  "no": "No",
-  "numBlocksNeeded": "This puzzle can be solved with %1 blocks.",
-  "oneTopBlock": "For this puzzle, you need to stack together all of the blocks in the white workspace.",
-  "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
-  "share": "Share",
-  "shareGame": "Share your game:",
-  "yes": "Yes"
+  "continue": "Tęsti",
+  "nextLevel": "Sveikinu! Išsprendei šią užduotį.",
+  "no": "Ne",
+  "numBlocksNeeded": "Ši užduotis gali būti išspręsta su %1 blokų(-ais).",
+  "oneTopBlock": "Kad atliktum užduotį, tau reikia sujungti visus blokus baltame darbo lauke.",
+  "reinfFeedbackMsg": "Gali nuspausti mygtuką „Mėginti dar kartą“, kad grįžtum prie savo žaidimo.",
+  "share": "Dalintis",
+  "shareGame": "Bendrink savo žaidimą:",
+  "yes": "Taip"
 }

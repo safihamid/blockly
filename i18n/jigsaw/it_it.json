@@ -1,10 +1,10 @@
 {
-  "continue": "Continua",
-  "nextLevel": "Complimenti! Hai completato questo puzzle.",
+  "continue": "Prosegui",
+  "nextLevel": "Complimenti! Hai completato questo esercizio.",
   "no": "No",
-  "numBlocksNeeded": "Questo puzzle può essere risolto con %1 blocchi.",
-  "oneTopBlock": "Per questo puzzle, devi sovrapporre verticalmente tutti i blocchi nell'area di lavoro bianca.",
-  "reinfFeedbackMsg": "Premi \"Riprova\" per ricominciare a giocare la tua partita.",
+  "numBlocksNeeded": "Questo esercizio può essere risolto con %1 blocchi.",
+  "oneTopBlock": "Per questo esercizio, devi sovrapporre verticalmente tutti i blocchi nell'area di lavoro bianca.",
+  "reinfFeedbackMsg": "Premi \"Ricomincia\" per ricominciare a giocare la tua partita.",
   "share": "Condividi",
   "shareGame": "Condividi il tuo gioco:",
   "yes": "Sì"

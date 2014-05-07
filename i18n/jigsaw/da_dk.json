@@ -4,8 +4,8 @@
   "no": "Nej",
   "numBlocksNeeded": "Dette puslespil kan løses med %1 blokke.",
   "oneTopBlock": "Til dette puslespil, du skal stable alle blokkene sammen i det hvide arbejdsområde.",
-  "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
-  "share": "Share",
-  "shareGame": "Share your game:",
+  "reinfFeedbackMsg": "Du kan trykke på knappen \"Prøv igen\", for at gå tilbage til dit spil.",
+  "share": "Del",
+  "shareGame": "Del dit spil:",
   "yes": "Ja"
 }

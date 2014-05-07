@@ -1,9 +1,9 @@
 {
   "continue": "继续",
-  "nextLevel": "恭喜你！你解决了这个谜题。",
+  "nextLevel": "恭喜！您已完成了这个难题。",
   "no": "不",
-  "numBlocksNeeded": "这个谜题可以用%1个语句块解决。",
-  "oneTopBlock": "要解开这个谜题，你需要把白色工作区中所有的语句块连在一起。",
+  "numBlocksNeeded": "这个难题可以用%1个块解决。",
+  "oneTopBlock": "对于这个难题，需要合并所有堆叠在白色的工作区中的块。",
   "reinfFeedbackMsg": "你可以按“重试”按钮来返回你的游戏",
   "share": "分享",
   "shareGame": "分享你的游戏:",

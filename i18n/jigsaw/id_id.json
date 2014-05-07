@@ -1,11 +1,11 @@
 {
-  "continue": "lanjutkan",
-  "nextLevel": "Selamat! Kamu telah menyelesaikan teka-teki ini.",
+  "continue": "Lanjutkan",
+  "nextLevel": "Horee! Anda telah menyelesaikan teka-teki ini.",
   "no": "Tidak",
   "numBlocksNeeded": "Teka-teki ini dapat diselesaikan dengan %1 blok.",
-  "oneTopBlock": "untuk teka-teki ini, kamu perlu menyusun semua blok-blok di dalam lembar kerja putih.",
+  "oneTopBlock": "Teka-teki ini, Anda perlu mengumpulkan semua blok dari ruang kerja putih.",
   "reinfFeedbackMsg": "Anda dapat menekan tombol \"Coba lagi\" untuk kembali bermain.",
   "share": "Bagikan",
-  "shareGame": "Bagi permainanmu:",
+  "shareGame": "Bagikan permainanmu:",
   "yes": "Ya"
 }

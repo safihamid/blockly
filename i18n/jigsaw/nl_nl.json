@@ -2,10 +2,10 @@
   "continue": "Doorgaan",
   "nextLevel": "Gefeliciteerd! Je hebt de puzzel voltooid.",
   "no": "Nee",
-  "numBlocksNeeded": "Deze puzzel kan opgelost worden met %1 blokken.",
-  "oneTopBlock": "Voor deze puzzel moet je alle blokken in de witte werkruimte koppelen.",
-  "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
+  "numBlocksNeeded": "Deze puzzel kan worden opgelost met %1 blokken.",
+  "oneTopBlock": "Voor deze puzzel moet je alle blokken in de witte werkruimte opstapelen.",
+  "reinfFeedbackMsg": "Klik 'Probeer opnieuw' om terug te gaan naar je spel.",
   "share": "Delen",
-  "shareGame": "Share your game:",
+  "shareGame": "Deel je spel met anderen:",
   "yes": "Ja"
 }
