@@ -20,6 +20,7 @@ var DEV = (process.env.MOOC_DEV === '1');
 var LOCALES = (LOCALIZE ? [
   'af_za',
   'ar_sa',
+  'az_az',
   'bg_bg',
   'bn_bd',
   'ca_es',
