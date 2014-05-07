@@ -1050,7 +1050,7 @@ Maze.performStep = function(stepMode) {
 
   animateAction(action, stepMode);
 
-  var finishSteps = !stepMode
+  var finishSteps = !stepMode;
   if (stepMode) {
     // If we've run out of steps, finish things up
     if (BlocklyApps.log.length === 0 || BlocklyApps.log.length === 1 &&
