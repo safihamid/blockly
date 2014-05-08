@@ -45,12 +45,12 @@ var helpArea = function(html) { -%>
     <tr>
       <td style="width:100%;">
         <button id="runButton" class="launch blocklyLaunch <%= hideRunButton ? 'hide' : ''%>">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="run30"/>
           <div><%= msg.run() %></div>
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="run26"/>
         </button>
         <button id="resetButton" class="launch blocklyLaunch" style="display: none">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="reset30"/>
           <div><%= msg.resetProgram() %></div>
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="reset26"/>
         </button>
       </td>
       <% if (data.controls) { %>

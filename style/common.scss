@@ -120,22 +120,40 @@ button.launch>img {
 button.blocklyLaunch {
   border: 1px solid $orange;
   background-color: $orange;
-  min-width: 102px;
-  padding: 6px 9px 5px 5px;
+  min-width: 111px;
+  padding: 7px 10px 7px 6px;
   /* Can't use "text-align: start" due to IE. */
   text-align: left;
+  img {
+    float: left;
+    margin-top: 0px;
+    margin-left: 6px;
+  }
+  div {
+    text-align: left;
+    margin-top: 3px;
+    margin-right: 4px;
+    float: right;
+    padding: 0px;
+    margin-left: 6px;
+    min-width: 45px;
+  }
   &#resetButton {
     border: 1px solid $cyan;
     background-color: $cyan;
   }
-  img {
-    float: left;
-    margin-top: 1px;
+  &#runButton div {
   }
-  div {
-    margin-top: 5px;
-    margin-left: 35px;
-  }
+}
+button.share {
+  border: 1px solid #FFA000;
+  background-color: #FFA000;
+  color: #fff;
+  margin-left: 0px;
+  margin-right: 5px;
+}
+button.share:focus {
+  outline-style: none;
 }
 button:hover>img {
   opacity: 1;
@@ -629,18 +647,18 @@ $modal-image-margin-gap: 10px;
 }
 
 // Includes an icon from the 30x30 spritesheet at position x, y (starting from top-left)
-@mixin icon30($x, $y) {
-  $x-offset: $x * 30px;
-  $y-offset: $y * 30px;
-  width: 30px;
-  height: 30px;
-  background: url("#{$common_root}shared-sprites-30x30.png") $x-offset $y-offset;
+@mixin icon26($x, $y) {
+  $x-offset: $x * 26px;
+  $y-offset: $y * 26px;
+  width: 26px;
+  height: 26px;
+  background: url("#{$common_root}shared-sprites-26x26.png") $x-offset $y-offset;
 }
 
-.run30 {
-  @include icon30(0, 0);
+.run26 {
+  @include icon26(0, 0);
 }
 
-.reset30 {
-  @include icon30(0, 1);
+.reset26 {
+  @include icon26(0, 1);
 }
