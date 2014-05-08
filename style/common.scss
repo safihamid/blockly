@@ -653,7 +653,7 @@ $modal-image-margin-gap: 10px;
   }
 }
 
-// Includes an icon from the 30x30 spritesheet at position x, y (starting from top-left)
+// Includes an icon at position x, y (starting from top-left)
 @mixin icon26($x, $y) {
   $x-offset: $x * 26px;
   $y-offset: $y * 26px;
