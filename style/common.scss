@@ -117,9 +117,50 @@ button.launch>img {
   opacity: 1;
   vertical-align: text-bottom;
 }
-button>img {
-  opacity: 0.6;
-  vertical-align: text-bottom;
+button.blocklyLaunch {
+  border: 1px solid $orange;
+  background-color: $orange;
+  min-width: 111px;
+  padding: 7px 10px 7px 6px;
+  /* Can't use "text-align: start" due to IE. */
+  text-align: left;
+  img {
+    float: left;
+    margin-top: 0px;
+    margin-left: 6px;
+  }
+  div {
+    text-align: left;
+    margin-top: 3px;
+    margin-right: 4px;
+    float: right;
+    padding: 0px;
+    margin-left: 6px;
+    min-width: 45px;
+  }
+  html[dir="RTL"] & {
+    margin-right: 0px;
+  }
+  &#resetButton {
+    border: 1px solid $cyan;
+    background-color: $cyan;
+  }
+  &#runButton div {
+  }
+}
+button.share {
+  border: 1px solid #FFA000;
+  background-color: #FFA000;
+  color: #fff;
+  margin-left: 0px;
+  margin-right: 5px;
+  &.shareRight {
+    margin-right: 0px;
+    float: right;
+  }
+}
+button.share:focus {
+  outline-style: none;
 }
 button:hover>img {
   opacity: 1;
@@ -610,4 +651,21 @@ $modal-image-margin-gap: 10px;
     cursor: copy;
     margin: 0;
   }
+}
+
+// Includes an icon at position x, y (starting from top-left)
+@mixin icon26($x, $y) {
+  $x-offset: $x * 26px;
+  $y-offset: $y * 26px;
+  width: 26px;
+  height: 26px;
+  background: url("#{$common_root}shared-sprites-26x26.png") $x-offset $y-offset;
+}
+
+.run26 {
+  @include icon26(0, 0);
+}
+
+.reset26 {
+  @include icon26(0, 1);
 }
