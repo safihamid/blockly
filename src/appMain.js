@@ -21,7 +21,7 @@ StubDialog.prototype.hide = function() {
   console.log(this);
 };
 
-module.exports = function(app, levels, options) {
+module.exports = function(app, levels, options, reqBlocks) {
 
   // If a levelId is not provided, then options.level is specified in full.
   // Otherwise, options.level overrides resolved level on a per-property basis.
@@ -31,6 +31,11 @@ module.exports = function(app, levels, options) {
     options.level.id = options.levelId;
     for (var prop in options.level) {
       level[prop] = options.level[prop];
+    }
+
+    if (reqBlocks && options.level.required_blocks) {
+      level.requiredBlocks = reqBlocks.parseBlocks(
+          options.level.required_blocks);
     }
 
     options.level = level;
