@@ -72,6 +72,8 @@ var loadLevel = function() {
 
   Jigsaw.MAZE_WIDTH = 0;
   Jigsaw.MAZE_HEIGHT = 0;
+
+  Jigsaw.block1Clicked = false;
 };
 
 var drawMap = function() {
@@ -166,8 +168,7 @@ Jigsaw.init = function(config) {
   var block1 = document.querySelectorAll("[block-id='1']")[0];
   if (block1) {
     dom.addMouseDownTouchEvent(block1, function () {
-      Jigsaw.BLOCK1_CLICKED = true;
-      Blockly.runButtonClick();
+      Jigsaw.block1Clicked = true;
     });
   }
 };
