@@ -39,6 +39,7 @@
   "numLinesOfCodeWritten": "You just wrote {numLines, plural, one {1 line} other {# lines}} of code!",
   "puzzleTitle": "Puzzle {puzzle_number} of {stage_total}",
   "resetProgram": "Reset",
+  "run": "Run",
   "runProgram": "Run Program",
   "runTooltip": "Run the program defined by the blocks in the workspace.",
   "showCodeHeader": "Show Code",

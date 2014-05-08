@@ -117,9 +117,25 @@ button.launch>img {
   opacity: 1;
   vertical-align: text-bottom;
 }
-button>img {
-  opacity: 0.6;
-  vertical-align: text-bottom;
+button.blocklyLaunch {
+  border: 1px solid $orange;
+  background-color: $orange;
+  min-width: 102px;
+  padding: 6px 9px 5px 5px;
+  /* Can't use "text-align: start" due to IE. */
+  text-align: left;
+  &#resetButton {
+    border: 1px solid $cyan;
+    background-color: $cyan;
+  }
+  img {
+    float: left;
+    margin-top: 1px;
+  }
+  div {
+    margin-top: 5px;
+    margin-left: 35px;
+  }
 }
 button:hover>img {
   opacity: 1;
@@ -610,4 +626,21 @@ $modal-image-margin-gap: 10px;
     cursor: copy;
     margin: 0;
   }
+}
+
+// Includes an icon from the 30x30 spritesheet at position x, y (starting from top-left)
+@mixin icon30($x, $y) {
+  $x-offset: $x * 30px;
+  $y-offset: $y * 30px;
+  width: 30px;
+  height: 30px;
+  background: url("#{$common_root}shared-sprites-30x30.png") $x-offset $y-offset;
+}
+
+.run30 {
+  @include icon30(0, 0);
+}
+
+.reset30 {
+  @include icon30(0, 1);
 }

@@ -44,13 +44,13 @@ var helpArea = function(html) { -%>
   <table id="gameButtons">
     <tr>
       <td style="width:100%;">
-        <button id="runButton" class="launch <%= hideRunButton ? 'hide' : ''%>">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="run icon21">
-          <%= msg.runProgram() %>
+        <button id="runButton" class="launch blocklyLaunch <%= hideRunButton ? 'hide' : ''%>">
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="run30"/>
+          <div><%= msg.run() %></div>
         </button>
-        <button id="resetButton" class="launch" style="display: none">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="stop icon21">
-            <%= msg.resetProgram() %>
+        <button id="resetButton" class="launch blocklyLaunch" style="display: none">
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="reset30"/>
+          <div><%= msg.resetProgram() %></div>
         </button>
       </td>
       <% if (data.controls) { %>
