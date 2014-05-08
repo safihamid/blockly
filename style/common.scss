@@ -138,6 +138,9 @@ button.blocklyLaunch {
     margin-left: 6px;
     min-width: 45px;
   }
+  html[dir="RTL"] & {
+    margin-right: 0px;
+  }
   &#resetButton {
     border: 1px solid $cyan;
     background-color: $cyan;
@@ -151,6 +154,10 @@ button.share {
   color: #fff;
   margin-left: 0px;
   margin-right: 5px;
+  &.shareRight {
+    margin-right: 0px;
+    float: right;
+  }
 }
 button.share:focus {
   outline-style: none;
