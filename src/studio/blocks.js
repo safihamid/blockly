@@ -41,7 +41,7 @@ exports.install = function(blockly, skin) {
   blockly.JavaScript = generator;
   
   generator.studio_eventHandlerPrologue = function() {
-    return 'var executionCtx = Studio.acquireEventHandlerNum();\n\n';
+    return '\n';
   };
 
   blockly.Blocks.studio_spriteCount = 6;
@@ -419,7 +419,7 @@ exports.install = function(blockly, skin) {
     }
 
     return 'Studio.moveDistance(\'block_id_' + this.id +
-        '\', executionCtx || 0, ' +
+        '\', ' +
         (this.getTitleValue('SPRITE') || '0') + ', ' +
         dirParam + ', ' +
         distParam + ');\n';
@@ -702,7 +702,7 @@ exports.install = function(blockly, skin) {
   generator.studio_saySprite = function() {
     // Generate JavaScript for saying.
     return 'Studio.saySprite(\'block_id_' + this.id +
-               '\', executionCtx || 0, ' +
+               '\', ' +
                (this.getTitleValue('SPRITE') || '0') + ', ' +
                blockly.JavaScript.quote_(this.getTitleValue('TEXT')) + ');\n';
   };
