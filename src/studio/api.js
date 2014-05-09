@@ -15,73 +15,59 @@ exports.random = function (values) {
   return values[key];
 };
 
-exports.acquireEventHandlerNum = function() {
-  return Studio.eventHandlerNumber++;
-};
-
 exports.setBackground = function (id, value) {
-  BlocklyApps.highlight(id);
-  Studio.setBackground(value);
+  Studio.queueCmd(id, 'setBackground', {'value': value});
 };
 
 exports.setSprite = function (id, spriteIndex, value) {
-  BlocklyApps.highlight(id);
-  Studio.setSprite(spriteIndex, value);
+  Studio.queueCmd(id,
+                  'setSprite',
+                  {'index': spriteIndex, 'value': value});
 };
 
-exports.saySprite = function (id, executionCtx, spriteIndex, text) {
-  BlocklyApps.highlight(id);
-  Studio.saySprite(executionCtx, spriteIndex, text);
-};
-
-exports.setBackground = function (id, value) {
-  BlocklyApps.highlight(id);
-  Studio.setBackground(value);
+exports.saySprite = function (id, spriteIndex, text) {
+  Studio.queueCmd(id, 'saySprite', {'spriteIndex': spriteIndex, 'text': text});
 };
 
 exports.setSpriteEmotion = function (id, spriteIndex, value) {
-  BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].emotion = value;
+  Studio.queueCmd(id,
+                  'setSpriteEmotion',
+                  {'spriteIndex': spriteIndex, 'value': value});
 };
 
 exports.setSpriteSpeed = function (id, spriteIndex, value) {
-  BlocklyApps.highlight(id);
-  Studio.sprite[spriteIndex].speed = value;
+  Studio.queueCmd(id,
+                  'setSpriteSpeed',
+                  {'spriteIndex': spriteIndex, 'value': value});
 };
 
 exports.setSpritePosition = function (id, spriteIndex, value) {
-  BlocklyApps.highlight(id);
-  Studio.setSpritePosition(spriteIndex,
-                           xFromPosition[value],
-                           yFromPosition[value]);
+  Studio.queueCmd(id,
+                  'setSpritePosition',
+                  {'spriteIndex': spriteIndex,
+                   'x': xFromPosition[value],
+                   'y': yFromPosition[value]});
 };
 
 exports.playSound = function(id, soundName) {
-  BlocklyApps.highlight(id);
-  BlocklyApps.playAudio(soundName, {volume: 0.5});
+  Studio.queueCmd(id, 'playSound', {'soundName': soundName});
 };
 
 exports.stop = function(id, spriteIndex) {
-  BlocklyApps.highlight(id);
-  Studio.stop(spriteIndex);
+  Studio.queueCmd(id, 'stop', {'spriteIndex': spriteIndex});
 };
 
 exports.move = function(id, spriteIndex, dir) {
-  BlocklyApps.highlight(id);
-  Studio.moveSingle(spriteIndex, dir);
+  Studio.queueCmd(id, 'move', {'spriteIndex': spriteIndex, 'dir': dir});
 };
 
-exports.moveDistance = function(id, executionCtx, spriteIndex, dir, distance) {
-  BlocklyApps.highlight(id);
-  Studio.moveDistance(executionCtx, spriteIndex, dir, distance);
+exports.moveDistance = function(id, spriteIndex, dir, distance) {
+  Studio.queueCmd(
+      id,
+      'moveDistance',
+      {'spriteIndex': spriteIndex, 'dir': dir, 'distance': distance});
 };
 
 exports.incrementScore = function(id, player) {
-  BlocklyApps.highlight(id);
-  if (player == "opponent") {
-    Studio.opponentScore++;
-  } else {
-    Studio.playerScore++;
-  }
-  Studio.displayScore();
+  Studio.queueCmd(id, 'incrementScore', {'player': player});
 };
