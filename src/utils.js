@@ -52,18 +52,22 @@ exports.range = function(start, end) {
   return ints;
 };
 
-exports.parseRequiredBlocks = function(blocks, blockDefinitions) {
-  var blocksXml = xml.parseElement(blocks);
+// Returns an array of required blocks by comparing a list of blocks with
+// a list of app specific block tests (defined in <app>/requiredBlocks.js)
+exports.parseRequiredBlocks = function(requiredBlocks, blockTests) {
+  var blocksXml = xml.parseElement(requiredBlocks);
 
-  var parsedBlocks = [];
-  for (var i = 0; i < blocksXml.children.length; i++) {
-    var block = blocksXml.children[i];
-    for (var blockTest in blockDefinitions) {
-      if (blockList[blockTest].type === block.getAttribute('type')) {
-        parsedBlocks.push([blockList[blockTest]]);  // Test blocks get wrapped in an array.
+  var blocks = [];
+  Array.prototype.forEach.call(blocksXml.children, function(block) {
+    for (var testKey in blockTests) {
+      var test = blockTests[testKey];
+      if (typeof test === 'function') { test = test() };
+      if (test.type === block.getAttribute('type')) {
+        blocks.push([test]);  // Test blocks get wrapped in an array.
+        break;
       }
     };
-  };
+  });
 
-  return parsedBlocks;
+  return blocks;
 };
