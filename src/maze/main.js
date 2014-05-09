@@ -6,11 +6,11 @@ if (typeof global !== 'undefined') {
 var blocks = require('./blocks');
 var levels = require('./levels');
 var skins = require('./skins');
-var reqBlocks = require('./requiredBlocks');
+var requiredBlocks = require('./requiredBlocks');
 
 window.mazeMain = function(options) {
   options.skinsModule = skins;
   options.blocksModule = blocks;
 
-  appMain(window.Maze, levels, options, reqBlocks);
+  appMain(window.Maze, levels, options, requiredBlocks);
 };

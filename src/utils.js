@@ -1,3 +1,5 @@
+var xml = require('./xml');
+
 exports.shallowCopy = function(source) {
   var result = {};
   for (var prop in source) {
@@ -48,4 +50,20 @@ exports.range = function(start, end) {
     ints.push(i);
   }
   return ints;
+};
+
+exports.parseRequiredBlocks = function(blocks, blockDefinitions) {
+  var blocksXml = xml.parseElement(blocks);
+
+  var parsedBlocks = [];
+  for (var i = 0; i < blocksXml.children.length; i++) {
+    var block = blocksXml.children[i];
+    for (var blockTest in blockDefinitions) {
+      if (blockList[blockTest].type === block.getAttribute('type')) {
+        parsedBlocks.push([blockList[blockTest]]);  // Test blocks get wrapped in an array.
+      }
+    };
+  };
+
+  return parsedBlocks;
 };
