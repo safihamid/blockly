@@ -61,12 +61,12 @@ exports.parseRequiredBlocks = function(requiredBlocks, blockTests) {
   Array.prototype.forEach.call(blocksXml.children, function(block) {
     for (var testKey in blockTests) {
       var test = blockTests[testKey];
-      if (typeof test === 'function') { test = test() };
+      if (typeof test === 'function') { test = test(); }
       if (test.type === block.getAttribute('type')) {
         blocks.push([test]);  // Test blocks get wrapped in an array.
         break;
       }
-    };
+    }
   });
 
   return blocks;
