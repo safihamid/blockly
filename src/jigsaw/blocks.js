@@ -161,7 +161,7 @@ exports.install = function(blockly, skin) {
     var level = levels[key];
     generateJigsawBlocksForLevel(blockly, skin, {
       image: skin[level.image.name],
-      HSV: HSV,
+      HSV: level.backgroundHSV || HSV,
       width: level.image.width,
       height: level.image.height,
       numBlocks: level.numBlocks,
@@ -209,7 +209,7 @@ function generateBlankBlock(blockly, skin, name, hsv, width, hasAppend) {
         .appendTitle(new blockly.FieldImage(skin.blank, width, 1));
       this.setPreviousStatement(true);
       if (hasAppend) {
-        this.appendStatementInput('');
+        this.appendStatementInput('child');
       }
       this.setNextStatement(true);
     }

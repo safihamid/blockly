@@ -34,7 +34,7 @@
   "playSoundLaser": "play laser sound",
   "playSoundTooltip": "Play a sound.",
   "reinfFeedbackMsg": "You can press the \"Try again\" button to go back to playing your game.",
-  "scoreText": "Score: {playerScore} : {opponentScore}",
+  "scoreText": "Pontuação: {playerScore}",
   "setBackgroundRandom": "set scene Random",
   "setBackgroundFlappy": "set scene City (day)",
   "setBackgroundNight": "set scene City (night)",

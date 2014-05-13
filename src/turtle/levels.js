@@ -54,12 +54,6 @@ var blocks = {
   SIMPLE_MOVE_DOWN_LENGTH: blockUtils.blockOfType('simple_move_down_length'),
   SIMPLE_MOVE_LEFT_LENGTH: blockUtils.blockOfType('simple_move_left_length'),
   SIMPLE_MOVE_RIGHT_LENGTH: blockUtils.blockOfType('simple_move_right_length'),
-  SIMPLE_JUMP_UP_LENGTH: blockUtils.blockOfType('simple_jump_up_length'),
-  SIMPLE_JUMP_DOWN_LENGTH: blockUtils.blockOfType('simple_jump_down_length'),
-  SIMPLE_JUMP_LEFT_LENGTH: blockUtils.blockOfType('simple_jump_left_length'),
-  SIMPLE_JUMP_RIGHT_LENGTH: blockUtils.blockOfType('simple_jump_right_length'),
-  SIMPLE_MOVE_LENGTH_SHORT: blockUtils.blockOfType('simple_move_length_short'),
-  SIMPLE_MOVE_LENGTH_LONG: blockUtils.blockOfType('simple_move_length_long'),
   simpleMoveBlocks: function() {
     return this.SIMPLE_MOVE_UP +
       this.SIMPLE_MOVE_DOWN +
@@ -77,16 +71,6 @@ var blocks = {
       this.SIMPLE_MOVE_DOWN_LENGTH +
       this.SIMPLE_MOVE_LEFT_LENGTH +
       this.SIMPLE_MOVE_RIGHT_LENGTH;
-  },
-  simpleJumpLengthBlocks: function() {
-    return this.SIMPLE_JUMP_UP_LENGTH +
-      this.SIMPLE_JUMP_DOWN_LENGTH +
-      this.SIMPLE_JUMP_LEFT_LENGTH +
-      this.SIMPLE_JUMP_RIGHT_LENGTH;
-  },
-  simpleLengthBlocks: function() {
-    return this.SIMPLE_MOVE_LENGTH_SHORT +
-      this.SIMPLE_MOVE_LENGTH_LONG;
   }
 };
 
@@ -813,7 +797,7 @@ module.exports = {
     answer: [],
     freePlay: true,
     initialY: 300,
-    toolbox: toolbox(5, 6),
+    toolbox: toolbox(5, 7),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
@@ -823,7 +807,7 @@ module.exports = {
     answer: [],
     freePlay: false,
     initialY: 300,
-    toolbox: toolbox(5, 6),
+    toolbox: toolbox(5, 7),
     startBlocks: '',
     startDirection: 0,
     sliderSpeed: 1.0
@@ -836,8 +820,8 @@ module.exports = {
         blocks.simpleMoveBlocks() +
         blocks.simpleJumpBlocks() +
         blocks.simpleMoveLengthBlocks() +
-        blocks.simpleJumpLengthBlocks() +
-        blocks.simpleLengthBlocks()
+        blockUtils.blockOfType('controls_repeat_simplified') +
+        blockUtils.blockOfType('draw_colour_simple')
       ),
     startBlocks: '',
     startDirection: 0,

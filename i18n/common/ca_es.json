@@ -13,6 +13,10 @@
   "continue": "Continuar",
   "dialogCancel": "Cancel·lar",
   "dialogOK": "OK",
+  "directionNorthLetter": "N",
+  "directionSouthLetter": "S",
+  "directionEastLetter": "E",
+  "directionWestLetter": "W",
   "emptyBlocksErrorMsg": "Els blocs \"Repetir\" o el \"Si\" necessiten tenir altres blocs dins per a treballar. Assegureu-vos que el bloc interior encaixa bé dins del bloc que conté.",
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Enhorabona! Has completat l'etapa final.",
@@ -21,6 +25,7 @@
   "hashError": "Ho sentim, '%1' no correspon amb ningun programa guardat.",
   "help": "Ajuda",
   "hintTitle": "Consell:",
+  "jump": "jump",
   "levelIncompleteError": "Estàs utilitzant tots els tipus de blocs necessaris, però no de la manera correcta.",
   "listVariable": "Llista",
   "makeYourOwnFlappy": "Make Your Own Flappy Game",
@@ -48,6 +53,8 @@
   "totalNumLinesOfCodeWritten": "Total de tots els temps: {numLines, plural, one {1 línia} other {# línies}} de codi.",
   "tryAgain": "Torna a intentar-ho",
   "backToPreviousLevel": "Torna al nivell anterior",
+  "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Escriu el teu codi JavaScript sota aquestes instruccions.",
   "typeFuncs": "Funcions disponibles:%1",
   "typeHint": "Tingueu en compte que els parèntesis i els punts i coma són obligatoris.",
@@ -58,5 +65,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

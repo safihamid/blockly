@@ -37,6 +37,8 @@ var renderApp = function(app, req, res) {
   });
 };
 
+app.use(express.static(__dirname + '/public'));
+
 app.get('/blockly/*', function(req, res) {
   res.redirect(req.url.slice(8));
 });

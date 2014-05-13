@@ -102,7 +102,7 @@ Turtle.init = function(config) {
     // (execute) and the infinite loop detection function.
     //XXX Not sure if this is still right.
     Blockly.JavaScript.addReservedWords('Turtle,code');
- 
+
     // Helper for creating canvas elements.
     var createCanvas = function(id, width, height) {
       var el = document.createElement('canvas');
@@ -111,19 +111,19 @@ Turtle.init = function(config) {
       el.height = height;
       return el;
     };
-  
+
     // Create hidden canvases.
     Turtle.ctxAnswer = createCanvas('answer', 400, 400).getContext('2d');
     Turtle.ctxImages = createCanvas('images', 400, 400).getContext('2d');
-    Turtle.ctxScratch = createCanvas('scratch', 400, 400).getContext('2d');    
+    Turtle.ctxScratch = createCanvas('scratch', 400, 400).getContext('2d');
     Turtle.ctxFeedback = createCanvas('feedback', 154, 154).getContext('2d');
-  
+
     // Create display canvas.
     var display = createCanvas('display', 400, 400);
     var visualization = document.getElementById('visualization');
     visualization.appendChild(display);
     Turtle.ctxDisplay = display.getContext('2d');
-    
+
     // Set their initial contents.
     Turtle.loadTurtle();
     Turtle.drawImages();
@@ -342,6 +342,9 @@ Turtle.execute = function() {
   BlocklyApps.reset();
   BlocklyApps.playAudio('start', {volume : 0.5, loop : true});
   Turtle.pid = window.setTimeout(Turtle.animate, 100);
+
+  // Disable toolbox while running
+  Blockly.mainWorkspace.setEnableToolbox(false);
 };
 
 /**
@@ -604,7 +607,10 @@ var displayFeedback = function() {
     feedbackImage: Turtle.ctxScratch.canvas.toDataURL("image/png"),
     // add 'impressive':true to non-freeplay levels that we deem are relatively impressive (see #66990480)
     showingSharing: level.freePlay || level.impressive,
-    saveToGalleryUrl: (level.freePlay || level.impressive) && Turtle.response.save_to_gallery_url,
+    // impressive levels are already saved
+    alreadySaved: level.impressive,
+    // allow users to save freeplay levels to their gallery (impressive non-freeplay levels are autosaved)
+    saveToGalleryUrl: level.freePlay && Turtle.response.save_to_gallery_url,
     appStrings: {
       reinfFeedbackMsg: msg.reinfFeedbackMsg(),
       sharingText: msg.shareDrawing()
@@ -717,20 +723,7 @@ Turtle.checkAnswer = function() {
     BlocklyApps.playAudio('failure', {volume : 0.5});
   }
 
-  // Get the canvas data for feedback.
-  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
-    BlocklyApps.report({
-      app: 'turtle',
-      level: level.id,
-      builder: level.builder,
-      result: BlocklyApps.levelComplete,
-      testResult: Turtle.testResults,
-      program: encodeURIComponent(textBlocks),
-      onComplete: Turtle.onReportComplete,
-      image : getFeedbackImage()
-    });
-  } else {
-    BlocklyApps.report({
+  var reportData = {
       app: 'turtle',
       level: level.id,
       builder: level.builder,
@@ -738,8 +731,21 @@ Turtle.checkAnswer = function() {
       testResult: Turtle.testResults,
       program: encodeURIComponent(textBlocks),
       onComplete: Turtle.onReportComplete
-    });
+  };
+
+  // Get the canvas data for feedback.
+  if (Turtle.testResults >= BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL) {
+    reportData.image = getFeedbackImage();
   }
+
+  if (level.impressive) {
+    reportData.save_to_gallery = true;
+  }
+
+  BlocklyApps.report(reportData);
+
+  // reenable toolbox
+  Blockly.mainWorkspace.setEnableToolbox(true);
 
   // The call to displayFeedback() will happen later in onReportComplete()
 };

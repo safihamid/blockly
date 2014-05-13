@@ -13,6 +13,10 @@
   "continue": "Fortsett",
   "dialogCancel": "Avbryt",
   "dialogOK": "OK",
+  "directionNorthLetter": "N",
+  "directionSouthLetter": "S",
+  "directionEastLetter": "E",
+  "directionWestLetter": "W",
   "emptyBlocksErrorMsg": "\"Gjenta\"- eller \"Hvis\"-blokken må ha andre blokker inne i seg for å fungere. Kontroller at den indre blokken sitter riktig på plass i blokken som er utenfor.",
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Gratulerer! Du har fullført siste nivå.",
@@ -21,6 +25,7 @@
   "hashError": "Beklager, '%1' samsvarer ikke med noe lagret program.",
   "help": "Hjelp",
   "hintTitle": "Tips:",
+  "jump": "jump",
   "levelIncompleteError": "Du bruker alle nødvendige typer blokker, men ikke på riktig måte.",
   "listVariable": "liste",
   "makeYourOwnFlappy": "Make Your Own Flappy Game",
@@ -48,6 +53,8 @@
   "totalNumLinesOfCodeWritten": "Totalt: {numLines, plural, one {1 linje} other {# linjer}} med kode.",
   "tryAgain": "Forsøk igjen",
   "backToPreviousLevel": "Tilbake til forrige nivå",
+  "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Skriv din JavaScript-kode under disse instruksjonene.",
   "typeFuncs": "Tilgjengelige funksjoner: %1",
   "typeHint": "Legg merke til at paranteser og semikolon er nødvendig.",
@@ -58,5 +65,6 @@
   "wantToLearn": "Vil du lære å kode?",
   "watchVideo": "Se videoen",
   "tryHOC": "Prøv Kodetimen",
-  "signup": "Registrer deg for intro kurset"
+  "signup": "Registrer deg for intro kurset",
+  "hintHeader": "Here's a tip:"
 }

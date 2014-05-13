@@ -132,7 +132,7 @@ var initWallMap = function() {
 /**
  * PIDs of async tasks currently executing.
  */
-Bounce.pidList = [];
+var timeoutList = require('../timeoutList');
 
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/East/South/West squares.
@@ -203,7 +203,7 @@ Bounce.createBallElements = function (i) {
 Bounce.deleteBallElements = function (i) {
   var ballClipPath = document.getElementById('ballClipPath' + i);
   ballClipPath.parentNode.removeChild(ballClipPath);
-  
+
   var ballIcon = document.getElementById('ball' + i);
   ballIcon.parentNode.removeChild(ballIcon);
 };
@@ -363,7 +363,7 @@ var drawMap = function() {
     paddleClipRect.setAttribute('height', Bounce.PEGMAN_HEIGHT);
     paddleClip.appendChild(paddleClipRect);
     svg.appendChild(paddleClip);
-    
+
     // Add paddle.
     var paddleIcon = document.createElementNS(Blockly.SVG_NS, 'image');
     paddleIcon.setAttribute('id', 'paddle');
@@ -374,7 +374,7 @@ var drawMap = function() {
     paddleIcon.setAttribute('clip-path', 'url(#paddleClipPath)');
     svg.appendChild(paddleIcon);
   }
-  
+
   if (Bounce.paddleFinish_) {
     for (i = 0; i < Bounce.paddleFinishCount; i++) {
       // Add finish markers.
@@ -489,7 +489,7 @@ Bounce.onTick = function() {
   if (Bounce.tickCount === 1) {
     try { Bounce.whenGameStarts(BlocklyApps, api); } catch (e) { }
   }
-  
+
   // Run key event handlers for any keys that are down:
   for (var key in Keycodes) {
     if (Bounce.keyState[Keycodes[key]] &&
@@ -510,7 +510,7 @@ Bounce.onTick = function() {
       }
     }
   }
-  
+
   for (var btn in ArrowIds) {
     if (Bounce.btnState[ArrowIds[btn]] &&
         Bounce.btnState[ArrowIds[btn]] == ButtonState.DOWN) {
@@ -534,35 +534,35 @@ Bounce.onTick = function() {
   for (var i = 0; i < Bounce.ballCount; i++) {
     var deltaX = Bounce.ballSpeed[i] * Math.sin(Bounce.ballDir[i]);
     var deltaY = -Bounce.ballSpeed[i] * Math.cos(Bounce.ballDir[i]);
-    
+
     var wasXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
     var wasYOK = Bounce.ballY[i] >= tiles.Y_TOP_BOUNDARY;
     var wasYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
 
     Bounce.ballX[i] += deltaX;
     Bounce.ballY[i] += deltaY;
-    
+
     if (0 === (Bounce.ballFlags[i] &
                (Bounce.BallFlags.MISSED_PADDLE | Bounce.BallFlags.IN_GOAL))) {
       var nowXOK = Bounce.ballX[i] >= 0 && Bounce.ballX[i] <= Bounce.COLS - 1;
       var nowYOK = Bounce.ballY[i] >= tiles.Y_TOP_BOUNDARY;
       var nowYAboveBottom = Bounce.ballY[i] <= Bounce.ROWS - 1;
-      
+
       if (wasYOK && wasXOK && !nowXOK) {
         //console.log("calling whenWallCollided for ball " + i +
         //" x=" + Bounce.ballX[i] + " y=" + Bounce.ballY[i]);
         try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
       }
-      
+
       if (wasXOK && wasYOK && !nowYOK) {
         if (Bounce.map[0][Math.round(Bounce.ballX[i])] & SquareType.GOAL) {
           //console.log("calling whenBallInGoal for ball " + i +
           //" x=" + Bounce.ballX[i] + " y=" + Bounce.ballY[i]);
           try { Bounce.whenBallInGoal(BlocklyApps, api); } catch (e) { }
           Bounce.ballFlags[i] |= Bounce.BallFlags.IN_GOAL;
-          Bounce.pidList.push(window.setTimeout(
+          timeoutList.setTimeout(
               delegate(this, Bounce.moveBallOffscreen, i),
-              1000));
+              1000);
           if (Bounce.respawnBalls) {
             Bounce.launchBall(i);
           }
@@ -572,11 +572,11 @@ Bounce.onTick = function() {
           try { Bounce.whenWallCollided(BlocklyApps, api); } catch (e) { }
         }
       }
-      
+
       var xPaddleBall = Bounce.ballX[i] - Bounce.paddleX;
       var yPaddleBall = Bounce.ballY[i] - Bounce.paddleY;
       var distPaddleBall = Bounce.calcDistance(xPaddleBall, yPaddleBall);
-      
+
       if (distPaddleBall < tiles.PADDLE_BALL_COLLIDE_DISTANCE) {
         // paddle ball collision
         //console.log("calling whenPaddleCollided for ball " + i +
@@ -588,23 +588,23 @@ Bounce.onTick = function() {
         //" x=" + Bounce.ballX[i] + " y=" + Bounce.ballY[i]);
         try { Bounce.whenBallMissesPaddle(BlocklyApps, api); } catch (e) { }
         Bounce.ballFlags[i] |= Bounce.BallFlags.MISSED_PADDLE;
-        Bounce.pidList.push(window.setTimeout(
+        timeoutList.setTimeout(
             delegate(this, Bounce.moveBallOffscreen, i),
-            1000));
+            1000);
         if (Bounce.respawnBalls) {
           Bounce.launchBall(i);
         } else if (Bounce.failOnBallExit) {
           Bounce.result = ResultType.FAILURE;
-          Bounce.onPuzzleComplete();          
+          Bounce.onPuzzleComplete();
         }
       }
     }
-  
+
     Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
   }
-  
+
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
-  
+
   if (checkFinished()) {
     Bounce.onPuzzleComplete();
   }
@@ -613,7 +613,7 @@ Bounce.onTick = function() {
 Bounce.onKey = function(e) {
   // Store the most recent event type per-key
   Bounce.keyState[e.keyCode] = e.type;
-  
+
   // If we are actively running our tick loop, suppress default event handling
   if (Bounce.intervalId &&
       e.keyCode >= Keycodes.LEFT && e.keyCode <= Keycodes.DOWN) {
@@ -646,7 +646,7 @@ Bounce.init = function(config) {
   level = config.level;
   onSharePage = config.share;
   loadLevel();
-  
+
   window.addEventListener("keydown", Bounce.onKey, false);
   window.addEventListener("keyup", Bounce.onKey, false);
 
@@ -695,7 +695,7 @@ Bounce.init = function(config) {
                                           ArrowIds[btn]));
     }
     document.addEventListener('mouseup', Bounce.onMouseUp, false);
-  
+
     /**
      * The richness of block colours, regardless of the hue.
      * MOOC blocks should be brighter (target audience is younger).
@@ -705,7 +705,7 @@ Bounce.init = function(config) {
     Blockly.HSV_SATURATION = 0.6;
 
     Blockly.SNAP_RADIUS *= Bounce.scale.snapRadius;
-    
+
     Bounce.ballStart_ = [];
     Bounce.ballX = [];
     Bounce.ballY = [];
@@ -717,7 +717,7 @@ Bounce.init = function(config) {
     Bounce.paddleFinishCount = 0;
     Bounce.defaultBallSpeed = level.ballSpeed || tiles.DEFAULT_BALL_SPEED;
     Bounce.defaultBallDir = level.ballDirection || tiles.DEFAULT_BALL_DIRECTION;
-    
+
     // Locate the start and finish squares.
     for (var y = 0; y < Bounce.ROWS; y++) {
       for (var x = 0; x < Bounce.COLS; x++) {
@@ -739,7 +739,7 @@ Bounce.init = function(config) {
         }
       }
     }
-    
+
     Bounce.originalBallCount = Bounce.ballCount;
 
     drawMap();
@@ -800,10 +800,7 @@ Bounce.clearEventHandlersKillTickLoop = function() {
   }
   Bounce.intervalId = 0;
   // Kill all tasks.
-  for (var i = 0; i < Bounce.pidList.length; i++) {
-    window.clearTimeout(Bounce.pidList[i]);
-  }
-  Bounce.pidList = [];
+  timeoutList.clearTimeouts();
 };
 
 /**
@@ -834,8 +831,7 @@ Bounce.playSoundAndResetBall = function(i) {
  */
 Bounce.launchBall = function(i) {
   Bounce.ballFlags[i] |= Bounce.BallFlags.LAUNCHING;
-  Bounce.pidList.push(
-      window.setTimeout(delegate(this, Bounce.playSoundAndResetBall, i), 3000));
+  timeoutList.setTimeout(delegate(this, Bounce.playSoundAndResetBall, i), 3000);
 };
 
 /**
@@ -856,7 +852,7 @@ Bounce.resetBall = function(i, options) {
                         Bounce.defaultBallDir;
   Bounce.ballSpeed[i] = Bounce.currentBallSpeed;
   Bounce.ballFlags[i] = 0;
-  
+
   Bounce.displayBall(i, Bounce.ballX[i], Bounce.ballY[i]);
 };
 
@@ -878,7 +874,7 @@ BlocklyApps.reset = function(first) {
     var softButtonsCell = document.getElementById('soft-buttons');
     softButtonsCell.className = 'soft-buttons-' + softButtonCount;
   }
-  
+
   // Reset the score.
   Bounce.playerScore = 0;
   Bounce.opponentScore = 0;
@@ -900,12 +896,12 @@ BlocklyApps.reset = function(first) {
   for (i = 0; i < Bounce.ballCount; i++) {
     Bounce.resetBall(i, {});
   }
-  
+
   // Move Paddle into position.
   Bounce.paddleX = Bounce.paddleStart_.x;
   Bounce.paddleY = Bounce.paddleStart_.y;
   Bounce.paddleSpeed = tiles.DEFAULT_PADDLE_SPEED;
-  
+
   Bounce.displayPaddle(Bounce.paddleX, Bounce.paddleY);
 
   var svg = document.getElementById('svgBounce');
@@ -1005,7 +1001,7 @@ BlocklyApps.runButtonClick = function() {
   BlocklyApps.reset(false);
   BlocklyApps.attempts++;
   Bounce.execute();
-  
+
   if (level.freePlay && !onSharePage) {
     var shareCell = document.getElementById('share-cell');
     shareCell.className = 'share-cell-enabled';
@@ -1074,14 +1070,6 @@ Bounce.execute = function() {
   Bounce.waitingForReport = false;
   Bounce.response = null;
 
-  // Check for empty top level blocks to warn user about bugs,
-  // especially ones that lead to infinite loops.
-  if (feedback.hasEmptyTopLevelBlocks()) {
-    Bounce.testResults = BlocklyApps.TestResults.EMPTY_BLOCK_FAIL;
-    displayFeedback();
-    return;
-  }
-
   if (level.editCode) {
     var codeTextbox = document.getElementById('codeTextbox');
     code = dom.getText(codeTextbox);
@@ -1096,7 +1084,7 @@ Bounce.execute = function() {
       }
     }
   }
-  
+
   var codeWallCollided = Blockly.Generator.workspaceToCode(
                                     'JavaScript',
                                     'bounce_whenWallCollided');
@@ -1173,7 +1161,7 @@ Bounce.execute = function() {
                         {volume: 0.5});
 
   BlocklyApps.reset(false);
-  
+
   // Set event handlers and start the onTick timer
   Bounce.whenWallCollided = whenWallCollidedFunc;
   Bounce.whenBallInGoal = whenBallInGoalFunc;
@@ -1199,7 +1187,7 @@ Bounce.onPuzzleComplete = function() {
   // If we know they succeeded, mark levelComplete true
   // Note that we have not yet animated the succesful run
   BlocklyApps.levelComplete = (Bounce.result == ResultType.SUCCESS);
-  
+
   // If the current level is a free play, always return the free play
   // result type
   if (level.freePlay) {
@@ -1213,22 +1201,22 @@ Bounce.onPuzzleComplete = function() {
   } else {
     BlocklyApps.playAudio('failure', {volume : 0.5});
   }
-  
+
   if (level.editCode) {
     Bounce.testResults = BlocklyApps.levelComplete ?
       BlocklyApps.TestResults.ALL_PASS :
       BlocklyApps.TestResults.TOO_FEW_BLOCKS_FAIL;
   }
-  
+
   if (level.failForOther1Star && !BlocklyApps.levelComplete) {
     Bounce.testResults = BlocklyApps.TestResults.OTHER_1_STAR_FAIL;
   }
-  
+
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   var textBlocks = Blockly.Xml.domToText(xml);
-  
+
   Bounce.waitingForReport = true;
-  
+
   // Report result to server.
   BlocklyApps.report({
                      app: 'bounce',
@@ -1273,7 +1261,7 @@ Bounce.displayBall = function(i, x, y) {
                         x * Bounce.SQUARE_SIZE);
   ballIcon.setAttribute('y',
                         y * Bounce.SQUARE_SIZE + Bounce.BALL_Y_OFFSET);
-  
+
   var ballClipRect = document.getElementById('ballClipRect' + i);
   ballClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
   ballClipRect.setAttribute('y', ballIcon.getAttribute('y'));
@@ -1290,7 +1278,7 @@ Bounce.displayPaddle = function(x, y) {
                           x * Bounce.SQUARE_SIZE);
   paddleIcon.setAttribute('y',
                           y * Bounce.SQUARE_SIZE + Bounce.PADDLE_Y_OFFSET);
-  
+
   var paddleClipRect = document.getElementById('paddleClipRect');
   paddleClipRect.setAttribute('x', x * Bounce.SQUARE_SIZE);
   paddleClipRect.setAttribute('y', paddleIcon.getAttribute('y'));
@@ -1436,7 +1424,7 @@ var checkFinished = function () {
     Bounce.result = ResultType.SUCCESS;
     return true;
   }
-  
+
   // if we have a failure condition, and it's been reached, we're done and failed
   if (level.goal && level.goal.failureCondition && level.goal.failureCondition()) {
     Bounce.result = ResultType.FAILURE;
@@ -1447,11 +1435,11 @@ var checkFinished = function () {
     Bounce.result = ResultType.SUCCESS;
     return true;
   }
-  
+
   if (Bounce.timedOut()) {
     Bounce.result = ResultType.FAILURE;
     return true;
   }
-  
+
   return false;
 };

@@ -1,4 +1,7 @@
-<% var msg = require('../../locale/current/common'); %>
+<%
+  var msg = require('../../locale/current/common');
+  var hideRunButton = locals.hideRunButton || false;
+%>
 
 <div id="rotateContainer" style="background-image: url(<%= assetUrl('media/mobile_tutorial_turnphone.png') %>)">
   <div id="rotateText">
@@ -41,19 +44,22 @@ var helpArea = function(html) { -%>
   <table id="gameButtons">
     <tr>
       <td style="width:100%;">
-        <button id="runButton" class="launch">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="run icon21">
-          <%= msg.runProgram() %>
+        <button id="runButton" class="launch blocklyLaunch <%= hideRunButton ? 'hide' : ''%>">
+          <div><%= msg.runProgram() %></div>
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="run26"/>
         </button>
-        <button id="resetButton" class="launch" style="display: none">
-          <img src="<%= assetUrl('media/1x1.gif') %>" class="stop icon21">
-            <%= msg.resetProgram() %>
+        <button id="resetButton" class="launch blocklyLaunch" style="display: none">
+          <div><%= msg.resetProgram() %></div>
+          <img src="<%= assetUrl('media/1x1.gif') %>" class="reset26"/>
         </button>
       </td>
       <% if (data.controls) { %>
         <%- data.controls %>
       <% } %>
     </tr>
+    <% if (data.extraControlRows) { %>
+      <%- data.extraControlRows %>
+    <% } %>
   </table>
 
   <% instructions() %>

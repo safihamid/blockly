@@ -13,6 +13,10 @@
   "continue": "Vazhdo",
   "dialogCancel": "Anulo",
   "dialogOK": "Ne rregull",
+  "directionNorthLetter": "N",
+  "directionSouthLetter": "S",
+  "directionEastLetter": "E",
+  "directionWestLetter": "W",
   "emptyBlocksErrorMsg": "The \"Repeat\" or \"If\" block needs to have other blocks inside it to work. Make sure the inner block fits properly inside the containing block.",
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Urime! Ju sapo perfunduat fazen finale ",
@@ -21,6 +25,7 @@
   "hashError": "Sorry, '%1' doesn't correspond with any saved program.",
   "help": "Ndihm",
   "hintTitle": "Ndihmes:",
+  "jump": "jump",
   "levelIncompleteError": "You are using all of the necessary types of blocks but not in the right way.",
   "listVariable": "lista",
   "makeYourOwnFlappy": "Make Your Own Flappy Game",
@@ -48,6 +53,8 @@
   "totalNumLinesOfCodeWritten": "All-time total: {numLines, plural, one {1 line} other {# lines}} of code.",
   "tryAgain": "Provo perseri",
   "backToPreviousLevel": "Kthehu ne nivelin e meparshem",
+  "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Type your JavaScript code below these instructions.",
   "typeFuncs": "Available functions:%1",
   "typeHint": "Note that the parentheses and semicolons are required.",
@@ -58,5 +65,6 @@
   "wantToLearn": "Want to learn to code?",
   "watchVideo": "Watch the Video",
   "tryHOC": "Try the Hour of Code",
-  "signup": "Sign up for the intro course"
+  "signup": "Sign up for the intro course",
+  "hintHeader": "Here's a tip:"
 }

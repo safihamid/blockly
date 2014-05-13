@@ -84,17 +84,6 @@ button.arrow:focus {
   min-width: 204px;
 }
 
-button.share {
-  border: 1px solid #FFA000;
-  background-color: #FFA000;
-  color: #fff;
-  margin-left: 0px;
-  margin-right: 5px;
-  padding-top: 11px;
-}
-button.share:focus {
-  outline-style: none;
-}
 .share-cell-none {
   display: none;
 }
@@ -102,11 +91,15 @@ button.share:focus {
   min-width: 102px;
 }
 .studio-speech-bubble {
+  fill: black;
+  font-size: 16px;
+  text-anchor: middle;
+}
+.studio-speech-bubble-path {
   fill: white;
   stroke: black;
-  font-size: x-large;
-  font-weight: bold;
-  stroke-width: 0.5;
+  stroke-width: 3;
+  opacity: 0.9;
 }
 .studio-score {
   text-anchor: middle;

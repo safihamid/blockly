@@ -58,17 +58,6 @@ $root: '/blockly/media/flappy/'; //TODO: Parameterize for asset pipeline
   display: none;
 }
 
-button.share {
-  border: 1px solid #FFA000;
-  background-color: #FFA000;
-  color: #fff;
-  margin-left: 0px;
-  margin-right: 5px;
-  padding-top: 11px;
-}
-button.share:focus {
-  outline-style: none;
-}
 .share-cell-none {
   display: none;
 }

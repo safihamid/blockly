@@ -1,3 +1,4 @@
+$common_root: '/blockly/media/common_images/';
 $cyan: #0094ca;
 $charcoal: #5b6770;
 $orange: #ffa400;
@@ -47,13 +48,24 @@ html[dir="RTL"] .farSide {
   bottom: 10px;
   margin-left: 415px;
 }
-.show-code-div {
+
+#show-code-button {
   @media screen and (max-device-width: 540px) {
     display: none;
   }
-  margin-top: 5px;
-  margin-bottom: 5px;
+
+  background-color: $green;
+  border-color: $green;
+  padding: 2px 8px;
+  margin: -5px 0 0 6px;
+  font-size: small;
+  color: white;
 }
+
+.share-code-spacer {
+  min-height:25px;
+}
+
 #codeTextbox {
   position: absolute;
   bottom: 10px;
@@ -88,8 +100,8 @@ button {
   color: #000;
 }
 button.launch {
-  border: 1px solid #FFA000;
-  background-color: #FFA000;
+  border: 1px solid $orange;
+  background-color: $orange;
   color: #fff;
   font-size: large;
   min-width: 96px;
@@ -105,9 +117,50 @@ button.launch>img {
   opacity: 1;
   vertical-align: text-bottom;
 }
-button>img {
-  opacity: 0.6;
-  vertical-align: text-bottom;
+button.blocklyLaunch {
+  border: 1px solid $orange;
+  background-color: $orange;
+  min-width: 111px;
+  padding: 7px 10px 7px 6px;
+  /* Can't use "text-align: start" due to IE. */
+  text-align: left;
+  img {
+    float: left;
+    margin-top: 0px;
+    margin-left: 6px;
+  }
+  div {
+    text-align: left;
+    margin-top: 3px;
+    margin-right: 4px;
+    float: right;
+    padding: 0px;
+    margin-left: 6px;
+    min-width: 45px;
+  }
+  html[dir="RTL"] & {
+    margin-right: 0px;
+  }
+  &#resetButton {
+    border: 1px solid $cyan;
+    background-color: $cyan;
+  }
+  &#runButton div {
+  }
+}
+button.share {
+  border: 1px solid #FFA000;
+  background-color: #FFA000;
+  color: #fff;
+  margin-left: 0px;
+  margin-right: 5px;
+  &.shareRight {
+    margin-right: 0px;
+    float: right;
+  }
+}
+button.share:focus {
+  outline-style: none;
 }
 button:hover>img {
   opacity: 1;
@@ -236,20 +289,7 @@ input[type="radio"] {
   color: #7E5BA0;
   font-weight: bold;
 }
-.linesOfCodeMsg {
-  font-size: 20px;
-  line-height: normal;
-  color: #5A6A73;
-}
-.shareDrawingMsg {
-  margin-top: 25px;
-  font-size: 20px;
-  color: #5A6A73;
-}
-.shareDiv {
-  display: inline-block;
-  width: 90%;
-}
+
 #show-code {
   margin-bottom: 5px;
 }
@@ -400,6 +440,7 @@ input[type="radio"] {
     font-size: 14px;
     line-height: inherit;
     color: $charcoal;
+    margin-bottom: 10px;
 
     a {
       font-weight: bold;
@@ -478,6 +519,13 @@ $modal-image-margin-gap: 10px;
       width: 20%;
     }
   }
+
+  .lines-of-code-message {
+    font-size: 20px;
+    line-height: normal;
+    color: $charcoal;
+    margin: 0 0 8px;
+  }
 }
 
 .yellow-background {
@@ -503,12 +551,30 @@ $modal-image-margin-gap: 10px;
   min-width: 100px;
 }
 
+@mixin k1-image-button ($filename, $image_width) {
+  .k1 & {
+    text-align: center;
+    border: none;
+    background: white url("#{$common_root}#{$filename}");
+    width: $image_width;
+    height: 118px;
+    font-size: 27px;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
 #again-button {
   background-color: $green;
   border: 1px solid $green;
   color: white;
   margin-left: 0px;
   margin-right: 10px;
+  @include k1-image-button('tryagain-arrow-button.png', 204px);
+  .k1 & {
+    text-align: right;
+  }
 }
 
 #continue-button {
@@ -517,6 +583,10 @@ $modal-image-margin-gap: 10px;
   color: white;
   margin-left: 0px;
   margin-right: 10px;
+  @include k1-image-button('next-arrow-button.png', 171px);
+  .k1 & {
+    text-align: left;
+  }
 }
 
 #save-to-gallery-button {
@@ -565,6 +635,43 @@ $modal-image-margin-gap: 10px;
     display: none;
   }
 }
-.social-buttons a:hover {
-  text-decoration: none;
+
+.sharing {
+  margin-top: 15px;
+  font-size: 20px;
+  color: $charcoal;
+
+  div {
+    margin: 15px 0;
+  }
+  
+  .saved-to-gallery {
+    color: $purple;
+  }
+  .social-buttons {
+    a:hover {
+      text-decoration: none;
+    }
+  }
+  #sharing-input {
+    cursor: copy;
+    margin: 0;
+  }
+}
+
+// Includes an icon at position x, y (starting from top-left)
+@mixin icon26($x, $y) {
+  $x-offset: $x * 26px;
+  $y-offset: $y * 26px;
+  width: 26px;
+  height: 26px;
+  background: url("#{$common_root}shared-sprites-26x26.png") $x-offset $y-offset;
+}
+
+.run26 {
+  @include icon26(0, 0);
+}
+
+.reset26 {
+  @include icon26(0, 1);
 }

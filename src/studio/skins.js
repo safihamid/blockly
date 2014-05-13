@@ -16,35 +16,46 @@ exports.load = function(assetUrl, id) {
   var skin = skinsBase.load(assetUrl, id);
   var config = CONFIGS[skin.id];
 
-  skin.retro = {
+  skin.hardcourt = {
+    background: skin.assetUrl('background.png'),
+  };
+  skin.black = {
     background: skin.assetUrl('retro_background.png'),
   };
   skin.cave = {
     background: skin.assetUrl('background_cave.png'),
   };
-  skin.santa = {
+  skin.night = {
     background: skin.assetUrl('background_santa.png'),
   };
-  skin.scifi = {
+  skin.cloudy = {
     background: skin.assetUrl('background_scifi.png'),
   };
   skin.underwater = {
     background: skin.assetUrl('background_underwater.png'),
   };
+  skin.green = {
+    sprite: skin.assetUrl('avatar1.png'),
+    spriteFlags: 0,
+  };
   skin.purple = {
     sprite: skin.assetUrl('avatar2.png'),
+    spriteFlags: 0,
   };
   skin.orange = {
     sprite: skin.assetUrl('avatar3.png'),
+    spriteFlags: 0,
   };
   skin.pink = {
     sprite: skin.assetUrl('avatar4.png'),
+    spriteFlags: 0,
   };
 
   // Images
   skin.goal = skin.assetUrl('goal.png');
   skin.goalSuccess = skin.assetUrl('goal_success.png');
-  skin.sprite = skin.assetUrl('avatar1.png');
+  skin.sprite = skin.assetUrl('witch_sprite_200px.png');
+  skin.spriteFlags = 28; // flags: emotions, animation, turns
   skin.goalAnimation = skin.assetUrl('goal.gif');
   skin.approachingGoalAnimation =
       skin.assetUrl(config.approachingGoalAnimation);

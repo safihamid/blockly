@@ -13,6 +13,10 @@
   "continue": "Nadaljuj",
   "dialogCancel": "Prekliči",
   "dialogOK": "Vredu",
+  "directionNorthLetter": "N",
+  "directionSouthLetter": "S",
+  "directionEastLetter": "E",
+  "directionWestLetter": "W",
   "emptyBlocksErrorMsg": "Znotraj 'Ponovi' ali 'če' bloka morajo biti drugi bloki, da bo delovalo. Prepričaj se, da se notranji bloki ustrezno prilegajo zunanjemu bloku.",
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Čestitke! Zaključil si zadnjo stopnjo.",
@@ -21,6 +25,7 @@
   "hashError": "Oprosti, '%1' ne ustreza nobenemu shranjenemu programu.",
   "help": "Pomoč",
   "hintTitle": "Namig:",
+  "jump": "jump",
   "levelIncompleteError": "Uporabljaš vse potrebne tipe blokov, a ne na pravi način.",
   "listVariable": "seznam",
   "makeYourOwnFlappy": "Make Your Own Flappy Game",
@@ -48,6 +53,8 @@
   "totalNumLinesOfCodeWritten": "Seštevek vseh skupaj:  {numLines, plural, one {1 vrstica} other {# vrstic}} kode.",
   "tryAgain": "Poskusi ponovno",
   "backToPreviousLevel": "Nazaj na prejšnjo raven",
+  "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Vtipkaj tvojo JavaScript kodo pod temi navodili.",
   "typeFuncs": "Razpoložljive funkcije: %1",
   "typeHint": "Zapomni si, oklepaji in podpičja so zahtevana.",
@@ -58,5 +65,6 @@
   "wantToLearn": "Se želiš naučiti programirati?",
   "watchVideo": "Glej video",
   "tryHOC": "Poizkusi Uro za programiranje (Hour to Code)",
-  "signup": "Vpiši se za uvodni tečaj"
+  "signup": "Vpiši se za uvodni tečaj",
+  "hintHeader": "Here's a tip:"
 }

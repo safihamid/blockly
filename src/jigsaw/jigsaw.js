@@ -72,6 +72,8 @@ var loadLevel = function() {
 
   Jigsaw.MAZE_WIDTH = 0;
   Jigsaw.MAZE_HEIGHT = 0;
+
+  Jigsaw.block1Clicked = false;
 };
 
 var drawMap = function() {
@@ -158,19 +160,28 @@ Jigsaw.init = function(config) {
   BlocklyApps.init(config);
 
   document.getElementById('runButton').style.display = 'none';
-  Blockly.addChangeListener(function(evt) {
-    BlocklyApps.runButtonClick();
+  Jigsaw.successListener = Blockly.addChangeListener(function(evt) {
+    checkForSuccess();
   });
-};
 
-BlocklyApps.runButtonClick = function() {
-  var success = level.goal.successCondition();
-  if (success) {
-    Jigsaw.result = ResultType.SUCCESS;
-
-    Jigsaw.onPuzzleComplete();
+  // Only used by level1, in which the success criteria is clicking on the block
+  var block1 = document.querySelectorAll("[block-id='1']")[0];
+  if (block1) {
+    dom.addMouseDownTouchEvent(block1, function () {
+      Jigsaw.block1Clicked = true;
+    });
   }
 };
+
+function checkForSuccess() {
+  var success = level.goal.successCondition();
+  if (success) {
+    Blockly.removeChangeListener(Jigsaw.successListener);
+
+    Jigsaw.result = ResultType.SUCCESS;
+    Jigsaw.onPuzzleComplete();
+  }
+}
 
 /**
  * Outcomes of running the user program.

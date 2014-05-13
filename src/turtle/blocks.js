@@ -25,6 +25,7 @@
 
 var Colours = require('./core').Colours;
 var msg = require('../../locale/current/turtle');
+var commonMsg = require('../../locale/current/common');
 
 // Install extensions to Blockly's language and JavaScript generator.
 exports.install = function(blockly, skin) {
@@ -444,15 +445,19 @@ exports.install = function(blockly, skin) {
     SHORT_MOVE_LENGTH: 25,
     LONG_MOVE_LENGTH: 100,
     DIRECTION_CONFIGS: {
-      left: { letter: 'W', moveFunction: 'moveLeft', image: skin.leftArrow, image_width: 42, image_height: 42 },
-      right: { letter: 'E', moveFunction: 'moveRight', image: skin.rightArrow, image_width: 42, image_height: 42 },
-      up: { letter: 'N', moveFunction: 'moveUp', image: skin.upArrow, image_width: 42, image_height: 42 },
-      down: { letter: 'S', moveFunction: 'moveDown', image: skin.downArrow, image_width: 42, image_height: 42 },
-      jump_left: { letter: 'W', moveFunction: 'jumpLeft', image: skin.leftJumpArrow, image_width: 42, image_height: 42 },
-      jump_right: { letter: 'E', moveFunction: 'jumpRight', image: skin.rightJumpArrow, image_width: 42, image_height: 42 },
-      jump_up: { letter: 'N', moveFunction: 'jumpUp', image: skin.upJumpArrow, image_width: 42, image_height: 42 },
-      jump_down: { letter: 'S', moveFunction: 'jumpDown', image: skin.downJumpArrow, image_width: 42, image_height: 42 }
+      left: { title: commonMsg.directionWestLetter(), moveFunction: 'moveLeft', image: skin.leftArrow, tooltip: msg.moveWestTooltip() },
+      right: { title: commonMsg.directionEastLetter(), moveFunction: 'moveRight', image: skin.rightArrow, tooltip: msg.moveEastTooltip() },
+      up: { title: commonMsg.directionNorthLetter(), moveFunction: 'moveUp', image: skin.upArrow, tooltip: msg.moveNorthTooltip() },
+      down: { title: commonMsg.directionSouthLetter(), moveFunction: 'moveDown', image: skin.downArrow, tooltip: msg.moveSouthTooltip() },
+      jump_left: { title: commonMsg.jump() + " " + commonMsg.directionWestLetter(), moveFunction: 'jumpLeft', image: skin.leftJumpArrow, tooltip: msg.jumpWestTooltip() },
+      jump_right: { title: commonMsg.jump() + " " + commonMsg.directionEastLetter(), moveFunction: 'jumpRight', image: skin.rightJumpArrow, tooltip: msg.jumpEastTooltip() },
+      jump_up: { title: commonMsg.jump() + " " + commonMsg.directionNorthLetter(), moveFunction: 'jumpUp', image: skin.upJumpArrow, tooltip: msg.jumpNorthTooltip() },
+      jump_down: { title: commonMsg.jump() + " "  + commonMsg.directionSouthLetter(), moveFunction: 'jumpDown', image: skin.downJumpArrow, tooltip: msg.jumpSouthTooltip() }
     },
+    LENGTHS: [
+      [skin.shortLineDraw, "SHORT_MOVE_LENGTH"],
+      [skin.longLineDraw, "LONG_MOVE_LENGTH"]
+    ],
     generateBlocksForAllDirections: function() {
       SimpleMove.generateBlocksForDirection("up");
       SimpleMove.generateBlocksForDirection("down");
@@ -463,73 +468,42 @@ exports.install = function(blockly, skin) {
       generator["simple_move_" + direction] = SimpleMove.generateCodeGenerator(direction);
       generator["simple_jump_" + direction] = SimpleMove.generateCodeGenerator('jump_' + direction);
       generator["simple_move_" + direction + "_length"] = SimpleMove.generateCodeGenerator(direction, true);
-      generator["simple_jump_" + direction + "_length"] = SimpleMove.generateCodeGenerator('jump_' + direction, true);
-      blockly.Blocks['simple_move_' + direction + '_length'] = SimpleMove.generateBlock(direction, true);
-      blockly.Blocks['simple_jump_' + direction + '_length'] = SimpleMove.generateBlock('jump_' + direction, true);
-      blockly.Blocks['simple_move_' + direction] = SimpleMove.generateBlock(direction);
-      blockly.Blocks['simple_jump_' + direction] = SimpleMove.generateBlock('jump_' + direction);
+      blockly.Blocks['simple_move_' + direction + '_length'] = SimpleMove.generateMoveBlock(direction, true);
+      blockly.Blocks['simple_move_' + direction] = SimpleMove.generateMoveBlock(direction);
+      blockly.Blocks['simple_jump_' + direction] = SimpleMove.generateMoveBlock('jump_' + direction);
     },
-    generateBlock: function(direction, hasLengthInput) {
+    generateMoveBlock: function(direction, hasLengthInput) {
       var directionConfig = SimpleMove.DIRECTION_CONFIGS[direction];
       return {
         helpUrl: '',
         init: function () {
           this.setHSV(184, 1.00, 0.74);
-          this.appendDummyInput()
-            .appendTitle(directionConfig.letter)
-            .appendTitle(new blockly.FieldImage(directionConfig.image, directionConfig.image_width, directionConfig.image_height));
+          var input = this.appendDummyInput().appendTitle(directionConfig.title)
+            .appendTitle(new blockly.FieldImage(directionConfig.image));
           this.setPreviousStatement(true);
           this.setNextStatement(true);
-          this.setTooltip(msg.jumpTooltip());
+          this.setTooltip(directionConfig.tooltip);
           if (hasLengthInput) {
-            this.setInputsInline(true);
-            this.appendValueInput("length").setCheck("Number");
+            var dropdown = new blockly.FieldImageDropdown(SimpleMove.LENGTHS);
+            dropdown.setValue(SimpleMove.LENGTHS[0][1]);
+            input.appendTitle(dropdown, 'length');
           }
         }
       };
     },
-    generateCodeGenerator: function(direction, hasLengthInput) {
+    generateCodeGenerator: function(direction, hasLengthInput, length) {
       return function() {
-        var length = SimpleMove.DEFAULT_MOVE_LENGTH;
+        length = length || SimpleMove.DEFAULT_MOVE_LENGTH;
 
         if (hasLengthInput) {
-          var lengthInputResult = generator.valueToCode(this, 'length', generator.ORDER_ATOMIC);
-          length = lengthInputResult || length; // Allow empty input
+          length = SimpleMove[this.getTitleValue("length")];
         }
         return 'Turtle.' + SimpleMove.DIRECTION_CONFIGS[direction].moveFunction + '(' + length + ',' + '\'block_id_' + this.id + '\');\n';
       };
-    },
-    stretchedLine: function(width) {
-      var lineImage = new blockly.FieldImage(skin.offsetLineSlice, width, 9);
-      lineImage.setPreserveAspectRatio("none");
-      return lineImage;
     }
   };
 
   SimpleMove.generateBlocksForAllDirections();
-
-  blockly.Blocks.simple_move_length_short = {
-    init: function() {
-      this.setHSV(258, 0.35, 0.62);
-      this.appendDummyInput().appendTitle(SimpleMove.stretchedLine(SimpleMove.SHORT_MOVE_LENGTH));
-      this.setOutput(true, 'Number');
-    }
-  };
-  blockly.Blocks.simple_move_length_long = {
-    init: function() {
-      this.setHSV(258, 0.35, 0.62);
-      this.appendDummyInput().appendTitle(SimpleMove.stretchedLine(SimpleMove.LONG_MOVE_LENGTH));
-      this.setOutput(true, 'Number');
-    }
-  };
-
-  
-  generator.simple_move_length_short = function () {
-    return [SimpleMove.SHORT_MOVE_LENGTH, generator.ORDER_ATOMIC];
-  };
-  generator.simple_move_length_long = function () {
-    return [SimpleMove.LONG_MOVE_LENGTH, generator.ORDER_ATOMIC];
-  };
 
   blockly.Blocks.jump.DIRECTIONS =
       [[msg.jumpForward(), 'jumpForward'],
@@ -639,7 +613,30 @@ exports.install = function(blockly, skin) {
     return 'Turtle.penColour(' + colour + ', \'block_id_' +
         this.id + '\');\n';
   };
-  
+
+  blockly.Blocks.draw_colour_simple = {
+    // Simplified dropdown block for setting the colour.
+    init: function() {
+      var colours = [Colours.RED, Colours.BLACK, Colours.PINK, Colours.ORANGE,
+        Colours.YELLOW, Colours.GREEN, Colours.BLUE, Colours.AQUAMARINE, Colours.PLUM];
+      this.setHSV(42, 0.89, 0.99);
+      var colourField = new Blockly.FieldColourDropdown(colours, 45, 35);
+      this.appendDummyInput()
+          .appendTitle(msg.setColour())
+          .appendTitle(colourField, 'COLOUR');
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(msg.colourTooltip());
+    }
+  };
+
+  generator.draw_colour_simple = function() {
+    // Generate JavaScript for setting the colour.
+    var colour = this.getTitleValue('COLOUR') || '\'#000000\'';
+    return 'Turtle.penColour("' + colour + '", \'block_id_' +
+        this.id + '\');\n';
+  };
+
   blockly.Blocks.up_big = {
     helpUrl: '',
     init: function() {

@@ -17,7 +17,8 @@ var CONFIGS = {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
     background: 4,
-    dirtSound: true
+    dirtSound: true,
+    pegmanYOffset: -8
   },
 
   farmer_night: {
@@ -25,12 +26,14 @@ var CONFIGS = {
     transparentTileEnding: true,
     nonDisappearingPegmanHittingObstacle: true,
     background: 4,
-    dirtSound: true
+    dirtSound: true,
+    pegmanYOffset: -8
   },
 
   pvz: {
     look: '#FFF',
-    obstacleScale: 1.4
+    obstacleScale: 1.4,
+    pegmanYOffset: -8
   },
 
   birds: {
@@ -47,7 +50,7 @@ var CONFIGS = {
     approachingGoalAnimation: 'close_goal.png',
     pegmanHeight: 68,
     pegmanWidth: 51,
-    pegmanYOffset: -6
+    pegmanYOffset: -14
   }
 
 };

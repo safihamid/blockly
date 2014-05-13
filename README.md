@@ -83,18 +83,26 @@ grunt test
 ```
 
 * Blockly tests target the `build/js/app_name` folder
+* If you see an error like `ReferenceError: Blockly is not defined` or notes about missing npm packages, double check that you've run `grunt build` before `grunt test`
 
 ### Localization
 
-Since localizing in to many languages dramatically slows down the build, the
-default target locales are `en_us` and `en_ploc` (pseudolocalized). To build
-all available locales, specify `MOOC_LOCALIZE=1` in your environment:
+It's especially important to test your changes with localization when modifying layouts. We support
+right-to-left languages and have some special layout tweaks embedded in the CSS to support that.
+
+Running a full localization build can take several minutes. Since localization re-builds javascript files for many languages, the
+default build target locales are `en_us` and `en_ploc` (pseudolocalized). To build
+all available locales, specify `MOOC_LOCALIZE=1` in your environment when running a task:
 
 ```bash
 MOOC_LOCALIZE=1 grunt rebuild
 ```
 
 Note: if you're running the `grunt dev` live-reload server and get the error `too many open files` after a localization build, try increasing the OS open file limit by running `ulimit -n 1024` (and adding it to your `.bashrc`).
+
+### Forwarding new strings on to CrowdIn
+
+To get new strings localized using CrowdIn, we currently run a script in a private repository. Contact a code.org engineer for help doing this.
 
 ## Project Specification
 

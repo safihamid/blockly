@@ -13,6 +13,10 @@
   "continue": "Jatka",
   "dialogCancel": "Peru",
   "dialogOK": "OK",
+  "directionNorthLetter": "N",
+  "directionSouthLetter": "S",
+  "directionEastLetter": "E",
+  "directionWestLetter": "W",
   "emptyBlocksErrorMsg": "\"Toista\" ja \"Jos\"-lohkot tarvitsevat toisen lohkon sisäänsä toimiakseen. Varmista, että sisempi lohko asettuu oikein ulompaan lohkoon.",
   "extraTopBlocks": "You have extra blocks that aren't attached to an event block.",
   "finalStage": "Onneksi olkoon! Olet suorittanut viimeisen vaiheen.",
@@ -21,6 +25,7 @@
   "hashError": "Valitan, '%1' ei vastaa mitään tallennettua ohjelmaa.",
   "help": "Ohje",
   "hintTitle": "Vihje:",
+  "jump": "jump",
   "levelIncompleteError": "Käytät kaikkia oikeanlaisia lohkoja, mutta et oikella tavalla.",
   "listVariable": "lista",
   "makeYourOwnFlappy": "Tee oma Läpytin -pelisi",
@@ -48,6 +53,8 @@
   "totalNumLinesOfCodeWritten": "Kokonaismäärä: {numLines, plural, one {yksi rivi} other {# riviä}} koodia.",
   "tryAgain": "Yritä uudestaan",
   "backToPreviousLevel": "Takaisin edelliseen tasoon",
+  "saveToGallery": "Save to your gallery",
+  "savedToGallery": "Saved to your gallery!",
   "typeCode": "Kirjoita JavaScript-koodisi näiden ohjeiden alle.",
   "typeFuncs": "Käytettävissä olevat funktiot: %1",
   "typeHint": "Sulkeet ja puolipisteet ovat pakollisia.",
@@ -58,5 +65,6 @@
   "wantToLearn": "Haluatko oppia koodaamaan?",
   "watchVideo": "Katso Video",
   "tryHOC": "Kokeile koodaustuntia",
-  "signup": "Rekisteröidy johdantokurssille"
+  "signup": "Rekisteröidy johdantokurssille",
+  "hintHeader": "Here's a tip:"
 }

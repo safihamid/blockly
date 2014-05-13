@@ -1,3 +1,4 @@
+var utils = require('./utils');
 window.BlocklyApps = require('./base');
 
 if (typeof global !== 'undefined') {
@@ -5,6 +6,7 @@ if (typeof global !== 'undefined') {
 }
 
 var addReadyListener = require('./dom').addReadyListener;
+var blocksCommon = require('./blocksCommon');
 
 function StubDialog() {
   for (var argument in arguments) {
@@ -20,7 +22,7 @@ StubDialog.prototype.hide = function() {
   console.log(this);
 };
 
-module.exports = function(app, levels, options) {
+module.exports = function(app, levels, options, requiredBlockTests) {
 
   // If a levelId is not provided, then options.level is specified in full.
   // Otherwise, options.level overrides resolved level on a per-property basis.
@@ -30,6 +32,11 @@ module.exports = function(app, levels, options) {
     options.level.id = options.levelId;
     for (var prop in options.level) {
       level[prop] = options.level[prop];
+    }
+
+    if (requiredBlockTests && options.level.required_blocks) {
+      level.requiredBlocks = utils.parseRequiredBlocks(
+          options.level.required_blocks, requiredBlockTests);
     }
 
     options.level = level;
@@ -51,6 +58,7 @@ module.exports = function(app, levels, options) {
   };
 
   options.skin = options.skinsModule.load(BlocklyApps.assetUrl, options.skinId);
+  blocksCommon.install(Blockly, options.skin);
   options.blocksModule.install(Blockly, options.skin);
 
   addReadyListener(function() {
