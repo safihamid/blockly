@@ -247,10 +247,8 @@ var drawMap = function() {
 
       // Look up all 4 neighbors, wall and non-wall should not contain the same letters. 
       // If they do the wall values will be replaced with a new random letter and revalidated again.
-      for (var i = 0; i < 4; i++)
-      {
-          for(var j = 0; j < 4; j++)
-          {
+      for (var i = 0; i < 4; i++) {
+          for (var j = 0; j < 4; j++) {
               if (i !== j && mazeIsWall[i] && !mazeIsWall[j] && mazeValues[i] !== undefined && mazeValues[j] !== undefined && mazeValues[i] === mazeValues[j]) {
                   mazeValues[i] = Math.floor(Math.random() * 25);
                   j = -1;
@@ -270,10 +268,10 @@ var drawMap = function() {
       if (mazeValues[3] !== undefined) {
           Maze.wallMap[y][x - 1] = mazeValues[3];  // West
       }
-  }
+  };
 
   // assign inital wall maps.
-  var finishX, finishY;
+  var finishX, finishY, pathIdx;
   for (y = 0; y < Maze.ROWS; y++) {
       for (x = 0; x < Maze.COLS; x++) {
           if (Maze.map[y][x] === SquareType.WALL) {
@@ -281,11 +279,11 @@ var drawMap = function() {
               Maze.wallMap[y][x] = wallIdx;
           }          
           else if (Maze.map[y][x] >= SquareType.A && Maze.map[y][x] <= SquareType.Z) { // Path.
-              var pathIdx = (Maze.map[y][x] - 10);
+              pathIdx = (Maze.map[y][x] - 10);
               Maze.wallMap[y][x] = pathIdx;
           }
           else if (Maze.map[y][x] >= SquareType.AEND && Maze.map[y][x] <= SquareType.ZEND) { // Finish.
-              var pathIdx = (Maze.map[y][x] - 40);
+              pathIdx = (Maze.map[y][x] - 40);
               Maze.wallMap[y][x] = pathIdx;
               finishX = x;
               finishY = y;
@@ -308,7 +306,7 @@ var drawMap = function() {
   for (y = 0; y < Maze.ROWS; y++) {
     for (x = 0; x < Maze.COLS; x++) {
 
-      var tile = 'l' + Maze.wallMap[y][x];
+      tile = 'l' + Maze.wallMap[y][x];
       var left = TILE_SHAPES[tile][0];
       var top = TILE_SHAPES[tile][1];
       // Tile's clipPath element.
@@ -817,6 +815,7 @@ BlocklyApps.reset = function(first) {
     }
   }
 
+  var tileElement;
   // Reset the tiles
   for (y = 0; y < Maze.ROWS; y++) {
     for (x = 0; x < Maze.COLS; x++) {
@@ -824,8 +823,8 @@ BlocklyApps.reset = function(first) {
         var tileClip = document.getElementById('tileClipPath' + y + '-' + x);
       tileClip.setAttribute('visibility', 'visible');
       // Tile sprite.
-      var tileElement = document.getElementById('tileElement' + y + '-' + x);
-      if (tileElement != null && tileElement != undefined) {
+      tileElement = document.getElementById('tileElement' + y + '-' + x);
+      if (tileElement !== null && tileElement !== undefined) {
           tileElement.setAttributeNS(
               'http://www.w3.org/1999/xlink', 'xlink:href', skin.tiles);
           tileElement.setAttribute('opacity', 1);
@@ -834,7 +833,7 @@ BlocklyApps.reset = function(first) {
   }
 
   // Reset Finish tile
-  var tileElement = document.getElementById('finish');
+  tileElement = document.getElementById('finish');
   tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
                          'xlink:href',
                            skin.tiles);
@@ -1149,13 +1148,14 @@ Maze.animatedMove = function (direction) {
 };
 
 var highlightMaze = function (x, y) {
+    var tileElement;
     if (Maze.map[y][x] !== SquareType.START && ( Maze.map[y][x] < SquareType.AEND || Maze.map[y][x] > SquareType.ZEND)) {
-        var tileElement = document.getElementById('tileElement' + y + '-' + x);
+        tileElement = document.getElementById('tileElement' + y + '-' + x);
         tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
                                'xlink:href',
                                  skin.tilesHighlighted);
     } else if (Maze.map[y][x] >= SquareType.AEND && Maze.map[y][x] <= SquareType.ZEND) {
-        var tileElement = document.getElementById('finish');
+        tileElement = document.getElementById('finish');
         tileElement.setAttributeNS('http://www.w3.org/1999/xlink',
                                'xlink:href',
                                  skin.tilesHighlighted);
@@ -1452,7 +1452,7 @@ Maze.scheduleFinish = function(sound) {
       var pegmanIcon = document.getElementById('pegman');
       pegmanIcon.setAttribute('visibility', 'hidden');
 
-      highlightMaze(Maze.finish_.x, Maze.finish_.y)
+      highlightMaze(Maze.finish_.x, Maze.finish_.y);
   }
 };
 
